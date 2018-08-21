@@ -1,6 +1,6 @@
 {
 	"name": "reactjs-admin-portal",
-	"version": "0.0.3",
+	"version": "0.0.5",
 	"description": "ReactJS Admin Portal",
 	"main": "index.js",
 	"dependencies": {
