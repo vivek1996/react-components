@@ -31,10 +31,9 @@ import Menu from '@material-ui/core/Menu';
 
 import { Drawer, Form } from "./";
 
-import { history } from "./../_helpers";
-import { mutualFundService } from './../_services';
+import { history } from "./../helpers";
 
-import { GulaqLogo } from "./../_icons";
+import { CustomIcon } from "./../icons";
 
 const styles = theme => ({
   root: {
@@ -221,16 +220,7 @@ const searchColumns = [
   { 
     name: 'name', type: 'search', label: 'Search…', placeholder: 'Search…', 
     options: function(value) {
-      if(value !== undefined && value.length > 2) {
-        return mutualFundService.search(value).then(funds => {
-          return funds;
-        }).catch(error => {
-          console.log("error", error);
-          return [];
-        });
-      } else {
-        return [];
-      }
+      return [];
     },
     "dependencies": {
       "*": [
@@ -454,7 +444,7 @@ class MenuAppBar extends React.Component {
             {
               (logo) ? (
                 <Link component={RouterLink} to="/dashboard">
-                  <GulaqLogo className={classes.logo} />
+                  <CustomIcon className={classes.logo} />
                 </Link>
               ) : null
             }

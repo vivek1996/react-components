@@ -1,23 +1,18 @@
-// ##############################
-import AppBar from "./Appbar.jsx";
-import Drawer from "./Drawer.jsx";
-
-import Card from "./Card.jsx";
-import ChipFilter from "./ChipFilter.jsx";
-import Footer from "./Footer.jsx";
-import GridList from "./GridList.jsx";
-import Table from "./Table/Table.jsx";
-import Accordion from "./Accordion.jsx";
-import Dialog from "./Dialog.jsx";
-import Form from "./Form.jsx";
-import List from "./List.jsx";
-
-import Popper from "./Popper.jsx";
-import Slider from "./Slider.jsx";
-import StatusBar from "./StatusBar.jsx";
-import Stepper from "./Stepper.jsx";
-import Snackbar from "./Snackbar.jsx";
-import Toolbar from "./Toolbar.jsx";
-import Filter from "./Filter.jsx";
-
-export { AppBar, Drawer, Card, ChipFilter, Footer, GridList, Table, Dialog, Accordion, Form, List, Popper, Slider, StatusBar, Stepper, Snackbar, Toolbar, Filter };
+export { default as AppBar } from './component/Appbar.js';
+export { default as Drawer } from "./component/Drawer.js";
+export { default as Card } from "./component/Card.js";
+export { default as ChipFilter } from "./component/ChipFilter.js";
+export { default as GridList } from "./component/GridList.js";
+export { default as Popper } from "./component/Popper.js";
+export { default as Slider } from "./component/Slider.js";
+export { default as StatusBar } from "./component/StatusBar.js";
+export { default as Stepper } from "./component/Stepper.js";
+export { default as Snackbar } from "./component/Snackbar.js";
+export { default as Footer } from "./component/Footer.js";
+export { default as Table } from "./component/Table/Table.js";
+export { default as Accordion } from "./component/Accordion.js";
+export { default as Dialog } from "./component/Dialog.js";
+export { default as Form } from "./component/Form.js";
+export { default as List } from "./component/List.js";
+export { default as Toolbar } from "./component/Toolbar.js";
+export { default as Filter } from "./component/Filter.js";

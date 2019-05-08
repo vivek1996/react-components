@@ -13,12 +13,13 @@ module.exports = {
         include: path.resolve(__dirname, 'src'),
         exclude: /(node_modules|build)/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [["react", "es2016"]]
-          }
+          loader: 'babel-loader'
         }
-      }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
     ]
   },
   externals: {

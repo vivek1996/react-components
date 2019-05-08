@@ -19,8 +19,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import { GulaqBlue } from "./../_icons";
-
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -80,7 +78,7 @@ class MiniDrawer extends React.Component {
       >
         <div className={classes.toolbar}>
           {(props.logo) 
-            ? (<IconButton aria-label="Delete"><GulaqBlue /></IconButton>)
+            ? (<IconButton aria-label="Delete">{props.logo}</IconButton>)
             : null
           }
 

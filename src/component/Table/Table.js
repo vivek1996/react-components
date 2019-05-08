@@ -23,7 +23,7 @@ import {Done, Clear } from '@material-ui/icons';
 import LinkIcon from '@material-ui/icons/Link';
 
 import TableHead from './TableHead';
-import { history, request } from './../../_helpers';
+import { history, request } from './../../helpers';
 import { Toolbar, Dialog, Filter, Card } from "./../";
 
 const styles = theme => ({
