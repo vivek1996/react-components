@@ -1,2 +1,2 @@
-# reactjs-admin-portal
-This is ReactJS based Admin portal with the Material UI support. By using this package anyone can create admin dashboard in minutes.
+# react-components
+This is ReactJS based Components which are build with Material UI library.

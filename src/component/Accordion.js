@@ -84,17 +84,15 @@ const styles = theme => ({
 });
 
 class EnhancedExpansionPanel extends React.Component {
-	state = {
-		expanded: null,
-		loading: false,
-		data: [],
-		content: null
-	};
-
 	constructor(props) {
     super(props);
 
-    this.state = Object.assign(this.state, props);
+    this.state = Object.assign({
+			expanded: null,
+			loading: false,
+			data: [],
+			content: null
+		}, props);
   }
 
 	componentWillReceiveProps = (nextProps) => {
@@ -124,7 +122,7 @@ class EnhancedExpansionPanel extends React.Component {
 		}
 	};
 
-	toggleExpansionPanel = (panel, elem, expanded) => (event) => {
+	toggleExpansionPanel = (panel, elem, expanded) => {
 		this.setState({expanded: !expanded ? panel : false, content: null, loading: true});
 
 		if(!expanded) {
@@ -165,13 +163,14 @@ class EnhancedExpansionPanel extends React.Component {
 										root: classes.summaryPanel, // class name, e.g. `classes-nesting-root-x`
 										content: classes.summaryContent, // class name, e.g. `classes-nesting-label-x`
 									}}
-									expandIcon={
-										<ExpandMoreIcon 
-											onClick={
-												this.toggleExpansionPanel(panel, elem, (expanded === panel))
+									IconButtonProps={
+										{
+											onClick: () => {
+												return this.toggleExpansionPanel(panel, elem, (expanded === panel))
 											}
-										/>
+										}
 									}
+									expandIcon={<ExpandMoreIcon />}
 								>
 									{
 										(elem.image) ? (

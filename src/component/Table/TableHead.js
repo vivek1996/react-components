@@ -89,6 +89,11 @@ class EnhancedTableHead extends React.Component {
   }
 }
 
+EnhancedTableHead.defaultProps = {
+  order: 'desc',
+  rowCount: 0
+};
+
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,

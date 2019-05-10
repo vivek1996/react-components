@@ -17,6 +17,9 @@ const styles = {
     height: 200,
     width: 200
   },
+  center: {
+    justifyContent: "center"
+  }
 };
 
 class EnhanceCard extends React.Component {
@@ -74,12 +77,18 @@ class EnhanceCard extends React.Component {
           </CardContent>
         ) : null}
         {(actions) ? (
-          <CardActions>
-            <List 
-              items={actions} 
-              data={data}
-              { ...other }
-            />
+          <CardActions 
+            className={!Array.isArray(actions) && classes.center}
+          >
+            {
+              (Array.isArray(actions)) ? (
+                <List 
+                  items={actions} 
+                  data={data}
+                  { ...other }
+                />
+              ) : actions
+            }
           </CardActions>
         ) : null}
       </Card>

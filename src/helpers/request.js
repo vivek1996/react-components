@@ -1,5 +1,4 @@
 const API_ROOT = '';
-import { appConstants } from './../constants';
 
 let requestHeader = {
   "Content-Type": "application/json; charset=utf-8",
@@ -16,7 +15,7 @@ const handleError = (error) => {
 export const request = {
   handleError: handleError,
   get: (url) => {
-    const token  = appConstants.getToken();
+    const token  = "appConstants.getToken()";
     if(token) {
       requestHeader["Authorization"] = `Bearer ${token}`;
     }
@@ -61,7 +60,7 @@ export const request = {
   },
 
   post: (url, data) => {
-	  const token  = appConstants.getToken();
+	  const token  = "appConstants.getToken()";
     if(token) {
       requestHeader["Authorization"] = `Bearer ${token}`;
     }
@@ -92,7 +91,7 @@ export const request = {
   },
 
   patch: (url, data) => {
-	  const token  = appConstants.getToken();
+	  const token  = "appConstants.getToken()";
     if(token) {
       requestHeader["Authorization"] = `Bearer ${token}`;
     }
