@@ -72,6 +72,9 @@ const reducer = (accumulator, currentValue) => {
   return accumulator;
 }
 
+/**
+ * General component description.
+ */
 class EnhancedForm extends React.Component {
   state = {loading: false, success: false, snackBarOpen: false };
   

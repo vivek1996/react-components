@@ -10,7 +10,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Card, CardMedia, CardContent, CardActions, Typography as Typography$1, withStyles as withStyles$2, Toolbar as Toolbar$1, Grid, Tooltip as Tooltip$1, IconButton as IconButton$1, Button as Button$1, Fab as Fab$1 } from '@material-ui/core';
+import { Card, CardMedia, CardContent, CardActions, Typography as Typography$1, withStyles as withStyles$1, Toolbar, Grid, Tooltip as Tooltip$1, IconButton as IconButton$1, Button, Fab } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import GridList from '@material-ui/core/GridList';
@@ -23,48 +23,52 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TablePagination from '@material-ui/core/TablePagination';
-import Fab from '@material-ui/core/Fab';
-import Paper from '@material-ui/core/Paper';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Avatar from '@material-ui/core/Avatar';
-import Link from '@material-ui/core/Link';
-import { Done, Clear, Delete } from '@material-ui/icons';
-import LinkIcon from '@material-ui/icons/Link';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Button from '@material-ui/core/Button';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { lighten, emphasize, fade } from '@material-ui/core/styles/colorManipulator';
+import { Delete, Done, Clear, KeyboardArrowUp, KeyboardArrowDown } from '@material-ui/icons';
 import { isMobile } from 'react-device-detect';
+import Button$1 from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
+import { combineReducers, createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import { createLogger } from 'redux-logger';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TablePagination from '@material-ui/core/TablePagination';
+import Fab$1 from '@material-ui/core/Fab';
+import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Avatar from '@material-ui/core/Avatar';
+import Link from '@material-ui/core/Link';
+import LinkIcon from '@material-ui/icons/Link';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import reactDom, { findDOMNode, createPortal } from 'react-dom';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import createStyles$1 from '@material-ui/core/styles/createStyles';
-import withStyles$1 from '@material-ui/core/styles/withStyles';
-import Toolbar from '@material-ui/core/Toolbar';
+import withStyles$1$1 from '@material-ui/core/styles/withStyles';
+import Toolbar$1 from '@material-ui/core/Toolbar';
 import Popover from '@material-ui/core/Popover';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import NoSsr from '@material-ui/core/NoSsr';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
-import { emphasize, lighten, fade } from '@material-ui/core/styles/colorManipulator';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Slider from '@material-ui/lab/Slider';
+import { Editor } from '@tinymce/tinymce-react';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -88,6 +92,10 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import WarningIcon from '@material-ui/icons/Warning';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import SwapVert from '@material-ui/icons/SwapVert';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Icon from '@material-ui/core/Icon';
 import AppBar from '@material-ui/core/AppBar';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -216,39 +224,116 @@ if (__DEV__) {
 
 var warning_1 = warning;
 
-var printWarning = function() {};
+/**
+ * Copyright 2014-2015, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
 
-if (process.env.NODE_ENV !== 'production') {
-  printWarning = function(format, subs) {
-    var index = 0;
-    var message =
-      'Warning: ' +
-      (subs.length > 0
-        ? format.replace(/%s/g, function() {
-            return subs[index++];
-          })
-        : format);
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
 
-    if (typeof console !== 'undefined') {
-      console.error(message);
+var __DEV__$1 = process.env.NODE_ENV !== 'production';
+
+var warning$1 = function() {};
+
+if (__DEV__$1) {
+  warning$1 = function(condition, format, args) {
+    var len = arguments.length;
+    args = new Array(len > 2 ? len - 2 : 0);
+    for (var key = 2; key < len; key++) {
+      args[key - 2] = arguments[key];
+    }
+    if (format === undefined) {
+      throw new Error(
+        '`warning(condition, format, ...args)` requires a warning ' +
+        'message argument'
+      );
     }
 
-    try {
-      // --- Welcome to debugging history ---
-      // This error was thrown as a convenience so that you can use the
-      // stack trace to find the callsite that triggered this warning.
-      throw new Error(message);
-    } catch (e) {}
+    if (format.length < 10 || (/^[s\W]*$/).test(format)) {
+      throw new Error(
+        'The warning format should be able to uniquely identify this ' +
+        'warning. Please, use a more descriptive format than: ' + format
+      );
+    }
+
+    if (!condition) {
+      var argIndex = 0;
+      var message = 'Warning: ' +
+        format.replace(/%s/g, function() {
+          return args[argIndex++];
+        });
+      if (typeof console !== 'undefined') {
+        console.error(message);
+      }
+      try {
+        // This error was thrown as a convenience so that you can use this stack
+        // to find the callsite that caused this warning to fire.
+        throw new Error(message);
+      } catch(x) {}
+    }
   };
 }
 
-var warnAboutDeprecatedCJSRequire = function(member) {
-  printWarning(
-    'Please use `require("history").%s` instead of `require("history/%s")`. ' +
-      'Support for the latter will be removed in the next major release.',
-    [member, member]
-  );
+var warning_1$1 = warning$1;
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var NODE_ENV = process.env.NODE_ENV;
+
+var invariant = function(condition, format, a, b, c, d, e, f) {
+  if (NODE_ENV !== 'production') {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  }
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error(
+        'Minified exception occurred; use the non-minified dev environment ' +
+        'for the full error message and additional helpful warnings.'
+      );
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(
+        format.replace(/%s/g, function() { return args[argIndex++]; })
+      );
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
 };
+
+var invariant_1 = invariant;
 
 function isAbsolute(pathname) {
   return pathname.charAt(0) === '/';
@@ -356,109 +441,41 @@ function valueEqual(a, b) {
   return false;
 }
 
-var isProduction = process.env.NODE_ENV === 'production';
-function warning$1(condition, message) {
-  if (!isProduction) {
-    if (condition) {
-      return;
-    }
+var PathUtils = createCommonjsModule(function (module, exports) {
 
-    var text = "Warning: " + message;
-
-    if (typeof console !== 'undefined') {
-      console.warn(text);
-    }
-
-    try {
-      throw Error(text);
-    } catch (x) {}
-  }
-}
-
-var isProduction$1 = process.env.NODE_ENV === 'production';
-var prefix = 'Invariant failed';
-function invariant(condition, message) {
-  if (condition) {
-    return;
-  }
-
-  if (isProduction$1) {
-    throw new Error(prefix);
-  } else {
-    throw new Error(prefix + ": " + (message || ''));
-  }
-}
-
-var history_min = createCommonjsModule(function (module, exports) {
-function _interopDefault(n){return n&&"object"==typeof n&&"default"in n?n.default:n}Object.defineProperty(exports,"__esModule",{value:!0});var resolvePathname$$1=_interopDefault(resolvePathname),valueEqual$$1=_interopDefault(valueEqual);var invariant$$1=_interopDefault(invariant);function _extends(){return (_extends=Object.assign||function(n){for(var t=1;t<arguments.length;t++){var e=arguments[t];for(var a in e)Object.prototype.hasOwnProperty.call(e,a)&&(n[a]=e[a]);}return n}).apply(this,arguments)}function addLeadingSlash(n){return "/"===n.charAt(0)?n:"/"+n}function stripLeadingSlash(n){return "/"===n.charAt(0)?n.substr(1):n}function hasBasename(n,t){return new RegExp("^"+t+"(\\/|\\?|#|$)","i").test(n)}function stripBasename(n,t){return hasBasename(n,t)?n.substr(t.length):n}function stripTrailingSlash(n){return "/"===n.charAt(n.length-1)?n.slice(0,-1):n}function parsePath(n){var t=n||"/",e="",a="",o=t.indexOf("#");-1!==o&&(a=t.substr(o),t=t.substr(0,o));var r=t.indexOf("?");return -1!==r&&(e=t.substr(r),t=t.substr(0,r)),{pathname:t,search:"?"===e?"":e,hash:"#"===a?"":a}}function createPath(n){var t=n.pathname,e=n.search,a=n.hash,o=t||"/";return e&&"?"!==e&&(o+="?"===e.charAt(0)?e:"?"+e),a&&"#"!==a&&(o+="#"===a.charAt(0)?a:"#"+a),o}function createLocation(n,t,e,a){var o;"string"==typeof n?(o=parsePath(n)).state=t:(void 0===(o=_extends({},n)).pathname&&(o.pathname=""),o.search?"?"!==o.search.charAt(0)&&(o.search="?"+o.search):o.search="",o.hash?"#"!==o.hash.charAt(0)&&(o.hash="#"+o.hash):o.hash="",void 0!==t&&void 0===o.state&&(o.state=t));try{o.pathname=decodeURI(o.pathname);}catch(n){throw n instanceof URIError?new URIError('Pathname "'+o.pathname+'" could not be decoded. This is likely caused by an invalid percent-encoding.'):n}return e&&(o.key=e),a?o.pathname?"/"!==o.pathname.charAt(0)&&(o.pathname=resolvePathname$$1(o.pathname,a.pathname)):o.pathname=a.pathname:o.pathname||(o.pathname="/"),o}function locationsAreEqual(n,t){return n.pathname===t.pathname&&n.search===t.search&&n.hash===t.hash&&n.key===t.key&&valueEqual$$1(n.state,t.state)}function createTransitionManager(){var r=null;var a=[];return {setPrompt:function(n){return r=n,function(){r===n&&(r=null);}},confirmTransitionTo:function(n,t,e,a){if(null!=r){var o="function"==typeof r?r(n,t):r;"string"==typeof o?"function"==typeof e?e(o,a):a(!0):a(!1!==o);}else a(!0);},appendListener:function(n){var t=!0;function e(){t&&n.apply(void 0,arguments);}return a.push(e),function(){t=!1,a=a.filter(function(n){return n!==e});}},notifyListeners:function(){for(var n=arguments.length,t=new Array(n),e=0;e<n;e++)t[e]=arguments[e];a.forEach(function(n){return n.apply(void 0,t)});}}}var canUseDOM=!("undefined"==typeof window||!window.document||!window.document.createElement);function getConfirmation(n,t){t(window.confirm(n));}function supportsHistory(){var n=window.navigator.userAgent;return (-1===n.indexOf("Android 2.")&&-1===n.indexOf("Android 4.0")||-1===n.indexOf("Mobile Safari")||-1!==n.indexOf("Chrome")||-1!==n.indexOf("Windows Phone"))&&(window.history&&"pushState"in window.history)}function supportsPopStateOnHashChange(){return -1===window.navigator.userAgent.indexOf("Trident")}function supportsGoWithoutReloadUsingHash(){return -1===window.navigator.userAgent.indexOf("Firefox")}function isExtraneousPopstateEvent(n){void 0===n.state&&navigator.userAgent.indexOf("CriOS");}var PopStateEvent="popstate",HashChangeEvent="hashchange";function getHistoryState(){try{return window.history.state||{}}catch(n){return {}}}function createBrowserHistory(n){void 0===n&&(n={}),canUseDOM||invariant$$1(!1);var c=window.history,s=supportsHistory(),t=!supportsPopStateOnHashChange(),e=n,a=e.forceRefresh,h=void 0!==a&&a,o=e.getUserConfirmation,u=void 0===o?getConfirmation:o,r=e.keyLength,i=void 0===r?6:r,f=n.basename?stripTrailingSlash(addLeadingSlash(n.basename)):"";function l(n){var t=n||{},e=t.key,a=t.state,o=window.location,r=o.pathname+o.search+o.hash;return f&&(r=stripBasename(r,f)),createLocation(r,a,e)}function d(){return Math.random().toString(36).substr(2,i)}var v=createTransitionManager();function p(n){_extends(T,n),T.length=c.length,v.notifyListeners(T.location,T.action);}function g(n){isExtraneousPopstateEvent(n)||w(l(n.state));}function P(){w(l(getHistoryState()));}var m=!1;function w(t){if(m)m=!1,p();else{v.confirmTransitionTo(t,"POP",u,function(n){n?p({action:"POP",location:t}):function(n){var t=T.location,e=H.indexOf(t.key);-1===e&&(e=0);var a=H.indexOf(n.key);-1===a&&(a=0);var o=e-a;o&&(m=!0,L(o));}(t);});}}var y=l(getHistoryState()),H=[y.key];function x(n){return f+createPath(n)}function L(n){c.go(n);}var O=0;function E(n){1===(O+=n)&&1===n?(window.addEventListener(PopStateEvent,g),t&&window.addEventListener(HashChangeEvent,P)):0===O&&(window.removeEventListener(PopStateEvent,g),t&&window.removeEventListener(HashChangeEvent,P));}var S=!1;var T={length:c.length,action:"POP",location:y,createHref:x,push:function(n,t){var i=createLocation(n,t,d(),T.location);v.confirmTransitionTo(i,"PUSH",u,function(n){if(n){var t=x(i),e=i.key,a=i.state;if(s)if(c.pushState({key:e,state:a},null,t),h)window.location.href=t;else{var o=H.indexOf(T.location.key),r=H.slice(0,-1===o?0:o+1);r.push(i.key),H=r,p({action:"PUSH",location:i});}else window.location.href=t;}});},replace:function(n,t){var r="REPLACE",i=createLocation(n,t,d(),T.location);v.confirmTransitionTo(i,r,u,function(n){if(n){var t=x(i),e=i.key,a=i.state;if(s)if(c.replaceState({key:e,state:a},null,t),h)window.location.replace(t);else{var o=H.indexOf(T.location.key);-1!==o&&(H[o]=i.key),p({action:r,location:i});}else window.location.replace(t);}});},go:L,goBack:function(){L(-1);},goForward:function(){L(1);},block:function(n){void 0===n&&(n=!1);var t=v.setPrompt(n);return S||(E(1),S=!0),function(){return S&&(S=!1,E(-1)),t()}},listen:function(n){var t=v.appendListener(n);return E(1),function(){E(-1),t();}}};return T}var HashChangeEvent$1="hashchange",HashPathCoders={hashbang:{encodePath:function(n){return "!"===n.charAt(0)?n:"!/"+stripLeadingSlash(n)},decodePath:function(n){return "!"===n.charAt(0)?n.substr(1):n}},noslash:{encodePath:stripLeadingSlash,decodePath:addLeadingSlash},slash:{encodePath:addLeadingSlash,decodePath:addLeadingSlash}};function getHashPath(){var n=window.location.href,t=n.indexOf("#");return -1===t?"":n.substring(t+1)}function pushHashPath(n){window.location.hash=n;}function replaceHashPath(n){var t=window.location.href.indexOf("#");window.location.replace(window.location.href.slice(0,0<=t?t:0)+"#"+n);}function createHashHistory(n){void 0===n&&(n={}),canUseDOM||invariant$$1(!1);var t=window.history,e=(supportsGoWithoutReloadUsingHash(),n),a=e.getUserConfirmation,i=void 0===a?getConfirmation:a,o=e.hashType,r=void 0===o?"slash":o,c=n.basename?stripTrailingSlash(addLeadingSlash(n.basename)):"",s=HashPathCoders[r],h=s.encodePath,u=s.decodePath;function f(){var n=u(getHashPath());return c&&(n=stripBasename(n,c)),createLocation(n)}var l=createTransitionManager();function d(n){_extends(E,n),E.length=t.length,l.notifyListeners(E.location,E.action);}var v=!1,p=null;function g(){var n=getHashPath(),t=h(n);if(n!==t)replaceHashPath(t);else{var e=f(),a=E.location;if(!v&&locationsAreEqual(a,e))return;if(p===createPath(e))return;p=null,function(t){if(v)v=!1,d();else{l.confirmTransitionTo(t,"POP",i,function(n){n?d({action:"POP",location:t}):function(n){var t=E.location,e=y.lastIndexOf(createPath(t));-1===e&&(e=0);var a=y.lastIndexOf(createPath(n));-1===a&&(a=0);var o=e-a;o&&(v=!0,H(o));}(t);});}}(e);}}var P=getHashPath(),m=h(P);P!==m&&replaceHashPath(m);var w=f(),y=[createPath(w)];function H(n){t.go(n);}var x=0;function L(n){1===(x+=n)&&1===n?window.addEventListener(HashChangeEvent$1,g):0===x&&window.removeEventListener(HashChangeEvent$1,g);}var O=!1;var E={length:t.length,action:"POP",location:w,createHref:function(n){return "#"+h(c+createPath(n))},push:function(n,t){var r=createLocation(n,void 0,void 0,E.location);l.confirmTransitionTo(r,"PUSH",i,function(n){if(n){var t=createPath(r),e=h(c+t);if(getHashPath()!==e){p=t,pushHashPath(e);var a=y.lastIndexOf(createPath(E.location)),o=y.slice(0,-1===a?0:a+1);o.push(t),y=o,d({action:"PUSH",location:r});}else d();}});},replace:function(n,t){var o="REPLACE",r=createLocation(n,void 0,void 0,E.location);l.confirmTransitionTo(r,o,i,function(n){if(n){var t=createPath(r),e=h(c+t);getHashPath()!==e&&(p=t,replaceHashPath(e));var a=y.indexOf(createPath(E.location));-1!==a&&(y[a]=t),d({action:o,location:r});}});},go:H,goBack:function(){H(-1);},goForward:function(){H(1);},block:function(n){void 0===n&&(n=!1);var t=l.setPrompt(n);return O||(L(1),O=!0),function(){return O&&(O=!1,L(-1)),t()}},listen:function(n){var t=l.appendListener(n);return L(1),function(){L(-1),t();}}};return E}function clamp(n,t,e){return Math.min(Math.max(n,t),e)}function createMemoryHistory(n){void 0===n&&(n={});var t=n,o=t.getUserConfirmation,e=t.initialEntries,a=void 0===e?["/"]:e,r=t.initialIndex,i=void 0===r?0:r,c=t.keyLength,s=void 0===c?6:c,h=createTransitionManager();function u(n){_extends(g,n),g.length=g.entries.length,h.notifyListeners(g.location,g.action);}function f(){return Math.random().toString(36).substr(2,s)}var l=clamp(i,0,a.length-1),d=a.map(function(n){return createLocation(n,void 0,"string"==typeof n?f():n.key||f())}),v=createPath;function p(n){var t=clamp(g.index+n,0,g.entries.length-1),e=g.entries[t];h.confirmTransitionTo(e,"POP",o,function(n){n?u({action:"POP",location:e,index:t}):u();});}var g={length:d.length,action:"POP",location:d[l],index:l,entries:d,createHref:v,push:function(n,t){var a=createLocation(n,t,f(),g.location);h.confirmTransitionTo(a,"PUSH",o,function(n){if(n){var t=g.index+1,e=g.entries.slice(0);e.length>t?e.splice(t,e.length-t,a):e.push(a),u({action:"PUSH",location:a,index:t,entries:e});}});},replace:function(n,t){var e="REPLACE",a=createLocation(n,t,f(),g.location);h.confirmTransitionTo(a,e,o,function(n){n&&(g.entries[g.index]=a,u({action:e,location:a}));});},go:p,goBack:function(){p(-1);},goForward:function(){p(1);},canGo:function(n){var t=g.index+n;return 0<=t&&t<g.entries.length},block:function(n){return void 0===n&&(n=!1),h.setPrompt(n)},listen:function(n){return h.appendListener(n)}};return g}exports.createBrowserHistory=createBrowserHistory,exports.createHashHistory=createHashHistory,exports.createMemoryHistory=createMemoryHistory,exports.createLocation=createLocation,exports.locationsAreEqual=locationsAreEqual,exports.parsePath=parsePath,exports.createPath=createPath;
-});
-
-unwrapExports(history_min);
-var history_min_1 = history_min.createBrowserHistory;
-var history_min_2 = history_min.createHashHistory;
-var history_min_3 = history_min.createMemoryHistory;
-var history_min_4 = history_min.createLocation;
-var history_min_5 = history_min.locationsAreEqual;
-var history_min_6 = history_min.parsePath;
-var history_min_7 = history_min.createPath;
-
-var history = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var resolvePathname$$1 = _interopDefault(resolvePathname);
-var valueEqual$$1 = _interopDefault(valueEqual);
-var warning = _interopDefault(warning$1);
-var invariant$$1 = _interopDefault(invariant);
-
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-function addLeadingSlash(path) {
+exports.__esModule = true;
+var addLeadingSlash = exports.addLeadingSlash = function addLeadingSlash(path) {
   return path.charAt(0) === '/' ? path : '/' + path;
-}
-function stripLeadingSlash(path) {
+};
+
+var stripLeadingSlash = exports.stripLeadingSlash = function stripLeadingSlash(path) {
   return path.charAt(0) === '/' ? path.substr(1) : path;
-}
-function hasBasename(path, prefix) {
+};
+
+var hasBasename = exports.hasBasename = function hasBasename(path, prefix) {
   return new RegExp('^' + prefix + '(\\/|\\?|#|$)', 'i').test(path);
-}
-function stripBasename(path, prefix) {
+};
+
+var stripBasename = exports.stripBasename = function stripBasename(path, prefix) {
   return hasBasename(path, prefix) ? path.substr(prefix.length) : path;
-}
-function stripTrailingSlash(path) {
+};
+
+var stripTrailingSlash = exports.stripTrailingSlash = function stripTrailingSlash(path) {
   return path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
-}
-function parsePath(path) {
+};
+
+var parsePath = exports.parsePath = function parsePath(path) {
   var pathname = path || '/';
   var search = '';
   var hash = '';
-  var hashIndex = pathname.indexOf('#');
 
+  var hashIndex = pathname.indexOf('#');
   if (hashIndex !== -1) {
     hash = pathname.substr(hashIndex);
     pathname = pathname.substr(0, hashIndex);
   }
 
   var searchIndex = pathname.indexOf('?');
-
   if (searchIndex !== -1) {
     search = pathname.substr(searchIndex);
     pathname = pathname.substr(0, searchIndex);
@@ -469,27 +486,62 @@ function parsePath(path) {
     search: search === '?' ? '' : search,
     hash: hash === '#' ? '' : hash
   };
-}
-function createPath(location) {
+};
+
+var createPath = exports.createPath = function createPath(location) {
   var pathname = location.pathname,
       search = location.search,
       hash = location.hash;
+
+
   var path = pathname || '/';
-  if (search && search !== '?') path += search.charAt(0) === '?' ? search : "?" + search;
-  if (hash && hash !== '#') path += hash.charAt(0) === '#' ? hash : "#" + hash;
+
+  if (search && search !== '?') path += search.charAt(0) === '?' ? search : '?' + search;
+
+  if (hash && hash !== '#') path += hash.charAt(0) === '#' ? hash : '#' + hash;
+
   return path;
-}
+};
+});
 
-function createLocation(path, state, key, currentLocation) {
-  var location;
+unwrapExports(PathUtils);
+var PathUtils_1 = PathUtils.addLeadingSlash;
+var PathUtils_2 = PathUtils.stripLeadingSlash;
+var PathUtils_3 = PathUtils.hasBasename;
+var PathUtils_4 = PathUtils.stripBasename;
+var PathUtils_5 = PathUtils.stripTrailingSlash;
+var PathUtils_6 = PathUtils.parsePath;
+var PathUtils_7 = PathUtils.createPath;
 
+var LocationUtils = createCommonjsModule(function (module, exports) {
+
+exports.__esModule = true;
+exports.locationsAreEqual = exports.createLocation = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+var _resolvePathname2 = _interopRequireDefault(resolvePathname);
+
+
+
+var _valueEqual2 = _interopRequireDefault(valueEqual);
+
+
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var createLocation = exports.createLocation = function createLocation(path, state, key, currentLocation) {
+  var location = void 0;
   if (typeof path === 'string') {
     // Two-arg form: push(path, state)
-    location = parsePath(path);
+    location = (0, PathUtils.parsePath)(path);
     location.state = state;
   } else {
     // One-arg form: push(location)
     location = _extends({}, path);
+
     if (location.pathname === undefined) location.pathname = '';
 
     if (location.search) {
@@ -524,7 +576,7 @@ function createLocation(path, state, key, currentLocation) {
     if (!location.pathname) {
       location.pathname = currentLocation.pathname;
     } else if (location.pathname.charAt(0) !== '/') {
-      location.pathname = resolvePathname$$1(location.pathname, currentLocation.pathname);
+      location.pathname = (0, _resolvePathname2.default)(location.pathname, currentLocation.pathname);
     }
   } else {
     // When there is no prior location and pathname is empty, set it to /
@@ -534,23 +586,41 @@ function createLocation(path, state, key, currentLocation) {
   }
 
   return location;
-}
-function locationsAreEqual(a, b) {
-  return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash && a.key === b.key && valueEqual$$1(a.state, b.state);
-}
+};
 
-function createTransitionManager() {
+var locationsAreEqual = exports.locationsAreEqual = function locationsAreEqual(a, b) {
+  return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash && a.key === b.key && (0, _valueEqual2.default)(a.state, b.state);
+};
+});
+
+unwrapExports(LocationUtils);
+var LocationUtils_1 = LocationUtils.locationsAreEqual;
+var LocationUtils_2 = LocationUtils.createLocation;
+
+var createTransitionManager_1 = createCommonjsModule(function (module, exports) {
+
+exports.__esModule = true;
+
+
+
+var _warning2 = _interopRequireDefault(warning_1$1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var createTransitionManager = function createTransitionManager() {
   var prompt = null;
 
-  function setPrompt(nextPrompt) {
-    warning(prompt == null, 'A history supports only one prompt at a time');
+  var setPrompt = function setPrompt(nextPrompt) {
+    (0, _warning2.default)(prompt == null, 'A history supports only one prompt at a time');
+
     prompt = nextPrompt;
+
     return function () {
       if (prompt === nextPrompt) prompt = null;
     };
-  }
+  };
 
-  function confirmTransitionTo(location, action, getUserConfirmation, callback) {
+  var confirmTransitionTo = function confirmTransitionTo(location, action, getUserConfirmation, callback) {
     // TODO: If another transition starts while we're still confirming
     // the previous one, we may end up in a weird state. Figure out the
     // best way to handle this.
@@ -561,7 +631,8 @@ function createTransitionManager() {
         if (typeof getUserConfirmation === 'function') {
           getUserConfirmation(result, callback);
         } else {
-          warning(false, 'A history needs a getUserConfirmation function in order to use a prompt message');
+          (0, _warning2.default)(false, 'A history needs a getUserConfirmation function in order to use a prompt message');
+
           callback(true);
         }
       } else {
@@ -571,35 +642,36 @@ function createTransitionManager() {
     } else {
       callback(true);
     }
-  }
+  };
 
   var listeners = [];
 
-  function appendListener(fn) {
+  var appendListener = function appendListener(fn) {
     var isActive = true;
 
-    function listener() {
-      if (isActive) fn.apply(void 0, arguments);
-    }
+    var listener = function listener() {
+      if (isActive) fn.apply(undefined, arguments);
+    };
 
     listeners.push(listener);
+
     return function () {
       isActive = false;
       listeners = listeners.filter(function (item) {
         return item !== listener;
       });
     };
-  }
+  };
 
-  function notifyListeners() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+  var notifyListeners = function notifyListeners() {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
     listeners.forEach(function (listener) {
-      return listener.apply(void 0, args);
+      return listener.apply(undefined, args);
     });
-  }
+  };
 
   return {
     setPrompt: setPrompt,
@@ -607,12 +679,30 @@ function createTransitionManager() {
     appendListener: appendListener,
     notifyListeners: notifyListeners
   };
-}
+};
 
-var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
-function getConfirmation(message, callback) {
-  callback(window.confirm(message)); // eslint-disable-line no-alert
-}
+exports.default = createTransitionManager;
+});
+
+unwrapExports(createTransitionManager_1);
+
+var DOMUtils = createCommonjsModule(function (module, exports) {
+
+exports.__esModule = true;
+var canUseDOM = exports.canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+
+var addEventListener = exports.addEventListener = function addEventListener(node$$1, event, listener) {
+  return node$$1.addEventListener ? node$$1.addEventListener(event, listener, false) : node$$1.attachEvent('on' + event, listener);
+};
+
+var removeEventListener = exports.removeEventListener = function removeEventListener(node$$1, event, listener) {
+  return node$$1.removeEventListener ? node$$1.removeEventListener(event, listener, false) : node$$1.detachEvent('on' + event, listener);
+};
+
+var getConfirmation = exports.getConfirmation = function getConfirmation(message, callback) {
+  return callback(window.confirm(message));
+}; // eslint-disable-line no-alert
+
 /**
  * Returns true if the HTML5 history API is supported. Taken from Modernizr.
  *
@@ -620,41 +710,81 @@ function getConfirmation(message, callback) {
  * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
  * changed to avoid false negatives for Windows Phones: https://github.com/reactjs/react-router/issues/586
  */
-
-function supportsHistory() {
+var supportsHistory = exports.supportsHistory = function supportsHistory() {
   var ua = window.navigator.userAgent;
+
   if ((ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) && ua.indexOf('Mobile Safari') !== -1 && ua.indexOf('Chrome') === -1 && ua.indexOf('Windows Phone') === -1) return false;
+
   return window.history && 'pushState' in window.history;
-}
+};
+
 /**
  * Returns true if browser fires popstate on hash change.
  * IE10 and IE11 do not.
  */
-
-function supportsPopStateOnHashChange() {
+var supportsPopStateOnHashChange = exports.supportsPopStateOnHashChange = function supportsPopStateOnHashChange() {
   return window.navigator.userAgent.indexOf('Trident') === -1;
-}
+};
+
 /**
  * Returns false if using go(n) with hash history causes a full page reload.
  */
-
-function supportsGoWithoutReloadUsingHash() {
+var supportsGoWithoutReloadUsingHash = exports.supportsGoWithoutReloadUsingHash = function supportsGoWithoutReloadUsingHash() {
   return window.navigator.userAgent.indexOf('Firefox') === -1;
-}
+};
+
 /**
  * Returns true if a given popstate event is an extraneous WebKit event.
  * Accounts for the fact that Chrome on iOS fires real popstate events
  * containing undefined state when pressing the back button.
  */
+var isExtraneousPopstateEvent = exports.isExtraneousPopstateEvent = function isExtraneousPopstateEvent(event) {
+  return event.state === undefined && navigator.userAgent.indexOf('CriOS') === -1;
+};
+});
 
-function isExtraneousPopstateEvent(event) {
-  event.state === undefined && navigator.userAgent.indexOf('CriOS') === -1;
-}
+unwrapExports(DOMUtils);
+var DOMUtils_1 = DOMUtils.canUseDOM;
+var DOMUtils_2 = DOMUtils.addEventListener;
+var DOMUtils_3 = DOMUtils.removeEventListener;
+var DOMUtils_4 = DOMUtils.getConfirmation;
+var DOMUtils_5 = DOMUtils.supportsHistory;
+var DOMUtils_6 = DOMUtils.supportsPopStateOnHashChange;
+var DOMUtils_7 = DOMUtils.supportsGoWithoutReloadUsingHash;
+var DOMUtils_8 = DOMUtils.isExtraneousPopstateEvent;
+
+var createBrowserHistory_1 = createCommonjsModule(function (module, exports) {
+
+exports.__esModule = true;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+var _warning2 = _interopRequireDefault(warning_1$1);
+
+
+
+var _invariant2 = _interopRequireDefault(invariant_1);
+
+
+
+
+
+
+
+var _createTransitionManager2 = _interopRequireDefault(createTransitionManager_1);
+
+
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var PopStateEvent = 'popstate';
 var HashChangeEvent = 'hashchange';
 
-function getHistoryState() {
+var getHistoryState = function getHistoryState() {
   try {
     return window.history.state || {};
   } catch (e) {
@@ -662,32 +792,31 @@ function getHistoryState() {
     // See https://github.com/ReactTraining/history/pull/289
     return {};
   }
-}
+};
+
 /**
  * Creates a history object that uses the HTML5 history API including
  * pushState, replaceState, and the popstate event.
  */
+var createBrowserHistory = function createBrowserHistory() {
+  var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
+  (0, _invariant2.default)(DOMUtils.canUseDOM, 'Browser history needs a DOM');
 
-function createBrowserHistory(props) {
-  if (props === void 0) {
-    props = {};
-  }
-
-  !canUseDOM ? invariant$$1(false, 'Browser history needs a DOM') : void 0;
   var globalHistory = window.history;
-  var canUseHistory = supportsHistory();
-  var needsHashChangeListener = !supportsPopStateOnHashChange();
-  var _props = props,
-      _props$forceRefresh = _props.forceRefresh,
-      forceRefresh = _props$forceRefresh === void 0 ? false : _props$forceRefresh,
-      _props$getUserConfirm = _props.getUserConfirmation,
-      getUserConfirmation = _props$getUserConfirm === void 0 ? getConfirmation : _props$getUserConfirm,
-      _props$keyLength = _props.keyLength,
-      keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
-  var basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
+  var canUseHistory = (0, DOMUtils.supportsHistory)();
+  var needsHashChangeListener = !(0, DOMUtils.supportsPopStateOnHashChange)();
 
-  function getDOMLocation(historyState) {
+  var _props$forceRefresh = props.forceRefresh,
+      forceRefresh = _props$forceRefresh === undefined ? false : _props$forceRefresh,
+      _props$getUserConfirm = props.getUserConfirmation,
+      getUserConfirmation = _props$getUserConfirm === undefined ? DOMUtils.getConfirmation : _props$getUserConfirm,
+      _props$keyLength = props.keyLength,
+      keyLength = _props$keyLength === undefined ? 6 : _props$keyLength;
+
+  var basename = props.basename ? (0, PathUtils.stripTrailingSlash)((0, PathUtils.addLeadingSlash)(props.basename)) : '';
+
+  var getDOMLocation = function getDOMLocation(historyState) {
     var _ref = historyState || {},
         key = _ref.key,
         state = _ref.state;
@@ -696,180 +825,195 @@ function createBrowserHistory(props) {
         pathname = _window$location.pathname,
         search = _window$location.search,
         hash = _window$location.hash;
+
+
     var path = pathname + search + hash;
-    warning(!basename || hasBasename(path, basename), 'You are attempting to use a basename on a page whose URL path does not begin ' + 'with the basename. Expected path "' + path + '" to begin with "' + basename + '".');
-    if (basename) path = stripBasename(path, basename);
-    return createLocation(path, state, key);
-  }
 
-  function createKey() {
+    (0, _warning2.default)(!basename || (0, PathUtils.hasBasename)(path, basename), 'You are attempting to use a basename on a page whose URL path does not begin ' + 'with the basename. Expected path "' + path + '" to begin with "' + basename + '".');
+
+    if (basename) path = (0, PathUtils.stripBasename)(path, basename);
+
+    return (0, LocationUtils.createLocation)(path, state, key);
+  };
+
+  var createKey = function createKey() {
     return Math.random().toString(36).substr(2, keyLength);
-  }
+  };
 
-  var transitionManager = createTransitionManager();
+  var transitionManager = (0, _createTransitionManager2.default)();
 
-  function setState(nextState) {
+  var setState = function setState(nextState) {
     _extends(history, nextState);
 
     history.length = globalHistory.length;
+
     transitionManager.notifyListeners(history.location, history.action);
-  }
+  };
 
-  function handlePopState(event) {
+  var handlePopState = function handlePopState(event) {
     // Ignore extraneous popstate events in WebKit.
-    if (isExtraneousPopstateEvent(event)) return;
-    handlePop(getDOMLocation(event.state));
-  }
+    if ((0, DOMUtils.isExtraneousPopstateEvent)(event)) return;
 
-  function handleHashChange() {
+    handlePop(getDOMLocation(event.state));
+  };
+
+  var handleHashChange = function handleHashChange() {
     handlePop(getDOMLocation(getHistoryState()));
-  }
+  };
 
   var forceNextPop = false;
 
-  function handlePop(location) {
+  var handlePop = function handlePop(location) {
     if (forceNextPop) {
       forceNextPop = false;
       setState();
     } else {
       var action = 'POP';
+
       transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
         if (ok) {
-          setState({
-            action: action,
-            location: location
-          });
+          setState({ action: action, location: location });
         } else {
           revertPop(location);
         }
       });
     }
-  }
+  };
 
-  function revertPop(fromLocation) {
-    var toLocation = history.location; // TODO: We could probably make this more reliable by
+  var revertPop = function revertPop(fromLocation) {
+    var toLocation = history.location;
+
+    // TODO: We could probably make this more reliable by
     // keeping a list of keys we've seen in sessionStorage.
     // Instead, we just default to 0 for keys we don't know.
 
     var toIndex = allKeys.indexOf(toLocation.key);
+
     if (toIndex === -1) toIndex = 0;
+
     var fromIndex = allKeys.indexOf(fromLocation.key);
+
     if (fromIndex === -1) fromIndex = 0;
+
     var delta = toIndex - fromIndex;
 
     if (delta) {
       forceNextPop = true;
       go(delta);
     }
-  }
+  };
 
   var initialLocation = getDOMLocation(getHistoryState());
-  var allKeys = [initialLocation.key]; // Public interface
+  var allKeys = [initialLocation.key];
 
-  function createHref(location) {
-    return basename + createPath(location);
-  }
+  // Public interface
 
-  function push(path, state) {
-    warning(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
+  var createHref = function createHref(location) {
+    return basename + (0, PathUtils.createPath)(location);
+  };
+
+  var push = function push(path, state) {
+    (0, _warning2.default)(!((typeof path === 'undefined' ? 'undefined' : _typeof(path)) === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
+
     var action = 'PUSH';
-    var location = createLocation(path, state, createKey(), history.location);
+    var location = (0, LocationUtils.createLocation)(path, state, createKey(), history.location);
+
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
       if (!ok) return;
+
       var href = createHref(location);
       var key = location.key,
           state = location.state;
 
+
       if (canUseHistory) {
-        globalHistory.pushState({
-          key: key,
-          state: state
-        }, null, href);
+        globalHistory.pushState({ key: key, state: state }, null, href);
 
         if (forceRefresh) {
           window.location.href = href;
         } else {
           var prevIndex = allKeys.indexOf(history.location.key);
           var nextKeys = allKeys.slice(0, prevIndex === -1 ? 0 : prevIndex + 1);
+
           nextKeys.push(location.key);
           allKeys = nextKeys;
-          setState({
-            action: action,
-            location: location
-          });
+
+          setState({ action: action, location: location });
         }
       } else {
-        warning(state === undefined, 'Browser history cannot push state in browsers that do not support HTML5 history');
+        (0, _warning2.default)(state === undefined, 'Browser history cannot push state in browsers that do not support HTML5 history');
+
         window.location.href = href;
       }
     });
-  }
+  };
 
-  function replace(path, state) {
-    warning(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to replace when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
+  var replace = function replace(path, state) {
+    (0, _warning2.default)(!((typeof path === 'undefined' ? 'undefined' : _typeof(path)) === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to replace when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
+
     var action = 'REPLACE';
-    var location = createLocation(path, state, createKey(), history.location);
+    var location = (0, LocationUtils.createLocation)(path, state, createKey(), history.location);
+
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
       if (!ok) return;
+
       var href = createHref(location);
       var key = location.key,
           state = location.state;
 
+
       if (canUseHistory) {
-        globalHistory.replaceState({
-          key: key,
-          state: state
-        }, null, href);
+        globalHistory.replaceState({ key: key, state: state }, null, href);
 
         if (forceRefresh) {
           window.location.replace(href);
         } else {
           var prevIndex = allKeys.indexOf(history.location.key);
+
           if (prevIndex !== -1) allKeys[prevIndex] = location.key;
-          setState({
-            action: action,
-            location: location
-          });
+
+          setState({ action: action, location: location });
         }
       } else {
-        warning(state === undefined, 'Browser history cannot replace state in browsers that do not support HTML5 history');
+        (0, _warning2.default)(state === undefined, 'Browser history cannot replace state in browsers that do not support HTML5 history');
+
         window.location.replace(href);
       }
     });
-  }
+  };
 
-  function go(n) {
+  var go = function go(n) {
     globalHistory.go(n);
-  }
+  };
 
-  function goBack() {
-    go(-1);
-  }
+  var goBack = function goBack() {
+    return go(-1);
+  };
 
-  function goForward() {
-    go(1);
-  }
+  var goForward = function goForward() {
+    return go(1);
+  };
 
   var listenerCount = 0;
 
-  function checkDOMListeners(delta) {
+  var checkDOMListeners = function checkDOMListeners(delta) {
     listenerCount += delta;
 
-    if (listenerCount === 1 && delta === 1) {
-      window.addEventListener(PopStateEvent, handlePopState);
-      if (needsHashChangeListener) window.addEventListener(HashChangeEvent, handleHashChange);
+    if (listenerCount === 1) {
+      (0, DOMUtils.addEventListener)(window, PopStateEvent, handlePopState);
+
+      if (needsHashChangeListener) (0, DOMUtils.addEventListener)(window, HashChangeEvent, handleHashChange);
     } else if (listenerCount === 0) {
-      window.removeEventListener(PopStateEvent, handlePopState);
-      if (needsHashChangeListener) window.removeEventListener(HashChangeEvent, handleHashChange);
+      (0, DOMUtils.removeEventListener)(window, PopStateEvent, handlePopState);
+
+      if (needsHashChangeListener) (0, DOMUtils.removeEventListener)(window, HashChangeEvent, handleHashChange);
     }
-  }
+  };
 
   var isBlocked = false;
 
-  function block(prompt) {
-    if (prompt === void 0) {
-      prompt = false;
-    }
+  var block = function block() {
+    var prompt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
     var unblock = transitionManager.setPrompt(prompt);
 
@@ -886,16 +1030,17 @@ function createBrowserHistory(props) {
 
       return unblock();
     };
-  }
+  };
 
-  function listen(listener) {
+  var listen = function listen(listener) {
     var unlisten = transitionManager.appendListener(listener);
     checkDOMListeners(1);
+
     return function () {
       checkDOMListeners(-1);
       unlisten();
     };
-  }
+  };
 
   var history = {
     length: globalHistory.length,
@@ -910,459 +1055,22 @@ function createBrowserHistory(props) {
     block: block,
     listen: listen
   };
-  return history;
-}
 
-var HashChangeEvent$1 = 'hashchange';
-var HashPathCoders = {
-  hashbang: {
-    encodePath: function encodePath(path) {
-      return path.charAt(0) === '!' ? path : '!/' + stripLeadingSlash(path);
-    },
-    decodePath: function decodePath(path) {
-      return path.charAt(0) === '!' ? path.substr(1) : path;
-    }
-  },
-  noslash: {
-    encodePath: stripLeadingSlash,
-    decodePath: addLeadingSlash
-  },
-  slash: {
-    encodePath: addLeadingSlash,
-    decodePath: addLeadingSlash
-  }
+  return history;
 };
 
-function getHashPath() {
-  // We can't use window.location.hash here because it's not
-  // consistent across browsers - Firefox will pre-decode it!
-  var href = window.location.href;
-  var hashIndex = href.indexOf('#');
-  return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
-}
-
-function pushHashPath(path) {
-  window.location.hash = path;
-}
-
-function replaceHashPath(path) {
-  var hashIndex = window.location.href.indexOf('#');
-  window.location.replace(window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path);
-}
-
-function createHashHistory(props) {
-  if (props === void 0) {
-    props = {};
-  }
-
-  !canUseDOM ? invariant$$1(false, 'Hash history needs a DOM') : void 0;
-  var globalHistory = window.history;
-  var canGoWithoutReload = supportsGoWithoutReloadUsingHash();
-  var _props = props,
-      _props$getUserConfirm = _props.getUserConfirmation,
-      getUserConfirmation = _props$getUserConfirm === void 0 ? getConfirmation : _props$getUserConfirm,
-      _props$hashType = _props.hashType,
-      hashType = _props$hashType === void 0 ? 'slash' : _props$hashType;
-  var basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
-  var _HashPathCoders$hashT = HashPathCoders[hashType],
-      encodePath = _HashPathCoders$hashT.encodePath,
-      decodePath = _HashPathCoders$hashT.decodePath;
-
-  function getDOMLocation() {
-    var path = decodePath(getHashPath());
-    warning(!basename || hasBasename(path, basename), 'You are attempting to use a basename on a page whose URL path does not begin ' + 'with the basename. Expected path "' + path + '" to begin with "' + basename + '".');
-    if (basename) path = stripBasename(path, basename);
-    return createLocation(path);
-  }
-
-  var transitionManager = createTransitionManager();
-
-  function setState(nextState) {
-    _extends(history, nextState);
-
-    history.length = globalHistory.length;
-    transitionManager.notifyListeners(history.location, history.action);
-  }
-
-  var forceNextPop = false;
-  var ignorePath = null;
-
-  function handleHashChange() {
-    var path = getHashPath();
-    var encodedPath = encodePath(path);
-
-    if (path !== encodedPath) {
-      // Ensure we always have a properly-encoded hash.
-      replaceHashPath(encodedPath);
-    } else {
-      var location = getDOMLocation();
-      var prevLocation = history.location;
-      if (!forceNextPop && locationsAreEqual(prevLocation, location)) return; // A hashchange doesn't always == location change.
-
-      if (ignorePath === createPath(location)) return; // Ignore this change; we already setState in push/replace.
-
-      ignorePath = null;
-      handlePop(location);
-    }
-  }
-
-  function handlePop(location) {
-    if (forceNextPop) {
-      forceNextPop = false;
-      setState();
-    } else {
-      var action = 'POP';
-      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-        if (ok) {
-          setState({
-            action: action,
-            location: location
-          });
-        } else {
-          revertPop(location);
-        }
-      });
-    }
-  }
-
-  function revertPop(fromLocation) {
-    var toLocation = history.location; // TODO: We could probably make this more reliable by
-    // keeping a list of paths we've seen in sessionStorage.
-    // Instead, we just default to 0 for paths we don't know.
-
-    var toIndex = allPaths.lastIndexOf(createPath(toLocation));
-    if (toIndex === -1) toIndex = 0;
-    var fromIndex = allPaths.lastIndexOf(createPath(fromLocation));
-    if (fromIndex === -1) fromIndex = 0;
-    var delta = toIndex - fromIndex;
-
-    if (delta) {
-      forceNextPop = true;
-      go(delta);
-    }
-  } // Ensure the hash is encoded properly before doing anything else.
-
-
-  var path = getHashPath();
-  var encodedPath = encodePath(path);
-  if (path !== encodedPath) replaceHashPath(encodedPath);
-  var initialLocation = getDOMLocation();
-  var allPaths = [createPath(initialLocation)]; // Public interface
-
-  function createHref(location) {
-    return '#' + encodePath(basename + createPath(location));
-  }
-
-  function push(path, state) {
-    warning(state === undefined, 'Hash history cannot push state; it is ignored');
-    var action = 'PUSH';
-    var location = createLocation(path, undefined, undefined, history.location);
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-      var path = createPath(location);
-      var encodedPath = encodePath(basename + path);
-      var hashChanged = getHashPath() !== encodedPath;
-
-      if (hashChanged) {
-        // We cannot tell if a hashchange was caused by a PUSH, so we'd
-        // rather setState here and ignore the hashchange. The caveat here
-        // is that other hash histories in the page will consider it a POP.
-        ignorePath = path;
-        pushHashPath(encodedPath);
-        var prevIndex = allPaths.lastIndexOf(createPath(history.location));
-        var nextPaths = allPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1);
-        nextPaths.push(path);
-        allPaths = nextPaths;
-        setState({
-          action: action,
-          location: location
-        });
-      } else {
-        warning(false, 'Hash history cannot PUSH the same path; a new entry will not be added to the history stack');
-        setState();
-      }
-    });
-  }
-
-  function replace(path, state) {
-    warning(state === undefined, 'Hash history cannot replace state; it is ignored');
-    var action = 'REPLACE';
-    var location = createLocation(path, undefined, undefined, history.location);
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-      var path = createPath(location);
-      var encodedPath = encodePath(basename + path);
-      var hashChanged = getHashPath() !== encodedPath;
-
-      if (hashChanged) {
-        // We cannot tell if a hashchange was caused by a REPLACE, so we'd
-        // rather setState here and ignore the hashchange. The caveat here
-        // is that other hash histories in the page will consider it a POP.
-        ignorePath = path;
-        replaceHashPath(encodedPath);
-      }
-
-      var prevIndex = allPaths.indexOf(createPath(history.location));
-      if (prevIndex !== -1) allPaths[prevIndex] = path;
-      setState({
-        action: action,
-        location: location
-      });
-    });
-  }
-
-  function go(n) {
-    warning(canGoWithoutReload, 'Hash history go(n) causes a full page reload in this browser');
-    globalHistory.go(n);
-  }
-
-  function goBack() {
-    go(-1);
-  }
-
-  function goForward() {
-    go(1);
-  }
-
-  var listenerCount = 0;
-
-  function checkDOMListeners(delta) {
-    listenerCount += delta;
-
-    if (listenerCount === 1 && delta === 1) {
-      window.addEventListener(HashChangeEvent$1, handleHashChange);
-    } else if (listenerCount === 0) {
-      window.removeEventListener(HashChangeEvent$1, handleHashChange);
-    }
-  }
-
-  var isBlocked = false;
-
-  function block(prompt) {
-    if (prompt === void 0) {
-      prompt = false;
-    }
-
-    var unblock = transitionManager.setPrompt(prompt);
-
-    if (!isBlocked) {
-      checkDOMListeners(1);
-      isBlocked = true;
-    }
-
-    return function () {
-      if (isBlocked) {
-        isBlocked = false;
-        checkDOMListeners(-1);
-      }
-
-      return unblock();
-    };
-  }
-
-  function listen(listener) {
-    var unlisten = transitionManager.appendListener(listener);
-    checkDOMListeners(1);
-    return function () {
-      checkDOMListeners(-1);
-      unlisten();
-    };
-  }
-
-  var history = {
-    length: globalHistory.length,
-    action: 'POP',
-    location: initialLocation,
-    createHref: createHref,
-    push: push,
-    replace: replace,
-    go: go,
-    goBack: goBack,
-    goForward: goForward,
-    block: block,
-    listen: listen
-  };
-  return history;
-}
-
-function clamp(n, lowerBound, upperBound) {
-  return Math.min(Math.max(n, lowerBound), upperBound);
-}
-/**
- * Creates a history object that stores locations in memory.
- */
-
-
-function createMemoryHistory(props) {
-  if (props === void 0) {
-    props = {};
-  }
-
-  var _props = props,
-      getUserConfirmation = _props.getUserConfirmation,
-      _props$initialEntries = _props.initialEntries,
-      initialEntries = _props$initialEntries === void 0 ? ['/'] : _props$initialEntries,
-      _props$initialIndex = _props.initialIndex,
-      initialIndex = _props$initialIndex === void 0 ? 0 : _props$initialIndex,
-      _props$keyLength = _props.keyLength,
-      keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
-  var transitionManager = createTransitionManager();
-
-  function setState(nextState) {
-    _extends(history, nextState);
-
-    history.length = history.entries.length;
-    transitionManager.notifyListeners(history.location, history.action);
-  }
-
-  function createKey() {
-    return Math.random().toString(36).substr(2, keyLength);
-  }
-
-  var index = clamp(initialIndex, 0, initialEntries.length - 1);
-  var entries = initialEntries.map(function (entry) {
-    return typeof entry === 'string' ? createLocation(entry, undefined, createKey()) : createLocation(entry, undefined, entry.key || createKey());
-  }); // Public interface
-
-  var createHref = createPath;
-
-  function push(path, state) {
-    warning(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
-    var action = 'PUSH';
-    var location = createLocation(path, state, createKey(), history.location);
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-      var prevIndex = history.index;
-      var nextIndex = prevIndex + 1;
-      var nextEntries = history.entries.slice(0);
-
-      if (nextEntries.length > nextIndex) {
-        nextEntries.splice(nextIndex, nextEntries.length - nextIndex, location);
-      } else {
-        nextEntries.push(location);
-      }
-
-      setState({
-        action: action,
-        location: location,
-        index: nextIndex,
-        entries: nextEntries
-      });
-    });
-  }
-
-  function replace(path, state) {
-    warning(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to replace when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
-    var action = 'REPLACE';
-    var location = createLocation(path, state, createKey(), history.location);
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-      history.entries[history.index] = location;
-      setState({
-        action: action,
-        location: location
-      });
-    });
-  }
-
-  function go(n) {
-    var nextIndex = clamp(history.index + n, 0, history.entries.length - 1);
-    var action = 'POP';
-    var location = history.entries[nextIndex];
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (ok) {
-        setState({
-          action: action,
-          location: location,
-          index: nextIndex
-        });
-      } else {
-        // Mimic the behavior of DOM histories by
-        // causing a render after a cancelled POP.
-        setState();
-      }
-    });
-  }
-
-  function goBack() {
-    go(-1);
-  }
-
-  function goForward() {
-    go(1);
-  }
-
-  function canGo(n) {
-    var nextIndex = history.index + n;
-    return nextIndex >= 0 && nextIndex < history.entries.length;
-  }
-
-  function block(prompt) {
-    if (prompt === void 0) {
-      prompt = false;
-    }
-
-    return transitionManager.setPrompt(prompt);
-  }
-
-  function listen(listener) {
-    return transitionManager.appendListener(listener);
-  }
-
-  var history = {
-    length: entries.length,
-    action: 'POP',
-    location: entries[index],
-    index: index,
-    entries: entries,
-    createHref: createHref,
-    push: push,
-    replace: replace,
-    go: go,
-    goBack: goBack,
-    goForward: goForward,
-    canGo: canGo,
-    block: block,
-    listen: listen
-  };
-  return history;
-}
-
-exports.createBrowserHistory = createBrowserHistory;
-exports.createHashHistory = createHashHistory;
-exports.createMemoryHistory = createMemoryHistory;
-exports.createLocation = createLocation;
-exports.locationsAreEqual = locationsAreEqual;
-exports.parsePath = parsePath;
-exports.createPath = createPath;
+exports.default = createBrowserHistory;
 });
 
-unwrapExports(history);
-var history_1 = history.createBrowserHistory;
-var history_2 = history.createHashHistory;
-var history_3 = history.createMemoryHistory;
-var history_4 = history.createLocation;
-var history_5 = history.locationsAreEqual;
-var history_6 = history.parsePath;
-var history_7 = history.createPath;
-
-var history$2 = createCommonjsModule(function (module) {
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports = history_min;
-} else {
-  module.exports = history;
-}
-});
-
-warnAboutDeprecatedCJSRequire('createBrowserHistory');
-var createBrowserHistory = history$2.createBrowserHistory;
+var createHistory = unwrapExports(createBrowserHistory_1);
 
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
+ *
+ * @providesModule warning
  */
 
 /**
@@ -1372,16 +1080,16 @@ var createBrowserHistory = history$2.createBrowserHistory;
  * same logic and follow the same code paths.
  */
 
-var __DEV__$1 = process.env.NODE_ENV !== 'production';
+var __DEV__$2 = process.env.NODE_ENV !== 'production';
 
 var warning$2 = function() {};
 
-if (__DEV__$1) {
-  var printWarning$1 = function printWarning(format, args) {
+if (__DEV__$2) {
+  var printWarning = function printWarning(format, args) {
     var len = arguments.length;
-    args = new Array(len > 1 ? len - 1 : 0);
-    for (var key = 1; key < len; key++) {
-      args[key - 1] = arguments[key];
+    args = new Array(len > 2 ? len - 2 : 0);
+    for (var key = 2; key < len; key++) {
+      args[key - 2] = arguments[key];
     }
     var argIndex = 0;
     var message = 'Warning: ' +
@@ -1412,62 +1120,12 @@ if (__DEV__$1) {
       );
     }
     if (!condition) {
-      printWarning$1.apply(null, [format].concat(args));
+      printWarning.apply(null, [format].concat(args));
     }
   };
 }
 
-var warning_1$1 = warning$2;
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments
- * to provide information about what broke and what you were
- * expecting.
- *
- * The invariant message will be stripped in production, but the invariant
- * will remain to ensure logic does not differ in production.
- */
-
-var NODE_ENV = process.env.NODE_ENV;
-
-var invariant$1 = function(condition, format, a, b, c, d, e, f) {
-  if (NODE_ENV !== 'production') {
-    if (format === undefined) {
-      throw new Error('invariant requires an error message argument');
-    }
-  }
-
-  if (!condition) {
-    var error;
-    if (format === undefined) {
-      error = new Error(
-        'Minified exception occurred; use the non-minified dev environment ' +
-        'for the full error message and additional helpful warnings.'
-      );
-    } else {
-      var args = [a, b, c, d, e, f];
-      var argIndex = 0;
-      error = new Error(
-        format.replace(/%s/g, function() { return args[argIndex++]; })
-      );
-      error.name = 'Invariant Violation';
-    }
-
-    error.framesToPop = 1; // we don't care about invariant's own frame
-    throw error;
-  }
-};
-
-var invariant_1 = invariant$1;
+var warning_1$2 = warning$2;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -1540,7 +1198,7 @@ var Router = function (_React$Component) {
   };
 
   Router.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-    warning_1$1(this.props.history === nextProps.history, "You cannot change <Router history>");
+    warning_1$2(this.props.history === nextProps.history, "You cannot change <Router history>");
   };
 
   Router.prototype.componentWillUnmount = function componentWillUnmount() {
@@ -1591,7 +1249,7 @@ var BrowserRouter = function (_React$Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn$1(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.history = createBrowserHistory(_this.props), _temp), _possibleConstructorReturn$1(_this, _ret);
+    return _ret = (_temp = (_this = _possibleConstructorReturn$1(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.history = createHistory(_this.props), _temp), _possibleConstructorReturn$1(_this, _ret);
   }
 
   BrowserRouter.prototype.componentWillMount = function componentWillMount() {
@@ -1613,8 +1271,333 @@ BrowserRouter.propTypes = {
   children: PropTypes.node
 };
 
-warnAboutDeprecatedCJSRequire('createHashHistory');
-var createHashHistory = history$2.createHashHistory;
+var createHashHistory_1 = createCommonjsModule(function (module, exports) {
+
+exports.__esModule = true;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+var _warning2 = _interopRequireDefault(warning_1$1);
+
+
+
+var _invariant2 = _interopRequireDefault(invariant_1);
+
+
+
+
+
+
+
+var _createTransitionManager2 = _interopRequireDefault(createTransitionManager_1);
+
+
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var HashChangeEvent = 'hashchange';
+
+var HashPathCoders = {
+  hashbang: {
+    encodePath: function encodePath(path) {
+      return path.charAt(0) === '!' ? path : '!/' + (0, PathUtils.stripLeadingSlash)(path);
+    },
+    decodePath: function decodePath(path) {
+      return path.charAt(0) === '!' ? path.substr(1) : path;
+    }
+  },
+  noslash: {
+    encodePath: PathUtils.stripLeadingSlash,
+    decodePath: PathUtils.addLeadingSlash
+  },
+  slash: {
+    encodePath: PathUtils.addLeadingSlash,
+    decodePath: PathUtils.addLeadingSlash
+  }
+};
+
+var getHashPath = function getHashPath() {
+  // We can't use window.location.hash here because it's not
+  // consistent across browsers - Firefox will pre-decode it!
+  var href = window.location.href;
+  var hashIndex = href.indexOf('#');
+  return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
+};
+
+var pushHashPath = function pushHashPath(path) {
+  return window.location.hash = path;
+};
+
+var replaceHashPath = function replaceHashPath(path) {
+  var hashIndex = window.location.href.indexOf('#');
+
+  window.location.replace(window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path);
+};
+
+var createHashHistory = function createHashHistory() {
+  var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  (0, _invariant2.default)(DOMUtils.canUseDOM, 'Hash history needs a DOM');
+
+  var globalHistory = window.history;
+  var canGoWithoutReload = (0, DOMUtils.supportsGoWithoutReloadUsingHash)();
+
+  var _props$getUserConfirm = props.getUserConfirmation,
+      getUserConfirmation = _props$getUserConfirm === undefined ? DOMUtils.getConfirmation : _props$getUserConfirm,
+      _props$hashType = props.hashType,
+      hashType = _props$hashType === undefined ? 'slash' : _props$hashType;
+
+  var basename = props.basename ? (0, PathUtils.stripTrailingSlash)((0, PathUtils.addLeadingSlash)(props.basename)) : '';
+
+  var _HashPathCoders$hashT = HashPathCoders[hashType],
+      encodePath = _HashPathCoders$hashT.encodePath,
+      decodePath = _HashPathCoders$hashT.decodePath;
+
+
+  var getDOMLocation = function getDOMLocation() {
+    var path = decodePath(getHashPath());
+
+    (0, _warning2.default)(!basename || (0, PathUtils.hasBasename)(path, basename), 'You are attempting to use a basename on a page whose URL path does not begin ' + 'with the basename. Expected path "' + path + '" to begin with "' + basename + '".');
+
+    if (basename) path = (0, PathUtils.stripBasename)(path, basename);
+
+    return (0, LocationUtils.createLocation)(path);
+  };
+
+  var transitionManager = (0, _createTransitionManager2.default)();
+
+  var setState = function setState(nextState) {
+    _extends(history, nextState);
+
+    history.length = globalHistory.length;
+
+    transitionManager.notifyListeners(history.location, history.action);
+  };
+
+  var forceNextPop = false;
+  var ignorePath = null;
+
+  var handleHashChange = function handleHashChange() {
+    var path = getHashPath();
+    var encodedPath = encodePath(path);
+
+    if (path !== encodedPath) {
+      // Ensure we always have a properly-encoded hash.
+      replaceHashPath(encodedPath);
+    } else {
+      var location = getDOMLocation();
+      var prevLocation = history.location;
+
+      if (!forceNextPop && (0, LocationUtils.locationsAreEqual)(prevLocation, location)) return; // A hashchange doesn't always == location change.
+
+      if (ignorePath === (0, PathUtils.createPath)(location)) return; // Ignore this change; we already setState in push/replace.
+
+      ignorePath = null;
+
+      handlePop(location);
+    }
+  };
+
+  var handlePop = function handlePop(location) {
+    if (forceNextPop) {
+      forceNextPop = false;
+      setState();
+    } else {
+      var action = 'POP';
+
+      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+        if (ok) {
+          setState({ action: action, location: location });
+        } else {
+          revertPop(location);
+        }
+      });
+    }
+  };
+
+  var revertPop = function revertPop(fromLocation) {
+    var toLocation = history.location;
+
+    // TODO: We could probably make this more reliable by
+    // keeping a list of paths we've seen in sessionStorage.
+    // Instead, we just default to 0 for paths we don't know.
+
+    var toIndex = allPaths.lastIndexOf((0, PathUtils.createPath)(toLocation));
+
+    if (toIndex === -1) toIndex = 0;
+
+    var fromIndex = allPaths.lastIndexOf((0, PathUtils.createPath)(fromLocation));
+
+    if (fromIndex === -1) fromIndex = 0;
+
+    var delta = toIndex - fromIndex;
+
+    if (delta) {
+      forceNextPop = true;
+      go(delta);
+    }
+  };
+
+  // Ensure the hash is encoded properly before doing anything else.
+  var path = getHashPath();
+  var encodedPath = encodePath(path);
+
+  if (path !== encodedPath) replaceHashPath(encodedPath);
+
+  var initialLocation = getDOMLocation();
+  var allPaths = [(0, PathUtils.createPath)(initialLocation)];
+
+  // Public interface
+
+  var createHref = function createHref(location) {
+    return '#' + encodePath(basename + (0, PathUtils.createPath)(location));
+  };
+
+  var push = function push(path, state) {
+    (0, _warning2.default)(state === undefined, 'Hash history cannot push state; it is ignored');
+
+    var action = 'PUSH';
+    var location = (0, LocationUtils.createLocation)(path, undefined, undefined, history.location);
+
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+
+      var path = (0, PathUtils.createPath)(location);
+      var encodedPath = encodePath(basename + path);
+      var hashChanged = getHashPath() !== encodedPath;
+
+      if (hashChanged) {
+        // We cannot tell if a hashchange was caused by a PUSH, so we'd
+        // rather setState here and ignore the hashchange. The caveat here
+        // is that other hash histories in the page will consider it a POP.
+        ignorePath = path;
+        pushHashPath(encodedPath);
+
+        var prevIndex = allPaths.lastIndexOf((0, PathUtils.createPath)(history.location));
+        var nextPaths = allPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1);
+
+        nextPaths.push(path);
+        allPaths = nextPaths;
+
+        setState({ action: action, location: location });
+      } else {
+        (0, _warning2.default)(false, 'Hash history cannot PUSH the same path; a new entry will not be added to the history stack');
+
+        setState();
+      }
+    });
+  };
+
+  var replace = function replace(path, state) {
+    (0, _warning2.default)(state === undefined, 'Hash history cannot replace state; it is ignored');
+
+    var action = 'REPLACE';
+    var location = (0, LocationUtils.createLocation)(path, undefined, undefined, history.location);
+
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+
+      var path = (0, PathUtils.createPath)(location);
+      var encodedPath = encodePath(basename + path);
+      var hashChanged = getHashPath() !== encodedPath;
+
+      if (hashChanged) {
+        // We cannot tell if a hashchange was caused by a REPLACE, so we'd
+        // rather setState here and ignore the hashchange. The caveat here
+        // is that other hash histories in the page will consider it a POP.
+        ignorePath = path;
+        replaceHashPath(encodedPath);
+      }
+
+      var prevIndex = allPaths.indexOf((0, PathUtils.createPath)(history.location));
+
+      if (prevIndex !== -1) allPaths[prevIndex] = path;
+
+      setState({ action: action, location: location });
+    });
+  };
+
+  var go = function go(n) {
+    (0, _warning2.default)(canGoWithoutReload, 'Hash history go(n) causes a full page reload in this browser');
+
+    globalHistory.go(n);
+  };
+
+  var goBack = function goBack() {
+    return go(-1);
+  };
+
+  var goForward = function goForward() {
+    return go(1);
+  };
+
+  var listenerCount = 0;
+
+  var checkDOMListeners = function checkDOMListeners(delta) {
+    listenerCount += delta;
+
+    if (listenerCount === 1) {
+      (0, DOMUtils.addEventListener)(window, HashChangeEvent, handleHashChange);
+    } else if (listenerCount === 0) {
+      (0, DOMUtils.removeEventListener)(window, HashChangeEvent, handleHashChange);
+    }
+  };
+
+  var isBlocked = false;
+
+  var block = function block() {
+    var prompt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+    var unblock = transitionManager.setPrompt(prompt);
+
+    if (!isBlocked) {
+      checkDOMListeners(1);
+      isBlocked = true;
+    }
+
+    return function () {
+      if (isBlocked) {
+        isBlocked = false;
+        checkDOMListeners(-1);
+      }
+
+      return unblock();
+    };
+  };
+
+  var listen = function listen(listener) {
+    var unlisten = transitionManager.appendListener(listener);
+    checkDOMListeners(1);
+
+    return function () {
+      checkDOMListeners(-1);
+      unlisten();
+    };
+  };
+
+  var history = {
+    length: globalHistory.length,
+    action: 'POP',
+    location: initialLocation,
+    createHref: createHref,
+    push: push,
+    replace: replace,
+    go: go,
+    goBack: goBack,
+    goForward: goForward,
+    block: block,
+    listen: listen
+  };
+
+  return history;
+};
+
+exports.default = createHashHistory;
+});
+
+var createHistory$1 = unwrapExports(createHashHistory_1);
 
 function _classCallCheck$2(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1638,7 +1621,7 @@ var HashRouter = function (_React$Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn$2(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.history = createHashHistory(_this.props), _temp), _possibleConstructorReturn$2(_this, _ret);
+    return _ret = (_temp = (_this = _possibleConstructorReturn$2(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.history = createHistory$1(_this.props), _temp), _possibleConstructorReturn$2(_this, _ret);
   }
 
   HashRouter.prototype.componentWillMount = function componentWillMount() {
@@ -1751,49 +1734,34 @@ Link$1.contextTypes = {
   }).isRequired
 };
 
-function _extends$2() {
-  _extends$2 = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends$2.apply(this, arguments);
-}
-
-function addLeadingSlash(path) {
+var addLeadingSlash = function addLeadingSlash(path) {
   return path.charAt(0) === '/' ? path : '/' + path;
-}
-function hasBasename(path, prefix) {
+};
+
+var hasBasename = function hasBasename(path, prefix) {
   return new RegExp('^' + prefix + '(\\/|\\?|#|$)', 'i').test(path);
-}
-function stripBasename(path, prefix) {
+};
+
+var stripBasename = function stripBasename(path, prefix) {
   return hasBasename(path, prefix) ? path.substr(prefix.length) : path;
-}
-function stripTrailingSlash(path) {
+};
+
+var stripTrailingSlash = function stripTrailingSlash(path) {
   return path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
-}
-function parsePath(path) {
+};
+
+var parsePath = function parsePath(path) {
   var pathname = path || '/';
   var search = '';
   var hash = '';
-  var hashIndex = pathname.indexOf('#');
 
+  var hashIndex = pathname.indexOf('#');
   if (hashIndex !== -1) {
     hash = pathname.substr(hashIndex);
     pathname = pathname.substr(0, hashIndex);
   }
 
   var searchIndex = pathname.indexOf('?');
-
   if (searchIndex !== -1) {
     search = pathname.substr(searchIndex);
     pathname = pathname.substr(0, searchIndex);
@@ -1804,27 +1772,35 @@ function parsePath(path) {
     search: search === '?' ? '' : search,
     hash: hash === '#' ? '' : hash
   };
-}
-function createPath(location) {
+};
+
+var createPath = function createPath(location) {
   var pathname = location.pathname,
       search = location.search,
       hash = location.hash;
+
+
   var path = pathname || '/';
-  if (search && search !== '?') path += search.charAt(0) === '?' ? search : "?" + search;
-  if (hash && hash !== '#') path += hash.charAt(0) === '#' ? hash : "#" + hash;
+
+  if (search && search !== '?') path += search.charAt(0) === '?' ? search : '?' + search;
+
+  if (hash && hash !== '#') path += hash.charAt(0) === '#' ? hash : '#' + hash;
+
   return path;
-}
+};
 
-function createLocation(path, state, key, currentLocation) {
-  var location;
+var _extends$2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var createLocation = function createLocation(path, state, key, currentLocation) {
+  var location = void 0;
   if (typeof path === 'string') {
     // Two-arg form: push(path, state)
     location = parsePath(path);
     location.state = state;
   } else {
     // One-arg form: push(location)
-    location = _extends({}, path);
+    location = _extends$2({}, path);
+
     if (location.pathname === undefined) location.pathname = '';
 
     if (location.search) {
@@ -1869,23 +1845,26 @@ function createLocation(path, state, key, currentLocation) {
   }
 
   return location;
-}
-function locationsAreEqual(a, b) {
-  return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash && a.key === b.key && valueEqual(a.state, b.state);
-}
+};
 
-function createTransitionManager() {
+var locationsAreEqual = function locationsAreEqual(a, b) {
+  return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash && a.key === b.key && valueEqual(a.state, b.state);
+};
+
+var createTransitionManager$1 = function createTransitionManager() {
   var prompt = null;
 
-  function setPrompt(nextPrompt) {
-    process.env.NODE_ENV !== "production" ? warning$1(prompt == null, 'A history supports only one prompt at a time') : void 0;
+  var setPrompt = function setPrompt(nextPrompt) {
+    warning_1$1(prompt == null, 'A history supports only one prompt at a time');
+
     prompt = nextPrompt;
+
     return function () {
       if (prompt === nextPrompt) prompt = null;
     };
-  }
+  };
 
-  function confirmTransitionTo(location, action, getUserConfirmation, callback) {
+  var confirmTransitionTo = function confirmTransitionTo(location, action, getUserConfirmation, callback) {
     // TODO: If another transition starts while we're still confirming
     // the previous one, we may end up in a weird state. Figure out the
     // best way to handle this.
@@ -1896,7 +1875,8 @@ function createTransitionManager() {
         if (typeof getUserConfirmation === 'function') {
           getUserConfirmation(result, callback);
         } else {
-          process.env.NODE_ENV !== "production" ? warning$1(false, 'A history needs a getUserConfirmation function in order to use a prompt message') : void 0;
+          warning_1$1(false, 'A history needs a getUserConfirmation function in order to use a prompt message');
+
           callback(true);
         }
       } else {
@@ -1906,35 +1886,36 @@ function createTransitionManager() {
     } else {
       callback(true);
     }
-  }
+  };
 
   var listeners = [];
 
-  function appendListener(fn) {
+  var appendListener = function appendListener(fn) {
     var isActive = true;
 
-    function listener() {
-      if (isActive) fn.apply(void 0, arguments);
-    }
+    var listener = function listener() {
+      if (isActive) fn.apply(undefined, arguments);
+    };
 
     listeners.push(listener);
+
     return function () {
       isActive = false;
       listeners = listeners.filter(function (item) {
         return item !== listener;
       });
     };
-  }
+  };
 
-  function notifyListeners() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+  var notifyListeners = function notifyListeners() {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
     listeners.forEach(function (listener) {
-      return listener.apply(void 0, args);
+      return listener.apply(undefined, args);
     });
-  }
+  };
 
   return {
     setPrompt: setPrompt,
@@ -1942,12 +1923,22 @@ function createTransitionManager() {
     appendListener: appendListener,
     notifyListeners: notifyListeners
   };
-}
+};
 
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
-function getConfirmation(message, callback) {
-  callback(window.confirm(message)); // eslint-disable-line no-alert
-}
+
+var addEventListener = function addEventListener(node$$1, event, listener) {
+  return node$$1.addEventListener ? node$$1.addEventListener(event, listener, false) : node$$1.attachEvent('on' + event, listener);
+};
+
+var removeEventListener = function removeEventListener(node$$1, event, listener) {
+  return node$$1.removeEventListener ? node$$1.removeEventListener(event, listener, false) : node$$1.detachEvent('on' + event, listener);
+};
+
+var getConfirmation = function getConfirmation(message, callback) {
+  return callback(window.confirm(message));
+}; // eslint-disable-line no-alert
+
 /**
  * Returns true if the HTML5 history API is supported. Taken from Modernizr.
  *
@@ -1955,34 +1946,39 @@ function getConfirmation(message, callback) {
  * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
  * changed to avoid false negatives for Windows Phones: https://github.com/reactjs/react-router/issues/586
  */
-
-function supportsHistory() {
+var supportsHistory = function supportsHistory() {
   var ua = window.navigator.userAgent;
+
   if ((ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) && ua.indexOf('Mobile Safari') !== -1 && ua.indexOf('Chrome') === -1 && ua.indexOf('Windows Phone') === -1) return false;
+
   return window.history && 'pushState' in window.history;
-}
+};
+
 /**
  * Returns true if browser fires popstate on hash change.
  * IE10 and IE11 do not.
  */
-
-function supportsPopStateOnHashChange() {
+var supportsPopStateOnHashChange = function supportsPopStateOnHashChange() {
   return window.navigator.userAgent.indexOf('Trident') === -1;
-}
+};
+
 /**
  * Returns true if a given popstate event is an extraneous WebKit event.
  * Accounts for the fact that Chrome on iOS fires real popstate events
  * containing undefined state when pressing the back button.
  */
+var isExtraneousPopstateEvent = function isExtraneousPopstateEvent(event) {
+  return event.state === undefined && navigator.userAgent.indexOf('CriOS') === -1;
+};
 
-function isExtraneousPopstateEvent(event) {
-  event.state === undefined && navigator.userAgent.indexOf('CriOS') === -1;
-}
+var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var PopStateEvent = 'popstate';
 var HashChangeEvent = 'hashchange';
 
-function getHistoryState() {
+var getHistoryState = function getHistoryState() {
   try {
     return window.history.state || {};
   } catch (e) {
@@ -1990,32 +1986,31 @@ function getHistoryState() {
     // See https://github.com/ReactTraining/history/pull/289
     return {};
   }
-}
+};
+
 /**
  * Creates a history object that uses the HTML5 history API including
  * pushState, replaceState, and the popstate event.
  */
+var createBrowserHistory = function createBrowserHistory() {
+  var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
+  invariant_1(canUseDOM, 'Browser history needs a DOM');
 
-function createBrowserHistory$1(props) {
-  if (props === void 0) {
-    props = {};
-  }
-
-  !canUseDOM ? process.env.NODE_ENV !== "production" ? invariant(false, 'Browser history needs a DOM') : invariant(false) : void 0;
   var globalHistory = window.history;
   var canUseHistory = supportsHistory();
   var needsHashChangeListener = !supportsPopStateOnHashChange();
-  var _props = props,
-      _props$forceRefresh = _props.forceRefresh,
-      forceRefresh = _props$forceRefresh === void 0 ? false : _props$forceRefresh,
-      _props$getUserConfirm = _props.getUserConfirmation,
-      getUserConfirmation = _props$getUserConfirm === void 0 ? getConfirmation : _props$getUserConfirm,
-      _props$keyLength = _props.keyLength,
-      keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
+
+  var _props$forceRefresh = props.forceRefresh,
+      forceRefresh = _props$forceRefresh === undefined ? false : _props$forceRefresh,
+      _props$getUserConfirm = props.getUserConfirmation,
+      getUserConfirmation = _props$getUserConfirm === undefined ? getConfirmation : _props$getUserConfirm,
+      _props$keyLength = props.keyLength,
+      keyLength = _props$keyLength === undefined ? 6 : _props$keyLength;
+
   var basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
 
-  function getDOMLocation(historyState) {
+  var getDOMLocation = function getDOMLocation(historyState) {
     var _ref = historyState || {},
         key = _ref.key,
         state = _ref.state;
@@ -2024,180 +2019,195 @@ function createBrowserHistory$1(props) {
         pathname = _window$location.pathname,
         search = _window$location.search,
         hash = _window$location.hash;
+
+
     var path = pathname + search + hash;
-    process.env.NODE_ENV !== "production" ? warning$1(!basename || hasBasename(path, basename), 'You are attempting to use a basename on a page whose URL path does not begin ' + 'with the basename. Expected path "' + path + '" to begin with "' + basename + '".') : void 0;
+
+    warning_1$1(!basename || hasBasename(path, basename), 'You are attempting to use a basename on a page whose URL path does not begin ' + 'with the basename. Expected path "' + path + '" to begin with "' + basename + '".');
+
     if (basename) path = stripBasename(path, basename);
+
     return createLocation(path, state, key);
-  }
+  };
 
-  function createKey() {
+  var createKey = function createKey() {
     return Math.random().toString(36).substr(2, keyLength);
-  }
+  };
 
-  var transitionManager = createTransitionManager();
+  var transitionManager = createTransitionManager$1();
 
-  function setState(nextState) {
-    _extends(history, nextState);
+  var setState = function setState(nextState) {
+    _extends$3(history, nextState);
 
     history.length = globalHistory.length;
-    transitionManager.notifyListeners(history.location, history.action);
-  }
 
-  function handlePopState(event) {
+    transitionManager.notifyListeners(history.location, history.action);
+  };
+
+  var handlePopState = function handlePopState(event) {
     // Ignore extraneous popstate events in WebKit.
     if (isExtraneousPopstateEvent(event)) return;
-    handlePop(getDOMLocation(event.state));
-  }
 
-  function handleHashChange() {
+    handlePop(getDOMLocation(event.state));
+  };
+
+  var handleHashChange = function handleHashChange() {
     handlePop(getDOMLocation(getHistoryState()));
-  }
+  };
 
   var forceNextPop = false;
 
-  function handlePop(location) {
+  var handlePop = function handlePop(location) {
     if (forceNextPop) {
       forceNextPop = false;
       setState();
     } else {
       var action = 'POP';
+
       transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
         if (ok) {
-          setState({
-            action: action,
-            location: location
-          });
+          setState({ action: action, location: location });
         } else {
           revertPop(location);
         }
       });
     }
-  }
+  };
 
-  function revertPop(fromLocation) {
-    var toLocation = history.location; // TODO: We could probably make this more reliable by
+  var revertPop = function revertPop(fromLocation) {
+    var toLocation = history.location;
+
+    // TODO: We could probably make this more reliable by
     // keeping a list of keys we've seen in sessionStorage.
     // Instead, we just default to 0 for keys we don't know.
 
     var toIndex = allKeys.indexOf(toLocation.key);
+
     if (toIndex === -1) toIndex = 0;
+
     var fromIndex = allKeys.indexOf(fromLocation.key);
+
     if (fromIndex === -1) fromIndex = 0;
+
     var delta = toIndex - fromIndex;
 
     if (delta) {
       forceNextPop = true;
       go(delta);
     }
-  }
+  };
 
   var initialLocation = getDOMLocation(getHistoryState());
-  var allKeys = [initialLocation.key]; // Public interface
+  var allKeys = [initialLocation.key];
 
-  function createHref(location) {
+  // Public interface
+
+  var createHref = function createHref(location) {
     return basename + createPath(location);
-  }
+  };
 
-  function push(path, state) {
-    process.env.NODE_ENV !== "production" ? warning$1(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' + 'argument is a location-like object that already has state; it is ignored') : void 0;
+  var push = function push(path, state) {
+    warning_1$1(!((typeof path === 'undefined' ? 'undefined' : _typeof$1(path)) === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
+
     var action = 'PUSH';
     var location = createLocation(path, state, createKey(), history.location);
+
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
       if (!ok) return;
+
       var href = createHref(location);
       var key = location.key,
           state = location.state;
 
+
       if (canUseHistory) {
-        globalHistory.pushState({
-          key: key,
-          state: state
-        }, null, href);
+        globalHistory.pushState({ key: key, state: state }, null, href);
 
         if (forceRefresh) {
           window.location.href = href;
         } else {
           var prevIndex = allKeys.indexOf(history.location.key);
           var nextKeys = allKeys.slice(0, prevIndex === -1 ? 0 : prevIndex + 1);
+
           nextKeys.push(location.key);
           allKeys = nextKeys;
-          setState({
-            action: action,
-            location: location
-          });
+
+          setState({ action: action, location: location });
         }
       } else {
-        process.env.NODE_ENV !== "production" ? warning$1(state === undefined, 'Browser history cannot push state in browsers that do not support HTML5 history') : void 0;
+        warning_1$1(state === undefined, 'Browser history cannot push state in browsers that do not support HTML5 history');
+
         window.location.href = href;
       }
     });
-  }
+  };
 
-  function replace(path, state) {
-    process.env.NODE_ENV !== "production" ? warning$1(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to replace when the 1st ' + 'argument is a location-like object that already has state; it is ignored') : void 0;
+  var replace = function replace(path, state) {
+    warning_1$1(!((typeof path === 'undefined' ? 'undefined' : _typeof$1(path)) === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to replace when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
+
     var action = 'REPLACE';
     var location = createLocation(path, state, createKey(), history.location);
+
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
       if (!ok) return;
+
       var href = createHref(location);
       var key = location.key,
           state = location.state;
 
+
       if (canUseHistory) {
-        globalHistory.replaceState({
-          key: key,
-          state: state
-        }, null, href);
+        globalHistory.replaceState({ key: key, state: state }, null, href);
 
         if (forceRefresh) {
           window.location.replace(href);
         } else {
           var prevIndex = allKeys.indexOf(history.location.key);
+
           if (prevIndex !== -1) allKeys[prevIndex] = location.key;
-          setState({
-            action: action,
-            location: location
-          });
+
+          setState({ action: action, location: location });
         }
       } else {
-        process.env.NODE_ENV !== "production" ? warning$1(state === undefined, 'Browser history cannot replace state in browsers that do not support HTML5 history') : void 0;
+        warning_1$1(state === undefined, 'Browser history cannot replace state in browsers that do not support HTML5 history');
+
         window.location.replace(href);
       }
     });
-  }
+  };
 
-  function go(n) {
+  var go = function go(n) {
     globalHistory.go(n);
-  }
+  };
 
-  function goBack() {
-    go(-1);
-  }
+  var goBack = function goBack() {
+    return go(-1);
+  };
 
-  function goForward() {
-    go(1);
-  }
+  var goForward = function goForward() {
+    return go(1);
+  };
 
   var listenerCount = 0;
 
-  function checkDOMListeners(delta) {
+  var checkDOMListeners = function checkDOMListeners(delta) {
     listenerCount += delta;
 
-    if (listenerCount === 1 && delta === 1) {
-      window.addEventListener(PopStateEvent, handlePopState);
-      if (needsHashChangeListener) window.addEventListener(HashChangeEvent, handleHashChange);
+    if (listenerCount === 1) {
+      addEventListener(window, PopStateEvent, handlePopState);
+
+      if (needsHashChangeListener) addEventListener(window, HashChangeEvent, handleHashChange);
     } else if (listenerCount === 0) {
-      window.removeEventListener(PopStateEvent, handlePopState);
-      if (needsHashChangeListener) window.removeEventListener(HashChangeEvent, handleHashChange);
+      removeEventListener(window, PopStateEvent, handlePopState);
+
+      if (needsHashChangeListener) removeEventListener(window, HashChangeEvent, handleHashChange);
     }
-  }
+  };
 
   var isBlocked = false;
 
-  function block(prompt) {
-    if (prompt === void 0) {
-      prompt = false;
-    }
+  var block = function block() {
+    var prompt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
     var unblock = transitionManager.setPrompt(prompt);
 
@@ -2214,16 +2224,17 @@ function createBrowserHistory$1(props) {
 
       return unblock();
     };
-  }
+  };
 
-  function listen(listener) {
+  var listen = function listen(listener) {
     var unlisten = transitionManager.appendListener(listener);
     checkDOMListeners(1);
+
     return function () {
       checkDOMListeners(-1);
       unlisten();
     };
-  }
+  };
 
   var history = {
     length: globalHistory.length,
@@ -2238,60 +2249,68 @@ function createBrowserHistory$1(props) {
     block: block,
     listen: listen
   };
-  return history;
-}
 
-function clamp(n, lowerBound, upperBound) {
+  return history;
+};
+
+var _typeof$2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends$5 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var clamp = function clamp(n, lowerBound, upperBound) {
   return Math.min(Math.max(n, lowerBound), upperBound);
-}
+};
+
 /**
  * Creates a history object that stores locations in memory.
  */
+var createMemoryHistory = function createMemoryHistory() {
+  var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var getUserConfirmation = props.getUserConfirmation,
+      _props$initialEntries = props.initialEntries,
+      initialEntries = _props$initialEntries === undefined ? ['/'] : _props$initialEntries,
+      _props$initialIndex = props.initialIndex,
+      initialIndex = _props$initialIndex === undefined ? 0 : _props$initialIndex,
+      _props$keyLength = props.keyLength,
+      keyLength = _props$keyLength === undefined ? 6 : _props$keyLength;
 
 
-function createMemoryHistory(props) {
-  if (props === void 0) {
-    props = {};
-  }
+  var transitionManager = createTransitionManager$1();
 
-  var _props = props,
-      getUserConfirmation = _props.getUserConfirmation,
-      _props$initialEntries = _props.initialEntries,
-      initialEntries = _props$initialEntries === void 0 ? ['/'] : _props$initialEntries,
-      _props$initialIndex = _props.initialIndex,
-      initialIndex = _props$initialIndex === void 0 ? 0 : _props$initialIndex,
-      _props$keyLength = _props.keyLength,
-      keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
-  var transitionManager = createTransitionManager();
-
-  function setState(nextState) {
-    _extends(history, nextState);
+  var setState = function setState(nextState) {
+    _extends$5(history, nextState);
 
     history.length = history.entries.length;
-    transitionManager.notifyListeners(history.location, history.action);
-  }
 
-  function createKey() {
+    transitionManager.notifyListeners(history.location, history.action);
+  };
+
+  var createKey = function createKey() {
     return Math.random().toString(36).substr(2, keyLength);
-  }
+  };
 
   var index = clamp(initialIndex, 0, initialEntries.length - 1);
   var entries = initialEntries.map(function (entry) {
     return typeof entry === 'string' ? createLocation(entry, undefined, createKey()) : createLocation(entry, undefined, entry.key || createKey());
-  }); // Public interface
+  });
+
+  // Public interface
 
   var createHref = createPath;
 
-  function push(path, state) {
-    process.env.NODE_ENV !== "production" ? warning$1(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' + 'argument is a location-like object that already has state; it is ignored') : void 0;
+  var push = function push(path, state) {
+    warning_1$1(!((typeof path === 'undefined' ? 'undefined' : _typeof$2(path)) === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
+
     var action = 'PUSH';
     var location = createLocation(path, state, createKey(), history.location);
+
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
       if (!ok) return;
+
       var prevIndex = history.index;
       var nextIndex = prevIndex + 1;
-      var nextEntries = history.entries.slice(0);
 
+      var nextEntries = history.entries.slice(0);
       if (nextEntries.length > nextIndex) {
         nextEntries.splice(nextIndex, nextEntries.length - nextIndex, location);
       } else {
@@ -2305,26 +2324,29 @@ function createMemoryHistory(props) {
         entries: nextEntries
       });
     });
-  }
+  };
 
-  function replace(path, state) {
-    process.env.NODE_ENV !== "production" ? warning$1(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to replace when the 1st ' + 'argument is a location-like object that already has state; it is ignored') : void 0;
+  var replace = function replace(path, state) {
+    warning_1$1(!((typeof path === 'undefined' ? 'undefined' : _typeof$2(path)) === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to replace when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
+
     var action = 'REPLACE';
     var location = createLocation(path, state, createKey(), history.location);
+
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
       if (!ok) return;
-      history.entries[history.index] = location;
-      setState({
-        action: action,
-        location: location
-      });
-    });
-  }
 
-  function go(n) {
+      history.entries[history.index] = location;
+
+      setState({ action: action, location: location });
+    });
+  };
+
+  var go = function go(n) {
     var nextIndex = clamp(history.index + n, 0, history.entries.length - 1);
+
     var action = 'POP';
     var location = history.entries[nextIndex];
+
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
       if (ok) {
         setState({
@@ -2338,32 +2360,29 @@ function createMemoryHistory(props) {
         setState();
       }
     });
-  }
+  };
 
-  function goBack() {
-    go(-1);
-  }
+  var goBack = function goBack() {
+    return go(-1);
+  };
 
-  function goForward() {
-    go(1);
-  }
+  var goForward = function goForward() {
+    return go(1);
+  };
 
-  function canGo(n) {
+  var canGo = function canGo(n) {
     var nextIndex = history.index + n;
     return nextIndex >= 0 && nextIndex < history.entries.length;
-  }
+  };
 
-  function block(prompt) {
-    if (prompt === void 0) {
-      prompt = false;
-    }
-
+  var block = function block() {
+    var prompt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     return transitionManager.setPrompt(prompt);
-  }
+  };
 
-  function listen(listener) {
+  var listen = function listen(listener) {
     return transitionManager.appendListener(listener);
-  }
+  };
 
   var history = {
     length: entries.length,
@@ -2381,8 +2400,9 @@ function createMemoryHistory(props) {
     block: block,
     listen: listen
   };
+
   return history;
-}
+};
 
 function _classCallCheck$4(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2410,7 +2430,7 @@ var MemoryRouter = function (_React$Component) {
   }
 
   MemoryRouter.prototype.componentWillMount = function componentWillMount() {
-    warning_1$1(!this.props.history, "<MemoryRouter> ignores the history prop. To use a custom history, " + "use `import { Router }` instead of `import { MemoryRouter as Router }`.");
+    warning_1$2(!this.props.history, "<MemoryRouter> ignores the history prop. To use a custom history, " + "use `import { Router }` instead of `import { MemoryRouter as Router }`.");
   };
 
   MemoryRouter.prototype.render = function render() {
@@ -2932,7 +2952,7 @@ var matchPath = function matchPath(pathname) {
   };
 };
 
-var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$6 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck$5(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2967,7 +2987,7 @@ var Route = function (_React$Component) {
 
   Route.prototype.getChildContext = function getChildContext() {
     return {
-      router: _extends$3({}, this.context.router, {
+      router: _extends$6({}, this.context.router, {
         route: {
           location: this.props.location || this.context.router.route.location,
           match: this.state.match
@@ -2996,17 +3016,17 @@ var Route = function (_React$Component) {
   };
 
   Route.prototype.componentWillMount = function componentWillMount() {
-    warning_1$1(!(this.props.component && this.props.render), "You should not use <Route component> and <Route render> in the same route; <Route render> will be ignored");
+    warning_1$2(!(this.props.component && this.props.render), "You should not use <Route component> and <Route render> in the same route; <Route render> will be ignored");
 
-    warning_1$1(!(this.props.component && this.props.children && !isEmptyChildren(this.props.children)), "You should not use <Route component> and <Route children> in the same route; <Route children> will be ignored");
+    warning_1$2(!(this.props.component && this.props.children && !isEmptyChildren(this.props.children)), "You should not use <Route component> and <Route children> in the same route; <Route children> will be ignored");
 
-    warning_1$1(!(this.props.render && this.props.children && !isEmptyChildren(this.props.children)), "You should not use <Route render> and <Route children> in the same route; <Route children> will be ignored");
+    warning_1$2(!(this.props.render && this.props.children && !isEmptyChildren(this.props.children)), "You should not use <Route render> and <Route children> in the same route; <Route children> will be ignored");
   };
 
   Route.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps, nextContext) {
-    warning_1$1(!(nextProps.location && !this.props.location), '<Route> elements should not change from uncontrolled to controlled (or vice versa). You initially used no "location" prop and then provided one on a subsequent render.');
+    warning_1$2(!(nextProps.location && !this.props.location), '<Route> elements should not change from uncontrolled to controlled (or vice versa). You initially used no "location" prop and then provided one on a subsequent render.');
 
-    warning_1$1(!(!nextProps.location && this.props.location), '<Route> elements should not change from controlled to uncontrolled (or vice versa). You provided a "location" prop initially but omitted it on a subsequent render.');
+    warning_1$2(!(!nextProps.location && this.props.location), '<Route> elements should not change from controlled to uncontrolled (or vice versa). You provided a "location" prop initially but omitted it on a subsequent render.');
 
     this.setState({
       match: this.computeMatch(nextProps, nextContext.router)
@@ -3065,9 +3085,9 @@ Route.childContextTypes = {
 
 // Written in this round about way for babel-transform-imports
 
-var _extends$4 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$7 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof$3 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _objectWithoutProperties$1(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
@@ -3088,7 +3108,7 @@ var NavLink = function NavLink(_ref) {
       rest = _objectWithoutProperties$1(_ref, ['to', 'exact', 'strict', 'location', 'activeClassName', 'className', 'activeStyle', 'style', 'isActive', 'ariaCurrent']);
 
   return React.createElement(Route, {
-    path: (typeof to === 'undefined' ? 'undefined' : _typeof$1(to)) === 'object' ? to.pathname : to,
+    path: (typeof to === 'undefined' ? 'undefined' : _typeof$3(to)) === 'object' ? to.pathname : to,
     exact: exact,
     strict: strict,
     location: location,
@@ -3098,12 +3118,12 @@ var NavLink = function NavLink(_ref) {
 
       var isActive = !!(getIsActive ? getIsActive(match, location) : match);
 
-      return React.createElement(Link$1, _extends$4({
+      return React.createElement(Link$1, _extends$7({
         to: to,
         className: isActive ? [className, activeClassName].filter(function (i) {
           return i;
         }).join(' ') : className,
-        style: isActive ? _extends$4({}, style, activeStyle) : style,
+        style: isActive ? _extends$7({}, style, activeStyle) : style,
         'aria-current': isActive && ariaCurrent
       }, rest));
     }
@@ -3237,7 +3257,7 @@ var generatePath = function generatePath() {
   return generator(params, { pretty: true });
 };
 
-var _extends$5 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$8 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck$7(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -3278,7 +3298,7 @@ var Redirect = function (_React$Component) {
     var nextTo = createLocation(this.props.to);
 
     if (locationsAreEqual(prevTo, nextTo)) {
-      warning_1$1(false, "You tried to redirect to the same route you're currently on: " + ("\"" + nextTo.pathname + nextTo.search + "\""));
+      warning_1$2(false, "You tried to redirect to the same route you're currently on: " + ("\"" + nextTo.pathname + nextTo.search + "\""));
       return;
     }
 
@@ -3293,7 +3313,7 @@ var Redirect = function (_React$Component) {
       if (typeof to === "string") {
         return generatePath(to, computedMatch.params);
       } else {
-        return _extends$5({}, to, {
+        return _extends$8({}, to, {
           pathname: generatePath(to.pathname, computedMatch.params)
         });
       }
@@ -3343,7 +3363,7 @@ Redirect.contextTypes = {
 
 // Written in this round about way for babel-transform-imports
 
-var _extends$6 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$9 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _objectWithoutProperties$2(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
@@ -3360,7 +3380,7 @@ var addLeadingSlash$1 = function addLeadingSlash(path) {
 var addBasename = function addBasename(basename, location) {
   if (!basename) return location;
 
-  return _extends$6({}, location, {
+  return _extends$9({}, location, {
     pathname: addLeadingSlash$1(basename) + location.pathname
   });
 };
@@ -3372,7 +3392,7 @@ var stripBasename$1 = function stripBasename(basename, location) {
 
   if (location.pathname.indexOf(base) !== 0) return location;
 
-  return _extends$6({}, location, {
+  return _extends$9({}, location, {
     pathname: location.pathname.substr(base.length)
   });
 };
@@ -3442,7 +3462,7 @@ var StaticRouter = function (_React$Component) {
   };
 
   StaticRouter.prototype.componentWillMount = function componentWillMount() {
-    warning_1$1(!this.props.history, "<StaticRouter> ignores the history prop. To use a custom history, " + "use `import { Router }` instead of `import { StaticRouter as Router }`.");
+    warning_1$2(!this.props.history, "<StaticRouter> ignores the history prop. To use a custom history, " + "use `import { Router }` instead of `import { StaticRouter as Router }`.");
   };
 
   StaticRouter.prototype.render = function render() {
@@ -3465,7 +3485,7 @@ var StaticRouter = function (_React$Component) {
       block: this.handleBlock
     };
 
-    return React.createElement(Router, _extends$6({}, props, { history: history }));
+    return React.createElement(Router, _extends$9({}, props, { history: history }));
   };
 
   return StaticRouter;
@@ -3510,9 +3530,9 @@ var Switch$1 = function (_React$Component) {
   };
 
   Switch$$1.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-    warning_1$1(!(nextProps.location && !this.props.location), '<Switch> elements should not change from uncontrolled to controlled (or vice versa). You initially used no "location" prop and then provided one on a subsequent render.');
+    warning_1$2(!(nextProps.location && !this.props.location), '<Switch> elements should not change from uncontrolled to controlled (or vice versa). You initially used no "location" prop and then provided one on a subsequent render.');
 
-    warning_1$1(!(!nextProps.location && this.props.location), '<Switch> elements should not change from controlled to uncontrolled (or vice versa). You provided a "location" prop initially but omitted it on a subsequent render.');
+    warning_1$2(!(!nextProps.location && this.props.location), '<Switch> elements should not change from controlled to uncontrolled (or vice versa). You provided a "location" prop initially but omitted it on a subsequent render.');
   };
 
   Switch$$1.prototype.render = function render() {
@@ -3561,10 +3581,39 @@ Switch$1.propTypes = {
 
 // Written in this round about way for babel-transform-imports
 
-var _typeof$2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+var _typeof$4 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+var asyncToGenerator = function (fn) {
+  return function () {
+    var gen = fn.apply(this, arguments);
+    return new Promise(function (resolve, reject) {
+      function step(key, arg) {
+        try {
+          var info = gen[key](arg);
+          var value = info.value;
+        } catch (error) {
+          reject(error);
+          return;
+        }
+
+        if (info.done) {
+          resolve(value);
+        } else {
+          return Promise.resolve(value).then(function (value) {
+            step("next", value);
+          }, function (err) {
+            step("throw", err);
+          });
+        }
+      }
+
+      return step("next");
+    });
+  };
 };
 
 var classCallCheck = function (instance, Constructor) {
@@ -3606,7 +3655,7 @@ var defineProperty$1 = function (obj, key, value) {
   return obj;
 };
 
-var _extends$8 = Object.assign || function (target) {
+var _extends$b = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];
 
@@ -3685,7 +3734,7 @@ var styles = function styles(theme) {
     }, theme.breakpoints.up('sm'), {
       width: theme.spacing.unit * 9
     }),
-    toolbar: _extends$8({
+    toolbar: _extends$b({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-end',
@@ -3730,7 +3779,7 @@ var MiniDrawer = function (_React$Component) {
           props.logo ? React.createElement(
             IconButton,
             { 'aria-label': 'Delete' },
-            props.logo
+            React.createElement(props.logo, null)
           ) : null,
           React.createElement(
             Typography,
@@ -3769,7 +3818,7 @@ var MiniDrawer = function (_React$Component) {
                 typeof prop.icon === 'function' ? React.createElement(prop.icon, null) : prop.icon
               ),
               React.createElement(ListItemText, {
-                primary: prop.sidebarName
+                primary: prop.title
               })
             ) : React.createElement(
               ListItem,
@@ -3783,7 +3832,7 @@ var MiniDrawer = function (_React$Component) {
                 null,
                 typeof prop.icon === 'function' ? React.createElement(prop.icon, null) : prop.icon
               ),
-              React.createElement(ListItemText, { primary: prop.sidebarName })
+              React.createElement(ListItemText, { primary: prop.title })
             );
           })
         )
@@ -3877,7 +3926,7 @@ var EnhanceCard = function (_React$Component) {
           {
             className: !Array.isArray(actions) && classes.center
           },
-          Array.isArray(actions) ? React.createElement(List$1, _extends$8({
+          Array.isArray(actions) ? React.createElement(List$1, _extends$b({
             items: actions,
             data: data
           }, other)) : actions
@@ -3975,7 +4024,7 @@ var ChipFilter = function (_React$Component) {
           availableOptions = option.enum;
         } else if (option.options) {
           availableOptions = option.options;
-        } else if (_typeof$2(option.data) === 'object') {
+        } else if (_typeof$4(option.data) === 'object') {
           availableOptions = option.data;
         } else if (typeof option.data === 'function') {
           availableOptions = option.data();
@@ -3991,7 +4040,28 @@ var ChipFilter = function (_React$Component) {
       } else if (['daterange'].indexOf(option.type) > -1) {
         return option.label + ' : From ' + filterData[option.name].start + ' To ' + filterData[option.name].end;
       } else {
-        return option.label + ' ' + filterData[option.name];
+        var _availableOptions = [];
+        if (option.enum) {
+          _availableOptions = option.enum;
+        } else if (option.options) {
+          _availableOptions = option.options;
+        } else if (_typeof$4(option.data) === 'object') {
+          _availableOptions = option.data;
+        } else if (typeof option.data === 'function') {
+          _availableOptions = option.data();
+        }
+
+        if (_availableOptions.length > 0) {
+          var _selectedOptions = _availableOptions.map(function (availableOption) {
+            return filterData[option.name].indexOf(availableOption.value.toString()) > -1 ? availableOption.label : '';
+          }).filter(function (selectedOption) {
+            return selectedOption !== undefined && selectedOption !== "";
+          });
+
+          return _selectedOptions.length > 1 ? _selectedOptions[0] + ' + ' + (_selectedOptions.length - 1) : _selectedOptions;
+        } else {
+          return option.label + ' ' + filterData[option.name];
+        }
       }
     }, _this.render = function () {
       var _this$props = _this.props,
@@ -4001,14 +4071,16 @@ var ChipFilter = function (_React$Component) {
           open = _this$state.open,
           filterData = _this$state.filterData;
 
+
+      var filterOptions = options || [];
       return React.createElement(
         'div',
         { className: classes.root },
-        options.map(function (option) {
+        filterOptions.map(function (option) {
           return option.filter ? React.createElement(Chip, {
             key: option.name,
             icon: filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0 ? React.createElement(ArrowDropDown, null) : null,
-            color: filterData[option.name] !== undefined && filterData[option.name] !== "" && filterData[option.name].length > 0 ? 'primary' : 'default',
+            color: filterData[option.name] !== undefined && filterData[option.name] !== "" && (filterData[option.name].length > 0 || Object.keys(filterData[option.name]).length > 0) ? 'primary' : 'default',
             label: _this.getSelectedValue(option),
             onClick: function onClick(node$$1) {
               var tempOption = Object.assign({}, option);
@@ -8884,133 +8956,533 @@ EnhancedTableHead.propTypes = {
 
 var TableHead$1 = withStyles(tableHeadStyles)(EnhancedTableHead);
 
-var history$3 = createBrowserHistory$1();
-
-var API_ROOT = '';
-
-var requestHeader = {
-  "Content-Type": "application/json; charset=utf-8"
+var toolbarStyles = function toolbarStyles(theme) {
+  return {
+    root: defineProperty$1({
+      // paddingRight: theme.spacing.unit,
+      marginBottom: theme.spacing.unit * 2
+    }, theme.breakpoints.only('xs'), {
+      marginBottom: theme.spacing.unit
+    }),
+    highlight: theme.palette.type === 'light' ? {
+      color: theme.palette.secondary.main,
+      backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+    } : {
+      color: theme.palette.text.primary,
+      backgroundColor: theme.palette.secondary.dark
+    },
+    spacer: {
+      flex: '1 1 100%'
+    },
+    actions: {
+      display: 'flex',
+      color: theme.palette.text.secondary,
+      flexBasis: '25%',
+      justifyContent: 'flex-end'
+    },
+    title: {
+      display: 'flex',
+      flex: '0 0 auto',
+      flexBasis: '75%',
+      justifyContent: 'flex-start',
+      alignItems: 'center'
+    },
+    fab: {
+      margin: theme.spacing.unit * 2
+    },
+    container: {
+      justifyContent: 'space-between'
+    }
+  };
 };
 
-var handleError = function handleError(error) {
-  if (error instanceof Promise) {
-    return error.then(function (data) {
-      console.log("handleError data : ", data);return Promise.reject(data.error);
-    });
-  } else {
-    return Promise.reject({ message: window.error.request, error: error });
+var toolbarOptions = {
+  title: "Table",
+  selectable: false,
+  content: null,
+  actions: []
+};
+
+var EnhancedToolbar = function (_React$Component) {
+  inherits(EnhancedToolbar, _React$Component);
+
+  function EnhancedToolbar(props) {
+    classCallCheck(this, EnhancedToolbar);
+
+    var _this = possibleConstructorReturn(this, (EnhancedToolbar.__proto__ || Object.getPrototypeOf(EnhancedToolbar)).call(this, props));
+
+    _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          other = objectWithoutProperties(_this$props, ['classes']);
+      var _this$state = _this.state,
+          title = _this$state.title,
+          data = _this$state.data,
+          content = _this$state.content;
+
+
+      return React.createElement(
+        Toolbar,
+        _extends$b({
+          className: classnames(classes.root, defineProperty$1({}, classes.highlight, _this.state.numSelected > 0))
+        }, other),
+        content ? content : React.createElement(
+          Grid,
+          { container: true, className: classes.container },
+          React.createElement(
+            Grid,
+            { item: true, className: classes.title },
+            _this.state.selectable ? _this.state.numSelected > 0 ? React.createElement(
+              Typography$1,
+              { color: 'inherit', variant: 'subheading' },
+              _this.state.numSelected,
+              ' selected'
+            ) : React.createElement(
+              Typography$1,
+              { variant: 'h6', id: 'tableTitle' },
+              title
+            ) : React.createElement(
+              Typography$1,
+              { variant: 'h6', id: 'tableTitle' },
+              title
+            )
+          ),
+          React.createElement(
+            Grid,
+            { item: true, className: classes.actions },
+            _this.state.selectable && _this.state.numSelected > 0 ? React.createElement(
+              Tooltip$1,
+              { title: 'Delete', placement: 'top-end' },
+              React.createElement(
+                IconButton$1,
+                { 'aria-label': 'Delete' },
+                React.createElement(Delete, null)
+              )
+            ) : _this.state.actions ? _this.state.actions.map(function (action) {
+              var icon = action.icon ? action.icon : null;
+
+              var actionBtn = void 0;
+              var buttonProps = {
+                "aria-label": action.title,
+                color: action.color,
+                size: action.size
+              };
+
+              if (action.action) {
+                buttonProps.onClick = function () {
+                  return action.action(_this, data);
+                };
+              } else {
+                buttonProps.to = action.href;
+                buttonProps.component = Link$1;
+              }
+
+              actionBtn = icon ? React.createElement(
+                Fab,
+                _extends$b({ className: classes.fab }, buttonProps),
+                icon
+              ) : React.createElement(
+                Button,
+                _extends$b({ variant: 'text' }, buttonProps),
+                action.label
+              );
+
+              return React.createElement(
+                Tooltip$1,
+                { title: action.title, placement: action.placement, key: action.title },
+                actionBtn
+              );
+            }) : ''
+          )
+        )
+      );
+    };
+
+    _this.state = Object.assign(toolbarOptions, props);
+    return _this;
   }
+
+  createClass(EnhancedToolbar, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState({
+        title: nextProps.title,
+        actions: nextProps.actions,
+        data: nextProps.data,
+        content: nextProps.content
+      });
+    }
+  }]);
+  return EnhancedToolbar;
+}(React.Component);
+
+EnhancedToolbar.propTypes = {
+  classes: PropTypes.object.isRequired
+  // data: PropTypes.object.isRequired,
 };
 
-var request = {
-  handleError: handleError,
-  get: function get(url) {
-    var token = "appConstants.getToken()";
-    {
-      requestHeader["Authorization"] = "Bearer " + token;
-    }
-
-    // console.log("requestHeader GET", requestHeader);
-    return fetch(API_ROOT + "/" + url, {
-      method: "GET",
-      cache: "no-cache",
-      headers: requestHeader
-    })
-    // .then(response => response.json()); 
-    .then(function (response) {
-      // console.log("get Request Response : ", response);
-      if (!response.ok) {
-        if (!response.bodyUsed) {
-          // return Promise.reject({message: response.statusText});
-          var text = response.text(); // Parse it as text
-          console.log("Get Response Text", text);
-          try {
-            console.log("Get In Try");
-            if (text instanceof Promise) {
-              return Promise.reject(text);
-            } else {
-              var data = JSON.parse(text); // Try to parse it as json
-              return Promise.reject(data);
-            }
-          } catch (e) {
-            console.log("Get In Catch");
-            return Promise.reject({ message: text });
-          }
-        } else {
-          try {
-            return Promise.reject(response.json());
-          } catch (e) {
-            return Promise.reject({ message: response });
-          }
-        }
-      }
-
-      return response.json();
-    }, request.handleError);
-  },
-
-  post: function post(url, data) {
-    var token = "appConstants.getToken()";
-    {
-      requestHeader["Authorization"] = "Bearer " + token;
-    }
-
-    // console.log("requestHeader POST", requestHeader);
-    return fetch(API_ROOT + "/" + url, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      // mode: "cors", // no-cors, cors, *same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      // credentials: "same-origin", // include, *same-origin, omit
-      headers: requestHeader,
-      // redirect: "follow", // manual, *follow, error
-      // referrer: "no-referrer", // no-referrer, *client
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
-    }).then(function (response) {
-      // console.log("Post Request Response : ", response);
-      if (!response.ok) {
-        try {
-          return Promise.reject(response.json());
-        } catch (e) {
-          return Promise.reject({ message: response });
-        }
-      }
-
-      return response.json();
-    }, request.handleError);
-  },
-
-  patch: function patch(url, data) {
-    var token = "appConstants.getToken()";
-    {
-      requestHeader["Authorization"] = "Bearer " + token;
-    }
-
-    // console.log("requestHeader PATCH", requestHeader);
-    return fetch(API_ROOT + "/" + url, {
-      method: "PATCH", // *GET, POST, PUT, DELETE, etc.
-      // mode: "cors", // no-cors, cors, *same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      // credentials: "same-origin", // include, *same-origin, omit
-      headers: requestHeader,
-      // redirect: "follow", // manual, *follow, error
-      // referrer: "no-referrer", // no-referrer, *client
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
-    }).then(function (response) {
-      // console.log("patch Request Response : ", response);
-      if (!response.ok) {
-        try {
-          return Promise.reject(response.json());
-        } catch (e) {
-          return Promise.reject({ message: response });
-        }
-      }
-
-      return response.json();
-    }, request.handleError);
-  }
-};
+var Toolbar$2 = withStyles$1(toolbarStyles)(EnhancedToolbar);
 
 var styles$4 = function styles(theme) {
+  return {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+      paddingRight: theme.spacing.unit,
+      paddingLeft: theme.spacing.unit
+    },
+    header: {
+      alignItems: 'center',
+      display: 'flex',
+      backgroundColor: theme.palette.primary.main,
+      color: '#fff',
+      height: '56px',
+      borderRadius: '3px 3px 0 0',
+      boxSizing: 'border-box',
+      fontWeight: 500,
+      justifyContent: 'space-between',
+      padding: '0 8px 0 16px',
+      minWidth: '300px'
+    },
+    textField: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit
+    },
+    button: {
+      margin: theme.spacing.unit
+    },
+    formControl: {
+      margin: theme.spacing.unit * 3
+    },
+    group: {
+      margin: theme.spacing.unit + 'px 0'
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing.unit,
+      color: 'rgba(255, 255, 255)'
+    },
+    title: {
+      color: 'rgba(255, 255, 255)'
+    },
+    content: {
+      paddingTop: theme.spacing.unit * 3
+    }
+  };
+};
+
+var EnhancedDialog = function (_React$Component) {
+  inherits(EnhancedDialog, _React$Component);
+
+  function EnhancedDialog(props) {
+    classCallCheck(this, EnhancedDialog);
+
+    var _this = possibleConstructorReturn(this, (EnhancedDialog.__proto__ || Object.getPrototypeOf(EnhancedDialog)).call(this, props));
+
+    _this.handleClose = function () {
+      _this.props.onClose();
+    };
+
+    _this.handleCancel = function () {
+      if (_this.props.value) {
+        _this.props.onClose(_this.props.value);
+      } else {
+        _this.props.onClose("cancel");
+      }
+    };
+
+    _this.handleOk = function () {
+      if (_this.state.value) {
+        _this.props.onClose(_this.state.value);
+      } else {
+        _this.props.onClose("ok");
+      }
+    };
+
+    _this.renderActions = function () {
+      switch (_this.state.type) {
+        case 'custom':
+          {
+            return React.createElement(
+              DialogActions,
+              null,
+              _this.state.actions.map(function (actionButton) {
+                var btnKey = 'button-' + actionButton.label.replace(' ', '-');
+
+                return React.createElement(
+                  Button$1,
+                  {
+                    variant: actionButton.variant ? actionButton.variant : "contained",
+                    color: actionButton.color ? actionButton.color : "primary",
+                    onClick: function onClick(e) {
+                      return actionButton.action(_this);
+                    },
+                    key: btnKey
+                  },
+                  actionButton.label
+                );
+              })
+            );
+          }
+        case 'confirm':
+          {
+            return React.createElement(
+              DialogActions,
+              null,
+              React.createElement(
+                Button$1,
+                { onClick: _this.handleCancel, color: 'primary' },
+                'Cancel'
+              ),
+              React.createElement(
+                Button$1,
+                { onClick: _this.handleOk, color: 'primary' },
+                'Ok'
+              )
+            );
+          }
+        case 'alert':
+          {
+            return React.createElement(
+              DialogActions,
+              null,
+              React.createElement(
+                Button$1,
+                { onClick: _this.handleClose, color: 'primary', autoFocus: true },
+                'Ok'
+              )
+            );
+          }
+        default:
+          {
+            return;
+          }
+      }
+    };
+
+    _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          title = _this$props.title,
+          onClose = _this$props.onClose,
+          fullScreen = _this$props.fullScreen,
+          other = objectWithoutProperties(_this$props, ['classes', 'title', 'onClose', 'fullScreen']);
+
+
+      return React.createElement(
+        Dialog,
+        _extends$b({
+          fullScreen: fullScreen && isMobile,
+          maxWidth: false,
+          onClose: onClose,
+          'aria-labelledby': 'dialog-title',
+          className: classes.dialog
+        }, other),
+        _this.state.title ? React.createElement(
+          DialogTitle,
+          { id: 'dialog-title', className: classes.header, disableTypography: true },
+          React.createElement(
+            Typography,
+            { variant: 'h6', className: classes.title },
+            _this.state.title
+          ),
+          onClose ? React.createElement(
+            IconButton,
+            { 'aria-label': 'Close', className: classes.closeButton, onClick: onClose },
+            React.createElement(CloseIcon, null)
+          ) : null
+        ) : "",
+        React.createElement(
+          DialogContent,
+          { className: classes.content },
+          _this.state.text ? React.createElement(
+            DialogContentText,
+            null,
+            _this.state.text
+          ) : "",
+          _this.state.content ? _this.state.content : ""
+        ),
+        _this.state.type ? _this.renderActions() : ""
+      );
+    };
+
+    _this.state = props;
+    return _this;
+  }
+
+  createClass(EnhancedDialog, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState(nextProps);
+    }
+  }]);
+  return EnhancedDialog;
+}(React.Component);
+
+EnhancedDialog.defaultProps = {
+  fullScreen: true
+};
+
+var Dialog$1 = withStyles(styles$4)(EnhancedDialog);
+
+var history = createBrowserHistory();
+
+var alertConstants = {
+    SUCCESS: 'ALERT_SUCCESS',
+    ERROR: 'ALERT_ERROR',
+    CLEAR: 'ALERT_CLEAR'
+};
+
+var userConstants = {
+    REGISTER_REQUEST: 'USERS_REGISTER_REQUEST',
+    REGISTER_SUCCESS: 'USERS_REGISTER_SUCCESS',
+    REGISTER_FAILURE: 'USERS_REGISTER_FAILURE',
+
+    LOGIN_REQUEST: 'USERS_LOGIN_REQUEST',
+    LOGIN_SUCCESS: 'USERS_LOGIN_SUCCESS',
+    LOGIN_FAILURE: 'USERS_LOGIN_FAILURE',
+
+    LOGOUT: 'USERS_LOGOUT',
+
+    GETALL_REQUEST: 'USERS_GETALL_REQUEST',
+    GETALL_SUCCESS: 'USERS_GETALL_SUCCESS',
+    GETALL_FAILURE: 'USERS_GETALL_FAILURE',
+
+    DELETE_REQUEST: 'USERS_DELETE_REQUEST',
+    DELETE_SUCCESS: 'USERS_DELETE_SUCCESS',
+    DELETE_FAILURE: 'USERS_DELETE_FAILURE'
+};
+
+var user = JSON.parse(localStorage.getItem('user'));
+var initialState = user ? { loggedIn: true, user: user } : {};
+
+function authentication() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+  switch (action.type) {
+    case userConstants.LOGIN_REQUEST:
+      return {
+        loggingIn: true,
+        user: action.user
+      };
+    case userConstants.LOGIN_SUCCESS:
+      return {
+        loggedIn: true,
+        user: action.user
+      };
+    case userConstants.LOGIN_FAILURE:
+      return {};
+    case userConstants.LOGOUT:
+      return {};
+    default:
+      return state;
+  }
+}
+
+function registration() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+  switch (action.type) {
+    case userConstants.REGISTER_REQUEST:
+      return { registering: true };
+    case userConstants.REGISTER_SUCCESS:
+      return {};
+    case userConstants.REGISTER_FAILURE:
+      return {};
+    default:
+      return state;
+  }
+}
+
+function users() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+  switch (action.type) {
+    case userConstants.GETALL_REQUEST:
+      return {
+        loading: true
+      };
+    case userConstants.GETALL_SUCCESS:
+      return {
+        items: action.users
+      };
+    case userConstants.GETALL_FAILURE:
+      return {
+        error: action.error
+      };
+    case userConstants.DELETE_REQUEST:
+      // add 'deleting:true' property to user being deleted
+      return _extends$b({}, state, {
+        items: state.items.map(function (user) {
+          return user.id === action.id ? _extends$b({}, user, { deleting: true }) : user;
+        })
+      });
+    case userConstants.DELETE_SUCCESS:
+      // remove deleted user from state
+      return {
+        items: state.items.filter(function (user) {
+          return user.id !== action.id;
+        })
+      };
+    case userConstants.DELETE_FAILURE:
+      // remove 'deleting:true' property and add 'deleteError:[error]' property to user 
+      return _extends$b({}, state, {
+        items: state.items.map(function (user) {
+          if (user.id === action.id) {
+            // make copy of user without 'deleting:true' property
+            var deleting = user.deleting,
+                userCopy = objectWithoutProperties(user, ['deleting']);
+            // return copy of user with 'deleteError:[error]' property
+
+            return _extends$b({}, userCopy, { deleteError: action.error });
+          }
+
+          return user;
+        })
+      });
+    default:
+      return state;
+  }
+}
+
+function alert() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+  switch (action.type) {
+    case alertConstants.SUCCESS:
+      return {
+        type: 'alert-success',
+        message: action.message
+      };
+    case alertConstants.ERROR:
+      return {
+        type: 'alert-danger',
+        message: action.message
+      };
+    case alertConstants.CLEAR:
+      return {};
+    default:
+      return state;
+  }
+}
+
+var rootReducer = combineReducers({
+  authentication: authentication,
+  registration: registration,
+  users: users,
+  alert: alert
+});
+
+var loggerMiddleware = createLogger();
+
+var store = createStore(rootReducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
+
+var styles$5 = function styles(theme) {
   return {
     tableWrapper: {
       overflowX: 'auto'
@@ -9021,7 +9493,7 @@ var styles$4 = function styles(theme) {
     paper: {
       width: '100%',
       minWidth: 'auto',
-      display: 'grid',
+      display: 'flex',
       flexDirection: 'column',
       overflow: 'visible'
     },
@@ -9043,23 +9515,29 @@ var styles$4 = function styles(theme) {
 };
 
 var tableOptions = {
-  order: 'asc',
+  order: 'desc',
   orderBy: 'id',
+  uKey: 'id',
   selected: [],
-  data: [],
+  rows: [],
   page: 0,
   rowsPerPage: 10,
   selectable: false,
   actions: [],
   dialogOpen: false,
   dialog: {},
-  loading: false
+  loading: false,
+  filter: {},
+  expanded: null,
+  expandedRow: {}
 };
 
 var EnhancedTable = function (_React$Component) {
   inherits(EnhancedTable, _React$Component);
 
   function EnhancedTable(props) {
+    var _this2 = this;
+
     classCallCheck(this, EnhancedTable);
 
     var _this = possibleConstructorReturn(this, (EnhancedTable.__proto__ || Object.getPrototypeOf(EnhancedTable)).call(this, props));
@@ -9071,37 +9549,40 @@ var EnhancedTable = function (_React$Component) {
     };
 
     _this.componentWillReceiveProps = function (nextProps) {
+      _this.loadData();
       _this.setState({
         rows: nextProps.rows,
         columns: nextProps.columns,
         title: nextProps.title,
-        orderBy: nextProps.orderBy,
-        order: nextProps.order,
-        rowsCount: nextProps.rowsCount,
-        uKey: nextProps.uKey
+        orderBy: nextProps.orderBy || _this.state.orderBy,
+        order: nextProps.order || _this.state.order,
+        rowsCount: nextProps.rowsCount
       });
     };
 
     _this.componentWillUnmount = function () {};
 
-    _this.loadData = function () {
-      var filterOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { orderBy: _this.state.orderBy, order: _this.state.order };
+    _this.loadData = function (filterOptions) {
+      filterOptions = filterOptions === undefined ? _this.state.filter : filterOptions;
+      var updatedTableProps = {
+        orderBy: _this.state.orderBy,
+        order: _this.state.order,
+        page: _this.state.page,
+        rowsPerPage: _this.state.rowsPerPage
+      };
 
-      if (_this.props.url) {
-        _this.setState({ loading: true });
-        request.get(_this.props.url).then(function (response) {
+      filterOptions = Object.assign({}, filterOptions, updatedTableProps);
+      if (_this.props.loadData) {
+        _this.setState({ filter: filterOptions, loading: true });
+        _this.props.loadData(filterOptions).then(function (records) {
           _this.setState({
-            rows: response.rows ? response.rows : response,
-            rowsCount: response.count ? response.count : response.length,
-            loading: false
+            loading: false, rows: records.rows, rowsCount: records.count
           });
         }, function (error) {
           _this.setState({ rows: [], rowsCount: 0, loading: false });
         });
-      } else if (_this.props.loadData) {
-        _this.props.loadData(filterOptions, _this);
       } else {
-        _this.setState({ rows: _this.state.rows, rowsCount: _this.state.rows.length, loading: false });
+        _this.setState({ rows: _this.state.rows, rowsCount: _this.state.rows.length, loading: false, filter: filterOptions });
       }
     };
 
@@ -9117,19 +9598,10 @@ var EnhancedTable = function (_React$Component) {
         order = 'asc';
       }
 
-      if (_this.props.url) {
-        _this.loadData({ order: order, orderBy: property });
-      } else if (_this.props.loadData) {
-        _this.props.loadData({ order: order, orderBy: property }, _this);
-      } else {
-        order === 'desc' ? _this.state.rows.sort(function (a, b) {
-          return b[orderBy] < a[orderBy] ? -1 : 1;
-        }) : _this.state.rows.sort(function (a, b) {
-          return a[orderBy] < b[orderBy] ? -1 : 1;
-        });
-      }
-
-      _this.setState({ order: order, orderBy: orderBy });
+      _this.setState({ order: order, orderBy: orderBy }, function () {
+        console.log("Inside handleRequestSort");
+        _this.loadData();
+      });
     };
 
     _this.handleSelectAllClick = function (event, checked) {
@@ -9145,7 +9617,7 @@ var EnhancedTable = function (_React$Component) {
     _this.handleClick = function (event, rowData) {
       if (event.target.tagName === "TD" && _this.props.clickLink) {
         event.preventDefault();
-        history$3.push(_this.props.clickLink + rowData[_this.state.uKey]);
+        history.push(_this.props.clickLink + rowData[_this.props.uKey]);
       }
 
       if (event.target.tagName === "TD" && _this.props.clickFunction) {
@@ -9155,23 +9627,17 @@ var EnhancedTable = function (_React$Component) {
     };
 
     _this.handleChangePage = function (event, page) {
-      if (_this.props.url) {
-        _this.loadData({ page: page });
-      } else if (_this.props.loadData) {
-        _this.props.loadData({ page: page }, _this);
-      }
-
-      _this.setState({ page: page });
+      _this.setState({ page: page }, function () {
+        console.log("Inside handleChangePage");
+        _this.loadData();
+      });
     };
 
     _this.handleChangeRowsPerPage = function (event) {
-      if (_this.props.url) {
-        _this.loadData({ rowsPerPage: event.target.value });
-      } else if (_this.props.loadData) {
-        _this.props.loadData({ rowsPerPage: event.target.value }, _this);
-      }
-
-      _this.setState({ rowsPerPage: event.target.value });
+      _this.setState({ rowsPerPage: event.target.value, page: 0 }, function () {
+        console.log("Inside handleChangeRowsPerPage");
+        _this.loadData();
+      });
     };
 
     _this.isSelected = function (id) {
@@ -9207,178 +9673,271 @@ var EnhancedTable = function (_React$Component) {
         return "";
       });
 
-      switch (cell.type) {
-        case 'boolean':
-          cellData = cellData ? React.createElement(Done, null) : React.createElement(Clear, null);
-          break;
-        case 'datetime':
-          cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY, h:mm:ss a');
-          break;
-        case 'date':
-          cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY');
-          break;
-        case 'month':
-          if (cellData) {
-            cellData = moment(cellData).format('MMMM YYYY');
-          } else {
-            cellData = "";
-          }
-          break;
-        case 'button':
-          cellData = [];
-          cell.buttons.map(function (button) {
-            var buttonLink = "";
-            var showField = true;
+      var showCellData = true;
+      if (cell.beforeShow) {
+        showCellData = cell.beforeShow(rowData);
+      }
 
-            if (button.beforeShow) {
-              showField = button.beforeShow(rowData);
+      if (showCellData) {
+        switch (cell.type) {
+          case 'boolean':
+            cellData = cellData ? React.createElement(Done, null) : React.createElement(Clear, null);
+            break;
+          case 'datetime':
+          case 'daterange':
+            cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY, h:mm:ss a');
+            break;
+          case 'date':
+            cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY');
+            break;
+          case 'month':
+            if (cellData) {
+              cellData = moment(cellData).format('MMMM YYYY');
+            } else {
+              cellData = "";
             }
+            break;
+          case 'button':
+            cellData = [];
+            cell.buttons.map(function (button) {
+              var buttonLink = "";
+              var showField = true;
 
-            if (button.getIcon) {
-              button['icon'] = button.getIcon(rowData[button.field]);
-            }
-
-            if (showField && button.link) {
-              buttonLink = button.link;
-              if (button.param) {
-                buttonLink = buttonLink + rowData[button.param];
+              if (button.beforeShow) {
+                showField = button.beforeShow(rowData);
               }
 
-              if (button.icon === undefined) {
-                cellData.push(React.createElement(Chip, {
-                  label: button.label,
-                  to: buttonLink,
+              if (button.getIcon) {
+                button['icon'] = button.getIcon(rowData[button.field]);
+              }
+
+              if (showField && button.link) {
+                buttonLink = button.link;
+                if (button.param) {
+                  buttonLink = buttonLink + rowData[button.param];
+                }
+
+                if (button.icon === undefined) {
+                  cellData.push(React.createElement(Chip, {
+                    label: button.label,
+                    to: buttonLink,
+                    component: Link$1,
+                    className: _this.props.classes.chip,
+                    key: rowData[uKey] + button.label.replace(' ', '-')
+                  }));
+                } else {
+                  cellData.push(React.createElement(
+                    IconButton,
+                    { "aria-label": button.label, to: buttonLink, component: Link$1, key: rowData[uKey] + button.label.replace(' ', '-') },
+                    React.createElement(button.icon, null)
+                  ));
+                }
+              }
+
+              if (showField && button.action) {
+                if (button.icon === undefined) {
+                  cellData.push(React.createElement(Chip, {
+                    label: button.label,
+                    onClick: function onClick() {
+                      return button.action(_this, rowData);
+                    },
+                    className: _this.props.classes.chip,
+                    key: rowData[uKey] + button.label.replace(' ', '-')
+                  }));
+                } else if (button.type === 'fab') {
+                  cellData.push(React.createElement(
+                    Fab$1,
+                    { "aria-label": button.label, onClick: function onClick() {
+                        return button.action(_this, rowData);
+                      }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-'), size: button.size, classes: button.classes },
+                    React.createElement(button.icon, null)
+                  ));
+                } else {
+                  cellData.push(React.createElement(
+                    IconButton,
+                    { "aria-label": button.label, onClick: function onClick() {
+                        return button.action(_this, rowData);
+                      }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-') },
+                    React.createElement(button.icon, null)
+                  ));
+                }
+              }
+
+              return "";
+            });
+            break;
+          case 'render':
+            cellData = cell.render(rowData, _this);
+            break;
+          case 'link':
+            if (cellData && cellData !== "") {
+              cellData = React.createElement(
+                Link,
+                {
                   component: Link$1,
-                  className: _this.props.classes.chip,
-                  key: rowData[uKey] + button.label.replace(' ', '-')
-                }));
-              } else {
-                cellData.push(React.createElement(
-                  IconButton,
-                  { "aria-label": button.label, to: buttonLink, component: Link$1, key: rowData[uKey] + button.label.replace(' ', '-') },
-                  React.createElement(button.icon, null)
-                ));
-              }
+                  to: cellData,
+                  target: "_blank",
+                  rel: "noopener"
+                },
+                React.createElement(LinkIcon, null)
+              );
             }
-
-            if (showField && button.action) {
-              if (button.icon === undefined) {
-                cellData.push(React.createElement(Chip, {
-                  label: button.label,
-                  onClick: function onClick() {
-                    return button.action(_this, rowData);
-                  },
-                  className: _this.props.classes.chip,
-                  key: rowData[uKey] + button.label.replace(' ', '-')
-                }));
-              } else if (button.type === 'fab') {
-                cellData.push(React.createElement(
-                  Fab,
-                  { "aria-label": button.label, onClick: function onClick() {
-                      return button.action(_this, rowData);
-                    }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-'), size: button.size, classes: button.classes },
-                  React.createElement(button.icon, null)
-                ));
-              } else {
-                cellData.push(React.createElement(
-                  IconButton,
-                  { "aria-label": button.label, onClick: function onClick() {
-                      return button.action(_this, rowData);
-                    }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-') },
-                  React.createElement(button.icon, null)
-                ));
-              }
+            break;
+          case 'file':
+            if (cellData && cellData !== "") {
+              cellData = React.createElement(
+                Link,
+                {
+                  component: Link$1,
+                  to: cellData,
+                  target: "_blank",
+                  rel: "noopener"
+                },
+                React.createElement(LinkIcon, null)
+              );
             }
-
-            return "";
-          });
-          break;
-        case 'render':
-          cellData = cell.render(rowData, _this);
-          break;
-        case 'link':
-          if (cellData && cellData !== "") {
+            break;
+          case 'image':
+            var imageSource = cellData;
             cellData = React.createElement(
-              Link,
-              {
-                component: Link$1,
-                to: cellData,
-                target: "_blank",
-                rel: "noopener"
-              },
+              IconButton,
+              { "aria-label": "button.label", onClick: function onClick() {
+                  _this.openDialog({
+                    title: "Image",
+                    content: React.createElement(Card$1, {
+                      image: imageSource,
+                      onClose: _this.closeDialog
+                    })
+                  });
+                } },
+              React.createElement(Avatar, { alt: "", src: cellData })
+            );
+            break;
+          case 'media':
+            var mediaSource = cellData;
+            cellData = React.createElement(
+              IconButton,
+              { "aria-label": cell.label, onClick: function onClick() {
+                  _this.openDialog({
+                    title: "Media",
+                    content: React.createElement(Card$1, {
+                      media: mediaSource,
+                      onClose: _this.closeDialog
+                    })
+                  });
+                } },
               React.createElement(LinkIcon, null)
             );
-          }
-          break;
-        case 'file':
-          if (cellData && cellData !== "") {
+            break;
+          case 'expand':
+            var isExpanded = rowData[uKey] === _this.state.expandedRow[uKey];
             cellData = React.createElement(
-              Link,
-              {
-                component: Link$1,
-                to: cellData,
-                target: "_blank",
-                rel: "noopener"
-              },
-              React.createElement(LinkIcon, null)
+              IconButton,
+              { "aria-label": cell.label, onClick: function onClick() {
+                  _this.toggleExpand(cell, rowData);
+                } },
+              isExpanded && _this.state.expanded ? React.createElement(KeyboardArrowUp, null) : React.createElement(KeyboardArrowDown, null)
             );
-          }
-          break;
-        case 'image':
-          var imageSource = cellData;
-          cellData = React.createElement(
-            IconButton,
-            { "aria-label": "button.label", onClick: function onClick() {
-                _this.openDialog({
-                  title: "Image",
-                  content: React.createElement(Card$1, {
-                    image: imageSource,
-                    onClose: _this.closeDialog
-                  })
-                });
-              } },
-            React.createElement(Avatar, { alt: "", src: cellData })
-          );
-          break;
-        case 'media':
-          var mediaSource = cellData;
-          cellData = React.createElement(
-            IconButton,
-            { "aria-label": cell.label, onClick: function onClick() {
-                _this.openDialog({
-                  title: "Media",
-                  content: React.createElement(Card$1, {
-                    media: mediaSource,
-                    onClose: _this.closeDialog
-                  })
-                });
-              } },
-            React.createElement(LinkIcon, null)
-          );
-          break;
-        default:
-          break;
+            break;
+          default:
+            break;
+        }
+      } else {
+        cellData = "";
       }
 
       return cellData;
     };
+
+    _this.toggleExpand = function () {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cell, rowData) {
+        var expandedRow, expandContent;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                expandedRow = _this.state.expandedRow;
+                expandContent = null;
+
+                if (!(Object.keys(expandedRow).length > 0 && expandedRow[_this.props.uKey] === rowData[_this.props.uKey])) {
+                  _context.next = 6;
+                  break;
+                }
+
+                expandedRow = {};
+                _context.next = 10;
+                break;
+
+              case 6:
+                expandedRow = rowData;
+                _context.next = 9;
+                return _this.getExpandContent(cell, rowData);
+
+              case 9:
+                expandContent = _context.sent;
+
+              case 10:
+
+                _this.setState({ expanded: expandContent, expandedRow: expandedRow });
+
+              case 11:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, _this2);
+      }));
+
+      return function (_x, _x2) {
+        return _ref.apply(this, arguments);
+      };
+    }();
+
+    _this.getExpandContent = function () {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cell, rowData) {
+        var expandContent;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return cell.render(rowData, _this);
+
+              case 2:
+                expandContent = _context2.sent;
+                return _context2.abrupt("return", expandContent);
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, _this2);
+      }));
+
+      return function (_x3, _x4) {
+        return _ref2.apply(this, arguments);
+      };
+    }();
 
     _this.render = function () {
       var _this$props = _this.props,
           title = _this$props.title,
           pagination = _this$props.pagination,
           classes = _this$props.classes,
-          other = objectWithoutProperties(_this$props, ["title", "pagination", "classes"]);
+          uKey = _this$props.uKey,
+          other = objectWithoutProperties(_this$props, ["title", "pagination", "classes", "uKey"]);
       var _this$state = _this.state,
           columns = _this$state.columns,
-          rowsCount = _this$state.rowsCount;
+          rowsCount = _this$state.rowsCount,
+          expanded = _this$state.expanded,
+          expandedRow = _this$state.expandedRow;
       var _this$state2 = _this.state,
           order = _this$state2.order,
           orderBy = _this$state2.orderBy,
           selected = _this$state2.selected,
           rowsPerPage = _this$state2.rowsPerPage,
           page = _this$state2.page,
-          uKey = _this$state2.uKey,
           selectable = _this$state2.selectable;
       var _this$state3 = _this.state,
           handleSelectAllClick = _this$state3.handleSelectAllClick,
@@ -9386,13 +9945,11 @@ var EnhancedTable = function (_React$Component) {
 
 
       var rows = [];
-      if (_this.state.url || _this.state.loadData) {
+      if (_this.state.loadData) {
         rows = _this.state.rows ? _this.state.rows : [];
       } else {
         rows = _this.state.rows ? _this.state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : [];
       }
-
-      // const rowsCount = (this.state.rowsCount) ? this.state.rowsCount : ((this.state.rows) ? this.state.rows.length : 0);
 
       if (selected !== undefined) {
         _this.selectedRows = selected;
@@ -9406,18 +9963,17 @@ var EnhancedTable = function (_React$Component) {
         _this.onRequestSort = handleRequestSort;
       }
 
-      // const emptyRows = rowsPerPage - Math.min(rowsPerPage, rowsCount - page * rowsPerPage);
       return React.createElement(
         Paper,
         { className: classes.paper },
-        title ? React.createElement(Toolbar$2, _extends$8({
+        title ? React.createElement(Toolbar$2, _extends$b({
           title: title,
           numSelected: _this.selectedRows.length,
           openDialog: _this.openDialog,
           closeDialog: _this.closeDialog,
           refreshData: _this.refreshData
         }, other)) : null,
-        React.createElement(Filter$1, { options: columns, loadData: _this.loadData }),
+        React.createElement(ChipFilter$1, { options: columns, loadData: _this.loadData }),
         React.createElement(
           "div",
           { className: classes.tableWrapper },
@@ -9458,76 +10014,99 @@ var EnhancedTable = function (_React$Component) {
               ) : null,
               rows.map(function (n) {
                 var isSelected = _this.isSelected(n[uKey]);
+                var isExpanded = n[uKey] === expandedRow[uKey];
+                var expandColumn = isExpanded && columns.find(function (column) {
+                  var showColumn = true;
+                  if (column.beforeShow) {
+                    showColumn = column.beforeShow(n);
+                  }
+
+                  return showColumn && column.type === 'expand';
+                });
+
                 return React.createElement(
-                  TableRow,
-                  {
-                    hover: true,
-                    onClick: function onClick(event) {
-                      return _this.handleClick(event, n);
+                  React.Fragment,
+                  null,
+                  React.createElement(
+                    TableRow,
+                    {
+                      hover: true,
+                      onClick: function onClick(event) {
+                        return _this.handleClick(event, n);
+                      },
+                      role: "checkbox",
+                      "aria-checked": isSelected,
+                      tabIndex: -1,
+                      key: new Date().getTime() + "-" + (title ? title.replace(' ', '-') : "") + "-" + n[uKey],
+                      selected: isSelected
                     },
-                    role: "checkbox",
-                    "aria-checked": isSelected,
-                    tabIndex: -1,
-                    key: new Date().getTime() + "-" + (title ? title.replace(' ', '-') : "") + "-" + n[uKey],
-                    selected: isSelected
-                  },
-                  columns.some(function (column) {
-                    return column.span === true;
-                  }) ? columns.map(function (column) {
-                    var cellData = _this.formatCellData(column, n, uKey);
+                    columns.some(function (column) {
+                      return column.span === true;
+                    }) ? columns.map(function (column) {
+                      var cellData = _this.formatCellData(column, n, uKey);
 
-                    return (column.show === undefined || column.show) && column.span ? column.name === "selectable" ? React.createElement(
-                      TableCell,
-                      {
-                        padding: "checkbox",
-                        key: column.name,
-                        classes: {
-                          root: classes.tableCell
-                        }
-                      },
-                      React.createElement(Checkbox, { checked: isSelected })
-                    ) : React.createElement(
-                      TableCell,
-                      {
-                        key: column.name,
-                        colSpan: columns.length,
-                        classes: {
-                          root: classes.tableCell
-                        }
-                      },
-                      cellData
-                    ) : null;
-                  }) : columns.map(function (column) {
-                    var cellData = _this.formatCellData(column, n, uKey);
+                      return (column.show === undefined || column.show) && column.span ? column.name === "selectable" ? React.createElement(
+                        TableCell,
+                        {
+                          padding: "checkbox",
+                          key: column.name,
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        React.createElement(Checkbox, { checked: isSelected })
+                      ) : React.createElement(
+                        TableCell,
+                        {
+                          key: column.name,
+                          colSpan: columns.length,
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        cellData
+                      ) : null;
+                    }) : columns.map(function (column) {
+                      var cellData = _this.formatCellData(column, n, uKey);
 
-                    return column.show === undefined || column.show ? column.name === "selectable" ? React.createElement(
+                      return column.show === undefined || column.show ? column.name === "selectable" ? React.createElement(
+                        TableCell,
+                        {
+                          padding: "checkbox",
+                          key: column.name,
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        React.createElement(Checkbox, { checked: isSelected })
+                      ) : React.createElement(
+                        TableCell,
+                        {
+                          key: column.name,
+                          padding: column.disablePadding ? 'none' : 'default',
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        cellData
+                      ) : null;
+                    })
+                  ),
+                  isExpanded && expandColumn && expanded ? React.createElement(
+                    TableRow,
+                    null,
+                    React.createElement(
                       TableCell,
-                      {
-                        padding: "checkbox",
-                        key: column.name,
-                        classes: {
-                          root: classes.tableCell
-                        }
-                      },
-                      React.createElement(Checkbox, { checked: isSelected })
-                    ) : React.createElement(
-                      TableCell,
-                      {
-                        key: column.name,
-                        padding: column.disablePadding ? 'none' : 'default',
-                        classes: {
-                          root: classes.tableCell
-                        }
-                      },
-                      cellData
-                    ) : null;
-                  })
+                      { colSpan: columns.length },
+                      expanded
+                    )
+                  ) : null
                 );
               })
             )
           )
         ),
-        pagination && rows.length > 0 && rowsCount > rows.length ? React.createElement(TablePagination, {
+        pagination && rows.length > 0 ? React.createElement(TablePagination, {
           component: "div",
           count: rowsCount,
           rowsPerPage: rowsPerPage,
@@ -9553,7 +10132,7 @@ var EnhancedTable = function (_React$Component) {
       );
     };
 
-    _this.state = Object.assign(tableOptions, props);
+    _this.state = Object.assign({}, tableOptions, props);
     return _this;
   }
 
@@ -9562,7 +10141,8 @@ var EnhancedTable = function (_React$Component) {
 
 EnhancedTable.defaultProps = {
   pagination: true,
-  rows: []
+  rows: [],
+  uKey: 'id'
 };
 
 EnhancedTable.propTypes = {
@@ -9571,9 +10151,9 @@ EnhancedTable.propTypes = {
   rows: PropTypes.array.isRequired
 };
 
-var Table$1 = withStyles(styles$4)(EnhancedTable);
+var Table$1 = withStyles(styles$5)(EnhancedTable);
 
-var styles$5 = function styles(theme) {
+var styles$6 = function styles(theme) {
 	var _panelDetail, _heading, _headingAction;
 
 	return {
@@ -9589,6 +10169,9 @@ var styles$5 = function styles(theme) {
 		summaryPanel: defineProperty$1({}, theme.breakpoints.down('xs'), {
 			padding: '0px 8px'
 		}),
+		headingWrapper: {
+			flexBasis: '80%'
+		},
 		heading: (_heading = {
 			fontSize: theme.typography.pxToRem(15)
 		}, defineProperty$1(_heading, theme.breakpoints.only('xs'), {
@@ -9625,6 +10208,13 @@ var EnhancedExpansionPanel = function (_React$Component) {
 		classCallCheck(this, EnhancedExpansionPanel);
 
 		var _this = possibleConstructorReturn(this, (EnhancedExpansionPanel.__proto__ || Object.getPrototypeOf(EnhancedExpansionPanel)).call(this, props));
+
+		_this.state = {
+			expanded: null,
+			loading: false,
+			data: [],
+			content: null
+		};
 
 		_this.componentWillReceiveProps = function (nextProps) {
 			_this.setState({ data: nextProps.data, topActions: nextProps.topActions });
@@ -9720,24 +10310,26 @@ var EnhancedExpansionPanel = function (_React$Component) {
 								}) : [],
 								elem.title && elem.subheading ? React.createElement(
 									'div',
-									null,
+									{
+										className: classes.headingWrapper
+									},
 									React.createElement(
 										Typography,
-										_extends$8({}, titleLink, {
+										_extends$b({}, titleLink, {
 											className: classes.heading
 										}),
 										typeof elem.title === "function" ? elem.title() : elem.title
 									),
 									React.createElement(
 										Typography,
-										_extends$8({}, titleLink, {
+										_extends$b({}, titleLink, {
 											className: classes.heading
 										}),
 										typeof elem.subheading === "function" ? elem.subheading() : elem.subheading
 									)
 								) : elem.title ? React.createElement(
 									Typography,
-									_extends$8({}, titleLink, {
+									_extends$b({}, titleLink, {
 										className: classes.heading
 									}),
 									typeof elem.title === "function" ? elem.title() : elem.title
@@ -9746,19 +10338,23 @@ var EnhancedExpansionPanel = function (_React$Component) {
 									'div',
 									{ className: classes.headingAction },
 									expanded === panel && topActions ? topActions.map(function (action) {
-										return action.icon ? React.createElement(
-											Fab,
+										var showAction = action.beforeShow ? action.beforeShow(elem) : true;
+
+										var actionButton = action.icon ? React.createElement(
+											Fab$1,
 											{ 'aria-label': action.title, className: classes.fab, color: action.color, onClick: function onClick() {
 													return action.action(_this, elem);
 												}, size: 'small', key: "fab" },
 											React.createElement(action.icon, null)
 										) : React.createElement(
-											Button,
+											Button$1,
 											{ 'aria-label': action.title, variant: 'contained', color: action.color, onClick: function onClick() {
 													return action.action(_this, elem);
 												}, size: 'small', key: "button" },
 											action.label
 										);
+
+										return showAction ? actionButton : null;
 									}) : React.createElement(
 										Typography,
 										{ className: classes.secondaryHeading },
@@ -9785,7 +10381,7 @@ var EnhancedExpansionPanel = function (_React$Component) {
 									null,
 									topActions.map(function (action) {
 										return React.createElement(
-											Button,
+											Button$1,
 											{ 'aria-label': action.title, color: action.color, onClick: function onClick() {
 													return action.action(_this, elem);
 												}, size: 'small' },
@@ -9802,12 +10398,7 @@ var EnhancedExpansionPanel = function (_React$Component) {
 			);
 		};
 
-		_this.state = Object.assign({
-			expanded: null,
-			loading: false,
-			data: [],
-			content: null
-		}, props);
+		_this.state = Object.assign(_this.state, props);
 		return _this;
 	}
 
@@ -9818,205 +10409,7 @@ EnhancedExpansionPanel.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-var Accordion = withStyles(styles$5)(EnhancedExpansionPanel);
-
-var styles$6 = function styles(theme) {
-  return {
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      flexWrap: 'wrap',
-      paddingRight: theme.spacing.unit,
-      paddingLeft: theme.spacing.unit
-    },
-    header: {
-      alignItems: 'center',
-      display: 'flex',
-      backgroundColor: theme.palette.primary.main,
-      color: '#fff',
-      height: '56px',
-      borderRadius: '3px 3px 0 0',
-      boxSizing: 'border-box',
-      fontWeight: 500,
-      justifyContent: 'space-between',
-      padding: '0 8px 0 16px',
-      minWidth: '300px'
-    },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit
-    },
-    button: {
-      margin: theme.spacing.unit
-    },
-    formControl: {
-      margin: theme.spacing.unit * 3
-    },
-    group: {
-      margin: theme.spacing.unit + 'px 0'
-    },
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing.unit,
-      color: 'rgba(255, 255, 255)'
-    },
-    title: {
-      color: 'rgba(255, 255, 255)'
-    },
-    content: {
-      paddingTop: theme.spacing.unit * 3
-    }
-  };
-};
-
-var EnhancedDialog = function (_React$Component) {
-  inherits(EnhancedDialog, _React$Component);
-
-  function EnhancedDialog(props) {
-    classCallCheck(this, EnhancedDialog);
-
-    var _this = possibleConstructorReturn(this, (EnhancedDialog.__proto__ || Object.getPrototypeOf(EnhancedDialog)).call(this, props));
-
-    _this.handleClose = function () {
-      _this.props.onClose();
-    };
-
-    _this.handleCancel = function () {
-      if (_this.props.value) {
-        _this.props.onClose(_this.props.value);
-      } else {
-        _this.props.onClose("cancel");
-      }
-    };
-
-    _this.handleOk = function () {
-      if (_this.state.value) {
-        _this.props.onClose(_this.state.value);
-      } else {
-        _this.props.onClose("ok");
-      }
-    };
-
-    _this.renderActions = function () {
-      switch (_this.state.type) {
-        case 'custom':
-          {
-            return React.createElement(
-              DialogActions,
-              null,
-              _this.state.actions.map(function (actionButton) {
-                var btnKey = 'button-' + actionButton.label.replace(' ', '-');
-
-                return React.createElement(
-                  Button,
-                  {
-                    variant: actionButton.variant ? actionButton.variant : "contained",
-                    color: actionButton.color ? actionButton.color : "primary",
-                    onClick: function onClick(e) {
-                      return actionButton.action(_this);
-                    },
-                    key: btnKey
-                  },
-                  actionButton.label
-                );
-              })
-            );
-          }
-        case 'confirm':
-          {
-            return React.createElement(
-              DialogActions,
-              null,
-              React.createElement(
-                Button,
-                { onClick: _this.handleCancel, color: 'primary' },
-                'Cancel'
-              ),
-              React.createElement(
-                Button,
-                { onClick: _this.handleOk, color: 'primary' },
-                'Ok'
-              )
-            );
-          }
-        case 'alert':
-          {
-            return React.createElement(
-              DialogActions,
-              null,
-              React.createElement(
-                Button,
-                { onClick: _this.handleClose, color: 'primary', autoFocus: true },
-                'Ok'
-              )
-            );
-          }
-        default:
-          {
-            return;
-          }
-      }
-    };
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          title = _this$props.title,
-          onClose = _this$props.onClose,
-          other = objectWithoutProperties(_this$props, ['classes', 'title', 'onClose']);
-
-
-      return React.createElement(
-        Dialog,
-        _extends$8({
-          fullScreen: isMobile,
-          maxWidth: false,
-          onClose: onClose,
-          'aria-labelledby': 'dialog-title',
-          className: classes.dialog
-        }, other),
-        _this.state.title ? React.createElement(
-          DialogTitle,
-          { id: 'dialog-title', className: classes.header, disableTypography: true },
-          React.createElement(
-            Typography,
-            { variant: 'h6', className: classes.title },
-            _this.state.title
-          ),
-          onClose ? React.createElement(
-            IconButton,
-            { 'aria-label': 'Close', className: classes.closeButton, onClick: onClose },
-            React.createElement(CloseIcon, null)
-          ) : null
-        ) : "",
-        React.createElement(
-          DialogContent,
-          { className: classes.content },
-          _this.state.text ? React.createElement(
-            DialogContentText,
-            null,
-            _this.state.text
-          ) : "",
-          _this.state.content ? _this.state.content : ""
-        ),
-        _this.state.type ? _this.renderActions() : ""
-      );
-    };
-
-    _this.state = props;
-    return _this;
-  }
-
-  createClass(EnhancedDialog, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState(nextProps);
-    }
-  }]);
-  return EnhancedDialog;
-}(React.Component);
-
-var Dialog$1 = withStyles(styles$6)(EnhancedDialog);
+var Accordion = withStyles(styles$6)(EnhancedExpansionPanel);
 
 var MomentUtils = /** @class */ (function () {
     function MomentUtils(_a) {
@@ -10077,6 +10470,7 @@ var MomentUtils = /** @class */ (function () {
         return date.clone().endOf("day");
     };
     MomentUtils.prototype.format = function (date, formatString) {
+        date.locale(this.locale);
         return date.format(formatString);
     };
     MomentUtils.prototype.formatNumber = function (numberToFormat) {
@@ -10150,9 +10544,7 @@ var MomentUtils = /** @class */ (function () {
     MomentUtils.prototype.getWeekdays = function () {
         var _this = this;
         return [0, 1, 2, 3, 4, 5, 6].map(function (dayOfWeek) {
-            return _this.moment()
-                .weekday(dayOfWeek)
-                .format("dd");
+            return _this.format(_this.moment().weekday(dayOfWeek), "dd");
         });
     };
     MomentUtils.prototype.isEqual = function (value, comparing) {
@@ -10195,31 +10587,31 @@ var MomentUtils = /** @class */ (function () {
     };
     // displaying methods
     MomentUtils.prototype.getCalendarHeaderText = function (date) {
-        return date.format(this.yearMonthFormat);
+        return this.format(date, this.yearMonthFormat);
     };
     MomentUtils.prototype.getYearText = function (date) {
-        return date.format("YYYY");
+        return this.format(date, "YYYY");
     };
     MomentUtils.prototype.getDatePickerHeaderText = function (date) {
-        return date.format("ddd, MMM D");
+        return this.format(date, "ddd, MMM D");
     };
     MomentUtils.prototype.getDateTimePickerHeaderText = function (date) {
-        return date.format("MMM D");
+        return this.format(date, "MMM D");
     };
     MomentUtils.prototype.getMonthText = function (date) {
-        return date.format("MMMM");
+        return this.format(date, "MMMM");
     };
     MomentUtils.prototype.getDayText = function (date) {
-        return date.format("D");
+        return this.format(date, "D");
     };
     MomentUtils.prototype.getHourText = function (date, ampm) {
-        return date.format(ampm ? "hh" : "HH");
+        return this.format(date, ampm ? "hh" : "HH");
     };
     MomentUtils.prototype.getMinuteText = function (date) {
-        return date.format("mm");
+        return this.format(date, "mm");
     };
     MomentUtils.prototype.getSecondText = function (date) {
-        return date.format("ss");
+        return this.format(date, "ss");
     };
     return MomentUtils;
 }());
@@ -10269,8 +10661,10 @@ function __rest(s, e) {
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
     return t;
 }
 
@@ -10502,7 +10896,7 @@ var _objectWithoutProperties = _interopDefault(objectWithoutProperties$1);
 var _extends = _interopDefault(_extends_1);
 var React$$1 = _interopDefault(React);
 var PropTypes$$1 = _interopDefault(PropTypes);
-var warning = _interopDefault(warning_1$1);
+var warning = _interopDefault(warning_1$2);
 
 function defineProperty(object$$1, property, attr) {
   return Object.defineProperty(object$$1, property, attr);
@@ -13161,16 +13555,16 @@ var ModalDialog = function (_a) {
       root: clearable || showTodayButton ? classes.dialogActions : undefined,
       action: clsx(classes.dialogAction, (_d = {}, _d[classes.clearableDialogAction] = clearable, _d[classes.todayDialogAction] = !clearable && showTodayButton, _d))
     }
-  }, clearable && createElement(Button, {
+  }, clearable && createElement(Button$1, {
     color: "primary",
     onClick: onClear
-  }, clearLabel), !clearable && showTodayButton && createElement(Button, {
+  }, clearLabel), !clearable && showTodayButton && createElement(Button$1, {
     color: "primary",
     onClick: onSetToday
-  }, todayLabel), createElement(Button, {
+  }, todayLabel), createElement(Button$1, {
     color: "primary",
     onClick: onDismiss
-  }, cancelLabel), createElement(Button, {
+  }, cancelLabel), createElement(Button$1, {
     color: "primary",
     onClick: onAccept
   }, okLabel)));
@@ -13395,7 +13789,7 @@ var PickerToolbar = function (_a) {
       classes = _a.classes,
       other = __rest(_a, ["children", "className", "classes"]);
 
-  return createElement(Toolbar, __assign({
+  return createElement(Toolbar$1, __assign({
     className: clsx(classes.toolbar, className)
   }, other), children);
 };
@@ -13421,7 +13815,7 @@ var styles$1$1 = function (theme) {
     }
   });
 };
-var PickerToolbar$1 = withStyles$1(styles$1$1, {
+var PickerToolbar$1 = withStyles$1$1(styles$1$1, {
   name: 'MuiPickersToolbar'
 })(PickerToolbar);
 
@@ -13461,7 +13855,7 @@ var styles$2$1 = function (theme) {
     }
   };
 };
-var ToolbarButton$1 = withStyles$1(styles$2$1, {
+var ToolbarButton$1 = withStyles$1$1(styles$2$1, {
   name: 'MuiPickersToolbarButton'
 })(ToolbarButton);
 
@@ -13565,7 +13959,7 @@ process.env.NODE_ENV !== "production" ? SlideTransition.propTypes = {
   transKey: string.isRequired,
   innerRef: any
 } : void 0;
-var SlideTransition$1 = withStyles$1(styles$3$1, {
+var SlideTransition$1 = withStyles$1$1(styles$3$1, {
   name: 'MuiPickersSlideTransition'
 })(SlideTransition);
 
@@ -13674,7 +14068,7 @@ var styles$4$1 = function (theme) {
     }
   });
 };
-var CalendarHeader$1 = withUtils()(withStyles$1(styles$4$1, {
+var CalendarHeader$1 = withUtils()(withStyles$1$1(styles$4$1, {
   withTheme: true,
   name: 'MuiPickersCalendarHeader'
 })(CalendarHeader));
@@ -13758,7 +14152,7 @@ var styles$5$1 = function (theme) {
     }
   });
 };
-var Day$1 = withStyles$1(styles$5$1, {
+var Day$1 = withStyles$1$1(styles$5$1, {
   name: 'MuiPickersDay'
 })(Day);
 
@@ -14068,7 +14462,7 @@ var styles$6$1 = function (theme) {
     }
   };
 };
-var Calendar$1 = withStyles$1(styles$6$1, {
+var Calendar$1 = withStyles$1$1(styles$6$1, {
   name: 'MuiPickersCalendar',
   withTheme: true
 })(withUtils()(Calendar));
@@ -14146,7 +14540,7 @@ var styles$7$1 = function (theme) {
     }
   });
 };
-var Month$1 = withStyles$1(styles$7$1, {
+var Month$1 = withStyles$1$1(styles$7$1, {
   name: 'MuiPickersMonth'
 })(Month);
 
@@ -14306,7 +14700,7 @@ var styles$9 = function (theme) {
     }
   });
 };
-var Year$1 = withStyles$1(styles$9, {
+var Year$1 = withStyles$1$1(styles$9, {
   name: 'MuiPickersYear'
 })(Year);
 
@@ -14415,7 +14809,7 @@ var styles$a = createStyles$1({
     justifyContent: 'center'
   }
 });
-var YearSelection$1 = withStyles$1(styles$a, {
+var YearSelection$1 = withStyles$1$1(styles$a, {
   name: 'MuiPickersYearSelection'
 })(withUtils()(YearSelection));
 
@@ -14605,7 +14999,7 @@ var styles$b = function () {
     }
   });
 };
-var DatePicker$1 = withStyles$1(styles$b)(withUtils()(DatePicker));
+var DatePicker$1 = withStyles$1$1(styles$b)(withUtils()(DatePicker));
 
 var DatePickerModal = function (props) {
   var allowKeyboardControl = props.allowKeyboardControl,
@@ -14828,7 +15222,7 @@ var styles$c = {
     width: DIALOG_WIDTH_WIDER
   }
 };
-var InlineWrapper$1 = withStyles$1(styles$c)(InlineWrapper);
+var InlineWrapper$1 = withStyles$1$1(styles$c)(InlineWrapper);
 
 var DatePickerInline = function (props) {
   var allowKeyboardControl = props.allowKeyboardControl,
@@ -15091,7 +15485,7 @@ var styles$d = function (theme) {
     }
   });
 };
-var ClockPointer$1 = withStyles$1(styles$d, {
+var ClockPointer$1 = withStyles$1$1(styles$d, {
   name: 'MuiPickersClockPointer'
 })(ClockPointer);
 
@@ -15259,7 +15653,7 @@ var styles$e = function (theme) {
     }
   });
 };
-var Clock$1 = withStyles$1(styles$e, {
+var Clock$1 = withStyles$1$1(styles$e, {
   name: 'MuiPickersClock'
 })(Clock);
 
@@ -15359,7 +15753,7 @@ var styles$f = function (theme) {
     }
   });
 };
-var ClockNumber$1 = withStyles$1(styles$f, {
+var ClockNumber$1 = withStyles$1$1(styles$f, {
   name: 'MuiPickersClockNumber'
 })(ClockNumber);
 
@@ -15813,7 +16207,7 @@ var styles$g = function () {
     }
   });
 };
-var TimePicker$1 = withStyles$1(styles$g, {
+var TimePicker$1 = withStyles$1$1(styles$g, {
   withTheme: true,
   name: 'MuiPickersTimePicker'
 })(withUtils()(TimePicker));
@@ -16049,7 +16443,7 @@ process.env.NODE_ENV !== "production" ? DateTimePickerHeader.propTypes = {
   ampm: bool,
   innerRef: any
 } : void 0;
-var DatetimePickerHeader = withStyles$1(styles$h, {
+var DatetimePickerHeader = withStyles$1$1(styles$h, {
   name: 'MuiPickerDTHeader'
 })(withUtils()(DateTimePickerHeader));
 
@@ -16135,7 +16529,7 @@ var styles$i = function (theme) {
     }
   };
 };
-var DateTimePickerTabs$1 = withStyles$1(styles$i, {
+var DateTimePickerTabs$1 = withStyles$1$1(styles$i, {
   name: 'MuiPickerDTTabs',
   withTheme: true
 })(DateTimePickerTabs);
@@ -18208,18 +18602,18 @@ exports.default = AutosizeInput;
 
 var AutosizeInput = unwrapExports(AutosizeInput_1);
 
-function _typeof$3(obj) {
+function _typeof$5(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof$3 = function (obj) {
+    _typeof$5 = function (obj) {
       return typeof obj;
     };
   } else {
-    _typeof$3 = function (obj) {
+    _typeof$5 = function (obj) {
       return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
     };
   }
 
-  return _typeof$3(obj);
+  return _typeof$5(obj);
 }
 
 function _classCallCheck$b(instance, Constructor) {
@@ -18259,8 +18653,8 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function _extends$9() {
-  _extends$9 = Object.assign || function (target) {
+function _extends$c() {
+  _extends$c = Object.assign || function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
 
@@ -18274,7 +18668,7 @@ function _extends$9() {
     return target;
   };
 
-  return _extends$9.apply(this, arguments);
+  return _extends$c.apply(this, arguments);
 }
 
 function _objectSpread(target) {
@@ -18448,7 +18842,7 @@ function classNames(prefix, cssKey, state, className) {
 
 var cleanValue = function cleanValue(value) {
   if (Array.isArray(value)) return value.filter(Boolean);
-  if (_typeof$3(value) === 'object' && value !== null) return [value];
+  if (_typeof$5(value) === 'object' && value !== null) return [value];
   return [];
 }; // ==============================
 // Handle Input Change
@@ -18876,7 +19270,7 @@ var Menu$1 = function Menu$$1(props) {
   css(getStyles('menu', props)), {
     menu: true
   }, className);
-  return React.createElement("div", _extends$9({
+  return React.createElement("div", _extends$c({
     className: cn
   }, innerProps, {
     ref: innerRef
@@ -18937,7 +19331,7 @@ var NoOptionsMessage = function NoOptionsMessage(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$9({
+  return React.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('noOptionsMessage', props)), {
@@ -18955,7 +19349,7 @@ var LoadingMessage = function LoadingMessage(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$9({
+  return React.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('loadingMessage', props)), {
@@ -19078,7 +19472,7 @@ function equal(a, b) {
   // fast-deep-equal index.js 2.0.1
   if (a === b) return true;
 
-  if (a && b && _typeof$3(a) == 'object' && _typeof$3(b) == 'object') {
+  if (a && b && _typeof$5(a) == 'object' && _typeof$5(b) == 'object') {
     var arrA = isArray(a),
         arrB = isArray(b),
         i,
@@ -19462,7 +19856,7 @@ var createFilter = function createFilter(config) {
 };
 
 var A11yText = function A11yText(props) {
-  return React.createElement("span", _extends$9({
+  return React.createElement("span", _extends$c({
     className:
     /*#__PURE__*/
 
@@ -19509,7 +19903,7 @@ function (_Component) {
           emotion = _this$props.emotion,
           props = _objectWithoutProperties$5(_this$props, ["in", "out", "onExited", "appear", "enter", "exit", "innerRef", "emotion"]);
 
-      return React.createElement("input", _extends$9({
+      return React.createElement("input", _extends$c({
         ref: innerRef
       }, props, {
         className:
@@ -20098,7 +20492,7 @@ var SelectContainer = function SelectContainer(props) {
       innerProps = props.innerProps,
       isDisabled = props.isDisabled,
       isRtl = props.isRtl;
-  return React.createElement("div", _extends$9({
+  return React.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('container', props)), {
@@ -20190,7 +20584,7 @@ var Svg = function Svg(_ref) {
   var size = _ref.size,
       props = _objectWithoutProperties$5(_ref, ["size"]);
 
-  return React.createElement("svg", _extends$9({
+  return React.createElement("svg", _extends$c({
     height: size,
     width: size,
     viewBox: "0 0 20 20",
@@ -20211,14 +20605,14 @@ var Svg = function Svg(_ref) {
 };
 
 var CrossIcon = function CrossIcon(props) {
-  return React.createElement(Svg, _extends$9({
+  return React.createElement(Svg, _extends$c({
     size: 20
   }, props), React.createElement("path", {
     d: "M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
   }));
 };
 var DownChevron = function DownChevron(props) {
-  return React.createElement(Svg, _extends$9({
+  return React.createElement(Svg, _extends$c({
     size: 20
   }, props), React.createElement("path", {
     d: "M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
@@ -20251,7 +20645,7 @@ var DropdownIndicator = function DropdownIndicator(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$9({}, innerProps, {
+  return React.createElement("div", _extends$c({}, innerProps, {
     className: cx(
     /*#__PURE__*/
     css(getStyles('dropdownIndicator', props)), {
@@ -20267,7 +20661,7 @@ var ClearIndicator = function ClearIndicator(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$9({}, innerProps, {
+  return React.createElement("div", _extends$c({}, innerProps, {
     className: cx(
     /*#__PURE__*/
     css(getStyles('clearIndicator', props)), {
@@ -20298,7 +20692,7 @@ var IndicatorSeparator = function IndicatorSeparator(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("span", _extends$9({}, innerProps, {
+  return React.createElement("span", _extends$c({}, innerProps, {
     className: cx(
     /*#__PURE__*/
     css(getStyles('indicatorSeparator', props)), {
@@ -20374,7 +20768,7 @@ var LoadingIndicator = function LoadingIndicator(props) {
     keyframesInjected = true;
   }
 
-  return React.createElement("div", _extends$9({}, innerProps, {
+  return React.createElement("div", _extends$c({}, innerProps, {
     className: cx(
     /*#__PURE__*/
     css(getStyles('loadingIndicator', props)), {
@@ -20439,7 +20833,7 @@ var Control = function Control(props) {
       innerRef = props.innerRef,
       innerProps = props.innerProps,
       menuIsOpen = props.menuIsOpen;
-  return React.createElement("div", _extends$9({
+  return React.createElement("div", _extends$c({
     ref: innerRef,
     className: cx(
     /*#__PURE__*/
@@ -20476,7 +20870,7 @@ var Group = function Group(props) {
     css(getStyles('group', props)), {
       'group': true
     }, className)
-  }, React.createElement(Heading, _extends$9({}, headingProps, {
+  }, React.createElement(Heading, _extends$c({}, headingProps, {
     selectProps: selectProps,
     theme: theme,
     getStyles: getStyles,
@@ -20507,7 +20901,7 @@ var GroupHeading = function GroupHeading(props) {
       selectProps = props.selectProps,
       cleanProps = _objectWithoutProperties$5(props, ["className", "cx", "getStyles", "theme", "selectProps"]);
 
-  return React.createElement("div", _extends$9({
+  return React.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('groupHeading', _objectSpread({
@@ -20564,7 +20958,7 @@ var Input$2 = function Input$$1(_ref2) {
     css(getStyles('input', _objectSpread({
       theme: theme
     }, props)))
-  }, React.createElement(AutosizeInput, _extends$9({
+  }, React.createElement(AutosizeInput, _extends$c({
     className: cx(null, {
       'input': true
     }, className),
@@ -20754,7 +21148,7 @@ var optionCSS = function optionCSS(_ref) {
     WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
     // provide some affordance on touch devices
     ':active': {
-      backgroundColor: isSelected ? colors.primary : colors.primary50
+      backgroundColor: !isDisabled && (isSelected ? colors.primary : colors.primary50)
     }
   };
 };
@@ -20769,7 +21163,7 @@ var Option = function Option(props) {
       isSelected = props.isSelected,
       innerRef = props.innerRef,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$9({
+  return React.createElement("div", _extends$c({
     ref: innerRef,
     className: cx(
     /*#__PURE__*/
@@ -20803,7 +21197,7 @@ var Placeholder = function Placeholder(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$9({
+  return React.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('placeholder', props)), {
@@ -20839,7 +21233,7 @@ var SingleValue = function SingleValue(props) {
       getStyles = props.getStyles,
       isDisabled = props.isDisabled,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$9({
+  return React.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('singleValue', props)), {
@@ -21018,7 +21412,6 @@ function (_Component) {
       focusedValue: null,
       inputIsHidden: false,
       isFocused: false,
-      isComposing: false,
       menuOptions: {
         render: [],
         focusable: []
@@ -21027,6 +21420,8 @@ function (_Component) {
     });
 
     _defineProperty(_assertThisInitialized$1(_assertThisInitialized$1(_this)), "blockOptionHover", false);
+
+    _defineProperty(_assertThisInitialized$1(_assertThisInitialized$1(_this)), "isComposing", false);
 
     _defineProperty(_assertThisInitialized$1(_assertThisInitialized$1(_this)), "clearFocusValueOnUpdate", false);
 
@@ -21378,15 +21773,11 @@ function (_Component) {
     });
 
     _defineProperty(_assertThisInitialized$1(_assertThisInitialized$1(_this)), "onCompositionStart", function () {
-      _this.setState({
-        isComposing: true
-      });
+      _this.isComposing = true;
     });
 
     _defineProperty(_assertThisInitialized$1(_assertThisInitialized$1(_this)), "onCompositionEnd", function () {
-      _this.setState({
-        isComposing: false
-      });
+      _this.isComposing = false;
     });
 
     _defineProperty(_assertThisInitialized$1(_assertThisInitialized$1(_this)), "onTouchStart", function (_ref4) {
@@ -21543,7 +21934,6 @@ function (_Component) {
           tabSelectsValue = _this$props7.tabSelectsValue,
           openMenuOnFocus = _this$props7.openMenuOnFocus;
       var _this$state2 = _this.state,
-          isComposing = _this$state2.isComposing,
           focusedOption = _this$state2.focusedOption,
           focusedValue = _this$state2.focusedValue,
           selectValue = _this$state2.selectValue;
@@ -21594,7 +21984,7 @@ function (_Component) {
           break;
 
         case 'Tab':
-          if (isComposing) return;
+          if (_this.isComposing) return;
 
           if (event.shiftKey || !menuIsOpen || !tabSelectsValue || !focusedOption || // don't capture the event if the menu opens on focus and the focused
           // option is already selected; it breaks the flow of navigation
@@ -21615,7 +22005,7 @@ function (_Component) {
 
           if (menuIsOpen) {
             if (!focusedOption) return;
-            if (isComposing) return;
+            if (_this.isComposing) return;
 
             _this.selectOption(focusedOption);
 
@@ -22359,7 +22749,7 @@ function (_Component) {
           cx = _this$commonProps.cx,
           theme = _this$commonProps.theme,
           selectProps = _this$commonProps.selectProps;
-      return React.createElement(Input$$1, _extends$9({
+      return React.createElement(Input$$1, _extends$c({
         autoCapitalize: "none",
         autoComplete: "off",
         autoCorrect: "off",
@@ -22405,7 +22795,7 @@ function (_Component) {
           isFocused = _this$state8.isFocused;
 
       if (!this.hasValue() || !controlShouldRenderValue) {
-        return inputValue ? null : React.createElement(Placeholder, _extends$9({}, commonProps, {
+        return inputValue ? null : React.createElement(Placeholder, _extends$c({}, commonProps, {
           key: "placeholder",
           isDisabled: isDisabled,
           isFocused: isFocused
@@ -22415,7 +22805,7 @@ function (_Component) {
       if (isMulti) {
         var selectValues = selectValue.map(function (opt) {
           var isOptionFocused = opt === focusedValue;
-          return React.createElement(MultiValue, _extends$9({}, commonProps, {
+          return React.createElement(MultiValue, _extends$c({}, commonProps, {
             components: {
               Container: MultiValueContainer,
               Label: MultiValueLabel,
@@ -22447,7 +22837,7 @@ function (_Component) {
       }
 
       var singleValue = selectValue[0];
-      return React.createElement(SingleValue, _extends$9({}, commonProps, {
+      return React.createElement(SingleValue, _extends$c({}, commonProps, {
         data: singleValue,
         isDisabled: isDisabled
       }), this.formatOptionLabel(singleValue, 'value'));
@@ -22471,7 +22861,7 @@ function (_Component) {
         onTouchEnd: this.onClearIndicatorTouchEnd,
         'aria-hidden': 'true'
       };
-      return React.createElement(ClearIndicator, _extends$9({}, commonProps, {
+      return React.createElement(ClearIndicator, _extends$c({}, commonProps, {
         innerProps: innerProps,
         isFocused: isFocused
       }));
@@ -22489,7 +22879,7 @@ function (_Component) {
       var innerProps = {
         'aria-hidden': 'true'
       };
-      return React.createElement(LoadingIndicator, _extends$9({}, commonProps, {
+      return React.createElement(LoadingIndicator, _extends$c({}, commonProps, {
         innerProps: innerProps,
         isDisabled: isDisabled,
         isFocused: isFocused
@@ -22506,7 +22896,7 @@ function (_Component) {
       var commonProps = this.commonProps;
       var isDisabled = this.props.isDisabled;
       var isFocused = this.state.isFocused;
-      return React.createElement(IndicatorSeparator, _extends$9({}, commonProps, {
+      return React.createElement(IndicatorSeparator, _extends$c({}, commonProps, {
         isDisabled: isDisabled,
         isFocused: isFocused
       }));
@@ -22524,7 +22914,7 @@ function (_Component) {
         onTouchEnd: this.onDropdownIndicatorTouchEnd,
         'aria-hidden': 'true'
       };
-      return React.createElement(DropdownIndicator, _extends$9({}, commonProps, {
+      return React.createElement(DropdownIndicator, _extends$c({}, commonProps, {
         innerProps: innerProps,
         isDisabled: isDisabled,
         isFocused: isFocused
@@ -22571,7 +22961,7 @@ function (_Component) {
         // focused option changes so we calculate additional props based on that
         var isFocused = focusedOption === props.data;
         props.innerRef = isFocused ? _this5.getFocusedOptionRef : undefined;
-        return React.createElement(Option, _extends$9({}, commonProps, props, {
+        return React.createElement(Option, _extends$c({}, commonProps, props, {
           isFocused: isFocused
         }), _this5.formatOptionLabel(props.data, 'menu'));
       };
@@ -22585,7 +22975,7 @@ function (_Component) {
                 group = _objectWithoutProperties$5(item, ["type"]);
 
             var headingId = "".concat(item.key, "-heading");
-            return React.createElement(Group, _extends$9({}, commonProps, group, {
+            return React.createElement(Group, _extends$c({}, commonProps, group, {
               Heading: GroupHeading,
               headingProps: {
                 id: headingId
@@ -22620,12 +23010,12 @@ function (_Component) {
         menuPosition: menuPosition,
         menuShouldScrollIntoView: menuShouldScrollIntoView
       };
-      var menuElement = React.createElement(MenuPlacer, _extends$9({}, commonProps, menuPlacementProps), function (_ref6) {
+      var menuElement = React.createElement(MenuPlacer, _extends$c({}, commonProps, menuPlacementProps), function (_ref6) {
         var ref = _ref6.ref,
             _ref6$placerProps = _ref6.placerProps,
             placement = _ref6$placerProps.placement,
             maxHeight = _ref6$placerProps.maxHeight;
-        return React.createElement(Menu$$1, _extends$9({}, commonProps, menuPlacementProps, {
+        return React.createElement(Menu$$1, _extends$c({}, commonProps, menuPlacementProps, {
           innerRef: ref,
           innerProps: {
             onMouseDown: _this5.onMenuMouseDown,
@@ -22639,7 +23029,7 @@ function (_Component) {
           onBottomArrive: onMenuScrollToBottom
         }, React.createElement(ScrollBlock, {
           isEnabled: menuShouldBlockScroll
-        }, React.createElement(MenuList$$1, _extends$9({}, commonProps, {
+        }, React.createElement(MenuList$$1, _extends$c({}, commonProps, {
           innerRef: _this5.getMenuListRef,
           isLoading: isLoading,
           maxHeight: maxHeight
@@ -22648,7 +23038,7 @@ function (_Component) {
       // so we use the same component. the actual portalling logic is forked
       // within the component based on `menuPosition`
 
-      return menuPortalTarget || menuPosition === 'fixed' ? React.createElement(MenuPortal$$1, _extends$9({}, commonProps, {
+      return menuPortalTarget || menuPosition === 'fixed' ? React.createElement(MenuPortal$$1, _extends$c({}, commonProps, {
         appendTo: menuPortalTarget,
         controlElement: this.controlRef,
         menuPlacement: menuPlacement,
@@ -22729,7 +23119,7 @@ function (_Component) {
           menuIsOpen = _this$props20.menuIsOpen;
       var isFocused = this.state.isFocused;
       var commonProps = this.commonProps = this.getCommonProps();
-      return React.createElement(SelectContainer, _extends$9({}, commonProps, {
+      return React.createElement(SelectContainer, _extends$c({}, commonProps, {
         className: className,
         innerProps: {
           id: id,
@@ -22737,7 +23127,7 @@ function (_Component) {
         },
         isDisabled: isDisabled,
         isFocused: isFocused
-      }), this.renderLiveRegion(), React.createElement(Control, _extends$9({}, commonProps, {
+      }), this.renderLiveRegion(), React.createElement(Control, _extends$c({}, commonProps, {
         innerRef: this.getControlRef,
         innerProps: {
           onMouseDown: this.onControlMouseDown,
@@ -22746,9 +23136,9 @@ function (_Component) {
         isDisabled: isDisabled,
         isFocused: isFocused,
         menuIsOpen: menuIsOpen
-      }), React.createElement(ValueContainer, _extends$9({}, commonProps, {
+      }), React.createElement(ValueContainer, _extends$c({}, commonProps, {
         isDisabled: isDisabled
-      }), this.renderPlaceholderOrValue(), this.renderInput()), React.createElement(IndicatorsContainer, _extends$9({}, commonProps, {
+      }), this.renderPlaceholderOrValue(), this.renderInput()), React.createElement(IndicatorsContainer, _extends$c({}, commonProps, {
         isDisabled: isDisabled
       }), this.renderClearIndicator(), this.renderLoadingIndicator(), this.renderIndicatorSeparator(), this.renderDropdownIndicator())), this.renderMenu(), this.renderFormField());
     }
@@ -22872,7 +23262,7 @@ var manageState = function manageState(SelectComponent) {
             defaultValue = _this$props2.defaultValue,
             props = _objectWithoutProperties$5(_this$props2, ["defaultInputValue", "defaultMenuIsOpen", "defaultValue"]);
 
-        return React.createElement(SelectComponent, _extends$9({}, props, {
+        return React.createElement(SelectComponent, _extends$c({}, props, {
           ref: function ref(_ref) {
             _this2.select = _ref;
           },
@@ -23069,7 +23459,7 @@ var makeAsyncSelect = function makeAsyncSelect(SelectComponent) {
             loadedOptions = _this$state.loadedOptions,
             passEmptyOptions = _this$state.passEmptyOptions;
         var options = passEmptyOptions ? [] : inputValue && loadedInputValue ? loadedOptions : defaultOptions || [];
-        return React.createElement(SelectComponent, _extends$9({}, props, {
+        return React.createElement(SelectComponent, _extends$c({}, props, {
           ref: function ref(_ref) {
             _this3.select = _ref;
           },
@@ -23218,10 +23608,10 @@ var makeCreatableSelect = function makeCreatableSelect(SelectComponent) {
       value: function render() {
         var _this2 = this;
 
-        var props = _extends$9({}, this.props);
+        var props = _extends$c({}, this.props);
 
         var options = this.state.options;
-        return React.createElement(SelectComponent, _extends$9({}, props, {
+        return React.createElement(SelectComponent, _extends$c({}, props, {
           ref: function ref(_ref) {
             _this2.select = _ref;
           },
@@ -23289,7 +23679,7 @@ var Fade = function Fade(_ref) {
     var innerProps = {
       style: _objectSpread({}, transition[state])
     };
-    return React.createElement(Tag, _extends$9({
+    return React.createElement(Tag, _extends$c({
       innerProps: innerProps
     }, props));
   });
@@ -23418,7 +23808,7 @@ var AnimatedMultiValue = function AnimatedMultiValue(WrappedComponent) {
     return React.createElement(Collapse, {
       in: inProp,
       onExited: onExited
-    }, React.createElement(WrappedComponent, _extends$9({
+    }, React.createElement(WrappedComponent, _extends$c({
       cropWithEllipsis: inProp
     }, props)));
   };
@@ -23426,7 +23816,7 @@ var AnimatedMultiValue = function AnimatedMultiValue(WrappedComponent) {
 
 var AnimatedPlaceholder = function AnimatedPlaceholder(WrappedComponent) {
   return function (props) {
-    return React.createElement(Fade, _extends$9({
+    return React.createElement(Fade, _extends$c({
       component: WrappedComponent,
       duration: props.isMulti ? collapseDuration : 1
     }, props));
@@ -23435,7 +23825,7 @@ var AnimatedPlaceholder = function AnimatedPlaceholder(WrappedComponent) {
 
 var AnimatedSingleValue = function AnimatedSingleValue(WrappedComponent) {
   return function (props) {
-    return React.createElement(Fade, _extends$9({
+    return React.createElement(Fade, _extends$c({
       component: WrappedComponent
     }, props));
   };
@@ -23444,7 +23834,7 @@ var AnimatedSingleValue = function AnimatedSingleValue(WrappedComponent) {
 // make ValueContainer a transition group
 var AnimatedValueContainer = function AnimatedValueContainer(WrappedComponent) {
   return function (props) {
-    return React.createElement(reactTransitionGroup_2, _extends$9({
+    return React.createElement(reactTransitionGroup_2, _extends$c({
       component: WrappedComponent
     }, props));
   };
@@ -23534,7 +23924,7 @@ var styles$j = function styles(theme) {
 function NoOptionsMessage$1(props) {
   return React.createElement(
     Typography,
-    _extends$8({
+    _extends$b({
       color: 'textSecondary',
       className: props.selectProps.classes.noOptionsMessage
     }, props.innerProps),
@@ -23546,15 +23936,15 @@ function inputComponent(_ref) {
   var inputRef = _ref.inputRef,
       props = objectWithoutProperties(_ref, ['inputRef']);
 
-  return React.createElement('div', _extends$8({ ref: inputRef }, props));
+  return React.createElement('div', _extends$b({ ref: inputRef }, props));
 }
 
 function Control$1(props) {
-  return React.createElement(TextField, _extends$8({
+  return React.createElement(TextField, _extends$b({
     fullWidth: true,
     InputProps: {
       inputComponent: inputComponent,
-      inputProps: _extends$8({
+      inputProps: _extends$b({
         className: props.selectProps.classes.input,
         inputRef: props.innerRef,
         children: props.children
@@ -23566,7 +23956,7 @@ function Control$1(props) {
 function Option$1(props) {
   return React.createElement(
     MenuItem,
-    _extends$8({
+    _extends$b({
       buttonRef: props.innerRef,
       selected: props.isFocused,
       component: 'div',
@@ -23581,7 +23971,7 @@ function Option$1(props) {
 function Placeholder$2(props) {
   return React.createElement(
     Typography,
-    _extends$8({
+    _extends$b({
       color: 'textSecondary',
       className: props.selectProps.classes.placeholder
     }, props.innerProps),
@@ -23592,7 +23982,7 @@ function Placeholder$2(props) {
 function SingleValue$2(props) {
   return React.createElement(
     Typography,
-    _extends$8({ className: props.selectProps.classes.singleValue }, props.innerProps),
+    _extends$b({ className: props.selectProps.classes.singleValue }, props.innerProps),
     props.children
   );
 }
@@ -23618,7 +24008,7 @@ function MultiValue$2(props) {
 function Menu$2(props) {
   return React.createElement(
     Paper,
-    _extends$8({ square: true, className: props.selectProps.classes.paper }, props.innerProps),
+    _extends$b({ square: true, className: props.selectProps.classes.paper }, props.innerProps),
     props.children
   );
 }
@@ -23668,7 +24058,7 @@ var AutoComplete = function (_React$Component) {
 
       var selectStyles = {
         input: function input(base) {
-          return _extends$8({}, base, {
+          return _extends$b({}, base, {
             color: theme.palette.text.primary,
             '& input': {
               font: 'inherit'
@@ -24106,7 +24496,7 @@ function deburr(string$$1) {
 
 var deburr_1 = deburr;
 
-var arrays = function shallowEqualArrays(arrA, arrB) {
+function shallowEqualArrays(arrA, arrB) {
   if (arrA === arrB) {
     return true;
   }
@@ -24128,7 +24518,9 @@ var arrays = function shallowEqualArrays(arrA, arrB) {
   }
 
   return true;
-};
+}
+
+var arrays = shallowEqualArrays;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -26427,7 +26819,7 @@ var AutoSuggest = function (_React$Component) {
           disableUnderline = inputProps.disableUnderline,
           other = objectWithoutProperties(inputProps, ['classes', 'inputRef', 'ref', 'disableUnderline']);
 
-      return React.createElement(TextField, _extends$8({
+      return React.createElement(TextField, _extends$b({
         fullWidth: true,
         InputProps: {
           disableUnderline: disableUnderline,
@@ -26468,7 +26860,7 @@ var AutoSuggest = function (_React$Component) {
         onSuggestionSelected: this.props.onSelect
       };
 
-      return React.createElement(dist$3, _extends$8({}, autosuggestProps, {
+      return React.createElement(dist$3, _extends$b({}, autosuggestProps, {
         inputProps: {
           classes: classes,
           placeholder: this.props.placeholder,
@@ -26486,7 +26878,7 @@ var AutoSuggest = function (_React$Component) {
         renderSuggestionsContainer: function renderSuggestionsContainer(options) {
           return React.createElement(
             Paper,
-            _extends$8({}, options.containerProps, { square: true }),
+            _extends$b({}, options.containerProps, { square: true }),
             options.children
           );
         }
@@ -26643,7 +27035,7 @@ var EnhancedSelect = function (_React$Component) {
     };
 
     _this.componentDidMount = function () {
-      if (_typeof$2(_this.props.options) === 'object') {
+      if (_typeof$4(_this.props.options) === 'object') {
         _this.setState({ selectOptions: _this.props.options });
       } else if (typeof _this.props.options === 'function') {
         var optionsFn = _this.props.options();
@@ -26739,7 +27131,7 @@ var Select$1 = withStyles(styles$m, { withTheme: true })(EnhancedSelect);
 
 var styles$n = function styles(theme) {
   return {
-    root: _extends$8({}, theme.typography.button, {
+    root: _extends$b({}, theme.typography.button, {
 
       // padding: theme.spacing.unit,
       color: theme.palette.common.white,
@@ -26836,8 +27228,8 @@ var Toggle = function (_React$Component) {
         'div',
         { className: classes.root },
         options.map(function (option) {
-          var optionValue = (typeof option === 'undefined' ? 'undefined' : _typeof$2(option)) === 'object' && option.hasOwnProperty('value') ? option.value : option;
-          var optionLabel = (typeof option === 'undefined' ? 'undefined' : _typeof$2(option)) === 'object' && option.hasOwnProperty('label') ? option.label : option;
+          var optionValue = (typeof option === 'undefined' ? 'undefined' : _typeof$4(option)) === 'object' && option.hasOwnProperty('value') ? option.value : option;
+          var optionLabel = (typeof option === 'undefined' ? 'undefined' : _typeof$4(option)) === 'object' && option.hasOwnProperty('label') ? option.label : option;
           var selected = isSelected === optionValue ? true : false;
 
           return React.createElement(
@@ -26867,145 +27259,6 @@ Toggle.propTypes = {
 };
 
 var Toggle$1 = withStyles(styles$n)(Toggle);
-
-var styles$o = function styles(theme) {
-  return {
-    root: {},
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit
-    }
-  };
-};
-
-var toggleOptions = {
-  toggleOptions: []
-};
-
-var EnhancedToggle = function (_React$Component) {
-  inherits(EnhancedToggle, _React$Component);
-
-  function EnhancedToggle(props) {
-    classCallCheck(this, EnhancedToggle);
-
-    var _this = possibleConstructorReturn(this, (EnhancedToggle.__proto__ || Object.getPrototypeOf(EnhancedToggle)).call(this, props));
-
-    _this.componentWillReceiveProps = function (nextProps) {
-      var data = _this.state.data;
-      if (nextProps.enum) {
-        _this.setState({
-          value: nextProps.value,
-          data: nextProps.data,
-          toggleOptions: nextProps.enum
-        });
-      } else if (typeof nextProps.options === 'function') {
-        var optionsFn = nextProps.options(data);
-        if (optionsFn instanceof Promise) {
-          optionsFn.then(function (options) {
-            _this.setState({
-              value: nextProps.value,
-              data: nextProps.data,
-              toggleOptions: options
-            });
-          });
-        } else {
-          _this.setState({
-            value: nextProps.value,
-            data: nextProps.data,
-            toggleOptions: optionsFn
-          });
-        }
-      } else if (_typeof$2(nextProps.options) === 'object') {
-        _this.setState({
-          value: nextProps.value,
-          data: nextProps.data,
-          toggleOptions: nextProps.options
-        });
-      }
-    };
-
-    _this.componentDidMount = function () {
-      if (_this.props.enum) {
-        _this.setState({ toggleOptions: _this.props.enum });
-      } else if (typeof _this.props.options === 'function') {
-        var optionsFn = _this.props.options(_this.props.data);
-        if (optionsFn instanceof Promise) {
-          optionsFn.then(function (options) {
-            _this.setState({ toggleOptions: options });
-          });
-        } else {
-          _this.setState({ toggleOptions: optionsFn });
-        }
-      } else if (_typeof$2(_this.props.options) === 'object') {
-        _this.setState({ toggleOptions: _this.props.options });
-      }
-    };
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          data = _this$props.data,
-          value = _this$props.value;
-      var toggleOptions = _this.state.toggleOptions;
-
-
-      return React.createElement(
-        FormControl,
-        {
-          className: classes.root,
-          error: typeof _this.props.error === 'function' ? _this.props.error(data) : _this.props.error,
-          'aria-describedby': _this.props.name + '-error-text',
-          key: 'form-control-' + _this.props.name
-        },
-        _this.props.label ? React.createElement(
-          'div',
-          null,
-          React.createElement('br', null),
-          React.createElement(
-            FormLabel,
-            null,
-            _this.props.label
-          ),
-          React.createElement('br', null)
-        ) : null,
-        React.createElement(Toggle$1, {
-          key: _this.props.name,
-          name: _this.props.name,
-          value: value,
-          options: toggleOptions,
-          onChange: _this.props.onChange
-        }),
-        _this.props.error ? React.createElement(
-          FormHelperText,
-          { id: _this.props.name + '-error-text' },
-          typeof _this.props.title === 'function' ? _this.props.title(data) : _this.props.title
-        ) : null,
-        _this.props.helptext ? React.createElement(
-          FormHelperText,
-          { id: _this.props.name + '-help-text' },
-          typeof _this.props.helptext === 'function' ? _this.props.helptext(data) : _this.props.helptext
-        ) : null,
-        _this.props.helplink ? React.createElement(
-          FormHelperText,
-          { id: _this.props.name + '-help-text' },
-          typeof _this.props.helplink === 'function' ? _this.props.helplink(data) : _this.props.helplink
-        ) : null
-      );
-    };
-
-    _this.state = Object.assign(toggleOptions, props);
-    return _this;
-  }
-
-  return EnhancedToggle;
-}(React.Component);
-
-EnhancedToggle.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
-};
-
-var Toggle$2 = withStyles(styles$o, { withTheme: true })(EnhancedToggle);
 
 /*
 object-assign
@@ -27141,7 +27394,7 @@ if (process.env.NODE_ENV !== 'production') {
   };
 }
 
-function invariant$2(condition, format, a, b, c, d, e, f) {
+function invariant$1(condition, format, a, b, c, d, e, f) {
   validateFormat(format);
 
   if (!condition) {
@@ -27162,7 +27415,7 @@ function invariant$2(condition, format, a, b, c, d, e, f) {
   }
 }
 
-var invariant_1$1 = invariant$2;
+var invariant_1$1 = invariant$1;
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -27209,7 +27462,7 @@ var emptyFunction_1 = emptyFunction;
 var warning$3 = emptyFunction_1;
 
 if (process.env.NODE_ENV !== 'production') {
-  var printWarning$2 = function printWarning(format) {
+  var printWarning$1 = function printWarning(format) {
     for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
       args[_key - 1] = arguments[_key];
     }
@@ -27243,15 +27496,15 @@ if (process.env.NODE_ENV !== 'production') {
         args[_key2 - 2] = arguments[_key2];
       }
 
-      printWarning$2.apply(undefined, [format].concat(args));
+      printWarning$1.apply(undefined, [format].concat(args));
     }
   };
 }
 
-var warning_1$2 = warning$3;
+var warning_1$3 = warning$3;
 
 if (process.env.NODE_ENV !== 'production') {
-  var warning$4 = warning_1$2;
+  var warning$4 = warning_1$3;
 }
 
 var MIXINS_KEY = 'mixins';
@@ -35368,7 +35621,7 @@ function styleInject(css, ref) {
 var css$3 = ".react-calendar_DateRangePicker__1jLs4 {\n  display: inline-block;\n  margin-bottom: 10px;\n  padding: 0;\n  position: relative;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none; }\n  .react-calendar_DateRangePicker__Legend__mi-Zo {\n    color: #52575e;\n    font-size: 14px;\n    line-height: 16px;\n    list-style-type: none;\n    margin: 20px 0;\n    padding: 0; }\n  .react-calendar_DateRangePicker__LegendItem__3AoBq {\n    display: inline-block;\n    margin: 0 20px; }\n  .react-calendar_DateRangePicker__LegendItemColor__2uuHT {\n    border-radius: 50%;\n    display: inline-block;\n    height: 14px;\n    margin-right: 6px;\n    vertical-align: text-bottom;\n    width: 14px;\n    border: 1px solid rgba(0, 0, 0, 0.25); }\n    .react-calendar_DateRangePicker__LegendItemColor--selection__19fAf {\n      background-color: #ed5434; }\n  .react-calendar_DateRangePicker__PaginationArrow__2Ho6I {\n    border: 0;\n    cursor: pointer;\n    display: block;\n    height: 35px;\n    outline: none;\n    overflow: hidden;\n    padding: 0;\n    position: absolute;\n    text-align: center;\n    top: 0;\n    white-space: nowrap;\n    width: 35px;\n    z-index: 1; }\n    .react-calendar_DateRangePicker__PaginationArrow--previous__11nRE {\n      left: 20px; }\n    .react-calendar_DateRangePicker__PaginationArrow--next__1Dzio {\n      right: 20px; }\n    .react-calendar_DateRangePicker__PaginationArrow__2Ho6I:hover {\n      background-color: #ccc; }\n  .react-calendar_DateRangePicker__PaginationArrowIcon__11GP5 {\n    border-bottom: 8px solid transparent;\n    border-top: 8px solid transparent;\n    height: 0;\n    position: absolute;\n    top: 10px;\n    width: 0; }\n    .react-calendar_DateRangePicker__PaginationArrowIcon--is-disabled__1DC-o {\n      opacity: .25; }\n    .react-calendar_DateRangePicker__PaginationArrowIcon--previous__1Bs2a {\n      border-left: 8px solid transparent;\n      border-right: 8px solid #aaa;\n      right: 11px; }\n    .react-calendar_DateRangePicker__PaginationArrowIcon--next__14dXg {\n      border-left: 8px solid #aaa;\n      border-right: 8px solid transparent;\n      left: 11px; }\n  .react-calendar_DateRangePicker__Month__2L3vu {\n    color: #333;\n    display: inline-block;\n    margin: 0 20px;\n    position: relative;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    width: 275px; }\n  .react-calendar_DateRangePicker__MonthHeader__3OwuN {\n    color: #000;\n    font-size: 14px;\n    font-weight: bold;\n    height: 35px;\n    line-height: 35px;\n    position: relative;\n    text-align: center; }\n  .react-calendar_DateRangePicker__MonthHeaderLabel__1zhmz {\n    display: inline-block;\n    position: relative; }\n  .react-calendar_DateRangePicker__MonthHeaderSelect__3skK9 {\n    background: #e4e4e4;\n    border: 0;\n    cursor: pointer;\n    display: inline-block;\n    height: 100%;\n    left: 0;\n    margin: 0;\n    opacity: 0;\n    position: absolute;\n    top: 0;\n    width: 100%;\n    z-index: 5; }\n  .react-calendar_DateRangePicker__MonthDates__1eWwS {\n    border-bottom: 1px solid #f4f5f6;\n    border-collapse: separate;\n    border-spacing: 0 1px;\n    margin: 0;\n    width: 100%; }\n  .react-calendar_DateRangePicker__WeekdayHeading__1uRIh, .react-calendar_DateRangePicker__Date__5p8cJ {\n    font-size: 12px;\n    line-height: 1;\n    padding: 10px 0;\n    text-align: center;\n    width: 14.285714285714286%; }\n  .react-calendar_DateRangePicker__WeekdayHeading__1uRIh {\n    border-bottom: 1px solid #f4f5f6;\n    color: #000;\n    font-weight: bold; }\n    .react-calendar_DateRangePicker__WeekdayHeading__1uRIh abbr[title] {\n      border-bottom-width: 0;\n      color: #000;\n      cursor: pointer;\n      font-size: inherit;\n      text-decoration: none; }\n  .react-calendar_DateRangePicker__Date__5p8cJ {\n    border: 0 solid #f4f5f6;\n    border-right-width: 1px;\n    cursor: pointer;\n    overflow: hidden;\n    position: relative; }\n    .react-calendar_DateRangePicker__Date__5p8cJ:first-child {\n      border-left-width: 1px; }\n    .react-calendar_DateRangePicker__Date--weekend__3O49M {\n      background-color: #f6f7f9; }\n    .react-calendar_DateRangePicker__Date--otherMonth__3KD9X {\n      opacity: .25; }\n    .react-calendar_DateRangePicker__Date--is-disabled__35q8x {\n      color: #cdcdd1;\n      cursor: default; }\n    .react-calendar_DateRangePicker__Date--is-selected__TEtsO {\n      color: #fff; }\n    .react-calendar_DateRangePicker__Date--is-highlighted__1Vtek {\n      color: #333; }\n  .react-calendar_DateRangePicker__CalendarDatePeriod__2p1WA {\n    bottom: 0;\n    position: absolute;\n    top: 0; }\n    .react-calendar_DateRangePicker__CalendarDatePeriod--am__2JwsB {\n      left: 0;\n      right: 50%; }\n    .react-calendar_DateRangePicker__CalendarDatePeriod--pm__yukTB {\n      left: 50%;\n      right: 0; }\n  .react-calendar_DateRangePicker__CalendarSelection__3vARJ {\n    background-color: #ed5434;\n    border: 1px solid #eb401d;\n    bottom: 5px;\n    left: 0;\n    position: absolute;\n    right: 0;\n    top: 5px; }\n    .react-calendar_DateRangePicker__CalendarSelection--inOtherMonth__2ufuG {\n      opacity: .5; }\n    .react-calendar_DateRangePicker__CalendarSelection--start__2uARt {\n      border-bottom-left-radius: 5px;\n      border-right-width: 0;\n      border-top-left-radius: 5px;\n      left: 5px; }\n    .react-calendar_DateRangePicker__CalendarSelection--end__tz18P {\n      border-bottom-right-radius: 5px;\n      border-left-width: 0;\n      border-top-right-radius: 5px;\n      right: 5px; }\n    .react-calendar_DateRangePicker__CalendarSelection--segment__3RUZG {\n      border-left-width: 0;\n      border-right-width: 0; }\n    .react-calendar_DateRangePicker__CalendarSelection--single__1rX0g {\n      border-radius: 5px;\n      left: 5px;\n      right: 5px; }\n    .react-calendar_DateRangePicker__CalendarSelection--is-pending__3P0I8 {\n      background-color: rgba(237, 84, 52, 0.75);\n      border-width: 0; }\n  .react-calendar_DateRangePicker__CalendarHighlight__21OVm {\n    background-color: rgba(255, 255, 255, 0.25);\n    border: 1px solid rgba(0, 0, 0, 0.25);\n    bottom: 5px;\n    left: 0;\n    position: absolute;\n    right: 0;\n    top: 5px; }\n    .react-calendar_DateRangePicker__CalendarHighlight--inOtherMonth__3QUZt {\n      opacity: .5; }\n    .react-calendar_DateRangePicker__CalendarHighlight--start__39dYQ {\n      border-bottom-left-radius: 5px;\n      border-right-width: 0;\n      border-top-left-radius: 5px;\n      left: 5px; }\n    .react-calendar_DateRangePicker__CalendarHighlight--end__3s5h7 {\n      border-bottom-right-radius: 5px;\n      border-left-width: 0;\n      border-top-right-radius: 5px;\n      right: 5px; }\n    .react-calendar_DateRangePicker__CalendarHighlight--segment__2vnVx {\n      border-left-width: 0;\n      border-right-width: 0; }\n    .react-calendar_DateRangePicker__CalendarHighlight--single__g3Jyy {\n      background-color: #fff;\n      border: 1px solid #eb401d;\n      border-radius: 5px;\n      left: 5px;\n      right: 5px; }\n  .react-calendar_DateRangePicker__HalfDateStates__3AvUe {\n    bottom: -50px;\n    left: -50px;\n    position: absolute;\n    right: -50px;\n    top: -50px;\n    transform: rotate(30deg); }\n  .react-calendar_DateRangePicker__FullDateStates__2eqtO {\n    bottom: 0;\n    left: 0;\n    position: absolute;\n    right: 0;\n    top: 0; }\n  .react-calendar_DateRangePicker__DateLabel__2TFJZ {\n    display: block;\n    position: relative;\n    text-align: center;\n    width: 100%;\n    z-index: 1; }\n";
 styleInject(css$3);
 
-var styles$p = function styles(theme) {
+var styles$o = function styles(theme) {
   return {};
 };
 var dateRangeOptions = {};
@@ -35438,7 +35691,93 @@ EnhancedDateRange.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-var DateRange = withStyles(styles$p, { withTheme: true })(EnhancedDateRange);
+var DateRange = withStyles(styles$o, { withTheme: true })(EnhancedDateRange);
+
+var styles$p = function styles(theme) {
+  return {};
+};
+
+var tinyTextOptions = {};
+
+var EnhancedRichText = function (_React$Component) {
+  inherits(EnhancedRichText, _React$Component);
+
+  function EnhancedRichText(props) {
+    classCallCheck(this, EnhancedRichText);
+
+    var _this = possibleConstructorReturn(this, (EnhancedRichText.__proto__ || Object.getPrototypeOf(EnhancedRichText)).call(this, props));
+
+    _this.componentDidMount = function () {
+      _this.setState({ setInitialValue: true });
+    };
+
+    _this.componentWillReceiveProps = function (nextProps) {
+      _this.setState({ value: nextProps.value, data: nextProps.data });
+      if (_this.state.setInitialValue) {
+        _this.setState({ keyValue: nextProps.value });
+      }
+      _this.setState({ setInitialValue: false });
+    };
+
+    _this.handleEditorChange = function (evt, editor) {
+      _this.props.onChange(_this.props.name, editor.getContent());
+      editor.save();
+    };
+
+    _this.render = function () {
+      var _this$state = _this.state,
+          data = _this$state.data,
+          value = _this$state.value;
+
+
+      return React.createElement(
+        FormControl,
+        {
+          error: typeof _this.props.error === 'function' ? _this.props.error(data) : _this.props.error,
+          'aria-describedby': _this.props.name + '-error-text',
+          key: 'form-control-' + _this.props.name
+        },
+        React.createElement(Editor, {
+          key: _this.state.keyValue,
+          initialValue: typeof value === 'function' ? value(data) : value === undefined ? "" : value,
+          init: {
+            plugins: 'link image code media table',
+            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | image media | code | table'
+          },
+          onChange: _this.handleEditorChange,
+          onKeyUp: _this.handleEditorChange
+        }),
+        _this.props.error ? React.createElement(
+          FormHelperText,
+          { id: _this.props.name + '-error-text' },
+          typeof _this.props.title === 'function' ? _this.props.title(data) : _this.props.title
+        ) : null,
+        _this.props.helptext ? React.createElement(
+          FormHelperText,
+          { id: _this.props.name + '-help-text' },
+          typeof _this.props.helptext === 'function' ? _this.props.helptext(data) : _this.props.helptext
+        ) : null,
+        _this.props.helplink ? React.createElement(
+          FormHelperText,
+          { id: _this.props.name + '-help-text' },
+          typeof _this.props.helplink === 'function' ? _this.props.helplink(data) : _this.props.helplink
+        ) : null
+      );
+    };
+
+    _this.state = Object.assign(tinyTextOptions, props);
+    return _this;
+  }
+
+  return EnhancedRichText;
+}(React.Component);
+
+EnhancedRichText.propTypes = {
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired
+};
+
+var RichText = withStyles(styles$p, { withTheme: true })(EnhancedRichText);
 
 var ITEM_HEIGHT = 48;
 var ITEM_PADDING_TOP = 8;
@@ -35552,27 +35891,15 @@ var styles$q = function styles(theme) {
   };
 };
 
-var reducer = function reducer(accumulator, currentValue) {
-  accumulator[currentValue.name] = "";
-  return accumulator;
-};
+var Field = function (_React$Component) {
+  inherits(Field, _React$Component);
 
-var EnhancedForm = function (_React$Component) {
-  inherits(EnhancedForm, _React$Component);
+  function Field(props) {
+    classCallCheck(this, Field);
 
-  function EnhancedForm(props) {
-    classCallCheck(this, EnhancedForm);
-
-    var _this = possibleConstructorReturn(this, (EnhancedForm.__proto__ || Object.getPrototypeOf(EnhancedForm)).call(this, props));
+    var _this = possibleConstructorReturn(this, (Field.__proto__ || Object.getPrototypeOf(Field)).call(this, props));
 
     _this.state = { loading: false, success: false, snackBarOpen: false };
-
-    _this.componentWillReceiveProps = function (nextProps) {
-      var tempNextProps = {};
-      tempNextProps.data = typeof nextProps.data === "function" ? nextProps.data() : nextProps.data;
-
-      _this.setState(Object.assign({}, nextProps, tempNextProps));
-    };
 
     _this.handleSnackBarClose = function (event, reason) {
       _this.setState({ snackBarOpen: false, snackBarMessage: null });
@@ -35609,11 +35936,11 @@ var EnhancedForm = function (_React$Component) {
             });
 
             return {
-              data: _extends$8({}, data, defineProperty$1({}, name, uniqueArray))
+              data: _extends$b({}, data, defineProperty$1({}, name, uniqueArray))
             };
           } else {
             return {
-              data: _extends$8({}, data, defineProperty$1({}, name, fieldValue))
+              data: _extends$b({}, data, defineProperty$1({}, name, fieldValue))
             };
           }
         }, function () {
@@ -35630,11 +35957,11 @@ var EnhancedForm = function (_React$Component) {
             });
 
             return {
-              data: _extends$8({}, data, defineProperty$1({}, name, filteredPrevValue))
+              data: _extends$b({}, data, defineProperty$1({}, name, filteredPrevValue))
             };
           } else {
             return {
-              data: _extends$8({}, data, defineProperty$1({}, name, fieldValue))
+              data: _extends$b({}, data, defineProperty$1({}, name, fieldValue))
             };
           }
         }, function () {
@@ -35645,92 +35972,22 @@ var EnhancedForm = function (_React$Component) {
       }
     };
 
-    _this.handleSliderChange = function (name, value) {
-      var data = _this.state.data;
-      var fields = _this.props.fields;
-
-      var fieldValue = value;
-
-      _this.setState(function (state, props) {
-        var updatedState = {};
-        var currentField = state.fields.find(function (field) {
-          return field.name === name;
-        });
-
-        if (currentField.dependencies && currentField.dependencies[fieldValue] !== undefined) {
-          updatedState.fields = fields.concat(currentField.dependencies[fieldValue]);
-        }
-
-        updatedState.data = _extends$8({}, data, defineProperty$1({}, name, isNaN(fieldValue) || typeof fieldValue === 'string' ? fieldValue : fieldValue.toFixed(currentField.decimal ? currentField.decimal : 2)));
-
-        return updatedState;
-      }, function () {
-        if (_this.state.loadOnChange && !_this.state.loading) {
-          _this.submitAction(_this.state.data);
-        }
-      });
-    };
-
-    _this.validateValue = function (field, value, formData) {
-      var validateFlag = true;
-      if (value !== undefined && value !== null && value !== "") {
-        if (validateFlag && field.minlength) {
-          validateFlag = value.length >= field.minlength ? true : false;
-        }
-
-        if (validateFlag && field.maxlength) {
-          validateFlag = value.length <= field.maxlength ? true : false;
-        }
-
-        var re = field.pattern ? field.pattern : '';
-        if (validateFlag && (re.length > 0 || (typeof re === 'undefined' ? 'undefined' : _typeof$2(re)) === "object")) {
-          validateFlag = re.test(value);
-        }
-
-        if (validateFlag && field.validate) {
-          validateFlag = typeof field.validate === "function" ? field.validate(formData) : field.validate;
-        }
-
-        return validateFlag;
-      } else {
-        return !validateFlag;
-      }
-    };
-
-    _this.checkFormat = function (field, value) {
+    _this.checkFormat = function (type, value, pattern) {
       if (value.length > 0) {
         var re = '';
-        switch (field.type) {
+        switch (type) {
           case 'tel':
-            re = field.pattern ? field.pattern : /^[0-9\b]+$/;
+            re = pattern ? pattern : /^[0-9\b]+$/;
             break;
           default:
-            re = field.pattern ? field.pattern : '';
+            re = pattern ? pattern : '';
             break;
         }
 
-        return re.length > 0 || (typeof re === 'undefined' ? 'undefined' : _typeof$2(re)) === "object" ? re.test(value) : true;
+        return re.length > 0 || (typeof re === 'undefined' ? 'undefined' : _typeof$4(re)) === "object" ? re.test(value) : true;
       } else {
         return true;
       }
-    };
-
-    _this.getDependentFields = function (currentField, fieldValue) {
-      var dependentFields = currentField.dependencies && (currentField.dependencies[fieldValue] || currentField.dependencies["*"]) || [];
-
-      var fields = currentField.dependent ? _this.state.fields : _this.props.fields;
-      var fieldNameArr = Object.keys(fields.reduce(reducer, {}));
-      var updatedFields = dependentFields.filter(function (field) {
-        return fieldNameArr.indexOf(field.name) === -1;
-      });
-
-      return fields.concat(updatedFields);
-    };
-
-    _this.getCurrentField = function (name) {
-      return _this.state.fields.find(function (field) {
-        return field.name === name;
-      });
     };
 
     _this.handleChange = function (event) {
@@ -35738,119 +35995,40 @@ var EnhancedForm = function (_React$Component) {
           name = _event$target2.name,
           value = _event$target2.value,
           type = _event$target2.type,
-          checked = _event$target2.checked;
-      var data = _this.state.data;
+          checked = _event$target2.checked,
+          pattern = _event$target2.pattern;
 
-      var fieldValue = value;
-
-      if (type === 'checkbox') {
-        fieldValue = checked;
-      }
-
-      var currentField = _this.getCurrentField(name);
+      var fieldValue = type === 'checkbox' ? checked : value;
       var formatFlag = true;
-      if (currentField.type === 'tel') {
-        formatFlag = _this.checkFormat(currentField, fieldValue);
+      if (type === 'tel') {
+        formatFlag = _this.checkFormat(type, value, pattern);
       }
 
       if (formatFlag) {
-        var updatedFields = _this.getDependentFields(currentField, fieldValue);
-        // if(currentField.dependencies && currentField.dependencies[fieldValue] !== undefined) {
-        //   this.setState((state, props) => {
-        //     let fields;
-        //     if(currentField.dependent) {
-        //       fields = state.fields;
-        //     } else {
-        //       fields = props.fields;
-        //     }
-
-        //     let newFields     = currentField.dependencies[fieldValue];
-        //     let fieldNameArr  = Object.keys(fields.reduce(reducer, {}));
-        //     let updatedFields = newFields.filter(field => fieldNameArr.indexOf(field.name) === -1);
-
-        //     return {
-        //       fields: fields.concat(updatedFields)
-        //     }
-        //   });
-        // } else if(currentField.dependencies && currentField.dependencies["*"] !== undefined) {
-        //   this.setState((state, props) => {
-        //     let fields;
-        //     if(currentField.dependent) {
-        //       fields = state.fields;
-        //     } else {
-        //       fields = props.fields;
-        //     }
-
-        //     let newFields = currentField.dependencies["*"];
-        //     let fieldNameArr = Object.keys(fields.reduce(reducer, {}));
-        //     let updatedFields = newFields.filter(field => fieldNameArr.indexOf(field.name) === -1);
-
-        //     return {
-        //       fields: fields.concat(updatedFields)
-        //     }
-        //   });
-        // }
-
-        _this.setState({
-          fields: updatedFields,
-          data: _extends$8({}, data, defineProperty$1({}, name, fieldValue))
-        }, function () {
-          if (_this.state.loadOnChange && !_this.state.loading) {
-            _this.submitAction();
-          }
-        });
+        _this.handleChangeData(name, fieldValue);
       } else {
-        var _updatedFields = _this.state.fields.map(function (field) {
-          if (field.name === currentField.name) {
-            currentField.error = true;
-            return currentField;
-          } else {
-            field.error = false;
-            return field;
-          }
-        });
-
-        _this.setState({
-          fields: _updatedFields
-        });
+        _this.setState({ error: true });
       }
     };
 
-    _this.handleDateChange = function (name, value) {
-      var data = _this.state.data;
+    _this.handleChangeData = function (name, value) {
+      var _this$props = _this.props,
+          format = _this$props.format,
+          type = _this$props.type,
+          decimal = _this$props.decimal;
+      if (type === 'date') {
+        value = format ? value.format(format) : value.format("YYYY-MM-DD");
+      }
 
-      var currentField = _this.getCurrentField(name);
+      if (type === 'range') {
+        value = isNaN(value) || typeof value === 'string' ? value : value.toFixed(decimal ? decimal : 2);
+      }
 
-      var fieldValue = currentField.format ? value.format(currentField.format) : value.format("YYYY-MM-DD");
       {
-        var updatedFields = _this.getDependentFields(currentField, fieldValue);
-
-        _this.setState({
-          fields: updatedFields,
-          data: _extends$8({}, data, defineProperty$1({}, name, fieldValue))
-        }, function () {
-          if (_this.state.loadOnChange && !_this.state.loading) {
-            _this.submitAction();
-          }
+        _this.setState({ error: false }, function () {
+          _this.props.onChange(name, value);
         });
       }
-    };
-
-    _this.handleDateRangeChange = function (name, fieldValue) {
-      var data = _this.state.data;
-
-
-      var currentField = _this.getCurrentField(name);
-      var updatedFields = _this.getDependentFields(currentField, fieldValue);
-
-      _this.setState({
-        fields: updatedFields,
-        data: _extends$8({}, data, defineProperty$1({}, name, fieldValue))
-      }, function () {
-        if (_this.state.loadOnChange && !_this.state.loading) {
-          _this.submitAction();
-        }
-      });
     };
 
     _this.handleChangeFile = function (event) {
@@ -35858,13 +36036,20 @@ var EnhancedForm = function (_React$Component) {
           name = _event$target3.name,
           value = _event$target3.value;
       var data = _this.state.data;
+      var fields = _this.props.fields;
 
       var fieldValue = value;
 
-      var currentField = _this.getCurrentField(name);
+      var currentField = _this.state.fields.find(function (field) {
+        return field.name === name;
+      });
 
       {
-        var updatedFields = _this.getDependentFields(currentField, fieldValue);
+        if (currentField.dependencies && currentField.dependencies[fieldValue] !== undefined) {
+          _this.setState({
+            fields: fields.concat(currentField.dependencies[fieldValue])
+          });
+        }
 
         var reader = new FileReader();
         var file = event.target.files[0];
@@ -35872,8 +36057,7 @@ var EnhancedForm = function (_React$Component) {
         reader.onloadend = function () {
           file.data = reader.result;
           _this.setState({
-            fields: updatedFields,
-            data: _extends$8({}, data, defineProperty$1({}, name, file))
+            data: _extends$b({}, data, defineProperty$1({}, name, file))
           }, function () {
             if (_this.state.loadOnChange && !_this.state.loading) {
               _this.submitAction();
@@ -35885,40 +36069,32 @@ var EnhancedForm = function (_React$Component) {
       }
     };
 
-    _this.handleToggleChange = function (name, fieldValue) {
-      var currentField = _this.getCurrentField(name);
-      var updatedFields = _this.getDependentFields(currentField, fieldValue);
-
-      _this.setState(function (state, props) {
-        var updatedState = {};
-        updatedState.fields = updatedFields;
-
-        if (state.data) {
-          state.data[name] = fieldValue;
-        }
-
-        updatedState.data = state.data ? state.data : defineProperty$1({}, name, fieldValue);
-
-        return updatedState;
-      }, function () {
-        if (_this.state.loadOnChange && !_this.state.loading) {
-          _this.submitAction();
-        }
-      });
-    };
-
     _this.handleAutoSuggestChange = function (name) {
-      return function (event, _ref2) {
-        var newValue = _ref2.newValue;
+      return function (event, _ref) {
+        var newValue = _ref.newValue;
         var data = _this.state.data;
+        var fields = _this.props.fields;
 
-        var currentField = _this.getCurrentField(name);
-        var updatedFields = _this.getDependentFields(currentField, newValue);
 
-        _this.setState({
-          fields: updatedFields,
-          data: _extends$8({}, data, defineProperty$1({}, name, newValue))
+        var currentField = _this.state.fields.find(function (field) {
+          return field.name === name;
         });
+
+        if (currentField.dependencies && currentField.dependencies[newValue] !== undefined) {
+          _this.setState({
+            fields: fields.concat(currentField.dependencies[newValue]),
+            data: _extends$b({}, data, defineProperty$1({}, name, newValue))
+          });
+        } else if (currentField.dependencies && currentField.dependencies["*"] !== undefined) {
+          _this.setState({
+            fields: fields.concat(currentField.dependencies["*"]),
+            data: _extends$b({}, data, defineProperty$1({}, name, newValue))
+          });
+        } else {
+          _this.setState({
+            data: _extends$b({}, data, defineProperty$1({}, name, newValue))
+          });
+        }
       };
     };
 
@@ -35932,7 +36108,7 @@ var EnhancedForm = function (_React$Component) {
         var data = _this.state.data;
 
         _this.setState({
-          data: _extends$8({}, data, defineProperty$1({}, name, value))
+          data: _extends$b({}, data, defineProperty$1({}, name, value))
         }, function () {
           if (_this.state.loadOnChange) {
             _this.submitAction();
@@ -35941,12 +36117,12 @@ var EnhancedForm = function (_React$Component) {
       }
     };
 
-    _this.onSuggestionSelected = function (event, _ref3) {
-      var suggestion = _ref3.suggestion,
-          suggestionValue = _ref3.suggestionValue,
-          suggestionIndex = _ref3.suggestionIndex,
-          sectionIndex = _ref3.sectionIndex,
-          method = _ref3.method;
+    _this.onSuggestionSelected = function (event, _ref2) {
+      var suggestion = _ref2.suggestion,
+          suggestionValue = _ref2.suggestionValue,
+          suggestionIndex = _ref2.suggestionIndex,
+          sectionIndex = _ref2.sectionIndex,
+          method = _ref2.method;
       var _this$state = _this.state,
           data = _this$state.data,
           fields = _this$state.fields;
@@ -35960,7 +36136,7 @@ var EnhancedForm = function (_React$Component) {
       });
 
       _this.setState({
-        data: _extends$8({}, data, selectedData)
+        data: _extends$b({}, data, selectedData)
       }, function () {
         if (_this.state.loadOnChange) {
           _this.submitAction(_this.state.data);
@@ -35968,892 +36144,1261 @@ var EnhancedForm = function (_React$Component) {
       });
     };
 
-    _this.handleCheckboxChange = function (event) {
-      var _event$target5 = event.target,
-          name = _event$target5.name,
-          value = _event$target5.value,
-          checked = _event$target5.checked;
-      var data = _this.state.data;
-
-      var fieldValue = checked;
-      var prevValue = data[name] === undefined ? [] : data[name];
-
-      var currentField = _this.getCurrentField(name);
-
-      if (checked) {
-        var updatedFields = _this.getDependentFields(currentField, value);
-
-        _this.setState(function (state, props) {
-          var prevFieldValue = state.data[name] === undefined ? [] : state.data[name];
-          if (Array.isArray(prevFieldValue)) {
-            var updatedArray = prevFieldValue.concat([value]);
-            var uniqueArray = updatedArray.filter(function (item, pos) {
-              return updatedArray.indexOf(item) === pos;
-            });
-
-            return {
-              fields: updatedFields,
-              data: _extends$8({}, data, defineProperty$1({}, name, uniqueArray))
-            };
-          } else {
-            return {
-              fields: updatedFields,
-              data: _extends$8({}, data, defineProperty$1({}, name, fieldValue))
-            };
-          }
-        }, function () {
-          if (_this.state.loadOnChange && !_this.state.loading) {
-            _this.submitAction(_this.state.data);
-          }
-        });
-      } else {
-        _this.setState(function (state, props) {
-          var prevFieldValue = state.data[name] === undefined ? [] : state.data[name];
-          if (Array.isArray(prevFieldValue)) {
-            var filteredPrevValue = prevValue.filter(function (item, pos) {
-              return prevValue.indexOf(value) !== pos;
-            });
-
-            return {
-              data: _extends$8({}, data, defineProperty$1({}, name, filteredPrevValue))
-            };
-          } else {
-            return {
-              data: _extends$8({}, data, defineProperty$1({}, name, fieldValue))
-            };
-          }
-        }, function () {
-          if (_this.state.loadOnChange && !_this.state.loading) {
-            _this.submitAction(_this.state.data);
-          }
-        });
-      }
-    };
-
-    _this.handleSliderChange = function (name, value) {
-      var data = _this.state.data;
-
-      var fieldValue = value;
-
-      var currentField = _this.getCurrentField(name);
-      var updatedFields = _this.getDependentFields(currentField, fieldValue);
-
-      _this.setState(function (state, props) {
-        var updatedState = {};
-        updatedState.fields = updatedFields;
-
-        updatedState.data = _extends$8({}, data, defineProperty$1({}, name, isNaN(fieldValue) || typeof fieldValue === 'string' ? fieldValue : fieldValue.toFixed(currentField.decimal ? currentField.decimal : 2)));
-
-        return updatedState;
-      }, function () {
-        if (_this.state.loadOnChange && !_this.state.loading) {
-          _this.submitAction(_this.state.data);
-        }
-      });
-    };
-
-    _this.handleSubmit = function (event) {
-      event.preventDefault();
-
-      _this.submitAction(_this.state.data);
-    };
-
     _this.submitAction = function () {
-      var formValidationFlag = true;
-      _this.setState(function (state, props) {
-        var formData = state.data;
-        var updatedState = {};
-        var updatedFields = state.fields.map(function (field) {
-          if (field.required && (field.readonly === undefined || field.readonly)) {
-            if (_this.validateValue(field, formData[field.name], formData)) {
-              field.error = false;
-              return field;
-            } else {
-              formValidationFlag = false;
-              field.error = true;
-              return field;
-            }
-          } else {
-            field.error = false;
-            return field;
-          }
-        });
-
-        updatedState.fields = updatedFields;
-
-        if (!state.loading && formValidationFlag) {
-          updatedState.success = false;
-          updatedState.loading = true;
-        }
-
-        return updatedState;
-      }, function () {
-        if (_this.state.loading && formValidationFlag) {
-          _this.props.submitAction(_this.state.data, _this);
-        }
-      });
+      console.log("submtAction");
     };
 
     _this.render = function () {
-      var _classNames;
+      var _React$createElement;
 
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          title = _this$props.title;
+      var classes = _this.props.classes;
       var _this$state2 = _this.state,
           data = _this$state2.data,
-          fields = _this$state2.fields,
-          buttons = _this$state2.buttons,
-          loading = _this$state2.loading,
-          success = _this$state2.success;
+          type = _this$state2.type,
+          name = _this$state2.name,
+          label = _this$state2.label,
+          helptext = _this$state2.helptext,
+          helplink = _this$state2.helplink,
+          error = _this$state2.error,
+          multiple = _this$state2.multiple,
+          prefix = _this$state2.prefix,
+          placeholder = _this$state2.placeholder,
+          disabled = _this$state2.disabled,
+          options = _this$state2.options,
+          value = _this$state2.value,
+          suffix = _this$state2.suffix,
+          required = _this$state2.required,
+          format = _this$state2.format,
+          disablePast = _this$state2.disablePast,
+          disableFuture = _this$state2.disableFuture,
+          disableDate = _this$state2.disableDate,
+          preview = _this$state2.preview,
+          openTo = _this$state2.openTo,
+          min = _this$state2.min,
+          max = _this$state2.max,
+          readonly = _this$state2.readonly,
+          title = _this$state2.title,
+          maxlength = _this$state2.maxlength,
+          minlength = _this$state2.minlength,
+          step = _this$state2.step;
 
 
-      var buttonClassname = classnames((_classNames = {}, defineProperty$1(_classNames, classes.buttonSuccess, success), defineProperty$1(_classNames, classes.button, !success), _classNames));
+      var fieldLabel = label !== undefined ? React.createElement(
+        FormLabel,
+        { component: 'legend' },
+        label
+      ) : null;
 
-      return React.createElement(
-        'div',
-        null,
-        title ? React.createElement(Toolbar$2, { title: title }) : "",
-        React.createElement(
-          'form',
-          { className: classes.container, onSubmit: _this.handleSubmit, autoComplete: 'off', noValidate: _this.props.novalidate ? _this.props.novalidate : false },
-          fields.map(function (formField) {
-            var field = '';
-            var fieldOptions = void 0;
-            var fieldValue = "";
+      var fieldHelpText = _this.props.helptext !== undefined ? React.createElement(
+        FormHelperText,
+        { id: name + '-help-text' },
+        typeof _this.props.helptext === 'function' ? _this.props.helptext(data) : _this.props.helptext
+      ) : null;
 
-            var arrayType = ["multiselect", "checkbox"];
-            if (data !== undefined && data !== null && data[formField.name] !== undefined) {
-              fieldValue = data[formField.name];
-              fieldValue = typeof fieldValue === 'function' ? fieldValue(data) : fieldValue;
-            } else if (formField.value && typeof formField.value === 'function') {
-              fieldValue = formField.value(data);
-            } else if (formField.value) {
-              fieldValue = formField.value;
-            } else if (arrayType.indexOf(formField.type) > -1 || formField.multiple) {
-              fieldValue = [];
-            }
+      var fieldHelpLink = _this.props.helplink !== undefined ? React.createElement(
+        FormHelperText,
+        {
+          id: name + '-help-link',
+          classes: {
+            root: classes.helperTextLink
+          }
+        },
+        typeof _this.props.helplink === 'function' ? _this.props.helplink(_this, data) : _this.props.helplink
+      ) : null;
 
-            switch (formField.type) {
-              case 'radio':
-                field = React.createElement(
-                  FormControl,
-                  { component: 'fieldset', required: true, className: classes.textField, key: 'form-control-' + formField.name },
-                  React.createElement(
-                    FormLabel,
-                    { component: 'legend' },
-                    formField.label
-                  ),
-                  React.createElement(
-                    RadioGroup,
-                    {
-                      'aria-label': formField.label,
-                      className: classes.group,
-                      value: fieldValue,
-                      id: formField.name,
-                      name: formField.name,
-                      onChange: _this.handleChange
-                    },
-                    formField.options.map(function (option) {
-                      return React.createElement(FormControlLabel, {
-                        value: option.value,
-                        control: React.createElement(Radio, null),
-                        label: option.label,
-                        disabled: option.disabled ? true : false,
-                        key: new Date().getTime() + '-radio-group-' + option.label
-                      });
-                    })
-                  )
-                );
-                break;
-              case 'boolean':
-                field = React.createElement(
-                  FormControl,
-                  { key: 'form-control-' + formField.name },
-                  formField.label ? React.createElement(
-                    FormLabel,
-                    null,
-                    formField.label
-                  ) : null,
-                  React.createElement(
-                    FormGroup,
-                    null,
-                    React.createElement(FormControlLabel, {
-                      control: React.createElement(Switch, {
-                        id: formField.name,
-                        name: formField.name,
-                        value: fieldValue,
-                        onChange: _this.handleChange,
-                        disabled: formField.disabled ? true : false,
-                        checked: fieldValue
-                      }),
-                      label: typeof formField.placeholder === 'function' ? formField.placeholder(data) : formField.placeholder
-                    })
-                  ),
-                  formField.error ? React.createElement(
-                    FormHelperText,
-                    { id: formField.name + '-error-text' },
-                    typeof formField.title === 'function' ? formField.title(data) : formField.title
-                  ) : null,
-                  formField.helptext ? React.createElement(
-                    FormHelperText,
-                    { id: formField.name + '-help-text' },
-                    typeof formField.helptext === 'function' ? formField.helptext(data) : formField.helptext
-                  ) : null,
-                  formField.helplink ? React.createElement(
-                    FormHelperText,
-                    {
-                      id: formField.name + '-help-link',
-                      classes: {
-                        root: classes.helperTextLink
-                      }
-                    },
-                    typeof formField.helplink === 'function' ? formField.helplink(_this, data) : formField.helplink
-                  ) : null
-                );
-                break;
-              case 'switch':
-                field = React.createElement(
-                  FormGroup,
-                  { className: classes.formGroup, row: true },
-                  formField.prefix ? React.createElement(
-                    FormLabel,
-                    {
-                      classes: {
-                        root: classes.switchLabel
-                      }
-                    },
-                    typeof formField.prefix === 'function' ? formField.prefix(data) : formField.prefix
-                  ) : null,
-                  React.createElement(Switch, {
-                    id: formField.name,
-                    label: "helllo",
-                    name: formField.name,
-                    value: fieldValue,
-                    onChange: _this.handleChange,
-                    disabled: formField.disabled ? true : false,
-                    checked: fieldValue
-                  }),
-                  formField.suffix ? React.createElement(
-                    FormLabel,
-                    {
-                      classes: {
-                        root: classes.switchLabel
-                      }
-                    },
-                    typeof formField.suffix === 'function' ? formField.suffix(data) : formField.suffix
-                  ) : null,
-                  React.createElement(
-                    FormHelperText,
-                    {
-                      classes: {
-                        root: classes.helperText
-                      }
-                    },
-                    typeof formField.helperText === 'function' ? formField.helperText(data) : formField.helperText
-                  )
-                );
-                break;
-              case 'toggle':
-                formField = Object.assign({}, formField, { value: fieldValue });
-                field = React.createElement(Toggle$2, _extends$8({
-                  data: data,
-                  value: fieldValue,
-                  onChange: _this.handleToggleChange
-                }, formField));
-                break;
-              case 'toggle-2':
-                formField = Object.assign({}, formField, { value: fieldValue });
-                field = React.createElement(Toggle$2, _extends$8({
-                  data: data,
-                  value: fieldValue,
-                  onChange: _this.handleToggleChange,
-                  classes: {
-                    root: classes.formControlToggle
-                  }
-                }, formField));
-                break;
-              case 'select':
-                formField = Object.assign({}, formField, { value: fieldValue });
-                field = React.createElement(Select$1, _extends$8({
-                  data: data,
-                  value: fieldValue,
-                  onChange: _this.handleChange
-                }, formField));
-                break;
-              case 'multiselect':
-                if (_typeof$2(formField.options) === 'object') {
-                  fieldOptions = formField.options;
-                } else if (typeof formField.options === 'function') {
-                  fieldOptions = formField.options();
-                }
+      var fieldErrorName = name + '-error-text';
+      var fieldErrorData = typeof _this.props.error === 'function' ? _this.props.error(data) : _this.props.error || false;
+      var fieldError = fieldErrorData ? React.createElement(
+        FormHelperText,
+        { id: fieldErrorName },
+        typeof _this.props.title === 'function' ? _this.props.title(data) : _this.props.title
+      ) : null;
 
-                field = React.createElement(
-                  Select$1,
-                  {
-                    multiple: true,
-                    key: formField.name,
-                    id: formField.name,
-                    name: formField.name,
-                    label: formField.label,
-                    value: fieldValue === '' || fieldValue === undefined ? [] : fieldValue,
-                    onChange: _this.handleChange,
-                    margin: 'dense',
-                    required: formField.required ? true : false,
-                    disabled: formField.disabled ? true : false,
-                    input: React.createElement(Input, { id: 'select-multiple-chip' }),
-                    renderValue: function renderValue(selected) {
-                      return React.createElement(
-                        'div',
-                        { className: classes.chips },
-                        selected.map(function (value) {
-                          var selectedOption = {};
-                          if ((typeof value === 'undefined' ? 'undefined' : _typeof$2(value)) === 'object') {
-                            selectedOption = value;
-                          } else {
-                            selectedOption = fieldOptions.find(function (fieldOption) {
-                              return fieldOption.value === value;
-                            });
-                          }
+      var fieldKey = 'form-control-' + name;
+      var arrayType = ["multiselect", "checkbox"];
+      var field = '';
+      var fieldOptions = [];
+      var fieldValue = "";
 
-                          return React.createElement(Chip, { key: selectedOption.value, label: selectedOption.label, className: classes.chip });
-                        })
-                      );
-                    },
-                    MenuProps: MenuProps
-                  },
-                  fieldOptions.map(function (fieldOption) {
-                    return React.createElement(
-                      MenuItem,
-                      {
-                        key: formField.name + '-' + fieldOption.value,
-                        value: fieldOption.value
-                      },
-                      fieldOption.label
-                    );
-                  })
-                );
-                break;
-              case 'autocomplete':
-                if (_typeof$2(formField.options) === 'object') {
-                  fieldOptions = formField.options;
-                } else if (typeof formField.options === 'function') {
-                  fieldOptions = formField.options();
-                }
+      if (data !== undefined && data !== null && data[name] !== undefined) {
+        fieldValue = data[name];
+        fieldValue = typeof fieldValue === 'function' ? fieldValue(data) : fieldValue;
+      } else if (value && typeof value === 'function') {
+        fieldValue = value(data);
+      } else if (value) {
+        fieldValue = value;
+      } else if (arrayType.indexOf(type) > -1 || multiple) {
+        fieldValue = [];
+      }
 
-                field = React.createElement(AutoComplete$1, {
-                  multiple: true,
-                  key: formField.name,
-                  id: formField.name,
-                  name: formField.name,
-                  label: formField.label,
+      if (Array.isArray(options)) {
+        fieldOptions = options;
+      } else if (typeof options === 'function') {
+        fieldOptions = options();
+      }
+
+      switch (type) {
+        case 'radio':
+          field = React.createElement(
+            FormControl,
+            {
+              component: 'fieldset',
+              required: true,
+              className: classes.textField,
+              key: fieldKey
+            },
+            fieldLabel,
+            React.createElement(
+              RadioGroup,
+              {
+                'aria-label': label,
+                className: classes.group,
+                value: fieldValue,
+                id: name,
+                name: name,
+                onChange: _this.handleChange
+              },
+              fieldOptions.map(function (option) {
+                return React.createElement(FormControlLabel, {
+                  value: option.value,
+                  control: React.createElement(Radio, null),
+                  label: option.label,
+                  disabled: option.disabled ? true : false,
+                  key: new Date().getTime() + '-radio-group-' + option.label
+                });
+              })
+            )
+          );
+          break;
+        case 'boolean':
+          field = React.createElement(
+            FormControl,
+            {
+              key: fieldKey
+            },
+            fieldLabel,
+            React.createElement(
+              FormGroup,
+              null,
+              React.createElement(FormControlLabel, {
+                control: React.createElement(Switch, {
+                  id: name,
+                  name: name,
                   value: fieldValue,
                   onChange: _this.handleChange,
-                  margin: 'dense',
-                  required: formField.required ? true : false,
-                  disabled: formField.disabled ? true : false,
-                  helperText: formField.placeholder,
-                  input: React.createElement(Input, { id: 'select-multiple-chip' }),
-                  renderValue: function renderValue(selected) {
-                    return React.createElement(
-                      'div',
-                      { className: classes.chips },
-                      selected.map(function (value) {
-                        var selectedOption = {};
-                        if ((typeof value === 'undefined' ? 'undefined' : _typeof$2(value)) === 'object') {
-                          selectedOption = value;
-                        } else {
-                          selectedOption = fieldOptions.find(function (fieldOption) {
-                            return fieldOption.value === value;
-                          });
-                        }
-
-                        return React.createElement(Chip, { key: selectedOption.value, label: selectedOption.label, className: classes.chip });
-                      })
-                    );
-                  },
-                  MenuProps: MenuProps
-                });
-                break;
-              case 'autosuggest':
-                if (_typeof$2(formField.options) === 'object') {
-                  fieldOptions = formField.options;
-                } else if (typeof formField.options === 'function') {
-                  fieldOptions = formField.options();
-                } else {
-                  fieldOptions = [];
+                  disabled: disabled ? true : false,
+                  checked: fieldValue
+                }),
+                label: typeof placeholder === 'function' ? placeholder(data) : placeholder
+              })
+            ),
+            fieldError,
+            fieldHelpText,
+            fieldHelpLink
+          );
+          break;
+        case 'switch':
+          field = React.createElement(
+            FormGroup,
+            { className: classes.formGroup, row: true },
+            prefix ? React.createElement(
+              FormLabel,
+              {
+                classes: {
+                  root: classes.switchLabel
                 }
-
-                field = React.createElement(
-                  FormControl,
-                  { className: classes.formControl,
-                    error: typeof formField.error === 'function' ? formField.error(data) : formField.error,
-                    'aria-describedby': formField.name + '-error-text',
-                    key: 'form-control-' + formField.name
-                  },
-                  React.createElement(AutoSuggest$1, {
-                    data: data,
-                    key: formField.name,
-                    placeholder: formField.placeholder,
-                    suggestions: fieldOptions,
-                    fetchApi: formField.options,
-                    name: formField.name,
-                    value: fieldValue,
-                    onChange: _this.handleAutoSuggestChange,
-                    onSelect: _this.onSuggestionSelected
-                  }),
-                  formField.error ? React.createElement(
-                    FormHelperText,
-                    { id: formField.name + '-error-text' },
-                    typeof formField.title === 'function' ? formField.title(data) : formField.title
-                  ) : null,
-                  formField.helptext ? React.createElement(
-                    FormHelperText,
-                    { id: formField.name + '-help-text' },
-                    typeof formField.helptext === 'function' ? formField.helptext(data) : formField.helptext
-                  ) : null,
-                  formField.helplink ? React.createElement(
-                    FormHelperText,
-                    {
-                      id: formField.name + '-help-link',
-                      classes: {
-                        root: classes.helperTextLink
-                      }
-                    },
-                    typeof formField.helplink === 'function' ? formField.helplink(_this, data) : formField.helplink
-                  ) : null
-                );
-                break;
-              case 'search':
-                if (_typeof$2(formField.options) === 'object') {
-                  fieldOptions = formField.options;
-                } else if (typeof formField.options === 'function') {
-                  fieldOptions = formField.options();
-                } else {
-                  fieldOptions = [];
+              },
+              typeof prefix === 'function' ? prefix(data) : prefix
+            ) : null,
+            React.createElement(Switch, {
+              id: name,
+              label: "helllo",
+              name: name,
+              value: fieldValue,
+              onChange: _this.handleChange,
+              disabled: disabled ? true : false,
+              checked: fieldValue
+            }),
+            suffix ? React.createElement(
+              FormLabel,
+              {
+                classes: {
+                  root: classes.switchLabel
                 }
+              },
+              typeof suffix === 'function' ? suffix(data) : suffix
+            ) : null,
+            fieldHelpText
+          );
+          break;
+        case 'toggle':
+          _this.props = Object.assign({}, _this.props, { value: fieldValue });
+          field = React.createElement(
+            FormControl,
+            {
+              className: classes.formControl,
+              error: fieldErrorData,
+              'aria-describedby': fieldErrorName,
+              key: fieldKey
+            },
+            React.createElement(Toggle$1
+            // onChange={this.handleToggleChange}
+            , _extends$b({ onChange: _this.handleChangeData,
 
-                field = React.createElement(AutoSuggest$1, {
-                  key: formField.name,
-                  placeholder: formField.placeholder ? formField.placeholder : 'Search…',
-                  suggestions: fieldOptions,
-                  fetchApi: formField.options,
-                  name: formField.name,
-                  value: fieldValue,
-                  onChange: _this.handleAutoSuggestChange,
-                  onSelect: _this.onSuggestionSelected,
-                  onKeyDown: _this.handleAutoSuggestClick,
-                  disableUnderline: true,
-                  classes: {
-                    root: classes.searchRoot,
-                    input: classes.searchInput
-                  }
-                });
-                break;
-              case 'file':
-                field = React.createElement(TextField, {
-                  key: formField.name,
-                  id: formField.name,
-                  name: formField.name,
-                  label: formField.label,
-                  type: formField.type,
-                  format: formField.format,
-                  placeholder: formField.placeholder,
-                  className: classes.textField,
-                  onChange: _this.handleChangeFile,
-                  margin: 'normal',
-                  required: formField.required ? true : false,
-                  disabled: formField.disabled ? true : false,
-                  helperText: formField.placeholder
-                });
-                break;
-              case 'image':
-                field = React.createElement(
+              key: name,
+              name: name,
+              value: fieldValue,
+              options: fieldOptions
+              // onChange={this.props.onChange}
+
+
+            }, _this.props)),
+            fieldHelpText,
+            fieldHelpLink,
+            fieldError
+          );
+          break;
+        case 'toggle-2':
+          _this.props = Object.assign({}, _this.props, { value: fieldValue });
+          field = React.createElement(Toggle$1, _extends$b({
+            data: data,
+            value: fieldValue
+            // onChange={this.handleToggleChange}
+            , onChange: _this.handleChangeData,
+            classes: {
+              root: classes.formControlToggle
+            }
+          }, _this.props));
+          break;
+        case 'select':
+          _this.props = Object.assign({}, _this.props, { value: fieldValue });
+          field = React.createElement(Select$1, _extends$b({
+            data: data,
+            value: fieldValue,
+            onChange: _this.handleChange
+          }, _this.props));
+          break;
+        case 'multiselect':
+          field = React.createElement(
+            Select$1,
+            {
+              multiple: true,
+              key: name,
+              id: name,
+              name: name,
+              label: label,
+              value: fieldValue === '' || fieldValue === undefined ? [] : fieldValue,
+              onChange: _this.handleChange,
+              margin: 'dense',
+              required: required ? true : false,
+              disabled: disabled ? true : false,
+              input: React.createElement(Input, { id: 'select-multiple-chip' }),
+              renderValue: function renderValue(selected) {
+                return React.createElement(
                   'div',
-                  null,
-                  formField.preview && (typeof formField.value === 'function' || data[formField.name]) ? React.createElement(Card$1, { media: fieldValue.data }) : null,
-                  React.createElement(TextField, {
-                    key: formField.name,
-                    id: formField.name,
-                    name: formField.name,
-                    label: formField.label,
-                    type: 'file',
-                    format: formField.format,
-                    placeholder: formField.placeholder,
-                    className: classes.textField,
-                    onChange: _this.handleChange,
-                    margin: 'normal',
-                    required: formField.required ? true : false,
-                    disabled: formField.disabled ? true : false,
-                    helperText: formField.placeholder,
-                    InputProps: {
-                      inputProps: {
-                        accept: "image/*"
-                      }
+                  { className: classes.chips },
+                  selected.map(function (value) {
+                    var selectedOption = {};
+                    if ((typeof value === 'undefined' ? 'undefined' : _typeof$4(value)) === 'object') {
+                      selectedOption = value;
+                    } else {
+                      selectedOption = fieldOptions.find(function (fieldOption) {
+                        return fieldOption.value === value;
+                      });
                     }
+
+                    return React.createElement(Chip, { key: selectedOption.value, label: selectedOption.label, className: classes.chip });
                   })
                 );
-                break;
-              case 'hidden':
-                field = React.createElement('input', {
-                  key: formField.name,
-                  id: formField.name,
-                  name: formField.name,
-                  type: formField.type,
-                  value: fieldValue,
-                  onChange: _this.handleChange,
-                  required: formField.required ? true : false
-                });
-                break;
-              case 'range':
-                formField = Object.assign({}, formField, { value: fieldValue });
-                field = React.createElement(Range, _extends$8({
-                  key: 'range-' + formField.name,
-                  data: data,
-                  value: fieldValue,
-                  onChange: _this.handleSliderChange
-                }, formField));
-                break;
-              case 'checkbox':
-                if (formField.enum) {
-                  fieldOptions = formField.enum;
-                } else if (formField.options) {
-                  fieldOptions = formField.options;
-                } else if (typeof formField.options === 'function') {
-                  fieldOptions = formField.options();
-                }
+              },
+              MenuProps: MenuProps
+            },
+            fieldOptions.map(function (fieldOption) {
+              return React.createElement(
+                MenuItem,
+                {
+                  key: name + '-' + fieldOption.value,
+                  value: fieldOption.value
+                },
+                fieldOption.label
+              );
+            })
+          );
+          break;
+        case 'autocomplete':
+          field = React.createElement(AutoComplete$1, {
+            multiple: true,
+            key: name,
+            id: name,
+            name: name,
+            label: label,
+            value: fieldValue,
+            onChange: _this.handleChange,
+            margin: 'dense',
+            required: required ? true : false,
+            disabled: disabled ? true : false,
+            helperText: placeholder,
+            input: React.createElement(Input, { id: 'select-multiple-chip' }),
+            renderValue: function renderValue(selected) {
+              return React.createElement(
+                'div',
+                { className: classes.chips },
+                selected.map(function (value) {
+                  var selectedOption = {};
+                  if ((typeof value === 'undefined' ? 'undefined' : _typeof$4(value)) === 'object') {
+                    selectedOption = value;
+                  } else {
+                    selectedOption = fieldOptions.find(function (fieldOption) {
+                      return fieldOption.value === value;
+                    });
+                  }
 
-                field = fieldOptions ? React.createElement(
-                  FormControl,
-                  { component: 'fieldset', required: formField.required, className: classes.textField, key: 'form-control-' + formField.name, error: formField.error, 'aria-describedby': formField.name + '-error-text' },
-                  React.createElement(
-                    FormLabel,
-                    { component: 'legend' },
-                    formField.label
-                  ),
-                  React.createElement(
-                    FormGroup,
-                    {
-                      'aria-label': formField.label,
-                      className: classes.group
-                    },
-                    fieldOptions.map(function (option) {
-                      return React.createElement(FormControlLabel, {
-                        control: React.createElement(Checkbox, {
-                          onChange: _this.handleCheckboxChange,
-                          value: option.value,
-                          name: formField.name,
-                          disabled: option.disabled ? true : false,
-                          checked: fieldValue.indexOf(option.value.toString()) > -1 ? true : false
-                        }),
-                        label: option.label
-                      });
-                    })
-                  ),
-                  formField.error ? React.createElement(
-                    FormHelperText,
-                    { id: formField.name + '-error-text' },
-                    formField.title
-                  ) : null
-                ) : React.createElement(
-                  FormControl,
-                  { component: 'fieldset', required: formField.required, className: classes.textField, key: 'form-control-' + formField.name, error: formField.error, 'aria-describedby': formField.name + '-error-text' },
-                  React.createElement(
-                    FormGroup,
-                    {
-                      'aria-label': formField.label,
-                      className: classes.group
-                    },
-                    React.createElement(FormControlLabel, {
-                      control: React.createElement(Checkbox, {
-                        onChange: _this.handleCheckboxChange,
-                        value: formField.value,
-                        name: formField.name,
-                        disabled: formField.disabled ? true : false,
-                        checked: fieldValue
-                      }),
-                      label: React.createElement(
-                        Typography,
-                        { variant: 'caption' },
-                        formField.label
-                      )
-                    })
-                  ),
-                  formField.error ? React.createElement(
-                    FormHelperText,
-                    { id: formField.name + '-error-text' },
-                    formField.title
-                  ) : null
-                );
-                break;
-              case 'date':
-                field = React.createElement(
-                  FormControl,
-                  {
-                    className: classes.formControl,
-                    error: formField.error,
-                    'aria-describedby': formField.name + '-error-text',
-                    key: 'form-control-' + formField.name
-                  },
-                  React.createElement(
-                    MuiPickersUtilsProvider,
-                    { utils: MomentUtils },
-                    React.createElement(DatePickerModal$1, {
-                      key: formField.name,
-                      id: formField.name,
-                      name: formField.name,
-                      label: formField.label,
-                      placeholder: formField.placeholder,
-                      className: classes.textField,
-                      value: fieldValue ? fieldValue : null,
-                      openTo: formField.openTo ? formField.openTo : 'day',
-                      views: ["year", "month", "day"],
-                      onChange: function onChange(date) {
-                        return _this.handleDateChange(formField.name, date);
-                      },
-                      margin: 'normal',
-                      format: formField.format ? formField.format : 'DD/MM/YYYY',
-                      required: formField.required ? true : false,
-                      disabled: formField.disabled ? true : false,
-                      disablePast: formField.disablePast ? formField.disablePast : false,
-                      shouldDisableDate: typeof formField.disableDate === 'function' ? function (day) {
-                        return formField.disableDate(day, data);
-                      } : null,
-                      disableFuture: formField.disableFuture ? formField.disableFuture : false,
-                      helperText: typeof formField.helperText === 'function' ? formField.helperText(data) : formField.helperText,
-                      minDate: typeof formField.min === 'function' ? formField.min(data) : formField.min,
-                      maxDate: typeof formField.max === 'function' ? formField.max(data) : formField.max,
-                      InputProps: {
-                        disabled: typeof formField.disabled === 'function' ? formField.disabled(data) : formField.disabled,
-                        readOnly: typeof formField.readonly === 'function' ? formField.readonly(data) : formField.readonly,
-                        startAdornment: formField.prefix ? React.createElement(
-                          InputAdornment,
-                          { position: 'start' },
-                          formField.prefix
-                        ) : null,
-                        endAdornment: formField.suffix ? React.createElement(
-                          InputAdornment,
-                          { position: 'end' },
-                          formField.suffix
-                        ) : null,
-                        inputProps: {
-                          title: typeof formField.title === 'function' ? formField.title(data) : formField.title,
-                          min: typeof formField.min === 'function' ? formField.min(data) : formField.min,
-                          max: typeof formField.max === 'function' ? formField.max(data) : formField.max,
-                          maxLength: typeof formField.maxlength === 'function' ? formField.maxlength(data) : formField.maxlength,
-                          minLength: typeof formField.minlength === 'function' ? formField.minlength(data) : formField.minlength,
-                          step: typeof formField.step === 'function' ? formField.step(data) : formField.step
-                        }
-                      }
-                    })
-                  ),
-                  formField.error ? React.createElement(
-                    FormHelperText,
-                    { id: formField.name + '-error-text' },
-                    formField.title
-                  ) : null
-                );
-                break;
-              case 'daterange':
-                field = React.createElement(DateRange, _extends$8({
-                  data: data,
-                  value: fieldValue,
-                  fields: _this.state.fields,
-                  onChange: _this.handleDateRangeChange
-                }, formField));
-                break;
-              default:
-                if (formField.enum) {
-                  fieldOptions = formField.enum;
-                } else if (formField.options) {
-                  fieldOptions = formField.options;
-                } else if (typeof formField.options === 'function') {
-                  fieldOptions = formField.options();
-                }
-
-                field = fieldOptions ? formField.multiple !== undefined && formField.multiple ? React.createElement(
-                  FormControl,
-                  { component: 'fieldset', required: true,
-                    className: classes.textField,
-                    key: 'form-control-' + formField.name
-                  },
-                  React.createElement(
-                    FormLabel,
-                    { component: 'legend' },
-                    formField.label
-                  ),
-                  React.createElement(
-                    FormGroup,
-                    {
-                      'aria-label': formField.label,
-                      className: classes.group
-                    },
-                    fieldOptions.map(function (option) {
-                      return React.createElement(FormControlLabel, {
-                        control: React.createElement(Checkbox, {
-                          onChange: _this.handleCheckboxChange,
-                          value: option.value,
-                          name: formField.name,
-                          disabled: option.disabled ? true : false,
-                          checked: fieldValue.indexOf(option.value.toString()) > -1 ? true : false
-                        }),
-                        label: option.label
-                      });
-                    })
-                  )
-                ) : React.createElement(
-                  FormControl,
-                  { component: 'fieldset', required: true, className: classes.textField, key: 'form-control-' + formField.name },
-                  React.createElement(
-                    FormLabel,
-                    { component: 'legend' },
-                    formField.label
-                  ),
-                  React.createElement(
-                    RadioGroup,
-                    {
-                      'aria-label': formField.label,
-                      className: classes.group,
-                      value: fieldValue,
-                      id: formField.name,
-                      name: formField.name,
-                      onChange: _this.handleChange
-                    },
-                    fieldOptions.map(function (option) {
-                      return React.createElement(FormControlLabel, { value: option.value, control: React.createElement(Radio, null), label: option.label, disabled: option.disabled ? true : false });
-                    })
-                  )
-                ) : React.createElement(
-                  FormControl,
-                  { className: classes.formControl,
-                    error: typeof formField.error === 'function' ? formField.error(data) : formField.error,
-                    'aria-describedby': formField.name + '-error-text',
-                    key: 'form-control-' + formField.name
-                  },
-                  React.createElement(TextField, {
-                    key: formField.name,
-                    id: formField.name,
-                    name: formField.name,
-                    type: formField.type,
-                    label: formField.label,
-                    placeholder: formField.placeholder,
-                    className: classes.textField,
-                    value: fieldValue,
-                    onChange: _this.handleChange,
-                    margin: 'normal',
-                    required: formField.required ? true : false,
-                    disabled: formField.disabled ? true : false,
-                    helperText: typeof formField.helperText === 'function' ? formField.helperText(data) : formField.helperText,
-                    InputProps: {
-                      disabled: typeof formField.disabled === 'function' ? formField.disabled(data) : formField.disabled,
-                      readOnly: typeof formField.readonly === 'function' ? formField.readonly(data) : formField.readonly,
-                      startAdornment: formField.prefix ? React.createElement(
-                        InputAdornment,
-                        { position: 'start' },
-                        formField.prefix
-                      ) : null,
-                      endAdornment: formField.suffix ? React.createElement(
-                        InputAdornment,
-                        { position: 'end' },
-                        formField.suffix
-                      ) : null,
-                      inputProps: {
-                        title: typeof formField.title === 'function' ? formField.title(data) : formField.title,
-                        min: typeof formField.min === 'function' ? formField.min(data) : formField.min,
-                        max: typeof formField.max === 'function' ? formField.max(data) : formField.max,
-                        maxLength: typeof formField.maxlength === 'function' ? formField.maxlength(data) : formField.maxlength,
-                        minLength: typeof formField.minlength === 'function' ? formField.minlength(data) : formField.minlength,
-                        step: typeof formField.step === 'function' ? formField.step(data) : formField.step
-                      }
-                    }
+                  return React.createElement(Chip, { key: selectedOption.value, label: selectedOption.label, className: classes.chip });
+                })
+              );
+            },
+            MenuProps: MenuProps
+          });
+          break;
+        case 'autosuggest':
+          field = React.createElement(
+            FormControl,
+            {
+              className: classes.formControl,
+              error: fieldErrorData,
+              'aria-describedby': fieldErrorName,
+              key: fieldKey
+            },
+            React.createElement(AutoSuggest$1, {
+              data: data,
+              key: name,
+              placeholder: placeholder,
+              suggestions: fieldOptions,
+              fetchApi: options,
+              name: name,
+              value: fieldValue,
+              onChange: _this.handleAutoSuggestChange
+              // onChange={this.props.onChange}
+              , onSelect: _this.onSuggestionSelected
+            }),
+            fieldError,
+            fieldHelpText,
+            fieldHelpLink
+          );
+          break;
+        case 'search':
+          field = React.createElement(AutoSuggest$1, {
+            key: name,
+            placeholder: placeholder ? placeholder : 'Search…',
+            suggestions: fieldOptions,
+            fetchApi: options,
+            name: name,
+            value: fieldValue,
+            onChange: _this.handleAutoSuggestChange
+            // onChange={this.props.onChange}
+            , onSelect: _this.onSuggestionSelected,
+            onKeyDown: _this.handleAutoSuggestClick,
+            disableUnderline: true,
+            classes: {
+              root: classes.searchRoot,
+              input: classes.searchInput
+            }
+          });
+          break;
+        case 'file':
+          field = React.createElement(TextField, {
+            key: name,
+            id: name,
+            name: name,
+            label: label,
+            type: type,
+            format: format,
+            placeholder: placeholder,
+            className: classes.textField,
+            onChange: _this.handleChangeFile,
+            margin: 'normal',
+            required: required ? true : false,
+            disabled: disabled ? true : false,
+            helperText: placeholder
+          });
+          break;
+        case 'image':
+          field = React.createElement(
+            'div',
+            null,
+            preview && (typeof value === 'function' || data[name]) ? React.createElement(Card$1, { media: fieldValue.data }) : null,
+            React.createElement(TextField, (_React$createElement = {
+              key: name,
+              id: name,
+              name: name,
+              label: label,
+              type: 'file',
+              format: format,
+              placeholder: placeholder,
+              className: classes.textField,
+              onChange: _this.handleChange
+            }, defineProperty$1(_React$createElement, 'onChange', _this.props.onChange), defineProperty$1(_React$createElement, 'margin', 'normal'), defineProperty$1(_React$createElement, 'required', required ? true : false), defineProperty$1(_React$createElement, 'disabled', disabled ? true : false), defineProperty$1(_React$createElement, 'helperText', placeholder), defineProperty$1(_React$createElement, 'InputProps', {
+              inputProps: {
+                accept: "image/*"
+              }
+            }), _React$createElement))
+          );
+          break;
+        case 'richtext':
+          field = React.createElement(RichText, _extends$b(defineProperty$1({
+            data: data,
+            value: fieldValue,
+            onChange: _this.richTextChange
+          }, 'onChange', _this.handleChangeData), _this.props));
+          break;
+        case 'hidden':
+          field = React.createElement('input', {
+            key: name,
+            id: name,
+            name: name,
+            type: type,
+            value: fieldValue,
+            onChange: _this.handleChange,
+            required: required ? true : false
+          });
+          break;
+        case 'range':
+          _this.props = Object.assign({}, _this.props, { value: fieldValue });
+          field = React.createElement(Range, _extends$b({
+            key: 'range-' + name,
+            data: data,
+            value: fieldValue
+            // onChange={this.handleSliderChange}
+            , onChange: _this.handleChangeData
+          }, _this.props));
+          break;
+        case 'checkbox':
+          field = fieldOptions ? React.createElement(
+            FormControl,
+            { component: 'fieldset', required: required, className: classes.textField, key: fieldKey, error: fieldErrorData, 'aria-describedby': fieldErrorName },
+            fieldLabel,
+            React.createElement(
+              FormGroup,
+              {
+                'aria-label': label,
+                className: classes.group
+              },
+              fieldOptions.map(function (option) {
+                return React.createElement(FormControlLabel, {
+                  control: React.createElement(Checkbox, {
+                    onChange: _this.handleCheckboxChange,
+                    value: option.value,
+                    name: name,
+                    disabled: option.disabled ? true : false,
+                    checked: fieldValue.indexOf(option.value.toString()) > -1 ? true : false
                   }),
-                  formField.helptext ? React.createElement(
-                    FormHelperText,
-                    { id: formField.name + '-help-text' },
-                    typeof formField.helptext === 'function' ? formField.helptext(data) : formField.helptext
+                  label: option.label
+                });
+              })
+            ),
+            fieldError
+          ) : React.createElement(
+            FormControl,
+            { component: 'fieldset', required: required, className: classes.textField, key: fieldKey, error: fieldErrorData, 'aria-describedby': fieldErrorName },
+            React.createElement(
+              FormGroup,
+              {
+                'aria-label': label,
+                className: classes.group
+              },
+              React.createElement(FormControlLabel, {
+                control: React.createElement(Checkbox, {
+                  onChange: _this.handleCheckboxChange,
+                  value: value,
+                  name: name,
+                  disabled: disabled ? true : false,
+                  checked: fieldValue
+                }),
+                label: React.createElement(
+                  Typography,
+                  { variant: 'caption' },
+                  label
+                )
+              })
+            ),
+            fieldError
+          );
+          break;
+        case 'date':
+          field = React.createElement(
+            FormControl,
+            {
+              className: classes.formControl,
+              error: fieldErrorData,
+              'aria-describedby': fieldErrorName,
+              key: fieldKey
+            },
+            React.createElement(
+              MuiPickersUtilsProvider,
+              { utils: MomentUtils },
+              React.createElement(DatePickerModal$1, {
+                key: name,
+                id: name,
+                name: name,
+                label: label,
+                placeholder: placeholder,
+                className: classes.textField,
+                value: fieldValue ? fieldValue : null,
+                openTo: openTo ? openTo : 'day',
+                views: ["year", "month", "day"]
+                // onChange={date => this.handleDateChange(name, date)}
+                , onChange: function onChange(date) {
+                  return _this.handleChangeData(name, date);
+                },
+                margin: 'normal',
+                format: format ? format : 'DD/MM/YYYY',
+                required: required ? true : false,
+                disabled: disabled ? true : false,
+                disablePast: disablePast ? disablePast : false,
+                shouldDisableDate: typeof disableDate === 'function' ? function (day) {
+                  return disableDate(day, data);
+                } : null,
+                disableFuture: disableFuture ? disableFuture : false,
+                helperText: typeof helptext === 'function' ? helptext(data) : helptext,
+                minDate: typeof min === 'function' ? min(data) : min,
+                maxDate: typeof max === 'function' ? max(data) : max,
+                InputProps: {
+                  disabled: typeof disabled === 'function' ? disabled(data) : disabled,
+                  readOnly: typeof readonly === 'function' ? readonly(data) : readonly,
+                  startAdornment: prefix ? React.createElement(
+                    InputAdornment,
+                    { position: 'start' },
+                    prefix
                   ) : null,
-                  formField.helplink ? React.createElement(
-                    FormHelperText,
-                    {
-                      id: formField.name + '-help-link',
-                      classes: {
-                        root: classes.helperTextLink
-                      }
-                    },
-                    typeof formField.helplink === 'function' ? formField.helplink(_this, data) : formField.helplink
+                  endAdornment: suffix ? React.createElement(
+                    InputAdornment,
+                    { position: 'end' },
+                    suffix
                   ) : null,
-                  formField.error ? React.createElement(
-                    FormHelperText,
-                    { id: formField.name + '-error-text' },
-                    typeof formField.title === 'function' ? formField.title(data) : formField.title
-                  ) : null
-                );
-                break;
-            }
+                  inputProps: {
+                    title: typeof title === 'function' ? title(data) : title,
+                    min: typeof min === 'function' ? min(data) : min,
+                    max: typeof max === 'function' ? max(data) : max,
+                    maxLength: typeof maxlength === 'function' ? maxlength(data) : maxlength,
+                    minLength: typeof minlength === 'function' ? minlength(data) : minlength,
+                    step: typeof step === 'function' ? step(data) : step
+                  }
+                }
+              })
+            ),
+            fieldError
+          );
+          break;
+        case 'daterange':
+          field = React.createElement(DateRange, _extends$b({
+            data: data,
+            value: fieldValue,
+            fields: _this.state.fields
+            // onChange={this.handleDateRangeChange}
+            , onChange: _this.handleChangeData
+          }, _this.props));
+          break;
+        default:
+          field = fieldOptions.length > 0 ? multiple !== undefined && multiple ? React.createElement(
+            FormControl,
+            { component: 'fieldset', required: required ? true : false,
+              className: classes.textField,
+              key: fieldKey
+            },
+            fieldLabel,
+            React.createElement(
+              FormGroup,
+              {
+                'aria-label': label,
+                className: classes.group
+              },
+              fieldOptions.map(function (option) {
+                return React.createElement(FormControlLabel, {
+                  control: React.createElement(Checkbox, {
+                    onChange: _this.handleCheckboxChange,
+                    value: option.value,
+                    name: name,
+                    disabled: option.disabled ? true : false,
+                    checked: fieldValue.indexOf(option.value.toString()) > -1 ? true : false
+                  }),
+                  label: option.label
+                });
+              })
+            )
+          ) : React.createElement(
+            FormControl,
+            {
+              component: 'fieldset',
+              required: required ? true : false,
+              className: classes.textField,
+              key: fieldKey },
+            fieldLabel,
+            React.createElement(
+              RadioGroup,
+              {
+                'aria-label': label,
+                className: classes.group,
+                value: fieldValue,
+                id: name,
+                name: name,
+                onChange: _this.handleChange
+              },
+              fieldOptions.map(function (option) {
+                return React.createElement(FormControlLabel, { value: option.value, control: React.createElement(Radio, null), label: option.label, disabled: option.disabled ? true : false });
+              })
+            )
+          ) : React.createElement(
+            FormControl,
+            {
+              className: classes.formControl,
+              error: fieldErrorData,
+              'aria-describedby': fieldErrorName,
+              key: fieldKey
+            },
+            React.createElement(TextField, {
+              key: name,
+              id: name,
+              name: name,
+              type: type,
+              label: label,
+              placeholder: placeholder,
+              className: classes.textField,
+              value: fieldValue,
+              onChange: _this.handleChange,
+              margin: 'normal',
+              required: required ? true : false,
+              disabled: disabled ? true : false
+              // helperText={(typeof helptext === 'function') ? helptext(data) : helptext}
+              , InputProps: {
+                disabled: typeof disabled === 'function' ? disabled(data) : disabled,
+                readOnly: typeof readonly === 'function' ? readonly(data) : readonly,
+                startAdornment: prefix ? React.createElement(
+                  InputAdornment,
+                  { position: 'start' },
+                  prefix
+                ) : null,
+                endAdornment: suffix ? React.createElement(
+                  InputAdornment,
+                  { position: 'end' },
+                  suffix
+                ) : null,
+                inputProps: {
+                  title: typeof title === 'function' ? title(data) : title,
+                  min: typeof min === 'function' ? min(data) : min,
+                  max: typeof max === 'function' ? max(data) : max,
+                  maxLength: typeof maxlength === 'function' ? maxlength(data) : maxlength,
+                  minLength: typeof minlength === 'function' ? minlength(data) : minlength,
+                  step: typeof step === 'function' ? step(data) : step
+                }
+              }
+            }),
+            fieldHelpText,
+            fieldHelpLink,
+            fieldError
+          );
+          break;
+      }
 
-            return field;
-          }),
-          buttons.map(function (formButton) {
-            var field = '';
-            switch (formButton.type) {
-              case 'button':
-                var btnKey = 'button-' + formButton.label.replace(' ', '-');
-                field = React.createElement(
-                  Button,
-                  {
-                    variant: formButton.variant ? formButton.variant : "contained",
-                    color: formButton.color ? formButton.color : "secondary",
-                    className: buttonClassname,
-                    onClick: function onClick(e) {
-                      return formButton.action(_this, data, e, btnKey);
-                    },
-                    key: btnKey,
-                    disabled: _this.state[btnKey] && _this.state[btnKey].disabled || success || loading || formButton.disabled
-                  },
-                  _this.state[btnKey] && _this.state[btnKey].success ? React.createElement(CheckIcon, null) : '',
-                  ' ',
-                  formButton.label,
-                  _this.state[btnKey] && _this.state[btnKey].loading && React.createElement(CircularProgress, { size: 24, className: classes.buttonProgress })
-                );
-                break;
-              default:
-                field = React.createElement(
-                  Button,
-                  {
-                    variant: 'contained',
-                    color: 'primary',
-                    type: 'submit',
-                    disabled: loading,
-                    className: buttonClassname,
-                    key: new Date().getTime() + '-button-' + formButton.label
-                  },
-                  success ? React.createElement(CheckIcon, null) : '',
-                  ' ',
-                  formButton.label,
-                  loading && React.createElement(CircularProgress, { size: 24, className: classes.buttonProgress })
-                );
-                break;
-            }
-
-            return field;
-          })
-        ),
-        React.createElement(Snackbar$1, {
-          variant: _this.state.snackBarType,
-          snackBarDuration: 10000,
-          snackBarOpen: _this.state.snackBarOpen,
-          snackBarMessage: _this.state.snackBarMessage,
-          onClose: _this.handleSnackBarClose
-        })
-      );
+      return field;
     };
 
     _this.state = props;
     return _this;
   }
 
+  // componentWillReceiveProps = (nextProps) => {
+  //   let tempNextProps = {};
+  //   tempNextProps.data = (typeof nextProps.data === "function") ? nextProps.data() : nextProps.data;
+
+  //   this.setState(Object.assign({}, nextProps, tempNextProps));
+  // }
+
+  // handleSliderChange = (name, value) => {
+  //   const { data } = this.state;
+  //   const { fields } = this.props;
+  //   let fieldValue = value;
+
+  //   this.setState((state, props) => {
+  //     let updatedState = {};
+  //     let currentField = state.fields.find(function(field) {
+  //       return field.name === name;
+  //     });
+
+  //     if(currentField.dependencies && currentField.dependencies[fieldValue] !== undefined) {
+  //       updatedState.fields = fields.concat(currentField.dependencies[fieldValue]);
+  //     }
+
+  //     updatedState.data = {
+  //       ...data,
+  //       [name]: (isNaN(fieldValue) || typeof fieldValue === 'string') ? fieldValue : fieldValue.toFixed((currentField.decimal) ? currentField.decimal : 2)
+  //     }
+
+  //     return updatedState;
+  //   }, () => {
+  //     if (this.state.loadOnChange &&  !this.state.loading) {
+  //       this.submitAction(this.state.data);
+  //     }
+  //   });
+  // };
+
+  // richTextChange = (name, value) => {
+  //   const { data } = this.state;
+  //   const { fields } = this.props;
+  //   let fieldValue = value;
+
+  //   this.setState((state, props) => {
+  //     let updatedState = {};
+  //     let currentField = state.fields.find(function(field) {
+  //       return field.name === name;
+  //     });
+
+  //     if(currentField.dependencies && currentField.dependencies[fieldValue] !== undefined) {
+  //       updatedState.fields = fields.concat(currentField.dependencies[fieldValue]);
+  //     }
+
+  //     updatedState.data = {
+  //       ...data,
+  //       [name]: fieldValue
+  //     }
+
+  //     return updatedState;
+  //   }, () => {
+  //     if (this.state.loadOnChange &&  !this.state.loading) {
+  //       this.submitAction(this.state.data);
+  //     }
+  //   });
+  // };
+
+  // handleDateChange = (name, value) => {
+  //   const { data } = this.state;
+  //   const { fields } = this.props;
+
+  //   let currentField = this.state.fields.find(function(field) {
+  //     return field.name === name;
+  //   });
+
+  //   let fieldValue = (currentField.format) ? value.format(currentField.format) :  value.format("YYYY-MM-DD");
+  //   let formatFlag = true;
+  //   if(formatFlag) {
+  //     if(currentField.dependencies && currentField.dependencies[fieldValue] !== undefined) {
+  //       this.setState({
+  //         fields: fields.concat(currentField.dependencies[fieldValue])
+  //       });
+  //     }
+
+  //     this.setState({
+  //       data: {
+  //         ...data,
+  //         [name]: fieldValue
+  //       }
+  //     }, () => {
+  //       if (this.state.loadOnChange &&  !this.state.loading) {
+  //         this.submitAction();
+  //       }
+  //     });
+  //   } else {
+  //     let updatedFields = this.state.fields.map(field => {
+  //       if(field.name === currentField.name) {
+  //         currentField.error = true;
+  //         return currentField;
+  //       } else {
+  //         field.error = false;
+  //         return field;
+  //       }
+  //     });
+
+  //     this.setState({
+  //       fields: updatedFields
+  //     });
+  //   }
+  // }
+
+  // handleDateRangeChange = (name, fieldValue) => {
+  //   const { data } = this.state;
+
+  //   let currentField = this.getCurrentField(name);
+  //   let updatedFields = this.getDependentFields(currentField, fieldValue);
+
+  //   this.setState({
+  //     fields: updatedFields,
+  //     data: {
+  //       ...data,
+  //       [name]: fieldValue
+  //     }
+  //   }, () => {
+  //     if (this.state.loadOnChange &&  !this.state.loading) {
+  //       this.submitAction();
+  //     }
+  //   });
+  // };
+
+  // handleToggleChange = (name, fieldValue) => {
+  // this.setState((state, props) => {
+  //   let updatedState = {};
+  //   let currentField = state.fields.find(function(field) {
+  //     return field.name === name;
+  //   });
+
+  //   if(currentField.dependencies && currentField.dependencies[fieldValue] !== undefined) {
+  //     let fields;
+  //     if(currentField.dependent) {
+  //       fields = state.fields;
+  //     } else {
+  //       fields = props.fields;
+  //     }
+
+  //     let newFields     = currentField.dependencies[fieldValue];
+  //     let fieldNameArr  = Object.keys(fields.reduce(reducer, {}));
+  //     let updatedFields = newFields.filter(field => fieldNameArr.indexOf(field.name) === -1);
+
+  //     updatedState.fields = fields.concat(updatedFields);
+  //   } else if(currentField.dependencies && currentField.dependencies["*"] !== undefined) {
+  //     let fields;
+  //     if(currentField.dependent) {
+  //       fields = state.fields;
+  //     } else {
+  //       fields = props.fields;
+  //     }
+
+  //     let newFields = currentField.dependencies["*"];
+  //     let fieldNameArr = Object.keys(fields.reduce(reducer, {}));
+  //     let updatedFields = newFields.filter(field => fieldNameArr.indexOf(field.name) === -1);
+
+  //     updatedState.fields = fields.concat(updatedFields);
+  //   }
+
+  //   if(state.data) {
+  //     state.data[name] = fieldValue;
+  //   }
+
+  //   updatedState.data = (state.data) ? state.data : {
+  //     [name]: fieldValue
+  //   };
+
+  //   return updatedState;
+  // }, () => {
+  //   if(this.state.loadOnChange && !this.state.loading) {
+  //     this.submitAction();
+  //   }
+  // });
+  // }
+
+  return Field;
+}(React.Component);
+
+Field.defaultProps = {
+  buttons: []
+};
+
+Field.propTypes = {
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+  buttons: PropTypes.array.isRequired
+};
+
+var Field$1 = withStyles$1(styles$q, { withTheme: true })(Field);
+
+var styles$r = function styles(theme) {
+  return {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+      paddingRight: theme.spacing.unit,
+      paddingLeft: theme.spacing.unit
+    },
+    button: {
+      margin: theme.spacing.unit
+    },
+    buttonSuccess: {
+      margin: theme.spacing.unit,
+      backgroundColor: green[500],
+      '&:hover': {
+        backgroundColor: green[700]
+      }
+    },
+    buttonWrapper: {
+      margin: theme.spacing.unit,
+      position: 'relative'
+    },
+    buttonProgress: {
+      color: green[500],
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      marginTop: -12,
+      marginLeft: -12,
+      zIndex: 10000
+    },
+    chips: {
+      display: 'flex',
+      flexWrap: 'wrap'
+    },
+    chip: {
+      margin: theme.spacing.unit / 4
+    },
+    success: {
+      backgroundColor: green[600]
+    },
+    error: {
+      backgroundColor: theme.palette.error.dark
+    },
+    info: {
+      backgroundColor: theme.palette.primary.dark
+    },
+    warning: {
+      backgroundColor: amber[700]
+    }
+  };
+};
+
+var reducer = function reducer(accumulator, currentValue) {
+  accumulator[currentValue.name] = "";
+  return accumulator;
+};
+
+/**
+ * General component description.
+ */
+
+var EnhancedForm = function (_React$Component) {
+  inherits(EnhancedForm, _React$Component);
+
+  function EnhancedForm(props) {
+    classCallCheck(this, EnhancedForm);
+
+    var _this = possibleConstructorReturn(this, (EnhancedForm.__proto__ || Object.getPrototypeOf(EnhancedForm)).call(this, props));
+
+    _initialiseProps.call(_this);
+
+    _this.state = props;
+    return _this;
+  }
+
+  // handleChange = event => {
+  //   const { name, value, type, checked } = event.target;
+
+  //   const { data } = this.state;
+  //   let fieldValue = value;
+
+  //   if(type === 'checkbox') {
+  //     fieldValue = checked;
+  //   }
+
+  //   let currentField = this.state.fields.find(function(field) {
+  //     return field.name === name;
+  //   });
+
+  //   let formatFlag = true;
+  //   if(currentField.type === 'tel') {
+  //     formatFlag = this.checkFormat(currentField, fieldValue);
+  //   }
+
+  //   if(formatFlag) {
+  //     if(currentField.dependencies && currentField.dependencies[fieldValue] !== undefined) {
+  //       this.setState((state, props) => {
+  //         let fields;
+  //         if(currentField.dependent) {
+  //           fields = state.fields;
+  //         } else {
+  //           fields = props.fields;
+  //         }
+
+  //         let newFields     = currentField.dependencies[fieldValue];
+  //         let fieldNameArr  = Object.keys(fields.reduce(reducer, {}));
+  //         let updatedFields = newFields.filter(field => fieldNameArr.indexOf(field.name) === -1);
+
+  //         return {
+  //           fields: fields.concat(updatedFields)
+  //         }
+  //       });
+  //     } else if(currentField.dependencies && currentField.dependencies["*"] !== undefined) {
+  //       this.setState((state, props) => {
+  //         let fields;
+  //         if(currentField.dependent) {
+  //           fields = state.fields;
+  //         } else {
+  //           fields = props.fields;
+  //         }
+
+  //         let newFields = currentField.dependencies["*"];
+  //         let fieldNameArr = Object.keys(fields.reduce(reducer, {}));
+  //         let updatedFields = newFields.filter(field => fieldNameArr.indexOf(field.name) === -1);
+
+  //         return {
+  //           fields: fields.concat(updatedFields)
+  //         }
+  //       });
+  //     }
+
+  //     this.setState({
+  //       data: {
+  //         ...data,
+  //         [name]: fieldValue
+  //       }
+  //     }, () => {
+  //       if (this.state.loadOnChange &&  !this.state.loading) {
+  //         this.submitAction();
+  //       }
+  //     });
+  //   } else {
+  //     let updatedFields = this.state.fields.map(field => {
+  //       if(field.name === currentField.name) {
+  //         currentField.error = true;
+  //         return currentField;
+  //       } else {
+  //         field.error = false;
+  //         return field;
+  //       }
+  //     });
+
+  //     this.setState({
+  //       fields: updatedFields
+  //     });
+  //   }
+  // }
+
   return EnhancedForm;
 }(React.Component);
+
+var _initialiseProps = function _initialiseProps() {
+  var _this2 = this;
+
+  this.state = { loading: false, success: false, snackBarOpen: false };
+
+  this.componentWillReceiveProps = function (nextProps) {
+    var tempNextProps = {};
+    tempNextProps.data = typeof nextProps.data === "function" ? nextProps.data() : nextProps.data;
+
+    _this2.setState(Object.assign({}, nextProps, tempNextProps));
+  };
+
+  this.handleSnackBarClose = function (event, reason) {
+    _this2.setState({ snackBarOpen: false, snackBarMessage: null });
+  };
+
+  this.validateValue = function (field, value, formData) {
+    var validateFlag = true;
+    if (value !== undefined && value !== null && value !== "") {
+      if (validateFlag && field.minlength) {
+        validateFlag = value.length >= field.minlength ? true : false;
+      }
+
+      if (validateFlag && field.maxlength) {
+        validateFlag = value.length <= field.maxlength ? true : false;
+      }
+
+      var re = field.pattern ? field.pattern : '';
+      if (validateFlag && (re.length > 0 || (typeof re === 'undefined' ? 'undefined' : _typeof$4(re)) === "object")) {
+        validateFlag = re.test(value);
+      }
+
+      if (validateFlag && field.validate) {
+        validateFlag = typeof field.validate === "function" ? field.validate(formData) : field.validate;
+      }
+
+      return validateFlag;
+    } else {
+      return !validateFlag;
+    }
+  };
+
+  this.handleSubmit = function (event) {
+    event.preventDefault();
+
+    _this2.submitAction(_this2.state.data);
+  };
+
+  this.submitAction = function () {
+    var formValidationFlag = true;
+    _this2.setState(function (state, props) {
+      var formData = state.data;
+      var updatedState = {};
+      var updatedFields = state.fields.map(function (field) {
+        if (field.required && (field.readonly === undefined || field.readonly)) {
+          if (_this2.validateValue(field, formData[field.name], formData)) {
+            field.error = false;
+            return field;
+          } else {
+            formValidationFlag = false;
+            field.error = true;
+            return field;
+          }
+        } else {
+          field.error = false;
+          return field;
+        }
+      });
+
+      updatedState.fields = updatedFields;
+
+      if (!state.loading && formValidationFlag) {
+        updatedState.success = false;
+        updatedState.loading = true;
+      }
+
+      return updatedState;
+    }, function () {
+      if (_this2.state.loading && formValidationFlag) {
+        _this2.state.submitAction(_this2.state.data, _this2);
+      }
+    });
+  };
+
+  this.getDependentFields = function (currentField, fieldValue) {
+    var dependentFields = currentField.dependencies && (currentField.dependencies[fieldValue] || currentField.dependencies["*"]) || [];
+
+    var fields = currentField.dependent ? _this2.state.fields : _this2.props.fields;
+    var fieldNameArr = Object.keys(fields.reduce(reducer, {}));
+    var updatedFields = dependentFields.filter(function (field) {
+      return fieldNameArr.indexOf(field.name) === -1;
+    });
+
+    return fields.concat(updatedFields);
+  };
+
+  this.getCurrentField = function (name) {
+    return _this2.state.fields.find(function (field) {
+      return field.name === name;
+    });
+  };
+
+  this.handleFieldChange = function (name, fieldValue) {
+    _this2.setState(function (state, props) {
+      var updatedState = {};
+      var currentField = _this2.getCurrentField(name);
+
+      if (currentField.dependencies && currentField.dependencies[fieldValue] !== undefined) {
+        var fields = void 0;
+        if (currentField.dependent) {
+          fields = state.fields;
+        } else {
+          fields = props.fields;
+        }
+
+        var newFields = currentField.dependencies[fieldValue];
+        var fieldNameArr = Object.keys(fields.reduce(reducer, {}));
+        var updatedFields = newFields.filter(function (field) {
+          return fieldNameArr.indexOf(field.name) === -1;
+        });
+
+        updatedState.fields = fields.concat(updatedFields);
+      } else if (currentField.dependencies && currentField.dependencies["*"] !== undefined) {
+        var _fields = void 0;
+        if (currentField.dependent) {
+          _fields = state.fields;
+        } else {
+          _fields = props.fields;
+        }
+
+        var _newFields = currentField.dependencies["*"];
+        var _fieldNameArr = Object.keys(_fields.reduce(reducer, {}));
+        var _updatedFields = _newFields.filter(function (field) {
+          return _fieldNameArr.indexOf(field.name) === -1;
+        });
+
+        updatedState.fields = _fields.concat(_updatedFields);
+      }
+
+      if (state.data) {
+        state.data[name] = fieldValue;
+      }
+
+      updatedState.data = state.data ? state.data : defineProperty$1({}, name, fieldValue);
+
+      return updatedState;
+    }, function () {
+      if (_this2.state.loadOnChange && !_this2.state.loading) {
+        _this2.submitAction();
+      }
+    });
+  };
+
+  this.render = function () {
+    var _classNames;
+
+    var _props = _this2.props,
+        classes = _props.classes,
+        title = _props.title;
+    var _state = _this2.state,
+        data = _state.data,
+        fields = _state.fields,
+        buttons = _state.buttons,
+        loading = _state.loading,
+        success = _state.success;
+
+
+    var buttonClassname = classnames((_classNames = {}, defineProperty$1(_classNames, classes.buttonSuccess, success), defineProperty$1(_classNames, classes.button, !success), _classNames));
+
+    return React.createElement(
+      'div',
+      null,
+      title ? React.createElement(Toolbar$2, { title: title }) : "",
+      React.createElement(
+        'form',
+        { className: classes.container, onSubmit: _this2.handleSubmit, autoComplete: 'off', noValidate: _this2.props.novalidate ? _this2.props.novalidate : false },
+        fields.map(function (formField) {
+
+          return React.createElement(Field$1, _extends$b({
+            data: data,
+            onChange: _this2.handleFieldChange
+          }, formField));
+        }),
+        buttons.map(function (formButton) {
+          var field = '';
+          switch (formButton.type) {
+            case 'button':
+              var btnKey = 'button-' + formButton.label.replace(' ', '-');
+              field = React.createElement(
+                Button$1,
+                {
+                  variant: formButton.variant ? formButton.variant : "contained",
+                  color: formButton.color ? formButton.color : "secondary",
+                  className: buttonClassname,
+                  onClick: function onClick(e) {
+                    return formButton.action(_this2, data, e, btnKey);
+                  },
+                  key: btnKey,
+                  disabled: _this2.state[btnKey] && (_this2.state[btnKey].disabled || _this2.state[btnKey].loading) || success || loading || formButton.disabled
+                },
+                _this2.state[btnKey] && _this2.state[btnKey].success ? React.createElement(CheckIcon, null) : '',
+                ' ',
+                formButton.label,
+                _this2.state[btnKey] && _this2.state[btnKey].loading && React.createElement(CircularProgress, { size: 24, className: classes.buttonProgress })
+              );
+              break;
+            default:
+              field = React.createElement(
+                Button$1,
+                {
+                  variant: 'contained',
+                  color: formButton.color ? formButton.color : "primary",
+                  type: 'submit',
+                  disabled: loading,
+                  className: buttonClassname,
+                  key: new Date().getTime() + '-button-' + formButton.label
+                },
+                success ? React.createElement(CheckIcon, null) : '',
+                ' ',
+                formButton.label,
+                loading && React.createElement(CircularProgress, { size: 24, className: classes.buttonProgress })
+              );
+              break;
+          }
+
+          return field;
+        })
+      ),
+      React.createElement(Snackbar$1, {
+        variant: _this2.state.snackBarType,
+        snackBarDuration: 10000,
+        snackBarOpen: _this2.state.snackBarOpen,
+        snackBarMessage: _this2.state.snackBarMessage,
+        onClose: _this2.handleSnackBarClose
+      })
+    );
+  };
+};
 
 EnhancedForm.defaultProps = {
   buttons: []
@@ -36865,9 +37410,9 @@ EnhancedForm.propTypes = {
   buttons: PropTypes.array.isRequired
 };
 
-var Form = withStyles$2(styles$q, { withTheme: true })(EnhancedForm);
+var Form = withStyles$1(styles$r, { withTheme: true })(EnhancedForm);
 
-var styles$r = function styles(theme) {
+var styles$s = function styles(theme) {
   return {
     root: {
       width: '100%',
@@ -36916,48 +37461,36 @@ var EnhanceList = function (_React$Component) {
           List,
           { component: 'nav' },
           items.map(function (item) {
-            var itemBtn = void 0;
-            var showItem = true;
-
-            if (item.beforeShow) {
-              showItem = item.beforeShow(data);
-            }
+            var showItem = item.beforeShow ? item.beforeShow(data) : true;
 
             if (item.getIcon) {
               item['icon'] = item.getIcon(data[item.field]);
             }
 
+            var listItemProps = {
+              button: true,
+              key: Date.now() + '-list-item-' + item.label.replace(' ', '-')
+            };
+
             if (item.action) {
-              itemBtn = React.createElement(
-                ListItem,
-                { button: true, onClick: function onClick() {
-                    return item.action(_this, data);
-                  }, key: Date.now() + '-list-item-' + item.label.replace(' ', '-') },
-                React.createElement(
-                  ListItemIcon,
-                  null,
-                  React.createElement(item.icon, null)
-                ),
-                React.createElement(ListItemText, { primary: item.label })
-              );
+              listItemProps.onClick = function () {
+                return item.action(_this, data);
+              };
             } else {
-              itemBtn = React.createElement(
-                ListItem,
-                { button: true, to: item.href, component: Link$1, key: Date.now() + '-list-item-' + item.label.replace(' ', '-') },
-                React.createElement(
-                  ListItemIcon,
-                  null,
-                  React.createElement(item.icon, null)
-                ),
-                React.createElement(ListItemText, { primary: item.label })
-              );
+              listItemProps.to = item.href;
+              listItemProps.component = Link$1;
             }
 
-            if (showItem) {
-              return itemBtn;
-            } else {
-              return "";
-            }
+            return showItem ? React.createElement(
+              ListItem,
+              listItemProps,
+              React.createElement(
+                ListItemIcon,
+                null,
+                React.createElement(item.icon, null)
+              ),
+              React.createElement(ListItemText, { primary: item.label })
+            ) : null;
           })
         ),
         React.createElement(Dialog$1, {
@@ -36978,13 +37511,17 @@ var EnhanceList = function (_React$Component) {
   return EnhanceList;
 }(React.Component);
 
+EnhanceList.defaultProps = {
+  data: {}
+};
+
 EnhanceList.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-var List$1 = withStyles(styles$r)(EnhanceList);
+var List$1 = withStyles(styles$s)(EnhanceList);
 
-var styles$s = function styles(theme) {
+var styles$t = function styles(theme) {
   return {
     paper: {
       maxWidth: 360,
@@ -37136,12 +37673,12 @@ var EnhancedPopper = function (_React$Component) {
               DialogActions,
               null,
               React.createElement(
-                Button,
+                Button$1,
                 { onClick: _this.handleCancel, color: 'primary' },
                 'Cancel'
               ),
               React.createElement(
-                Button,
+                Button$1,
                 { onClick: _this.handleOk, color: 'primary' },
                 'Ok'
               )
@@ -37153,7 +37690,7 @@ var EnhancedPopper = function (_React$Component) {
               DialogActions,
               null,
               React.createElement(
-                Button,
+                Button$1,
                 { onClick: _this.handleClose, color: 'primary', autoFocus: true },
                 'Ok'
               )
@@ -37242,9 +37779,9 @@ EnhancedPopper.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-var Popper$1 = withStyles(styles$s)(EnhancedPopper);
+var Popper$1 = withStyles(styles$t)(EnhancedPopper);
 
-var styles$t = function styles(theme) {
+var styles$u = function styles(theme) {
   return {
     root: {
       maxWidth: 400,
@@ -37329,13 +37866,13 @@ var TextMobileStepper = function (_React$Component) {
           activeStep: activeStep,
           className: classes.mobileStepper,
           nextButton: React.createElement(
-            Button,
+            Button$1,
             { size: 'small', onClick: this.handleNext, disabled: activeStep === maxSteps - 1 },
             'Next',
             theme.direction === 'rtl' ? React.createElement(KeyboardArrowLeft, null) : React.createElement(KeyboardArrowRight, null)
           ),
           backButton: React.createElement(
-            Button,
+            Button$1,
             { size: 'small', onClick: this.handleBack, disabled: activeStep === 0 },
             theme.direction === 'rtl' ? React.createElement(KeyboardArrowRight, null) : React.createElement(KeyboardArrowLeft, null),
             'Back'
@@ -37352,9 +37889,9 @@ TextMobileStepper.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-var Slider$1 = withStyles(styles$t, { withTheme: true })(TextMobileStepper);
+var Slider$1 = withStyles(styles$u, { withTheme: true })(TextMobileStepper);
 
-var styles$u = function styles(theme) {
+var styles$v = function styles(theme) {
   return {
     root: {
       width: '90%'
@@ -37478,7 +38015,7 @@ var StatusBar = function (_React$Component) {
 
           return React.createElement(
             Step,
-            _extends$8({ key: step.label }, props),
+            _extends$b({ key: step.label }, props),
             React.createElement(
               StepLabel,
               labelProps,
@@ -37496,9 +38033,9 @@ StatusBar.propTypes = {
   classes: PropTypes.object
 };
 
-var StatusBar$1 = withStyles(styles$u)(StatusBar);
+var StatusBar$1 = withStyles(styles$v)(StatusBar);
 
-var styles$v = function styles(theme) {
+var styles$w = function styles(theme) {
   return {
     root: {
       width: '90%'
@@ -37626,7 +38163,7 @@ var EnhancedStepper = function (_React$Component) {
             }
             return React.createElement(
               Step,
-              _extends$8({ key: label }, props),
+              _extends$b({ key: label }, props),
               React.createElement(
                 StepLabel,
                 labelProps,
@@ -37647,7 +38184,7 @@ var EnhancedStepper = function (_React$Component) {
               'All steps completed - you\'re finished'
             ),
             React.createElement(
-              Button,
+              Button$1,
               { onClick: this.handleReset, className: classes.button },
               'Reset'
             )
@@ -37663,7 +38200,7 @@ var EnhancedStepper = function (_React$Component) {
               'div',
               null,
               React.createElement(
-                Button,
+                Button$1,
                 {
                   disabled: activeStep === 0,
                   onClick: this.handleBack,
@@ -37672,7 +38209,7 @@ var EnhancedStepper = function (_React$Component) {
                 'Back'
               ),
               this.isStepOptional(activeStep) && React.createElement(
-                Button,
+                Button$1,
                 {
                   variant: 'contained',
                   color: 'primary',
@@ -37682,7 +38219,7 @@ var EnhancedStepper = function (_React$Component) {
                 'Skip'
               ),
               React.createElement(
-                Button,
+                Button$1,
                 {
                   variant: 'contained',
                   color: 'primary',
@@ -37704,9 +38241,9 @@ EnhancedStepper.propTypes = {
   classes: PropTypes.object
 };
 
-var Stepper$1 = withStyles(styles$v)(EnhancedStepper);
+var Stepper$1 = withStyles(styles$w)(EnhancedStepper);
 
-var styles$w = function styles(theme) {
+var styles$x = function styles(theme) {
   return {
     snackBarClose: {
       fontSize: 20
@@ -37818,174 +38355,7 @@ EnhancedSnackbar.propTypes = {
   variant: PropTypes.string.isRequired
 };
 
-var Snackbar$1 = withStyles(styles$w)(EnhancedSnackbar);
-
-var toolbarStyles = function toolbarStyles(theme) {
-  return {
-    root: defineProperty$1({
-      // paddingRight: theme.spacing.unit,
-      marginBottom: theme.spacing.unit * 2
-    }, theme.breakpoints.only('xs'), {
-      marginBottom: theme.spacing.unit
-    }),
-    highlight: theme.palette.type === 'light' ? {
-      color: theme.palette.secondary.main,
-      backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-    } : {
-      color: theme.palette.text.primary,
-      backgroundColor: theme.palette.secondary.dark
-    },
-    spacer: {
-      flex: '1 1 100%'
-    },
-    actions: {
-      display: 'flex',
-      color: theme.palette.text.secondary,
-      flexBasis: '25%',
-      justifyContent: 'flex-end'
-    },
-    title: {
-      display: 'flex',
-      flex: '0 0 auto',
-      flexBasis: '75%',
-      justifyContent: 'flex-start',
-      alignItems: 'center'
-    },
-    fab: {
-      margin: theme.spacing.unit * 2
-    },
-    container: {
-      justifyContent: 'space-between'
-    }
-  };
-};
-
-var toolbarOptions = {
-  title: "Table",
-  selectable: false,
-  content: null,
-  actions: []
-};
-
-var EnhancedToolbar = function (_React$Component) {
-  inherits(EnhancedToolbar, _React$Component);
-
-  function EnhancedToolbar(props) {
-    classCallCheck(this, EnhancedToolbar);
-
-    var _this = possibleConstructorReturn(this, (EnhancedToolbar.__proto__ || Object.getPrototypeOf(EnhancedToolbar)).call(this, props));
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          other = objectWithoutProperties(_this$props, ['classes']);
-      var _this$state = _this.state,
-          title = _this$state.title,
-          data = _this$state.data,
-          content = _this$state.content;
-
-
-      return React.createElement(
-        Toolbar$1,
-        _extends$8({
-          className: classnames(classes.root, defineProperty$1({}, classes.highlight, _this.state.numSelected > 0))
-        }, other),
-        content ? content : React.createElement(
-          Grid,
-          { container: true, className: classes.container },
-          React.createElement(
-            Grid,
-            { item: true, className: classes.title },
-            _this.state.selectable ? _this.state.numSelected > 0 ? React.createElement(
-              Typography$1,
-              { color: 'inherit', variant: 'subheading' },
-              _this.state.numSelected,
-              ' selected'
-            ) : React.createElement(
-              Typography$1,
-              { variant: 'h6', id: 'tableTitle' },
-              title
-            ) : React.createElement(
-              Typography$1,
-              { variant: 'h6', id: 'tableTitle' },
-              title
-            )
-          ),
-          React.createElement(
-            Grid,
-            { item: true, className: classes.actions },
-            _this.state.selectable && _this.state.numSelected > 0 ? React.createElement(
-              Tooltip$1,
-              { title: 'Delete', placement: 'top-end' },
-              React.createElement(
-                IconButton$1,
-                { 'aria-label': 'Delete' },
-                React.createElement(Delete, null)
-              )
-            ) : _this.state.actions ? _this.state.actions.map(function (action) {
-              var icon = action.icon ? action.icon : null;
-
-              var actionBtn = void 0;
-              var buttonProps = {
-                "aria-label": action.title,
-                color: action.color,
-                size: action.size
-              };
-
-              if (action.action) {
-                buttonProps.onClick = function () {
-                  return action.action(_this, data);
-                };
-              } else {
-                buttonProps.to = action.href;
-                buttonProps.component = Link$1;
-              }
-
-              actionBtn = icon ? React.createElement(
-                Fab$1,
-                _extends$8({ className: classes.fab }, buttonProps),
-                icon
-              ) : React.createElement(
-                Button$1,
-                _extends$8({ variant: 'text' }, buttonProps),
-                action.label
-              );
-
-              return React.createElement(
-                Tooltip$1,
-                { title: action.title, placement: action.placement, key: action.title },
-                actionBtn
-              );
-            }) : ''
-          )
-        )
-      );
-    };
-
-    _this.state = Object.assign(toolbarOptions, props);
-    return _this;
-  }
-
-  createClass(EnhancedToolbar, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState({
-        title: nextProps.title,
-        actions: nextProps.actions,
-        data: nextProps.data,
-        content: nextProps.content
-      });
-    }
-  }]);
-  return EnhancedToolbar;
-}(React.Component);
-
-EnhancedToolbar.propTypes = {
-  classes: PropTypes.object.isRequired
-  // data: PropTypes.object.isRequired,
-};
-
-var Toolbar$2 = withStyles$2(toolbarStyles)(EnhancedToolbar);
+var Snackbar$1 = withStyles(styles$x)(EnhancedSnackbar);
 
 var async = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
@@ -43597,7 +43967,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var async$1 = unwrapExports(async);
 
-var styles$x = function styles(theme) {
+var styles$y = function styles(theme) {
   return {
     root: {
       // flexGrow: 1,
@@ -43637,7 +44007,7 @@ var styles$x = function styles(theme) {
 function NoOptionsMessage$2(props) {
   return React.createElement(
     Typography,
-    _extends$8({
+    _extends$b({
       color: 'textSecondary',
       className: props.selectProps.classes.noOptionsMessage
     }, props.innerProps),
@@ -43649,7 +44019,7 @@ function inputComponent$1(_ref) {
   var inputRef = _ref.inputRef,
       props = objectWithoutProperties(_ref, ['inputRef']);
 
-  return React.createElement('div', _extends$8({ ref: inputRef }, props));
+  return React.createElement('div', _extends$b({ ref: inputRef }, props));
 }
 
 function Control$2(props) {
@@ -43657,7 +44027,7 @@ function Control$2(props) {
     fullWidth: true,
     InputProps: {
       inputComponent: inputComponent$1,
-      inputProps: _extends$8({
+      inputProps: _extends$b({
         className: props.selectProps.classes.input,
         ref: props.innerRef,
         children: props.children
@@ -43669,7 +44039,7 @@ function Control$2(props) {
 function Option$2(props) {
   return React.createElement(
     MenuItem,
-    _extends$8({
+    _extends$b({
       buttonRef: props.innerRef,
       selected: props.isFocused,
       component: 'div',
@@ -43684,7 +44054,7 @@ function Option$2(props) {
 function Placeholder$3(props) {
   return React.createElement(
     Typography,
-    _extends$8({
+    _extends$b({
       color: 'textSecondary',
       className: props.selectProps.classes.placeholder
     }, props.innerProps),
@@ -43695,7 +44065,7 @@ function Placeholder$3(props) {
 function SingleValue$3(props) {
   return React.createElement(
     Typography,
-    _extends$8({ className: props.selectProps.classes.singleValue }, props.innerProps),
+    _extends$b({ className: props.selectProps.classes.singleValue }, props.innerProps),
     props.children
   );
 }
@@ -43761,7 +44131,7 @@ var Filter = function (_React$Component) {
     }, _this.openDialog = function (filterForm) {
       _this.setState({ dialogOpen: true, filterForm: filterForm });
     }, _this.closeDialog = function (value) {
-      if ((typeof value === 'undefined' ? 'undefined' : _typeof$2(value)) === 'object') {
+      if ((typeof value === 'undefined' ? 'undefined' : _typeof$4(value)) === 'object') {
         _this.setState({ filter: value });
       }
       _this.setState({ dialogOpen: false });
@@ -43852,11 +44222,142 @@ Filter.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-var Filter$1 = withStyles(styles$x)(Filter);
+var Filter$1 = withStyles(styles$y)(Filter);
+
+var styles$z = function styles(theme) {
+  return {};
+};
+
+var Sort = function (_React$Component) {
+  inherits(Sort, _React$Component);
+
+  function Sort() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    classCallCheck(this, Sort);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Sort.__proto__ || Object.getPrototypeOf(Sort)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      anchorEl: null
+    }, _this.handleOpenMenu = function (event) {
+      _this.setState({ anchorEl: event.currentTarget });
+    }, _this.handleCloseMenu = function () {
+      _this.setState({ anchorEl: null });
+    }, _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          options = _this$props.options,
+          data = _this$props.data,
+          onChange = _this$props.onChange;
+      var anchorEl = _this.state.anchorEl;
+
+      var isMenuOpen = Boolean(anchorEl);
+      var renderSortingMenu = React.createElement(
+        Popover,
+        {
+          open: isMenuOpen,
+          anchorEl: anchorEl,
+          onClose: _this.handleCloseMenu,
+          className: classes.popper,
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right'
+          },
+          transformOrigin: {
+            vertical: 'top',
+            horizontal: 'right'
+          }
+        },
+        React.createElement(
+          List,
+          { className: classes.list },
+          React.createElement(
+            ListItem,
+            {
+              alignItems: 'flex-start',
+              onClick: function onClick() {
+                _this.handleCloseMenu();
+              }
+            },
+            React.createElement(ListItemText, {
+              secondary: 'Sort By : '
+            }),
+            React.createElement(
+              ListItemIcon,
+              null,
+              React.createElement(SwapVert, null)
+            )
+          ),
+          options.map(function (option) {
+            var sortDirection = data.sortBy === option.name && data.sortDirection === 'DESC' ? 'ASC' : 'DESC';
+
+            return option.sort ? React.createElement(
+              ListItem,
+              {
+                key: 'sort-' + option.name,
+                alignItems: 'flex-start'
+              },
+              React.createElement(ListItemText, {
+                primary: option.label
+              }),
+              React.createElement(
+                ListItemSecondaryAction,
+                null,
+                React.createElement(
+                  IconButton,
+                  { 'aria-label': sortDirection,
+                    onClick: function onClick() {
+                      var sortObj = {
+                        sortBy: option.name,
+                        sortDirection: sortDirection
+                      };
+
+                      var tempdata = Object.assign({}, data, sortObj);
+                      onChange(tempdata);
+                      _this.handleCloseMenu();
+                    }
+                  },
+                  data.sortBy === option.name && data.sortDirection === 'DESC' ? React.createElement(ArrowUpward, null) : React.createElement(ArrowDownward, null)
+                )
+              )
+            ) : null;
+          })
+        )
+      );
+
+      return React.createElement(
+        'div',
+        null,
+        React.createElement(
+          IconButton,
+          {
+            color: 'inherit',
+            'aria-label': 'open sorting',
+            'aria-haspopup': 'true',
+            onClick: _this.handleOpenMenu
+          },
+          React.createElement(SwapVert, null)
+        ),
+        renderSortingMenu
+      );
+    }, _temp), possibleConstructorReturn(_this, _ret);
+  }
+
+  return Sort;
+}(React.Component);
+
+withStyles(styles$z)(Sort);
 
 // ##############################
 
-var styles$y = function styles(theme) {
+var history$1 = createBrowserHistory();
+
+var styles$A = function styles(theme) {
 	return {
 		icon: {
 			display: 'inline-flex',
@@ -43884,7 +44385,7 @@ var CustomIcon = function (_React$Component) {
 			    size = _props.size,
 			    other = objectWithoutProperties(_props, ['name', 'font', 'color', 'size']);
 
-			return React.createElement(Icon, _extends$8({
+			return React.createElement(Icon, _extends$b({
 				name: 'down-circle',
 				color: 'white',
 				size: 30
@@ -43895,9 +44396,9 @@ var CustomIcon = function (_React$Component) {
 	return CustomIcon;
 }(React.Component);
 
-var CustomIcon$1 = withStyles(styles$y)(CustomIcon);
+var CustomIcon$1 = withStyles(styles$A)(CustomIcon);
 
-var styles$z = function styles(theme) {
+var styles$B = function styles(theme) {
   var _search;
 
   return {
@@ -44198,7 +44699,7 @@ var MenuAppBar = function (_React$Component) {
                 React.Fragment,
                 null,
                 !profileCompleteFlag ? React.createElement(
-                  Button,
+                  Button$1,
                   {
                     variant: 'contained',
                     color: 'primary',
@@ -44206,7 +44707,7 @@ var MenuAppBar = function (_React$Component) {
                     className: classes.button,
                     onClick: function onClick() {
                       _this2.handleCloseMenu();
-                      history$3.push('/complete-profile');
+                      history$1.push('/complete-profile');
                     }
                   },
                   'Complete KYC'
@@ -44314,7 +44815,7 @@ var MenuAppBar = function (_React$Component) {
           className: classnames(classes.appBar, isDrawerOpen && classes.appBarShift)
         },
         React.createElement(
-          Toolbar,
+          Toolbar$1,
           {
             disableGutters: !isDrawerOpen,
             className: classes.toolbar
@@ -44375,10 +44876,10 @@ var MenuAppBar = function (_React$Component) {
                 loading: false,
                 submitAction: function submitAction(filterData) {
                   if (filterData && filterData.id) {
-                    history$3.push('/mutual-fund/' + filterData.id);
+                    history$1.push('/mutual-fund/' + filterData.id);
                   } else if (filterData && filterData.name) {
                     var fundName = filterData.name.split(" ").join("-");
-                    history$3.push('/dashboard/' + fundName);
+                    history$1.push('/dashboard/' + fundName);
                   }
                 }
               })
@@ -44447,7 +44948,7 @@ MenuAppBar.propTypes = {
   routes: PropTypes.array.isRequired
 };
 
-var Appbar = withStyles(styles$z)(MenuAppBar);
+var Appbar = withStyles(styles$B)(MenuAppBar);
 
 export { Appbar as AppBar, Drawer$1 as Drawer, Card$1 as Card, ChipFilter$1 as ChipFilter, GridList$1 as GridList, Popper$1 as Popper, Slider$1 as Slider, StatusBar$1 as StatusBar, Stepper$1 as Stepper, Snackbar$1 as Snackbar, Footer, Table$1 as Table, Accordion, Dialog$1 as Dialog, Form, List$1 as List, Toolbar$2 as Toolbar, Filter$1 as Filter };
 //# sourceMappingURL=index.es.js.map
