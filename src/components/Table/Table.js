@@ -30,7 +30,9 @@ import Dialog from "./../Dialog";
 import Card from "./../Card";
 import ChipFilter from "./../ChipFilter";
 
-import { history } from './../../_helpers';
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
 
 const styles = theme => ({
   tableWrapper: {

@@ -12,7 +12,8 @@ import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 import async from 'async';
 
-import { Dialog, Form } from "./";
+import Dialog from "./Dialog";
+import Form from "./Form";
 
 const styles = theme => ({
   root: {

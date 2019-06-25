@@ -18,21 +18,6 @@ var ChevronRightIcon = _interopDefault(require('@material-ui/icons/ChevronRight'
 var ListItem = _interopDefault(require('@material-ui/core/ListItem'));
 var ListItemIcon = _interopDefault(require('@material-ui/core/ListItemIcon'));
 var ListItemText = _interopDefault(require('@material-ui/core/ListItemText'));
-var core = require('@material-ui/core');
-var Chip = _interopDefault(require('@material-ui/core/Chip'));
-var ArrowDropDown = _interopDefault(require('@material-ui/icons/ArrowDropDown'));
-var GridList = _interopDefault(require('@material-ui/core/GridList'));
-var GridListTile = _interopDefault(require('@material-ui/core/GridListTile'));
-var GridListTileBar = _interopDefault(require('@material-ui/core/GridListTileBar'));
-var InfoIcon = _interopDefault(require('@material-ui/icons/Info'));
-var TableCell = _interopDefault(require('@material-ui/core/TableCell'));
-var TableHead = _interopDefault(require('@material-ui/core/TableHead'));
-var TableRow = _interopDefault(require('@material-ui/core/TableRow'));
-var TableSortLabel = _interopDefault(require('@material-ui/core/TableSortLabel'));
-var Checkbox = _interopDefault(require('@material-ui/core/Checkbox'));
-var Tooltip = _interopDefault(require('@material-ui/core/Tooltip'));
-var colorManipulator = require('@material-ui/core/styles/colorManipulator');
-var icons = require('@material-ui/icons');
 var reactDeviceDetect = require('react-device-detect');
 var Button = _interopDefault(require('@material-ui/core/Button'));
 var Dialog = _interopDefault(require('@material-ui/core/Dialog'));
@@ -41,24 +26,18 @@ var DialogContent = _interopDefault(require('@material-ui/core/DialogContent'));
 var DialogContentText = _interopDefault(require('@material-ui/core/DialogContentText'));
 var DialogTitle = _interopDefault(require('@material-ui/core/DialogTitle'));
 var CloseIcon = _interopDefault(require('@material-ui/icons/Close'));
-var redux = require('redux');
-var thunkMiddleware = _interopDefault(require('redux-thunk'));
-var reduxLogger = require('redux-logger');
-var Table = _interopDefault(require('@material-ui/core/Table'));
-var TableBody = _interopDefault(require('@material-ui/core/TableBody'));
-var TablePagination = _interopDefault(require('@material-ui/core/TablePagination'));
-var Fab = _interopDefault(require('@material-ui/core/Fab'));
-var Paper = _interopDefault(require('@material-ui/core/Paper'));
-var CircularProgress = _interopDefault(require('@material-ui/core/CircularProgress'));
-var Avatar = _interopDefault(require('@material-ui/core/Avatar'));
-var Link = _interopDefault(require('@material-ui/core/Link'));
-var LinkIcon = _interopDefault(require('@material-ui/icons/Link'));
-var ExpansionPanel = _interopDefault(require('@material-ui/core/ExpansionPanel'));
-var ExpansionPanelDetails = _interopDefault(require('@material-ui/core/ExpansionPanelDetails'));
-var ExpansionPanelSummary = _interopDefault(require('@material-ui/core/ExpansionPanelSummary'));
-var ExpansionPanelActions = _interopDefault(require('@material-ui/core/ExpansionPanelActions'));
-var LinearProgress = _interopDefault(require('@material-ui/core/LinearProgress'));
-var ExpandMoreIcon = _interopDefault(require('@material-ui/icons/ExpandMore'));
+var List = _interopDefault(require('@material-ui/core/List'));
+var core = require('@material-ui/core');
+var Snackbar = _interopDefault(require('@material-ui/core/Snackbar'));
+var SnackbarContent = _interopDefault(require('@material-ui/core/SnackbarContent'));
+var CheckCircleIcon = _interopDefault(require('@material-ui/icons/CheckCircle'));
+var ErrorIcon = _interopDefault(require('@material-ui/icons/Error'));
+var InfoIcon = _interopDefault(require('@material-ui/icons/Info'));
+var WarningIcon = _interopDefault(require('@material-ui/icons/Warning'));
+var green = _interopDefault(require('@material-ui/core/colors/green'));
+var amber = _interopDefault(require('@material-ui/core/colors/amber'));
+var colorManipulator = require('@material-ui/core/styles/colorManipulator');
+var icons = require('@material-ui/icons');
 var reactDom = require('react-dom');
 var reactDom__default = _interopDefault(reactDom);
 var InputAdornment = _interopDefault(require('@material-ui/core/InputAdornment'));
@@ -68,27 +47,31 @@ var createStyles$1 = _interopDefault(require('@material-ui/core/styles/createSty
 var withStyles$1 = _interopDefault(require('@material-ui/core/styles/withStyles'));
 var Toolbar = _interopDefault(require('@material-ui/core/Toolbar'));
 var Popover = _interopDefault(require('@material-ui/core/Popover'));
+var Paper = _interopDefault(require('@material-ui/core/Paper'));
 var Tab = _interopDefault(require('@material-ui/core/Tab'));
 var Tabs = _interopDefault(require('@material-ui/core/Tabs'));
 var NoSsr = _interopDefault(require('@material-ui/core/NoSsr'));
+var Chip = _interopDefault(require('@material-ui/core/Chip'));
 var MenuItem = _interopDefault(require('@material-ui/core/MenuItem'));
 var CancelIcon = _interopDefault(require('@material-ui/icons/Cancel'));
 var FormHelperText = _interopDefault(require('@material-ui/core/FormHelperText'));
 var FormControl = _interopDefault(require('@material-ui/core/FormControl'));
 var FormLabel = _interopDefault(require('@material-ui/core/FormLabel'));
 var Slider = _interopDefault(require('@material-ui/lab/Slider'));
-var tinymceReact = require('@tinymce/tinymce-react');
 var FormGroup = _interopDefault(require('@material-ui/core/FormGroup'));
 var FormControlLabel = _interopDefault(require('@material-ui/core/FormControlLabel'));
 var Switch = _interopDefault(require('@material-ui/core/Switch'));
 var Radio = _interopDefault(require('@material-ui/core/Radio'));
 var RadioGroup = _interopDefault(require('@material-ui/core/RadioGroup'));
-var green = _interopDefault(require('@material-ui/core/colors/green'));
-var CheckIcon = _interopDefault(require('@material-ui/icons/Check'));
+var Checkbox = _interopDefault(require('@material-ui/core/Checkbox'));
 var Input = _interopDefault(require('@material-ui/core/Input'));
-var amber = _interopDefault(require('@material-ui/core/colors/amber'));
-var List = _interopDefault(require('@material-ui/core/List'));
+var CircularProgress = _interopDefault(require('@material-ui/core/CircularProgress'));
+var CheckIcon = _interopDefault(require('@material-ui/icons/Check'));
 var Popper = _interopDefault(require('@material-ui/core/Popper'));
+var ArrowDropDown = _interopDefault(require('@material-ui/icons/ArrowDropDown'));
+var GridList = _interopDefault(require('@material-ui/core/GridList'));
+var GridListTile = _interopDefault(require('@material-ui/core/GridListTile'));
+var GridListTileBar = _interopDefault(require('@material-ui/core/GridListTileBar'));
 var MobileStepper = _interopDefault(require('@material-ui/core/MobileStepper'));
 var KeyboardArrowLeft = _interopDefault(require('@material-ui/icons/KeyboardArrowLeft'));
 var KeyboardArrowRight = _interopDefault(require('@material-ui/icons/KeyboardArrowRight'));
@@ -96,81 +79,24 @@ var Stepper = _interopDefault(require('@material-ui/core/Stepper'));
 var Step = _interopDefault(require('@material-ui/core/Step'));
 var StepLabel = _interopDefault(require('@material-ui/core/StepLabel'));
 var StepConnector = _interopDefault(require('@material-ui/core/StepConnector'));
-var Snackbar = _interopDefault(require('@material-ui/core/Snackbar'));
-var SnackbarContent = _interopDefault(require('@material-ui/core/SnackbarContent'));
-var CheckCircleIcon = _interopDefault(require('@material-ui/icons/CheckCircle'));
-var ErrorIcon = _interopDefault(require('@material-ui/icons/Error'));
-var WarningIcon = _interopDefault(require('@material-ui/icons/Warning'));
-var ListItemSecondaryAction = _interopDefault(require('@material-ui/core/ListItemSecondaryAction'));
-var SwapVert = _interopDefault(require('@material-ui/icons/SwapVert'));
-var ArrowUpward = _interopDefault(require('@material-ui/icons/ArrowUpward'));
-var ArrowDownward = _interopDefault(require('@material-ui/icons/ArrowDownward'));
-var Icon = _interopDefault(require('@material-ui/core/Icon'));
-var AppBar = _interopDefault(require('@material-ui/core/AppBar'));
-var MenuIcon = _interopDefault(require('@material-ui/icons/Menu'));
-var SearchIcon = _interopDefault(require('@material-ui/icons/Search'));
-var AccountCircle = _interopDefault(require('@material-ui/icons/AccountCircle'));
-var ListItemAvatar = _interopDefault(require('@material-ui/core/ListItemAvatar'));
-var Menu = _interopDefault(require('@material-ui/core/Menu'));
-
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function commonjsRequire () {
-	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
-}
-
-function unwrapExports (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
-}
-
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-
-var classnames = createCommonjsModule(function (module) {
-/*!
-  Copyright (c) 2016 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/
-/* global define */
-
-(function () {
-
-	var hasOwn = {}.hasOwnProperty;
-
-	function classNames () {
-		var classes = [];
-
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
-
-			var argType = typeof arg;
-
-			if (argType === 'string' || argType === 'number') {
-				classes.push(arg);
-			} else if (Array.isArray(arg)) {
-				classes.push(classNames.apply(null, arg));
-			} else if (argType === 'object') {
-				for (var key in arg) {
-					if (hasOwn.call(arg, key) && arg[key]) {
-						classes.push(key);
-					}
-				}
-			}
-		}
-
-		return classes.join(' ');
-	}
-
-	if (module.exports) {
-		module.exports = classNames;
-	} else {
-		window.classNames = classNames;
-	}
-}());
-});
+var TableCell = _interopDefault(require('@material-ui/core/TableCell'));
+var TableHead = _interopDefault(require('@material-ui/core/TableHead'));
+var TableRow = _interopDefault(require('@material-ui/core/TableRow'));
+var TableSortLabel = _interopDefault(require('@material-ui/core/TableSortLabel'));
+var Tooltip = _interopDefault(require('@material-ui/core/Tooltip'));
+var Table = _interopDefault(require('@material-ui/core/Table'));
+var TableBody = _interopDefault(require('@material-ui/core/TableBody'));
+var TablePagination = _interopDefault(require('@material-ui/core/TablePagination'));
+var Fab = _interopDefault(require('@material-ui/core/Fab'));
+var Avatar = _interopDefault(require('@material-ui/core/Avatar'));
+var Link = _interopDefault(require('@material-ui/core/Link'));
+var LinkIcon = _interopDefault(require('@material-ui/icons/Link'));
+var ExpansionPanel = _interopDefault(require('@material-ui/core/ExpansionPanel'));
+var ExpansionPanelDetails = _interopDefault(require('@material-ui/core/ExpansionPanelDetails'));
+var ExpansionPanelSummary = _interopDefault(require('@material-ui/core/ExpansionPanelSummary'));
+var ExpansionPanelActions = _interopDefault(require('@material-ui/core/ExpansionPanelActions'));
+var LinearProgress = _interopDefault(require('@material-ui/core/LinearProgress'));
+var ExpandMoreIcon = _interopDefault(require('@material-ui/icons/ExpandMore'));
 
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -232,6 +158,20 @@ if (__DEV__) {
 }
 
 var warning_1 = warning;
+
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function commonjsRequire () {
+	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
+}
+
+function unwrapExports (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
 
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -3590,6 +3530,51 @@ Switch$1.propTypes = {
 
 // Written in this round about way for babel-transform-imports
 
+var classnames = createCommonjsModule(function (module) {
+/*!
+  Copyright (c) 2016 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (module.exports) {
+		module.exports = classNames;
+	} else {
+		window.classNames = classNames;
+	}
+}());
+});
+
 var _typeof$4 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
@@ -3858,7 +3843,319 @@ MiniDrawer.propTypes = {
 
 var Drawer$1 = styles.withStyles(styles$1, { withTheme: true })(MiniDrawer);
 
-var styles$2 = {
+var styles$2 = function styles$$1(theme) {
+  return {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+      paddingRight: theme.spacing.unit,
+      paddingLeft: theme.spacing.unit
+    },
+    header: {
+      alignItems: 'center',
+      display: 'flex',
+      backgroundColor: theme.palette.primary.main,
+      color: '#fff',
+      height: '56px',
+      borderRadius: '3px 3px 0 0',
+      boxSizing: 'border-box',
+      fontWeight: 500,
+      justifyContent: 'space-between',
+      padding: '0 8px 0 16px',
+      minWidth: '300px'
+    },
+    textField: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit
+    },
+    button: {
+      margin: theme.spacing.unit
+    },
+    formControl: {
+      margin: theme.spacing.unit * 3
+    },
+    group: {
+      margin: theme.spacing.unit + 'px 0'
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing.unit,
+      color: 'rgba(255, 255, 255)'
+    },
+    title: {
+      color: 'rgba(255, 255, 255)'
+    },
+    content: {
+      paddingTop: theme.spacing.unit * 3
+    }
+  };
+};
+
+var EnhancedDialog = function (_React$Component) {
+  inherits(EnhancedDialog, _React$Component);
+
+  function EnhancedDialog(props) {
+    classCallCheck(this, EnhancedDialog);
+
+    var _this = possibleConstructorReturn(this, (EnhancedDialog.__proto__ || Object.getPrototypeOf(EnhancedDialog)).call(this, props));
+
+    _this.handleClose = function () {
+      _this.props.onClose();
+    };
+
+    _this.handleCancel = function () {
+      if (_this.props.value) {
+        _this.props.onClose(_this.props.value);
+      } else {
+        _this.props.onClose("cancel");
+      }
+    };
+
+    _this.handleOk = function () {
+      if (_this.state.value) {
+        _this.props.onClose(_this.state.value);
+      } else {
+        _this.props.onClose("ok");
+      }
+    };
+
+    _this.renderActions = function () {
+      switch (_this.state.type) {
+        case 'custom':
+          {
+            return React__default.createElement(
+              DialogActions,
+              null,
+              _this.state.actions.map(function (actionButton) {
+                var btnKey = 'button-' + actionButton.label.replace(' ', '-');
+
+                return React__default.createElement(
+                  Button,
+                  {
+                    variant: actionButton.variant ? actionButton.variant : "contained",
+                    color: actionButton.color ? actionButton.color : "primary",
+                    onClick: function onClick(e) {
+                      return actionButton.action(_this);
+                    },
+                    key: btnKey
+                  },
+                  actionButton.label
+                );
+              })
+            );
+          }
+        case 'confirm':
+          {
+            return React__default.createElement(
+              DialogActions,
+              null,
+              React__default.createElement(
+                Button,
+                { onClick: _this.handleCancel, color: 'primary' },
+                'Cancel'
+              ),
+              React__default.createElement(
+                Button,
+                { onClick: _this.handleOk, color: 'primary' },
+                'Ok'
+              )
+            );
+          }
+        case 'alert':
+          {
+            return React__default.createElement(
+              DialogActions,
+              null,
+              React__default.createElement(
+                Button,
+                { onClick: _this.handleClose, color: 'primary', autoFocus: true },
+                'Ok'
+              )
+            );
+          }
+        default:
+          {
+            return;
+          }
+      }
+    };
+
+    _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          title = _this$props.title,
+          onClose = _this$props.onClose,
+          fullScreen = _this$props.fullScreen,
+          other = objectWithoutProperties(_this$props, ['classes', 'title', 'onClose', 'fullScreen']);
+
+
+      return React__default.createElement(
+        Dialog,
+        _extends$b({
+          fullScreen: fullScreen && reactDeviceDetect.isMobile,
+          maxWidth: false,
+          onClose: onClose,
+          'aria-labelledby': 'dialog-title',
+          className: classes.dialog
+        }, other),
+        _this.state.title ? React__default.createElement(
+          DialogTitle,
+          { id: 'dialog-title', className: classes.header, disableTypography: true },
+          React__default.createElement(
+            Typography,
+            { variant: 'h6', className: classes.title },
+            _this.state.title
+          ),
+          onClose ? React__default.createElement(
+            IconButton,
+            { 'aria-label': 'Close', className: classes.closeButton, onClick: onClose },
+            React__default.createElement(CloseIcon, null)
+          ) : null
+        ) : "",
+        React__default.createElement(
+          DialogContent,
+          { className: classes.content },
+          _this.state.text ? React__default.createElement(
+            DialogContentText,
+            null,
+            _this.state.text
+          ) : "",
+          _this.state.content ? _this.state.content : ""
+        ),
+        _this.state.type ? _this.renderActions() : ""
+      );
+    };
+
+    _this.state = props;
+    return _this;
+  }
+
+  createClass(EnhancedDialog, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState(nextProps);
+    }
+  }]);
+  return EnhancedDialog;
+}(React__default.Component);
+
+EnhancedDialog.defaultProps = {
+  fullScreen: true
+};
+
+var Dialog$1 = styles.withStyles(styles$2)(EnhancedDialog);
+
+var styles$3 = function styles$$1(theme) {
+  return {
+    root: {
+      width: '100%',
+      maxWidth: 360,
+      backgroundColor: theme.palette.background.paper
+    }
+  };
+};
+
+var listOptions = {
+  dialogOpen: false,
+  dialog: {}
+};
+
+var EnhanceList = function (_React$Component) {
+  inherits(EnhanceList, _React$Component);
+
+  function EnhanceList(props) {
+    classCallCheck(this, EnhanceList);
+
+    var _this = possibleConstructorReturn(this, (EnhanceList.__proto__ || Object.getPrototypeOf(EnhanceList)).call(this, props));
+
+    _this.openDialog = function (dialogInfo) {
+      _this.setState({ dialogOpen: true, dialog: dialogInfo });
+    };
+
+    _this.closeDialog = function (value) {
+      _this.setState({ dialogOpen: false });
+
+      if (value === "ok" && _this.state.dialog.action) {
+        _this.state.dialog.action();
+      }
+    };
+
+    _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          items = _this$props.items,
+          data = _this$props.data;
+
+
+      return React__default.createElement(
+        'div',
+        { className: classes.root },
+        React__default.createElement(
+          List,
+          { component: 'nav' },
+          items.map(function (item) {
+            var showItem = item.beforeShow ? item.beforeShow(data) : true;
+
+            if (item.getIcon) {
+              item['icon'] = item.getIcon(data[item.field]);
+            }
+
+            var listItemProps = {
+              button: true,
+              key: Date.now() + '-list-item-' + item.label.replace(' ', '-')
+            };
+
+            if (item.action) {
+              listItemProps.onClick = function () {
+                return item.action(_this, data);
+              };
+            } else {
+              listItemProps.to = item.href;
+              listItemProps.component = Link$1;
+            }
+
+            return showItem ? React__default.createElement(
+              ListItem,
+              listItemProps,
+              React__default.createElement(
+                ListItemIcon,
+                null,
+                React__default.createElement(item.icon, null)
+              ),
+              React__default.createElement(ListItemText, { primary: item.label })
+            ) : null;
+          })
+        ),
+        React__default.createElement(Dialog$1, {
+          title: _this.state.dialog.title,
+          open: _this.state.dialogOpen,
+          onClose: _this.closeDialog,
+          type: _this.state.dialog.type,
+          content: _this.state.dialog.content,
+          text: _this.state.dialog.text
+        })
+      );
+    };
+
+    _this.state = Object.assign(listOptions, props);
+    return _this;
+  }
+
+  return EnhanceList;
+}(React__default.Component);
+
+EnhanceList.defaultProps = {
+  data: {}
+};
+
+EnhanceList.propTypes = {
+  classes: PropTypes__default.object.isRequired
+};
+
+var List$1 = styles.withStyles(styles$3)(EnhanceList);
+
+var styles$4 = {
   card: {},
   media: {
     height: 200,
@@ -3958,300 +4255,288 @@ EnhanceCard.propTypes = {
   avatar: PropTypes__default.string
 };
 
-var Card = styles.withStyles(styles$2)(EnhanceCard);
+var Card = styles.withStyles(styles$4)(EnhanceCard);
 
-var styles$3 = function styles$$1(theme) {
+var styles$5 = function styles$$1(theme) {
   return {
-    root: {
-      display: 'flex',
-      // justifyContent: 'flex-end',
-      flexWrap: 'inherit',
-      overflowX: 'hidden',
-      overflowY: 'hidden',
-      '&:hover': {
-        overflowX: 'auto'
-      }
-      // [theme.breakpoints.between('sm', 'xl')]: {
-      //   flexWrap: 'wrap',
-      // }
+    snackBarClose: {
+      fontSize: 20
     },
-    chip: {
-      margin: theme.spacing.unit / 2
+    snackBarMessage: {
+      display: 'flex'
     },
-    paper: {
-      marginRight: theme.spacing.unit * 2
+    snackBarIcon: {
+      fontSize: 20
     },
-    chipLabel: {
-      paddingLeft: theme.spacing.unit,
-      paddingRight: theme.spacing.unit
+    snackBarIconVariant: {
+      opacity: 0.9,
+      marginRight: theme.spacing.unit
+    },
+    success: {
+      backgroundColor: green[600]
+    },
+    error: {
+      backgroundColor: theme.palette.error.dark
+    },
+    info: {
+      backgroundColor: theme.palette.primary.dark
+    },
+    warning: {
+      backgroundColor: amber[700]
     }
   };
 };
 
-var ChipFilter = function (_React$Component) {
-  inherits(ChipFilter, _React$Component);
+var variantIcon = {
+  success: CheckCircleIcon,
+  warning: WarningIcon,
+  error: ErrorIcon,
+  info: InfoIcon
+};
 
-  function ChipFilter() {
-    var _ref;
+var EnhancedSnackbar = function (_React$Component) {
+  inherits(EnhancedSnackbar, _React$Component);
 
-    var _temp, _this, _ret;
+  function EnhancedSnackbar(props) {
+    classCallCheck(this, EnhancedSnackbar);
 
-    classCallCheck(this, ChipFilter);
+    var _this = possibleConstructorReturn(this, (EnhancedSnackbar.__proto__ || Object.getPrototypeOf(EnhancedSnackbar)).call(this, props));
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    _this.state = { snackBarOpen: false };
 
-    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = ChipFilter.__proto__ || Object.getPrototypeOf(ChipFilter)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      open: false,
-      dialogOpen: false,
-      dialog: {},
-      filterData: {}
-    }, _this.clearFilter = function (option) {
-      _this.setState(function (state) {
-        var newState = state;
-        delete newState.filterData[option.name];
-        return newState;
-      }, function () {
-        _this.props.loadData(_this.state.filterData);
-      });
-    }, _this.openFilter = function (dialogInfo) {
-      _this.setState({ dialogOpen: true, dialog: dialogInfo });
-    }, _this.closeFilter = function (value) {
-      _this.setState({ dialogOpen: false });
+    _this.componentWillReceiveProps = function (nextProps) {
+      _this.setState(nextProps);
+    };
 
-      if (value === "ok" && _this.state.dialog.action) {
-        _this.state.dialog.action();
-      }
-    }, _this.getSelectedValue = function (option) {
-      var filterData = _this.state.filterData;
-      if (filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0) {
-        return option.label;
-      } else if (['multiselect', 'select', 'radio', 'checkbox'].indexOf(option.type) > -1) {
-        var availableOptions = [];
-        if (option.enum) {
-          availableOptions = option.enum;
-        } else if (option.options) {
-          availableOptions = option.options;
-        } else if (_typeof$4(option.data) === 'object') {
-          availableOptions = option.data;
-        } else if (typeof option.data === 'function') {
-          availableOptions = option.data();
-        }
+    _this.handleSnackBarClose = function (event, reason) {
+      _this.setState({ snackBarOpen: false });
+    };
 
-        var selectedOptions = availableOptions.map(function (availableOption) {
-          return filterData[option.name].indexOf(availableOption.value.toString()) > -1 ? availableOption.label : '';
-        }).filter(function (selectedOption) {
-          return selectedOption !== undefined && selectedOption !== "";
-        });
+    _this.render = function () {
+      var classes = _this.props.classes;
+      var variant = _this.state.variant;
 
-        return selectedOptions.length > 1 ? selectedOptions[0] + ' + ' + (selectedOptions.length - 1) : selectedOptions;
-      } else if (['daterange'].indexOf(option.type) > -1) {
-        return option.label + ' : From ' + filterData[option.name].start + ' To ' + filterData[option.name].end;
-      } else {
-        var _availableOptions = [];
-        if (option.enum) {
-          _availableOptions = option.enum;
-        } else if (option.options) {
-          _availableOptions = option.options;
-        } else if (_typeof$4(option.data) === 'object') {
-          _availableOptions = option.data;
-        } else if (typeof option.data === 'function') {
-          _availableOptions = option.data();
-        }
+      var Icon = variantIcon[variant];
 
-        if (_availableOptions.length > 0) {
-          var _selectedOptions = _availableOptions.map(function (availableOption) {
-            return filterData[option.name].indexOf(availableOption.value.toString()) > -1 ? availableOption.label : '';
-          }).filter(function (selectedOption) {
-            return selectedOption !== undefined && selectedOption !== "";
-          });
-
-          return _selectedOptions.length > 1 ? _selectedOptions[0] + ' + ' + (_selectedOptions.length - 1) : _selectedOptions;
-        } else {
-          return option.label + ' ' + filterData[option.name];
-        }
-      }
-    }, _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          options = _this$props.options;
-      var _this$state = _this.state,
-          open = _this$state.open,
-          filterData = _this$state.filterData;
-
-
-      var filterOptions = options || [];
       return React__default.createElement(
-        'div',
-        { className: classes.root },
-        filterOptions.map(function (option) {
-          return option.filter ? React__default.createElement(Chip, {
-            key: option.name,
-            icon: filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0 ? React__default.createElement(ArrowDropDown, null) : null,
-            color: filterData[option.name] !== undefined && filterData[option.name] !== "" && (filterData[option.name].length > 0 || Object.keys(filterData[option.name]).length > 0) ? 'primary' : 'default',
-            label: _this.getSelectedValue(option),
-            onClick: function onClick(node) {
-              var tempOption = Object.assign({}, option);
-              delete tempOption.label;
-              _this.openFilter({
-                title: option.label,
-                anchorEl: node.target,
-                content: React__default.createElement(Form, {
-                  fields: [tempOption],
-                  buttons: [],
-                  data: filterData,
-                  loadOnChange: true,
-                  submitAction: function submitAction(filterData, formInstance) {
-                    if (Object.keys(filterData).length > 0) {
-                      _this.props.loadData(filterData);
-                    }
-
-                    formInstance.setState({ loading: false });
-                    _this.setState({ filterData: filterData });
-                  },
-                  onClose: _this.closeFilter
-                })
-              });
+        Snackbar,
+        {
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'left'
+          },
+          open: _this.state.snackBarOpen,
+          autoHideDuration: _this.state.snackBarDuration ? _this.state.snackBarDuration : 10000,
+          onClose: _this.props.onClose ? _this.props.onClose : _this.handleSnackBarClose
+        },
+        React__default.createElement(SnackbarContent, {
+          className: classes[_this.state.snackBarType ? _this.state.snackBarType : variant],
+          'aria-describedby': 'snackbar-message-id',
+          message: React__default.createElement(
+            'span',
+            { id: 'snackbar-message-id', className: classes.snackBarMessage },
+            React__default.createElement(Icon, { className: classnames(classes.snackBarIcon, classes.snackBarIconVariant) }),
+            _this.state.snackBarMessage
+          ),
+          action: [React__default.createElement(
+            IconButton,
+            {
+              key: 'close',
+              'aria-label': 'Close',
+              color: 'inherit',
+              className: classes.snackBarClose,
+              onClick: _this.handleSnackBarClose
             },
-            onDelete: filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0 ? null : function () {
-              _this.clearFilter(option);
-            },
-            className: classes.chip,
-            'aria-owns': open ? 'menu-list-grow' : undefined,
-            'aria-haspopup': 'true',
-            classes: {
-              label: classes.chipLabel
-            }
-          }) : null;
-        }),
-        React__default.createElement(Popper$1, {
-          key: _this.state.dialog.key,
-          title: _this.state.dialog.title,
-          open: _this.state.dialogOpen,
-          onClose: _this.closeFilter,
-          type: _this.state.dialog.type,
-          content: _this.state.dialog.content,
-          text: _this.state.dialog.text,
-          arrow: false,
-          arrowRef: null,
-          disablePortal: false,
-          flip: true,
-          placement: "bottom-start",
-          preventOverflow: 'scrollParent',
-          anchorEl: _this.state.dialog.anchorEl
+            React__default.createElement(CloseIcon, null)
+          )]
         })
       );
-    }, _temp), possibleConstructorReturn(_this, _ret);
+    };
+
+    _this.state = props;
+    return _this;
   }
 
-  return ChipFilter;
+  return EnhancedSnackbar;
 }(React__default.Component);
 
-ChipFilter.propTypes = {
-  classes: PropTypes__default.object.isRequired
+EnhancedSnackbar.defaultProps = {
+  variant: "error"
 };
 
-var ChipFilter$1 = styles.withStyles(styles$3)(ChipFilter);
-
-function Footer(_ref) {
-  var props = objectWithoutProperties(_ref, []);
-  var classes = props.classes,
-      company = props.company,
-      website = props.website,
-      trademark = props.trademark;
-
-  return React__default.createElement(
-    "footer",
-    { className: classes.footer },
-    React__default.createElement(
-      "div",
-      { className: classes.container },
-      React__default.createElement(
-        "p",
-        { className: classes.right },
-        React__default.createElement(
-          "span",
-          null,
-          "\xA9 ",
-          1900 + new Date().getYear(),
-          " ",
-          company,
-          " \xA0",
-          React__default.createElement(
-            "a",
-            { href: website, className: classes.a },
-            trademark
-          )
-        )
-      )
-    )
-  );
-}
-
-Footer.propTypes = {
-  classes: PropTypes__default.object.isRequired
+EnhancedSnackbar.propTypes = {
+  classes: PropTypes__default.object.isRequired,
+  variant: PropTypes__default.string.isRequired
 };
 
-var styles$4 = function styles$$1(theme) {
+var Snackbar$1 = styles.withStyles(styles$5)(EnhancedSnackbar);
+
+var toolbarStyles = function toolbarStyles(theme) {
   return {
-    root: {
+    root: defineProperty$1({
+      // paddingRight: theme.spacing.unit,
+      marginBottom: theme.spacing.unit * 2
+    }, theme.breakpoints.only('xs'), {
+      marginBottom: theme.spacing.unit
+    }),
+    highlight: theme.palette.type === 'light' ? {
+      color: theme.palette.secondary.main,
+      backgroundColor: colorManipulator.lighten(theme.palette.secondary.light, 0.85)
+    } : {
+      color: theme.palette.text.primary,
+      backgroundColor: theme.palette.secondary.dark
+    },
+    spacer: {
+      flex: '1 1 100%'
+    },
+    actions: {
       display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      overflow: 'hidden',
-      backgroundColor: theme.palette.background.paper
+      color: theme.palette.text.secondary,
+      flexBasis: '25%',
+      justifyContent: 'flex-end'
     },
-    gridList: {
-      // width: 500,
-      // height: 450,
+    title: {
+      display: 'flex',
+      flex: '0 0 auto',
+      flexBasis: '75%',
+      justifyContent: 'flex-start',
+      alignItems: 'center'
     },
-    icon: {
-      color: 'rgba(255, 255, 255, 0.54)'
+    fab: {
+      margin: theme.spacing.unit * 2
+    },
+    container: {
+      justifyContent: 'space-between'
     }
   };
 };
 
-function TitlebarGridList(props) {
-  var classes = props.classes,
-      items = props.items;
-
-
-  console.log("items", items);
-  return React__default.createElement(
-    'div',
-    { className: classes.root },
-    React__default.createElement(
-      GridList,
-      { cellHeight: 200, className: classes.gridList, cols: 4 },
-      items && items.map(function (item) {
-        return React__default.createElement(
-          GridListTile,
-          { key: item.id },
-          React__default.createElement(Card, {
-            title: 'Employers & Employees',
-            subtitle: 'Employers & Employees',
-            description: 'Employers & Employees'
-          }),
-          React__default.createElement(GridListTileBar, {
-            title: 'item.title',
-            actionIcon: React__default.createElement(
-              IconButton,
-              { className: classes.icon },
-              React__default.createElement(InfoIcon, null)
-            )
-          })
-        );
-      })
-    )
-  );
-}
-
-TitlebarGridList.propTypes = {
-  classes: PropTypes__default.object.isRequired
+var toolbarOptions = {
+  title: "Table",
+  selectable: false,
+  content: null,
+  actions: []
 };
 
-var GridList$1 = styles.withStyles(styles$4)(TitlebarGridList);
+var EnhancedToolbar = function (_React$Component) {
+  inherits(EnhancedToolbar, _React$Component);
+
+  function EnhancedToolbar(props) {
+    classCallCheck(this, EnhancedToolbar);
+
+    var _this = possibleConstructorReturn(this, (EnhancedToolbar.__proto__ || Object.getPrototypeOf(EnhancedToolbar)).call(this, props));
+
+    _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          other = objectWithoutProperties(_this$props, ['classes']);
+      var _this$state = _this.state,
+          title = _this$state.title,
+          data = _this$state.data,
+          content = _this$state.content;
+
+
+      return React__default.createElement(
+        core.Toolbar,
+        _extends$b({
+          className: classnames(classes.root, defineProperty$1({}, classes.highlight, _this.state.numSelected > 0))
+        }, other),
+        content ? content : React__default.createElement(
+          core.Grid,
+          { container: true, className: classes.container },
+          React__default.createElement(
+            core.Grid,
+            { item: true, className: classes.title },
+            _this.state.selectable ? _this.state.numSelected > 0 ? React__default.createElement(
+              core.Typography,
+              { color: 'inherit', variant: 'subheading' },
+              _this.state.numSelected,
+              ' selected'
+            ) : React__default.createElement(
+              core.Typography,
+              { variant: 'h6', id: 'tableTitle' },
+              title
+            ) : React__default.createElement(
+              core.Typography,
+              { variant: 'h6', id: 'tableTitle' },
+              title
+            )
+          ),
+          React__default.createElement(
+            core.Grid,
+            { item: true, className: classes.actions },
+            _this.state.selectable && _this.state.numSelected > 0 ? React__default.createElement(
+              core.Tooltip,
+              { title: 'Delete', placement: 'top-end' },
+              React__default.createElement(
+                core.IconButton,
+                { 'aria-label': 'Delete' },
+                React__default.createElement(icons.Delete, null)
+              )
+            ) : _this.state.actions ? _this.state.actions.map(function (action) {
+              var icon = action.icon ? action.icon : null;
+
+              var actionBtn = void 0;
+              var buttonProps = {
+                "aria-label": action.title,
+                color: action.color,
+                size: action.size
+              };
+
+              if (action.action) {
+                buttonProps.onClick = function () {
+                  return action.action(_this, data);
+                };
+              } else {
+                buttonProps.to = action.href;
+                buttonProps.component = Link$1;
+              }
+
+              actionBtn = icon ? React__default.createElement(
+                core.Fab,
+                _extends$b({ className: classes.fab }, buttonProps),
+                icon
+              ) : React__default.createElement(
+                core.Button,
+                _extends$b({ variant: 'text' }, buttonProps),
+                action.label
+              );
+
+              return React__default.createElement(
+                core.Tooltip,
+                { title: action.title, placement: action.placement, key: action.title },
+                actionBtn
+              );
+            }) : ''
+          )
+        )
+      );
+    };
+
+    _this.state = Object.assign(toolbarOptions, props);
+    return _this;
+  }
+
+  createClass(EnhancedToolbar, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState({
+        title: nextProps.title,
+        actions: nextProps.actions,
+        data: nextProps.data,
+        content: nextProps.content
+      });
+    }
+  }]);
+  return EnhancedToolbar;
+}(React__default.Component);
+
+EnhancedToolbar.propTypes = {
+  classes: PropTypes__default.object.isRequired
+  // data: PropTypes.object.isRequired,
+};
+
+var Toolbar$1 = core.withStyles(toolbarStyles)(EnhancedToolbar);
 
 var moment = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
@@ -8853,1573 +9138,6 @@ var moment = createCommonjsModule(function (module, exports) {
 })));
 });
 
-var tableHeadStyles = function tableHeadStyles(theme) {
-  return {
-    head: {
-      background: '#f5f5f5'
-    },
-    tableCell: {
-      padding: '4px 8px 4px 8px'
-    }
-  };
-};
-
-var tableHeadOptions = {
-  order: "asc",
-  orderBy: "id",
-  rowCount: 0,
-  numSelected: 0,
-  columns: []
-};
-
-var EnhancedTableHead = function (_React$Component) {
-  inherits(EnhancedTableHead, _React$Component);
-
-  function EnhancedTableHead(props) {
-    classCallCheck(this, EnhancedTableHead);
-
-    var _this = possibleConstructorReturn(this, (EnhancedTableHead.__proto__ || Object.getPrototypeOf(EnhancedTableHead)).call(this, props));
-
-    _this.createSortHandler = function (property) {
-      return function (event) {
-        _this.props.onRequestSort(event, property);
-      };
-    };
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          columns = _this$props.columns,
-          classes = _this$props.classes;
-
-
-      return React__default.createElement(
-        TableHead,
-        { className: classes.head },
-        React__default.createElement(
-          TableRow,
-          null,
-          columns.map(function (column) {
-            return column.name === "selectable" ? React__default.createElement(
-              TableCell,
-              {
-                padding: 'checkbox',
-                classes: {
-                  root: classes.tableCell
-                }
-              },
-              React__default.createElement(Checkbox, { indeterminate: _this.props.numSelected > 0 && _this.props.numSelected < _this.props.rowCount, checked: _this.props.numSelected === _this.props.rowCount, onChange: _this.props.onSelectAllClick })
-            ) : column.show === undefined || column.show ? React__default.createElement(
-              TableCell,
-              {
-                key: new Date().getTime() + '-table-head-' + column.name,
-                padding: column.disablePadding ? 'none' : 'default',
-                sortDirection: _this.props.orderBy === column.name ? _this.props.order : false,
-                classes: {
-                  root: classes.tableCell
-                }
-              },
-              column.sort ? React__default.createElement(
-                Tooltip,
-                {
-                  title: 'Sort',
-                  placement: column.numeric ? 'bottom-end' : 'bottom-start',
-                  enterDelay: 300
-                },
-                React__default.createElement(
-                  TableSortLabel,
-                  {
-                    active: _this.props.orderBy === column.name,
-                    direction: _this.props.order,
-                    onClick: _this.createSortHandler(column.name)
-                  },
-                  column.label
-                )
-              ) : column.label
-            ) : null;
-          }, _this)
-        )
-      );
-    };
-
-    _this.state = Object.assign(tableHeadOptions, props);
-    return _this;
-  }
-
-  return EnhancedTableHead;
-}(React__default.Component);
-
-EnhancedTableHead.defaultProps = {
-  order: 'desc',
-  rowCount: 0
-};
-
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes__default.number.isRequired,
-  onRequestSort: PropTypes__default.func.isRequired,
-  onSelectAllClick: PropTypes__default.func.isRequired,
-  order: PropTypes__default.string.isRequired,
-  // orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes__default.number.isRequired,
-  classes: PropTypes__default.object.isRequired
-};
-
-var TableHead$1 = styles.withStyles(tableHeadStyles)(EnhancedTableHead);
-
-var toolbarStyles = function toolbarStyles(theme) {
-  return {
-    root: defineProperty$1({
-      // paddingRight: theme.spacing.unit,
-      marginBottom: theme.spacing.unit * 2
-    }, theme.breakpoints.only('xs'), {
-      marginBottom: theme.spacing.unit
-    }),
-    highlight: theme.palette.type === 'light' ? {
-      color: theme.palette.secondary.main,
-      backgroundColor: colorManipulator.lighten(theme.palette.secondary.light, 0.85)
-    } : {
-      color: theme.palette.text.primary,
-      backgroundColor: theme.palette.secondary.dark
-    },
-    spacer: {
-      flex: '1 1 100%'
-    },
-    actions: {
-      display: 'flex',
-      color: theme.palette.text.secondary,
-      flexBasis: '25%',
-      justifyContent: 'flex-end'
-    },
-    title: {
-      display: 'flex',
-      flex: '0 0 auto',
-      flexBasis: '75%',
-      justifyContent: 'flex-start',
-      alignItems: 'center'
-    },
-    fab: {
-      margin: theme.spacing.unit * 2
-    },
-    container: {
-      justifyContent: 'space-between'
-    }
-  };
-};
-
-var toolbarOptions = {
-  title: "Table",
-  selectable: false,
-  content: null,
-  actions: []
-};
-
-var EnhancedToolbar = function (_React$Component) {
-  inherits(EnhancedToolbar, _React$Component);
-
-  function EnhancedToolbar(props) {
-    classCallCheck(this, EnhancedToolbar);
-
-    var _this = possibleConstructorReturn(this, (EnhancedToolbar.__proto__ || Object.getPrototypeOf(EnhancedToolbar)).call(this, props));
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          other = objectWithoutProperties(_this$props, ['classes']);
-      var _this$state = _this.state,
-          title = _this$state.title,
-          data = _this$state.data,
-          content = _this$state.content;
-
-
-      return React__default.createElement(
-        core.Toolbar,
-        _extends$b({
-          className: classnames(classes.root, defineProperty$1({}, classes.highlight, _this.state.numSelected > 0))
-        }, other),
-        content ? content : React__default.createElement(
-          core.Grid,
-          { container: true, className: classes.container },
-          React__default.createElement(
-            core.Grid,
-            { item: true, className: classes.title },
-            _this.state.selectable ? _this.state.numSelected > 0 ? React__default.createElement(
-              core.Typography,
-              { color: 'inherit', variant: 'subheading' },
-              _this.state.numSelected,
-              ' selected'
-            ) : React__default.createElement(
-              core.Typography,
-              { variant: 'h6', id: 'tableTitle' },
-              title
-            ) : React__default.createElement(
-              core.Typography,
-              { variant: 'h6', id: 'tableTitle' },
-              title
-            )
-          ),
-          React__default.createElement(
-            core.Grid,
-            { item: true, className: classes.actions },
-            _this.state.selectable && _this.state.numSelected > 0 ? React__default.createElement(
-              core.Tooltip,
-              { title: 'Delete', placement: 'top-end' },
-              React__default.createElement(
-                core.IconButton,
-                { 'aria-label': 'Delete' },
-                React__default.createElement(icons.Delete, null)
-              )
-            ) : _this.state.actions ? _this.state.actions.map(function (action) {
-              var icon = action.icon ? action.icon : null;
-
-              var actionBtn = void 0;
-              var buttonProps = {
-                "aria-label": action.title,
-                color: action.color,
-                size: action.size
-              };
-
-              if (action.action) {
-                buttonProps.onClick = function () {
-                  return action.action(_this, data);
-                };
-              } else {
-                buttonProps.to = action.href;
-                buttonProps.component = Link$1;
-              }
-
-              actionBtn = icon ? React__default.createElement(
-                core.Fab,
-                _extends$b({ className: classes.fab }, buttonProps),
-                icon
-              ) : React__default.createElement(
-                core.Button,
-                _extends$b({ variant: 'text' }, buttonProps),
-                action.label
-              );
-
-              return React__default.createElement(
-                core.Tooltip,
-                { title: action.title, placement: action.placement, key: action.title },
-                actionBtn
-              );
-            }) : ''
-          )
-        )
-      );
-    };
-
-    _this.state = Object.assign(toolbarOptions, props);
-    return _this;
-  }
-
-  createClass(EnhancedToolbar, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState({
-        title: nextProps.title,
-        actions: nextProps.actions,
-        data: nextProps.data,
-        content: nextProps.content
-      });
-    }
-  }]);
-  return EnhancedToolbar;
-}(React__default.Component);
-
-EnhancedToolbar.propTypes = {
-  classes: PropTypes__default.object.isRequired
-  // data: PropTypes.object.isRequired,
-};
-
-var Toolbar$1 = core.withStyles(toolbarStyles)(EnhancedToolbar);
-
-var styles$5 = function styles$$1(theme) {
-  return {
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      flexWrap: 'wrap',
-      paddingRight: theme.spacing.unit,
-      paddingLeft: theme.spacing.unit
-    },
-    header: {
-      alignItems: 'center',
-      display: 'flex',
-      backgroundColor: theme.palette.primary.main,
-      color: '#fff',
-      height: '56px',
-      borderRadius: '3px 3px 0 0',
-      boxSizing: 'border-box',
-      fontWeight: 500,
-      justifyContent: 'space-between',
-      padding: '0 8px 0 16px',
-      minWidth: '300px'
-    },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit
-    },
-    button: {
-      margin: theme.spacing.unit
-    },
-    formControl: {
-      margin: theme.spacing.unit * 3
-    },
-    group: {
-      margin: theme.spacing.unit + 'px 0'
-    },
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing.unit,
-      color: 'rgba(255, 255, 255)'
-    },
-    title: {
-      color: 'rgba(255, 255, 255)'
-    },
-    content: {
-      paddingTop: theme.spacing.unit * 3
-    }
-  };
-};
-
-var EnhancedDialog = function (_React$Component) {
-  inherits(EnhancedDialog, _React$Component);
-
-  function EnhancedDialog(props) {
-    classCallCheck(this, EnhancedDialog);
-
-    var _this = possibleConstructorReturn(this, (EnhancedDialog.__proto__ || Object.getPrototypeOf(EnhancedDialog)).call(this, props));
-
-    _this.handleClose = function () {
-      _this.props.onClose();
-    };
-
-    _this.handleCancel = function () {
-      if (_this.props.value) {
-        _this.props.onClose(_this.props.value);
-      } else {
-        _this.props.onClose("cancel");
-      }
-    };
-
-    _this.handleOk = function () {
-      if (_this.state.value) {
-        _this.props.onClose(_this.state.value);
-      } else {
-        _this.props.onClose("ok");
-      }
-    };
-
-    _this.renderActions = function () {
-      switch (_this.state.type) {
-        case 'custom':
-          {
-            return React__default.createElement(
-              DialogActions,
-              null,
-              _this.state.actions.map(function (actionButton) {
-                var btnKey = 'button-' + actionButton.label.replace(' ', '-');
-
-                return React__default.createElement(
-                  Button,
-                  {
-                    variant: actionButton.variant ? actionButton.variant : "contained",
-                    color: actionButton.color ? actionButton.color : "primary",
-                    onClick: function onClick(e) {
-                      return actionButton.action(_this);
-                    },
-                    key: btnKey
-                  },
-                  actionButton.label
-                );
-              })
-            );
-          }
-        case 'confirm':
-          {
-            return React__default.createElement(
-              DialogActions,
-              null,
-              React__default.createElement(
-                Button,
-                { onClick: _this.handleCancel, color: 'primary' },
-                'Cancel'
-              ),
-              React__default.createElement(
-                Button,
-                { onClick: _this.handleOk, color: 'primary' },
-                'Ok'
-              )
-            );
-          }
-        case 'alert':
-          {
-            return React__default.createElement(
-              DialogActions,
-              null,
-              React__default.createElement(
-                Button,
-                { onClick: _this.handleClose, color: 'primary', autoFocus: true },
-                'Ok'
-              )
-            );
-          }
-        default:
-          {
-            return;
-          }
-      }
-    };
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          title = _this$props.title,
-          onClose = _this$props.onClose,
-          fullScreen = _this$props.fullScreen,
-          other = objectWithoutProperties(_this$props, ['classes', 'title', 'onClose', 'fullScreen']);
-
-
-      return React__default.createElement(
-        Dialog,
-        _extends$b({
-          fullScreen: fullScreen && reactDeviceDetect.isMobile,
-          maxWidth: false,
-          onClose: onClose,
-          'aria-labelledby': 'dialog-title',
-          className: classes.dialog
-        }, other),
-        _this.state.title ? React__default.createElement(
-          DialogTitle,
-          { id: 'dialog-title', className: classes.header, disableTypography: true },
-          React__default.createElement(
-            Typography,
-            { variant: 'h6', className: classes.title },
-            _this.state.title
-          ),
-          onClose ? React__default.createElement(
-            IconButton,
-            { 'aria-label': 'Close', className: classes.closeButton, onClick: onClose },
-            React__default.createElement(CloseIcon, null)
-          ) : null
-        ) : "",
-        React__default.createElement(
-          DialogContent,
-          { className: classes.content },
-          _this.state.text ? React__default.createElement(
-            DialogContentText,
-            null,
-            _this.state.text
-          ) : "",
-          _this.state.content ? _this.state.content : ""
-        ),
-        _this.state.type ? _this.renderActions() : ""
-      );
-    };
-
-    _this.state = props;
-    return _this;
-  }
-
-  createClass(EnhancedDialog, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState(nextProps);
-    }
-  }]);
-  return EnhancedDialog;
-}(React__default.Component);
-
-EnhancedDialog.defaultProps = {
-  fullScreen: true
-};
-
-var Dialog$1 = styles.withStyles(styles$5)(EnhancedDialog);
-
-var history = createBrowserHistory();
-
-var alertConstants = {
-    SUCCESS: 'ALERT_SUCCESS',
-    ERROR: 'ALERT_ERROR',
-    CLEAR: 'ALERT_CLEAR'
-};
-
-var userConstants = {
-    REGISTER_REQUEST: 'USERS_REGISTER_REQUEST',
-    REGISTER_SUCCESS: 'USERS_REGISTER_SUCCESS',
-    REGISTER_FAILURE: 'USERS_REGISTER_FAILURE',
-
-    LOGIN_REQUEST: 'USERS_LOGIN_REQUEST',
-    LOGIN_SUCCESS: 'USERS_LOGIN_SUCCESS',
-    LOGIN_FAILURE: 'USERS_LOGIN_FAILURE',
-
-    LOGOUT: 'USERS_LOGOUT',
-
-    GETALL_REQUEST: 'USERS_GETALL_REQUEST',
-    GETALL_SUCCESS: 'USERS_GETALL_SUCCESS',
-    GETALL_FAILURE: 'USERS_GETALL_FAILURE',
-
-    DELETE_REQUEST: 'USERS_DELETE_REQUEST',
-    DELETE_SUCCESS: 'USERS_DELETE_SUCCESS',
-    DELETE_FAILURE: 'USERS_DELETE_FAILURE'
-};
-
-var user = JSON.parse(localStorage.getItem('user'));
-var initialState = user ? { loggedIn: true, user: user } : {};
-
-function authentication() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-  var action = arguments[1];
-
-  switch (action.type) {
-    case userConstants.LOGIN_REQUEST:
-      return {
-        loggingIn: true,
-        user: action.user
-      };
-    case userConstants.LOGIN_SUCCESS:
-      return {
-        loggedIn: true,
-        user: action.user
-      };
-    case userConstants.LOGIN_FAILURE:
-      return {};
-    case userConstants.LOGOUT:
-      return {};
-    default:
-      return state;
-  }
-}
-
-function registration() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var action = arguments[1];
-
-  switch (action.type) {
-    case userConstants.REGISTER_REQUEST:
-      return { registering: true };
-    case userConstants.REGISTER_SUCCESS:
-      return {};
-    case userConstants.REGISTER_FAILURE:
-      return {};
-    default:
-      return state;
-  }
-}
-
-function users() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var action = arguments[1];
-
-  switch (action.type) {
-    case userConstants.GETALL_REQUEST:
-      return {
-        loading: true
-      };
-    case userConstants.GETALL_SUCCESS:
-      return {
-        items: action.users
-      };
-    case userConstants.GETALL_FAILURE:
-      return {
-        error: action.error
-      };
-    case userConstants.DELETE_REQUEST:
-      // add 'deleting:true' property to user being deleted
-      return _extends$b({}, state, {
-        items: state.items.map(function (user) {
-          return user.id === action.id ? _extends$b({}, user, { deleting: true }) : user;
-        })
-      });
-    case userConstants.DELETE_SUCCESS:
-      // remove deleted user from state
-      return {
-        items: state.items.filter(function (user) {
-          return user.id !== action.id;
-        })
-      };
-    case userConstants.DELETE_FAILURE:
-      // remove 'deleting:true' property and add 'deleteError:[error]' property to user 
-      return _extends$b({}, state, {
-        items: state.items.map(function (user) {
-          if (user.id === action.id) {
-            // make copy of user without 'deleting:true' property
-            var deleting = user.deleting,
-                userCopy = objectWithoutProperties(user, ['deleting']);
-            // return copy of user with 'deleteError:[error]' property
-
-            return _extends$b({}, userCopy, { deleteError: action.error });
-          }
-
-          return user;
-        })
-      });
-    default:
-      return state;
-  }
-}
-
-function alert() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var action = arguments[1];
-
-  switch (action.type) {
-    case alertConstants.SUCCESS:
-      return {
-        type: 'alert-success',
-        message: action.message
-      };
-    case alertConstants.ERROR:
-      return {
-        type: 'alert-danger',
-        message: action.message
-      };
-    case alertConstants.CLEAR:
-      return {};
-    default:
-      return state;
-  }
-}
-
-var rootReducer = redux.combineReducers({
-  authentication: authentication,
-  registration: registration,
-  users: users,
-  alert: alert
-});
-
-var loggerMiddleware = reduxLogger.createLogger();
-
-var store = redux.createStore(rootReducer, redux.applyMiddleware(thunkMiddleware, loggerMiddleware));
-
-var styles$6 = function styles$$1(theme) {
-  return {
-    tableWrapper: {
-      overflowX: 'auto'
-    },
-    table: {
-      minWidth: 'auto'
-    },
-    paper: {
-      width: '100%',
-      minWidth: 'auto',
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'visible'
-    },
-    chip: {
-      margin: theme.spacing.unit
-    },
-    progress: {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      marginTop: -12,
-      marginLeft: -12,
-      zIndex: 10000
-    },
-    tableCell: {
-      padding: '4px 8px 4px 8px'
-    }
-  };
-};
-
-var tableOptions = {
-  order: 'desc',
-  orderBy: 'id',
-  uKey: 'id',
-  selected: [],
-  rows: [],
-  page: 0,
-  rowsPerPage: 10,
-  selectable: false,
-  actions: [],
-  dialogOpen: false,
-  dialog: {},
-  loading: false,
-  filter: {},
-  expanded: null,
-  expandedRow: {}
-};
-
-var EnhancedTable = function (_React$Component) {
-  inherits(EnhancedTable, _React$Component);
-
-  function EnhancedTable(props) {
-    var _this2 = this;
-
-    classCallCheck(this, EnhancedTable);
-
-    var _this = possibleConstructorReturn(this, (EnhancedTable.__proto__ || Object.getPrototypeOf(EnhancedTable)).call(this, props));
-
-    _this.selectedRows = [];
-
-    _this.componentDidMount = function () {
-      _this.loadData();
-    };
-
-    _this.componentWillReceiveProps = function (nextProps) {
-      _this.loadData();
-      _this.setState({
-        rows: nextProps.rows,
-        columns: nextProps.columns,
-        title: nextProps.title,
-        orderBy: nextProps.orderBy || _this.state.orderBy,
-        order: nextProps.order || _this.state.order,
-        rowsCount: nextProps.rowsCount
-      });
-    };
-
-    _this.componentWillUnmount = function () {};
-
-    _this.loadData = function (filterOptions) {
-      filterOptions = filterOptions === undefined ? _this.state.filter : filterOptions;
-      var updatedTableProps = {
-        orderBy: _this.state.orderBy,
-        order: _this.state.order,
-        page: _this.state.page,
-        rowsPerPage: _this.state.rowsPerPage
-      };
-
-      filterOptions = Object.assign({}, filterOptions, updatedTableProps);
-      if (_this.props.loadData) {
-        _this.setState({ filter: filterOptions, loading: true });
-        _this.props.loadData(filterOptions).then(function (records) {
-          _this.setState({
-            loading: false, rows: records.rows, rowsCount: records.count
-          });
-        }, function (error) {
-          _this.setState({ rows: [], rowsCount: 0, loading: false });
-        });
-      } else {
-        _this.setState({ rows: _this.state.rows, rowsCount: _this.state.rows.length, loading: false, filter: filterOptions });
-      }
-    };
-
-    _this.refreshData = function () {
-      _this.loadData();
-    };
-
-    _this.handleRequestSort = function (event, property) {
-      var orderBy = property;
-      var order = 'desc';
-
-      if (_this.state.orderBy === property && _this.state.order === 'desc') {
-        order = 'asc';
-      }
-
-      _this.setState({ order: order, orderBy: orderBy }, function () {
-        console.log("Inside handleRequestSort");
-        _this.loadData();
-      });
-    };
-
-    _this.handleSelectAllClick = function (event, checked) {
-      if (checked) {
-        _this.setState({ selected: _this.state.rows.map(function (n) {
-            return n[_this.props.uKey];
-          }) });
-        return;
-      }
-      _this.setState({ selected: [] });
-    };
-
-    _this.handleClick = function (event, rowData) {
-      if (event.target.tagName === "TD" && _this.props.clickLink) {
-        event.preventDefault();
-        history.push(_this.props.clickLink + rowData[_this.props.uKey]);
-      }
-
-      if (event.target.tagName === "TD" && _this.props.clickFunction) {
-        event.preventDefault();
-        _this.props.clickFunction(_this, rowData);
-      }
-    };
-
-    _this.handleChangePage = function (event, page) {
-      _this.setState({ page: page }, function () {
-        console.log("Inside handleChangePage");
-        _this.loadData();
-      });
-    };
-
-    _this.handleChangeRowsPerPage = function (event) {
-      _this.setState({ rowsPerPage: event.target.value, page: 0 }, function () {
-        console.log("Inside handleChangeRowsPerPage");
-        _this.loadData();
-      });
-    };
-
-    _this.isSelected = function (id) {
-      if (_this.state.selectable) {
-        return _this.state.selected.indexOf(id) !== -1;
-      } else {
-        return false;
-      }
-    };
-
-    _this.openDialog = function (dialogInfo) {
-      _this.setState({ dialogOpen: true, dialog: dialogInfo });
-    };
-
-    _this.closeDialog = function (value) {
-      _this.setState({ dialogOpen: false });
-
-      if (value === "ok" && _this.state.dialog.action) {
-        _this.state.dialog.action();
-      }
-    };
-
-    _this.formatCellData = function (cell, rowData, uKey) {
-      var cellData = rowData;
-      var nestedData = cell.name.split('.');
-      nestedData.map(function (nestedColumn) {
-        if (cellData[nestedColumn]) {
-          cellData = cellData[nestedColumn];
-        } else {
-          cellData = "";
-        }
-
-        return "";
-      });
-
-      var showCellData = true;
-      if (cell.beforeShow) {
-        showCellData = cell.beforeShow(rowData);
-      }
-
-      if (showCellData) {
-        switch (cell.type) {
-          case 'boolean':
-            cellData = cellData ? React__default.createElement(icons.Done, null) : React__default.createElement(icons.Clear, null);
-            break;
-          case 'datetime':
-          case 'daterange':
-            cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY, h:mm:ss a');
-            break;
-          case 'date':
-            cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY');
-            break;
-          case 'month':
-            if (cellData) {
-              cellData = moment(cellData).format('MMMM YYYY');
-            } else {
-              cellData = "";
-            }
-            break;
-          case 'button':
-            cellData = [];
-            cell.buttons.map(function (button) {
-              var buttonLink = "";
-              var showField = true;
-
-              if (button.beforeShow) {
-                showField = button.beforeShow(rowData);
-              }
-
-              if (button.getIcon) {
-                button['icon'] = button.getIcon(rowData[button.field]);
-              }
-
-              if (showField && button.link) {
-                buttonLink = button.link;
-                if (button.param) {
-                  buttonLink = buttonLink + rowData[button.param];
-                }
-
-                if (button.icon === undefined) {
-                  cellData.push(React__default.createElement(Chip, {
-                    label: button.label,
-                    to: buttonLink,
-                    component: Link$1,
-                    className: _this.props.classes.chip,
-                    key: rowData[uKey] + button.label.replace(' ', '-')
-                  }));
-                } else {
-                  cellData.push(React__default.createElement(
-                    IconButton,
-                    { "aria-label": button.label, to: buttonLink, component: Link$1, key: rowData[uKey] + button.label.replace(' ', '-') },
-                    React__default.createElement(button.icon, null)
-                  ));
-                }
-              }
-
-              if (showField && button.action) {
-                if (button.icon === undefined) {
-                  cellData.push(React__default.createElement(Chip, {
-                    label: button.label,
-                    onClick: function onClick() {
-                      return button.action(_this, rowData);
-                    },
-                    className: _this.props.classes.chip,
-                    key: rowData[uKey] + button.label.replace(' ', '-')
-                  }));
-                } else if (button.type === 'fab') {
-                  cellData.push(React__default.createElement(
-                    Fab,
-                    { "aria-label": button.label, onClick: function onClick() {
-                        return button.action(_this, rowData);
-                      }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-'), size: button.size, classes: button.classes },
-                    React__default.createElement(button.icon, null)
-                  ));
-                } else {
-                  cellData.push(React__default.createElement(
-                    IconButton,
-                    { "aria-label": button.label, onClick: function onClick() {
-                        return button.action(_this, rowData);
-                      }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-') },
-                    React__default.createElement(button.icon, null)
-                  ));
-                }
-              }
-
-              return "";
-            });
-            break;
-          case 'render':
-            cellData = cell.render(rowData, _this);
-            break;
-          case 'link':
-            if (cellData && cellData !== "") {
-              cellData = React__default.createElement(
-                Link,
-                {
-                  component: Link$1,
-                  to: cellData,
-                  target: "_blank",
-                  rel: "noopener"
-                },
-                React__default.createElement(LinkIcon, null)
-              );
-            }
-            break;
-          case 'file':
-            if (cellData && cellData !== "") {
-              cellData = React__default.createElement(
-                Link,
-                {
-                  component: Link$1,
-                  to: cellData,
-                  target: "_blank",
-                  rel: "noopener"
-                },
-                React__default.createElement(LinkIcon, null)
-              );
-            }
-            break;
-          case 'image':
-            var imageSource = cellData;
-            cellData = React__default.createElement(
-              IconButton,
-              { "aria-label": "button.label", onClick: function onClick() {
-                  _this.openDialog({
-                    title: "Image",
-                    content: React__default.createElement(Card, {
-                      image: imageSource,
-                      onClose: _this.closeDialog
-                    })
-                  });
-                } },
-              React__default.createElement(Avatar, { alt: "", src: cellData })
-            );
-            break;
-          case 'media':
-            var mediaSource = cellData;
-            cellData = React__default.createElement(
-              IconButton,
-              { "aria-label": cell.label, onClick: function onClick() {
-                  _this.openDialog({
-                    title: "Media",
-                    content: React__default.createElement(Card, {
-                      media: mediaSource,
-                      onClose: _this.closeDialog
-                    })
-                  });
-                } },
-              React__default.createElement(LinkIcon, null)
-            );
-            break;
-          case 'expand':
-            var isExpanded = rowData[uKey] === _this.state.expandedRow[uKey];
-            cellData = React__default.createElement(
-              IconButton,
-              { "aria-label": cell.label, onClick: function onClick() {
-                  _this.toggleExpand(cell, rowData);
-                } },
-              isExpanded && _this.state.expanded ? React__default.createElement(icons.KeyboardArrowUp, null) : React__default.createElement(icons.KeyboardArrowDown, null)
-            );
-            break;
-          default:
-            break;
-        }
-      } else {
-        cellData = "";
-      }
-
-      return cellData;
-    };
-
-    _this.toggleExpand = function () {
-      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cell, rowData) {
-        var expandedRow, expandContent;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                expandedRow = _this.state.expandedRow;
-                expandContent = null;
-
-                if (!(Object.keys(expandedRow).length > 0 && expandedRow[_this.props.uKey] === rowData[_this.props.uKey])) {
-                  _context.next = 6;
-                  break;
-                }
-
-                expandedRow = {};
-                _context.next = 10;
-                break;
-
-              case 6:
-                expandedRow = rowData;
-                _context.next = 9;
-                return _this.getExpandContent(cell, rowData);
-
-              case 9:
-                expandContent = _context.sent;
-
-              case 10:
-
-                _this.setState({ expanded: expandContent, expandedRow: expandedRow });
-
-              case 11:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, _this2);
-      }));
-
-      return function (_x, _x2) {
-        return _ref.apply(this, arguments);
-      };
-    }();
-
-    _this.getExpandContent = function () {
-      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cell, rowData) {
-        var expandContent;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return cell.render(rowData, _this);
-
-              case 2:
-                expandContent = _context2.sent;
-                return _context2.abrupt("return", expandContent);
-
-              case 4:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, _this2);
-      }));
-
-      return function (_x3, _x4) {
-        return _ref2.apply(this, arguments);
-      };
-    }();
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          title = _this$props.title,
-          pagination = _this$props.pagination,
-          classes = _this$props.classes,
-          uKey = _this$props.uKey,
-          other = objectWithoutProperties(_this$props, ["title", "pagination", "classes", "uKey"]);
-      var _this$state = _this.state,
-          columns = _this$state.columns,
-          rowsCount = _this$state.rowsCount,
-          expanded = _this$state.expanded,
-          expandedRow = _this$state.expandedRow;
-      var _this$state2 = _this.state,
-          order = _this$state2.order,
-          orderBy = _this$state2.orderBy,
-          selected = _this$state2.selected,
-          rowsPerPage = _this$state2.rowsPerPage,
-          page = _this$state2.page,
-          selectable = _this$state2.selectable;
-      var _this$state3 = _this.state,
-          handleSelectAllClick = _this$state3.handleSelectAllClick,
-          handleRequestSort = _this$state3.handleRequestSort;
-
-
-      var rows = [];
-      if (_this.state.loadData) {
-        rows = _this.state.rows ? _this.state.rows : [];
-      } else {
-        rows = _this.state.rows ? _this.state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : [];
-      }
-
-      if (selected !== undefined) {
-        _this.selectedRows = selected;
-      }
-
-      if (handleSelectAllClick !== undefined) {
-        _this.handleSelectAllClick = handleSelectAllClick;
-      }
-
-      if (handleRequestSort !== undefined) {
-        _this.onRequestSort = handleRequestSort;
-      }
-
-      return React__default.createElement(
-        Paper,
-        { className: classes.paper },
-        title ? React__default.createElement(Toolbar$1, _extends$b({
-          title: title,
-          numSelected: _this.selectedRows.length,
-          openDialog: _this.openDialog,
-          closeDialog: _this.closeDialog,
-          refreshData: _this.refreshData
-        }, other)) : null,
-        React__default.createElement(ChipFilter$1, { options: columns, loadData: _this.loadData }),
-        React__default.createElement(
-          "div",
-          { className: classes.tableWrapper },
-          _this.state.loading && React__default.createElement(CircularProgress, { className: classes.progress }),
-          React__default.createElement(
-            Table,
-            { className: classes.table, "aria-labelledby": "tableTitle", key: Date.now() },
-            React__default.createElement(TableHead$1, {
-              selectable: selectable,
-              columns: columns,
-              numSelected: _this.selectedRows.length,
-              order: order,
-              orderBy: orderBy,
-              onSelectAllClick: _this.handleSelectAllClick,
-              onRequestSort: _this.handleRequestSort,
-              rowCount: rowsCount
-            }),
-            React__default.createElement(
-              TableBody,
-              null,
-              !_this.state.loading && rows.length === 0 ? React__default.createElement(
-                TableRow,
-                null,
-                React__default.createElement(
-                  TableCell,
-                  {
-                    colSpan: columns.length,
-                    classes: {
-                      root: classes.tableCell
-                    }
-                  },
-                  React__default.createElement(
-                    Typography,
-                    null,
-                    "Nothing here yet"
-                  )
-                )
-              ) : null,
-              rows.map(function (n) {
-                var isSelected = _this.isSelected(n[uKey]);
-                var isExpanded = n[uKey] === expandedRow[uKey];
-                var expandColumn = isExpanded && columns.find(function (column) {
-                  var showColumn = true;
-                  if (column.beforeShow) {
-                    showColumn = column.beforeShow(n);
-                  }
-
-                  return showColumn && column.type === 'expand';
-                });
-
-                return React__default.createElement(
-                  React__default.Fragment,
-                  null,
-                  React__default.createElement(
-                    TableRow,
-                    {
-                      hover: true,
-                      onClick: function onClick(event) {
-                        return _this.handleClick(event, n);
-                      },
-                      role: "checkbox",
-                      "aria-checked": isSelected,
-                      tabIndex: -1,
-                      key: new Date().getTime() + "-" + (title ? title.replace(' ', '-') : "") + "-" + n[uKey],
-                      selected: isSelected
-                    },
-                    columns.some(function (column) {
-                      return column.span === true;
-                    }) ? columns.map(function (column) {
-                      var cellData = _this.formatCellData(column, n, uKey);
-
-                      return (column.show === undefined || column.show) && column.span ? column.name === "selectable" ? React__default.createElement(
-                        TableCell,
-                        {
-                          padding: "checkbox",
-                          key: column.name,
-                          classes: {
-                            root: classes.tableCell
-                          }
-                        },
-                        React__default.createElement(Checkbox, { checked: isSelected })
-                      ) : React__default.createElement(
-                        TableCell,
-                        {
-                          key: column.name,
-                          colSpan: columns.length,
-                          classes: {
-                            root: classes.tableCell
-                          }
-                        },
-                        cellData
-                      ) : null;
-                    }) : columns.map(function (column) {
-                      var cellData = _this.formatCellData(column, n, uKey);
-
-                      return column.show === undefined || column.show ? column.name === "selectable" ? React__default.createElement(
-                        TableCell,
-                        {
-                          padding: "checkbox",
-                          key: column.name,
-                          classes: {
-                            root: classes.tableCell
-                          }
-                        },
-                        React__default.createElement(Checkbox, { checked: isSelected })
-                      ) : React__default.createElement(
-                        TableCell,
-                        {
-                          key: column.name,
-                          padding: column.disablePadding ? 'none' : 'default',
-                          classes: {
-                            root: classes.tableCell
-                          }
-                        },
-                        cellData
-                      ) : null;
-                    })
-                  ),
-                  isExpanded && expandColumn && expanded ? React__default.createElement(
-                    TableRow,
-                    null,
-                    React__default.createElement(
-                      TableCell,
-                      { colSpan: columns.length },
-                      expanded
-                    )
-                  ) : null
-                );
-              })
-            )
-          )
-        ),
-        pagination && rows.length > 0 ? React__default.createElement(TablePagination, {
-          component: "div",
-          count: rowsCount,
-          rowsPerPage: rowsPerPage,
-          page: page,
-          rowsPerPageOptions: [5, 10, 25, 50, 100],
-          backIconButtonProps: {
-            'aria-label': 'Previous Page'
-          },
-          nextIconButtonProps: {
-            'aria-label': 'Next Page'
-          },
-          onChangePage: _this.handleChangePage,
-          onChangeRowsPerPage: _this.handleChangeRowsPerPage
-        }) : null,
-        React__default.createElement(Dialog$1, {
-          title: _this.state.dialog.title,
-          open: _this.state.dialogOpen,
-          onClose: _this.closeDialog,
-          type: _this.state.dialog.type,
-          content: _this.state.dialog.content,
-          text: _this.state.dialog.text
-        })
-      );
-    };
-
-    _this.state = Object.assign({}, tableOptions, props);
-    return _this;
-  }
-
-  return EnhancedTable;
-}(React__default.Component);
-
-EnhancedTable.defaultProps = {
-  pagination: true,
-  rows: [],
-  uKey: 'id'
-};
-
-EnhancedTable.propTypes = {
-  classes: PropTypes__default.object.isRequired,
-  pagination: PropTypes__default.bool.isRequired,
-  rows: PropTypes__default.array.isRequired
-};
-
-var Table$1 = styles.withStyles(styles$6)(EnhancedTable);
-
-var styles$7 = function styles$$1(theme) {
-	var _panelDetail, _heading, _headingAction;
-
-	return {
-		root: {
-			width: '100%'
-		},
-		panelDetail: (_panelDetail = {}, defineProperty$1(_panelDetail, theme.breakpoints.only('xs'), {
-			display: 'flex'
-		}), defineProperty$1(_panelDetail, 'display', 'block'), _panelDetail),
-		summaryContent: defineProperty$1({}, theme.breakpoints.down('xs'), {
-			margin: 0
-		}),
-		summaryPanel: defineProperty$1({}, theme.breakpoints.down('xs'), {
-			padding: '0px 8px'
-		}),
-		headingWrapper: {
-			flexBasis: '80%'
-		},
-		heading: (_heading = {
-			fontSize: theme.typography.pxToRem(15)
-		}, defineProperty$1(_heading, theme.breakpoints.only('xs'), {
-			fontSize: theme.typography.pxToRem(12)
-		}), defineProperty$1(_heading, 'display', 'flex'), defineProperty$1(_heading, 'alignItems', 'center'), defineProperty$1(_heading, 'marginLeft', theme.spacing.unit), defineProperty$1(_heading, 'marginRight', theme.spacing.unit), defineProperty$1(_heading, 'flexBasis', '80%'), defineProperty$1(_heading, 'textDecoration', 'none'), _heading),
-		secondaryHeading: {
-			fontSize: theme.typography.pxToRem(15),
-			color: theme.palette.text.secondary
-			// flexBasis: '15%',
-		},
-		headingContent: {
-			flexBasis: '80%'
-		},
-		headingAction: (_headingAction = {}, defineProperty$1(_headingAction, theme.breakpoints.only('xs'), {
-			flexBasis: '24%',
-			marginTop: theme.spacing.unit
-		}), defineProperty$1(_headingAction, theme.breakpoints.between('sm', 'md'), {
-			flexBasis: '12%'
-		}), defineProperty$1(_headingAction, theme.breakpoints.up('md'), {
-			flexBasis: '8%'
-		}), defineProperty$1(_headingAction, theme.breakpoints.between('sm', 'xl'), {
-			display: 'flex',
-			alignItems: 'center',
-			marginLeft: theme.spacing.unit,
-			marginRight: theme.spacing.unit
-		}), _headingAction)
-	};
-};
-
-var EnhancedExpansionPanel = function (_React$Component) {
-	inherits(EnhancedExpansionPanel, _React$Component);
-
-	function EnhancedExpansionPanel(props) {
-		classCallCheck(this, EnhancedExpansionPanel);
-
-		var _this = possibleConstructorReturn(this, (EnhancedExpansionPanel.__proto__ || Object.getPrototypeOf(EnhancedExpansionPanel)).call(this, props));
-
-		_this.state = {
-			expanded: null,
-			loading: false,
-			data: [],
-			content: null
-		};
-
-		_this.componentWillReceiveProps = function (nextProps) {
-			_this.setState({ data: nextProps.data, topActions: nextProps.topActions });
-		};
-
-		_this.handleChange = function (panel, elem) {
-			return function (event, expanded) {
-				_this.setState({ expanded: expanded ? panel : false, content: null, loading: true });
-
-				if (expanded) {
-					if (typeof elem.content === "function") {
-						var contentFn = elem.content();
-						if (contentFn instanceof Promise) {
-							contentFn.then(function (response) {
-								_this.setState({ content: response, loading: false });
-							}).catch(function (error) {
-								_this.setState({ content: error, loading: false });
-							});
-						} else {
-							_this.setState({ content: contentFn, loading: false });
-						}
-					} else {
-						_this.setState({ content: elem.content, loading: false });
-					}
-				} else {
-					_this.setState({ loading: false });
-				}
-			};
-		};
-
-		_this.toggleExpansionPanel = function (panel, elem, expanded) {
-			_this.setState({ expanded: !expanded ? panel : false, content: null, loading: true });
-
-			if (!expanded) {
-				if (typeof elem.content === "function") {
-					var contentFn = elem.content();
-					if (contentFn instanceof Promise) {
-						contentFn.then(function (response) {
-							_this.setState({ content: response, loading: false });
-						}).catch(function (error) {
-							_this.setState({ content: error, loading: false });
-						});
-					} else {
-						_this.setState({ content: contentFn, loading: false });
-					}
-				} else {
-					_this.setState({ content: elem.content, loading: false });
-				}
-			} else {
-				_this.setState({ loading: false });
-			}
-		};
-
-		_this.render = function () {
-			var classes = _this.props.classes;
-			var _this$state = _this.state,
-			    data = _this$state.data,
-			    content = _this$state.content,
-			    expanded = _this$state.expanded,
-			    topActions = _this$state.topActions,
-			    actions = _this$state.actions;
-
-
-			var titleLink = {};
-
-			return React__default.createElement(
-				'div',
-				{ className: classes.root },
-				data.map(function (elem, index) {
-					if (elem) {
-						var panel = 'panel' + index;
-						return React__default.createElement(
-							ExpansionPanel,
-							{ expanded: expanded === panel, key: elem.key },
-							React__default.createElement(
-								ExpansionPanelSummary,
-								{
-									classes: {
-										root: classes.summaryPanel, // class name, e.g. `classes-nesting-root-x`
-										content: classes.summaryContent // class name, e.g. `classes-nesting-label-x`
-									},
-									IconButtonProps: {
-										onClick: function onClick() {
-											return _this.toggleExpansionPanel(panel, elem, expanded === panel);
-										}
-									},
-									expandIcon: React__default.createElement(ExpandMoreIcon, null)
-								},
-								elem.image ? React__default.createElement(Avatar, { alt: "", src: elem.image }) : null,
-								titleLink = elem.link ? Object.assign({}, {
-									component: Link$1,
-									to: elem.link
-								}) : [],
-								elem.title && elem.subheading ? React__default.createElement(
-									'div',
-									{
-										className: classes.headingWrapper
-									},
-									React__default.createElement(
-										Typography,
-										_extends$b({}, titleLink, {
-											className: classes.heading
-										}),
-										typeof elem.title === "function" ? elem.title() : elem.title
-									),
-									React__default.createElement(
-										Typography,
-										_extends$b({}, titleLink, {
-											className: classes.heading
-										}),
-										typeof elem.subheading === "function" ? elem.subheading() : elem.subheading
-									)
-								) : elem.title ? React__default.createElement(
-									Typography,
-									_extends$b({}, titleLink, {
-										className: classes.heading
-									}),
-									typeof elem.title === "function" ? elem.title() : elem.title
-								) : null,
-								React__default.createElement(
-									'div',
-									{ className: classes.headingAction },
-									expanded === panel && topActions ? topActions.map(function (action) {
-										var showAction = action.beforeShow ? action.beforeShow(elem) : true;
-
-										var actionButton = action.icon ? React__default.createElement(
-											Fab,
-											{ 'aria-label': action.title, className: classes.fab, color: action.color, onClick: function onClick() {
-													return action.action(_this, elem);
-												}, size: 'small', key: "fab" },
-											React__default.createElement(action.icon, null)
-										) : React__default.createElement(
-											Button,
-											{ 'aria-label': action.title, variant: 'contained', color: action.color, onClick: function onClick() {
-													return action.action(_this, elem);
-												}, size: 'small', key: "button" },
-											action.label
-										);
-
-										return showAction ? actionButton : null;
-									}) : React__default.createElement(
-										Typography,
-										{ className: classes.secondaryHeading },
-										typeof elem.description === "function" ? elem.description() : elem.description
-									)
-								)
-							),
-							_this.state.loading && React__default.createElement(LinearProgress, null),
-							expanded === panel && content ? React__default.createElement(
-								ExpansionPanelDetails,
-								{
-									classes: {
-										root: classes.panelDetail
-									}
-								},
-								content
-							) : null,
-							expanded === panel && actions ? React__default.createElement(
-								'div',
-								null,
-								React__default.createElement(Divider, null),
-								React__default.createElement(
-									ExpansionPanelActions,
-									null,
-									topActions.map(function (action) {
-										return React__default.createElement(
-											Button,
-											{ 'aria-label': action.title, color: action.color, onClick: function onClick() {
-													return action.action(_this, elem);
-												}, size: 'small' },
-											action.title
-										);
-									})
-								)
-							) : null
-						);
-					} else {
-						return null;
-					}
-				})
-			);
-		};
-
-		_this.state = Object.assign(_this.state, props);
-		return _this;
-	}
-
-	return EnhancedExpansionPanel;
-}(React__default.Component);
-
-EnhancedExpansionPanel.propTypes = {
-	classes: PropTypes__default.object.isRequired
-};
-
-var Accordion = styles.withStyles(styles$7)(EnhancedExpansionPanel);
-
 var MomentUtils = /** @class */ (function () {
     function MomentUtils(_a) {
         var _b = _a === void 0 ? {} : _a, locale = _b.locale, instance = _b.instance, moment$$1 = _b.moment;
@@ -11286,7 +10004,7 @@ function polyfill(Component) {
 }
 
 var reactLifecyclesCompat_es = /*#__PURE__*/Object.freeze({
-	polyfill: polyfill
+  polyfill: polyfill
 });
 
 var PropTypes$1 = createCommonjsModule(function (module, exports) {
@@ -13581,7 +12299,7 @@ var ModalDialog = function (_a) {
 ModalDialog.displayName = 'ModalDialog';
 var dialogHeight = 405;
 var dialogHeightWithTabs = 455;
-var styles$8 = styles.createStyles({
+var styles$6 = styles.createStyles({
   dialogRoot: {
     minWidth: DIALOG_WIDTH,
     minHeight: dialogHeight
@@ -13617,7 +12335,7 @@ var styles$8 = styles.createStyles({
   dialogAction: {// empty but may be needed for override
   }
 });
-var ModalDialog$1 = styles.withStyles(styles$8, {
+var ModalDialog$1 = styles.withStyles(styles$6, {
   name: 'MuiPickersModal'
 })(ModalDialog);
 
@@ -14521,7 +13239,7 @@ function (_super) {
   };
   return Month;
 }(React.PureComponent);
-var styles$7$1 = function (theme) {
+var styles$7 = function (theme) {
   return createStyles$1({
     root: {
       flex: '1 0 33.33%',
@@ -14549,7 +13267,7 @@ var styles$7$1 = function (theme) {
     }
   });
 };
-var Month$1 = withStyles$1(styles$7$1, {
+var Month$1 = withStyles$1(styles$7, {
   name: 'MuiPickersMonth'
 })(Month);
 
@@ -14619,7 +13337,7 @@ function (_super) {
   };
   return MonthSelection;
 }(React.PureComponent);
-var styles$8$1 = styles.createStyles({
+var styles$8 = styles.createStyles({
   container: {
     width: 310,
     display: 'flex',
@@ -14627,7 +13345,7 @@ var styles$8$1 = styles.createStyles({
     alignContent: 'stretch'
   }
 });
-var MonthSelection$1 = styles.withStyles(styles$8$1, {
+var MonthSelection$1 = styles.withStyles(styles$8, {
   name: 'MuiPickersMonthSelection'
 })(withUtils()(MonthSelection));
 
@@ -19267,7 +17985,7 @@ _defineProperty(MenuPlacer, "contextTypes", {
   getPortalPlacement: PropTypes__default.func
 });
 
-var Menu$1 = function Menu$$1(props) {
+var Menu = function Menu(props) {
   var children = props.children,
       className = props.className,
       cx = props.cx,
@@ -21264,7 +19982,7 @@ var components = {
   IndicatorSeparator: IndicatorSeparator,
   Input: Input$2,
   LoadingIndicator: LoadingIndicator,
-  Menu: Menu$1,
+  Menu: Menu,
   MenuList: MenuList,
   MenuPortal: MenuPortal,
   LoadingMessage: LoadingMessage,
@@ -24014,7 +22732,7 @@ function MultiValue$2(props) {
   });
 }
 
-function Menu$2(props) {
+function Menu$1(props) {
   return React__default.createElement(
     Paper,
     _extends$b({ square: true, className: props.selectProps.classes.paper }, props.innerProps),
@@ -24024,7 +22742,7 @@ function Menu$2(props) {
 
 var components$1 = {
   Control: Control$1,
-  Menu: Menu$2,
+  Menu: Menu$1,
   MultiValue: MultiValue$2,
   NoOptionsMessage: NoOptionsMessage$1,
   Option: Option$1,
@@ -35702,6 +34420,317 @@ EnhancedDateRange.propTypes = {
 
 var DateRange = styles.withStyles(styles$o, { withTheme: true })(EnhancedDateRange);
 
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var __assign$1 = (undefined && undefined.__assign) || function () {
+    __assign$1 = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign$1.apply(this, arguments);
+};
+var eventPropTypes = {
+    onActivate: PropTypes.func,
+    onAddUndo: PropTypes.func,
+    onBeforeAddUndo: PropTypes.func,
+    onBeforeExecCommand: PropTypes.func,
+    onBeforeGetContent: PropTypes.func,
+    onBeforeRenderUI: PropTypes.func,
+    onBeforeSetContent: PropTypes.func,
+    onBeforePaste: PropTypes.func,
+    onBlur: PropTypes.func,
+    onChange: PropTypes.func,
+    onClearUndos: PropTypes.func,
+    onClick: PropTypes.func,
+    onContextMenu: PropTypes.func,
+    onCopy: PropTypes.func,
+    onCut: PropTypes.func,
+    onDblclick: PropTypes.func,
+    onDeactivate: PropTypes.func,
+    onDirty: PropTypes.func,
+    onDrag: PropTypes.func,
+    onDragDrop: PropTypes.func,
+    onDragEnd: PropTypes.func,
+    onDragGesture: PropTypes.func,
+    onDragOver: PropTypes.func,
+    onDrop: PropTypes.func,
+    onExecCommand: PropTypes.func,
+    onFocus: PropTypes.func,
+    onFocusIn: PropTypes.func,
+    onFocusOut: PropTypes.func,
+    onGetContent: PropTypes.func,
+    onHide: PropTypes.func,
+    onInit: PropTypes.func,
+    onKeyDown: PropTypes.func,
+    onKeyPress: PropTypes.func,
+    onKeyUp: PropTypes.func,
+    onLoadContent: PropTypes.func,
+    onMouseDown: PropTypes.func,
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func,
+    onMouseMove: PropTypes.func,
+    onMouseOut: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    onMouseUp: PropTypes.func,
+    onNodeChange: PropTypes.func,
+    onObjectResizeStart: PropTypes.func,
+    onObjectResized: PropTypes.func,
+    onObjectSelected: PropTypes.func,
+    onPaste: PropTypes.func,
+    onPostProcess: PropTypes.func,
+    onPostRender: PropTypes.func,
+    onPreProcess: PropTypes.func,
+    onProgressState: PropTypes.func,
+    onRedo: PropTypes.func,
+    onRemove: PropTypes.func,
+    onReset: PropTypes.func,
+    onSaveContent: PropTypes.func,
+    onSelectionChange: PropTypes.func,
+    onSetAttrib: PropTypes.func,
+    onSetContent: PropTypes.func,
+    onShow: PropTypes.func,
+    onSubmit: PropTypes.func,
+    onUndo: PropTypes.func,
+    onVisualAid: PropTypes.func
+};
+var EditorPropTypes = __assign$1({ apiKey: PropTypes.string, id: PropTypes.string, inline: PropTypes.bool, init: PropTypes.object, initialValue: PropTypes.string, onEditorChange: PropTypes.func, value: PropTypes.string, tagName: PropTypes.string, cloudChannel: PropTypes.string, plugins: PropTypes.oneOfType([PropTypes.string, PropTypes.array]), toolbar: PropTypes.oneOfType([PropTypes.string, PropTypes.array]), disabled: PropTypes.bool, textareaName: PropTypes.string }, eventPropTypes);
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var isValidKey = function (keys) { return function (key) { return keys.indexOf(key) !== -1; }; };
+// tslint:disable-next-line:ban-types
+var isFunction = function (x) { return typeof x === 'function'; };
+var bindHandlers = function (props, editor, initEvent) {
+    Object.keys(props)
+        .filter(isValidKey(Object.keys(eventPropTypes)))
+        .forEach(function (key) {
+        var handler = props[key];
+        if (isFunction(handler)) {
+            if (key === 'onInit') {
+                handler(initEvent, editor);
+            }
+            else {
+                editor.on(key.substring(2), function (e) { return handler(e, editor); });
+            }
+        }
+    });
+};
+var unique = 0;
+var uuid = function (prefix) {
+    var date = new Date();
+    var time = date.getTime();
+    var random = Math.floor(Math.random() * 1000000000);
+    unique++;
+    return prefix + '_' + random + unique + String(time);
+};
+var isTextarea = function (element) {
+    return element !== null && element.tagName.toLowerCase() === 'textarea';
+};
+var normalizePluginArray = function (plugins) {
+    if (typeof plugins === 'undefined' || plugins === '') {
+        return [];
+    }
+    return Array.isArray(plugins) ? plugins : plugins.split(' ');
+};
+var mergePlugins = function (initPlugins, inputPlugins) {
+    return normalizePluginArray(initPlugins).concat(normalizePluginArray(inputPlugins));
+};
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var injectScriptTag = function (scriptId, doc, url, callback) {
+    var scriptTag = doc.createElement('script');
+    scriptTag.type = 'application/javascript';
+    scriptTag.id = scriptId;
+    scriptTag.addEventListener('load', callback);
+    scriptTag.src = url;
+    if (doc.head) {
+        doc.head.appendChild(scriptTag);
+    }
+};
+var create = function () {
+    return {
+        listeners: [],
+        scriptId: uuid('tiny-script'),
+        scriptLoaded: false
+    };
+};
+var load = function (state, doc, url, callback) {
+    if (state.scriptLoaded) {
+        callback();
+    }
+    else {
+        state.listeners.push(callback);
+        if (!doc.getElementById(state.scriptId)) {
+            injectScriptTag(state.scriptId, doc, url, function () {
+                state.listeners.forEach(function (fn) { return fn(); });
+                state.scriptLoaded = true;
+            });
+        }
+    }
+};
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var getGlobal = function () { return (typeof window !== 'undefined' ? window : global); };
+var getTinymce = function () {
+    var global = getGlobal();
+    return global && global.tinymce ? global.tinymce : null;
+};
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var __extends$1 = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign$2 = (undefined && undefined.__assign) || function () {
+    __assign$2 = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign$2.apply(this, arguments);
+};
+var scriptState = create();
+var Editor = /** @class */ (function (_super) {
+    __extends$1(Editor, _super);
+    function Editor() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.element = null;
+        _this.initialise = function () {
+            var finalInit = __assign$2({}, _this.props.init, { target: _this.element, readonly: _this.props.disabled, inline: _this.inline, plugins: mergePlugins(_this.props.init && _this.props.init.plugins, _this.props.plugins), toolbar: _this.props.toolbar || (_this.props.init && _this.props.init.toolbar), setup: function (editor) {
+                    _this.editor = editor;
+                    editor.on('init', function (e) {
+                        _this.initEditor(e, editor);
+                    });
+                    if (_this.props.init && typeof _this.props.init.setup === 'function') {
+                        _this.props.init.setup(editor);
+                    }
+                } });
+            if (isTextarea(_this.element)) {
+                _this.element.style.visibility = '';
+            }
+            getTinymce().init(finalInit);
+        };
+        return _this;
+    }
+    Editor.prototype.componentWillMount = function () {
+        this.id = this.id || this.props.id || uuid('tiny-react');
+        this.inline = this.props.inline ? this.props.inline : this.props.init && this.props.init.inline;
+    };
+    Editor.prototype.componentDidMount = function () {
+        if (getTinymce() !== null) {
+            this.initialise();
+        }
+        else if (this.element && this.element.ownerDocument) {
+            var doc = this.element.ownerDocument;
+            var channel = this.props.cloudChannel;
+            var apiKey = this.props.apiKey ? this.props.apiKey : 'no-api-key';
+            load(scriptState, doc, "https://cdn.tiny.cloud/1/" + apiKey + "/tinymce/" + channel + "/tinymce.min.js", this.initialise);
+        }
+    };
+    Editor.prototype.componentWillUnmount = function () {
+        if (getTinymce() !== null) {
+            getTinymce().remove(this.editor);
+        }
+    };
+    Editor.prototype.componentWillReceiveProps = function (nextProps) {
+        if (this.editor && this.editor.initialized) {
+            this.currentContent = this.currentContent || this.editor.getContent();
+            if (typeof nextProps.value === 'string' && nextProps.value !== this.props.value && nextProps.value !== this.currentContent) {
+                this.editor.setContent(nextProps.value);
+            }
+            if (typeof nextProps.disabled === 'boolean' && nextProps.disabled !== this.props.disabled) {
+                this.editor.setMode(nextProps.disabled ? 'readonly' : 'design');
+            }
+        }
+    };
+    Editor.prototype.render = function () {
+        return this.inline ? this.renderInline() : this.renderIframe();
+    };
+    Editor.prototype.initEditor = function (initEvent, editor) {
+        var _this = this;
+        var value = typeof this.props.value === 'string' ? this.props.value : typeof this.props.initialValue === 'string' ? this.props.initialValue : '';
+        editor.setContent(value);
+        if (isFunction(this.props.onEditorChange)) {
+            editor.on('change keyup setcontent', function (e) {
+                _this.currentContent = editor.getContent();
+                if (isFunction(_this.props.onEditorChange)) {
+                    _this.props.onEditorChange(_this.currentContent, editor);
+                }
+            });
+        }
+        bindHandlers(this.props, editor, initEvent);
+    };
+    Editor.prototype.renderInline = function () {
+        var _this = this;
+        var _a = this.props.tagName, tagName = _a === void 0 ? 'div' : _a;
+        return React.createElement(tagName, {
+            ref: function (elm) { return (_this.element = elm); },
+            id: this.id
+        });
+    };
+    Editor.prototype.renderIframe = function () {
+        var _this = this;
+        return React.createElement("textarea", { ref: function (elm) { return (_this.element = elm); }, style: { visibility: 'hidden' }, id: this.id, name: this.props.textareaName });
+    };
+    Editor.propTypes = EditorPropTypes;
+    Editor.defaultProps = {
+        cloudChannel: '5'
+    };
+    return Editor;
+}(React.Component));
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
 var styles$p = function styles$$1(theme) {
   return {};
 };
@@ -35746,7 +34775,7 @@ var EnhancedRichText = function (_React$Component) {
           'aria-describedby': _this.props.name + '-error-text',
           key: 'form-control-' + _this.props.name
         },
-        React__default.createElement(tinymceReact.Editor, {
+        React__default.createElement(Editor, {
           key: _this.state.keyValue,
           initialValue: typeof value === 'function' ? value(data) : value === undefined ? "" : value,
           init: {
@@ -37423,115 +36452,6 @@ var Form = core.withStyles(styles$r, { withTheme: true })(EnhancedForm);
 
 var styles$s = function styles$$1(theme) {
   return {
-    root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper
-    }
-  };
-};
-
-var listOptions = {
-  dialogOpen: false,
-  dialog: {}
-};
-
-var EnhanceList = function (_React$Component) {
-  inherits(EnhanceList, _React$Component);
-
-  function EnhanceList(props) {
-    classCallCheck(this, EnhanceList);
-
-    var _this = possibleConstructorReturn(this, (EnhanceList.__proto__ || Object.getPrototypeOf(EnhanceList)).call(this, props));
-
-    _this.openDialog = function (dialogInfo) {
-      _this.setState({ dialogOpen: true, dialog: dialogInfo });
-    };
-
-    _this.closeDialog = function (value) {
-      _this.setState({ dialogOpen: false });
-
-      if (value === "ok" && _this.state.dialog.action) {
-        _this.state.dialog.action();
-      }
-    };
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          items = _this$props.items,
-          data = _this$props.data;
-
-
-      return React__default.createElement(
-        'div',
-        { className: classes.root },
-        React__default.createElement(
-          List,
-          { component: 'nav' },
-          items.map(function (item) {
-            var showItem = item.beforeShow ? item.beforeShow(data) : true;
-
-            if (item.getIcon) {
-              item['icon'] = item.getIcon(data[item.field]);
-            }
-
-            var listItemProps = {
-              button: true,
-              key: Date.now() + '-list-item-' + item.label.replace(' ', '-')
-            };
-
-            if (item.action) {
-              listItemProps.onClick = function () {
-                return item.action(_this, data);
-              };
-            } else {
-              listItemProps.to = item.href;
-              listItemProps.component = Link$1;
-            }
-
-            return showItem ? React__default.createElement(
-              ListItem,
-              listItemProps,
-              React__default.createElement(
-                ListItemIcon,
-                null,
-                React__default.createElement(item.icon, null)
-              ),
-              React__default.createElement(ListItemText, { primary: item.label })
-            ) : null;
-          })
-        ),
-        React__default.createElement(Dialog$1, {
-          title: _this.state.dialog.title,
-          open: _this.state.dialogOpen,
-          onClose: _this.closeDialog,
-          type: _this.state.dialog.type,
-          content: _this.state.dialog.content,
-          text: _this.state.dialog.text
-        })
-      );
-    };
-
-    _this.state = Object.assign(listOptions, props);
-    return _this;
-  }
-
-  return EnhanceList;
-}(React__default.Component);
-
-EnhanceList.defaultProps = {
-  data: {}
-};
-
-EnhanceList.propTypes = {
-  classes: PropTypes__default.object.isRequired
-};
-
-var List$1 = styles.withStyles(styles$s)(EnhanceList);
-
-var styles$t = function styles$$1(theme) {
-  return {
     paper: {
       maxWidth: 360,
       // maxHeight: 360,
@@ -37788,9 +36708,263 @@ EnhancedPopper.propTypes = {
   classes: PropTypes__default.object.isRequired
 };
 
-var Popper$1 = styles.withStyles(styles$t)(EnhancedPopper);
+var Popper$1 = styles.withStyles(styles$s)(EnhancedPopper);
+
+var styles$t = function styles$$1(theme) {
+  return {
+    root: {
+      display: 'flex',
+      // justifyContent: 'flex-end',
+      flexWrap: 'inherit',
+      overflowX: 'hidden',
+      overflowY: 'hidden',
+      '&:hover': {
+        overflowX: 'auto'
+      }
+      // [theme.breakpoints.between('sm', 'xl')]: {
+      //   flexWrap: 'wrap',
+      // }
+    },
+    chip: {
+      margin: theme.spacing.unit / 2
+    },
+    paper: {
+      marginRight: theme.spacing.unit * 2
+    },
+    chipLabel: {
+      paddingLeft: theme.spacing.unit,
+      paddingRight: theme.spacing.unit
+    }
+  };
+};
+
+var ChipFilter = function (_React$Component) {
+  inherits(ChipFilter, _React$Component);
+
+  function ChipFilter() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    classCallCheck(this, ChipFilter);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = ChipFilter.__proto__ || Object.getPrototypeOf(ChipFilter)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      open: false,
+      dialogOpen: false,
+      dialog: {},
+      filterData: {}
+    }, _this.clearFilter = function (option) {
+      _this.setState(function (state) {
+        var newState = state;
+        delete newState.filterData[option.name];
+        return newState;
+      }, function () {
+        _this.props.loadData(_this.state.filterData);
+      });
+    }, _this.openFilter = function (dialogInfo) {
+      _this.setState({ dialogOpen: true, dialog: dialogInfo });
+    }, _this.closeFilter = function (value) {
+      _this.setState({ dialogOpen: false });
+
+      if (value === "ok" && _this.state.dialog.action) {
+        _this.state.dialog.action();
+      }
+    }, _this.getSelectedValue = function (option) {
+      var filterData = _this.state.filterData;
+      if (filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0) {
+        return option.label;
+      } else if (['multiselect', 'select', 'radio', 'checkbox'].indexOf(option.type) > -1) {
+        var availableOptions = [];
+        if (option.enum) {
+          availableOptions = option.enum;
+        } else if (option.options) {
+          availableOptions = option.options;
+        } else if (_typeof$4(option.data) === 'object') {
+          availableOptions = option.data;
+        } else if (typeof option.data === 'function') {
+          availableOptions = option.data();
+        }
+
+        var selectedOptions = availableOptions.map(function (availableOption) {
+          return filterData[option.name].indexOf(availableOption.value.toString()) > -1 ? availableOption.label : '';
+        }).filter(function (selectedOption) {
+          return selectedOption !== undefined && selectedOption !== "";
+        });
+
+        return selectedOptions.length > 1 ? selectedOptions[0] + ' + ' + (selectedOptions.length - 1) : selectedOptions;
+      } else if (['daterange'].indexOf(option.type) > -1) {
+        return option.label + ' : From ' + filterData[option.name].start + ' To ' + filterData[option.name].end;
+      } else {
+        var _availableOptions = [];
+        if (option.enum) {
+          _availableOptions = option.enum;
+        } else if (option.options) {
+          _availableOptions = option.options;
+        } else if (_typeof$4(option.data) === 'object') {
+          _availableOptions = option.data;
+        } else if (typeof option.data === 'function') {
+          _availableOptions = option.data();
+        }
+
+        if (_availableOptions.length > 0) {
+          var _selectedOptions = _availableOptions.map(function (availableOption) {
+            return filterData[option.name].indexOf(availableOption.value.toString()) > -1 ? availableOption.label : '';
+          }).filter(function (selectedOption) {
+            return selectedOption !== undefined && selectedOption !== "";
+          });
+
+          return _selectedOptions.length > 1 ? _selectedOptions[0] + ' + ' + (_selectedOptions.length - 1) : _selectedOptions;
+        } else {
+          return option.label + ' ' + filterData[option.name];
+        }
+      }
+    }, _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          options = _this$props.options;
+      var _this$state = _this.state,
+          open = _this$state.open,
+          filterData = _this$state.filterData;
+
+
+      var filterOptions = options || [];
+      return React__default.createElement(
+        'div',
+        { className: classes.root },
+        filterOptions.map(function (option) {
+          return option.filter ? React__default.createElement(Chip, {
+            key: option.name,
+            icon: filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0 ? React__default.createElement(ArrowDropDown, null) : null,
+            color: filterData[option.name] !== undefined && filterData[option.name] !== "" && (filterData[option.name].length > 0 || Object.keys(filterData[option.name]).length > 0) ? 'primary' : 'default',
+            label: _this.getSelectedValue(option),
+            onClick: function onClick(node) {
+              var tempOption = Object.assign({}, option);
+              delete tempOption.label;
+              _this.openFilter({
+                title: option.label,
+                anchorEl: node.target,
+                content: React__default.createElement(Form, {
+                  fields: [tempOption],
+                  buttons: [],
+                  data: filterData,
+                  loadOnChange: true,
+                  submitAction: function submitAction(filterData, formInstance) {
+                    if (Object.keys(filterData).length > 0) {
+                      _this.props.loadData(filterData);
+                    }
+
+                    formInstance.setState({ loading: false });
+                    _this.setState({ filterData: filterData });
+                  },
+                  onClose: _this.closeFilter
+                })
+              });
+            },
+            onDelete: filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0 ? null : function () {
+              _this.clearFilter(option);
+            },
+            className: classes.chip,
+            'aria-owns': open ? 'menu-list-grow' : undefined,
+            'aria-haspopup': 'true',
+            classes: {
+              label: classes.chipLabel
+            }
+          }) : null;
+        }),
+        React__default.createElement(Popper$1, {
+          key: _this.state.dialog.key,
+          title: _this.state.dialog.title,
+          open: _this.state.dialogOpen,
+          onClose: _this.closeFilter,
+          type: _this.state.dialog.type,
+          content: _this.state.dialog.content,
+          text: _this.state.dialog.text,
+          arrow: false,
+          arrowRef: null,
+          disablePortal: false,
+          flip: true,
+          placement: "bottom-start",
+          preventOverflow: 'scrollParent',
+          anchorEl: _this.state.dialog.anchorEl
+        })
+      );
+    }, _temp), possibleConstructorReturn(_this, _ret);
+  }
+
+  return ChipFilter;
+}(React__default.Component);
+
+ChipFilter.propTypes = {
+  classes: PropTypes__default.object.isRequired
+};
+
+var ChipFilter$1 = styles.withStyles(styles$t)(ChipFilter);
 
 var styles$u = function styles$$1(theme) {
+  return {
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      backgroundColor: theme.palette.background.paper
+    },
+    gridList: {
+      // width: 500,
+      // height: 450,
+    },
+    icon: {
+      color: 'rgba(255, 255, 255, 0.54)'
+    }
+  };
+};
+
+function TitlebarGridList(props) {
+  var classes = props.classes,
+      items = props.items;
+
+
+  console.log("items", items);
+  return React__default.createElement(
+    'div',
+    { className: classes.root },
+    React__default.createElement(
+      GridList,
+      { cellHeight: 200, className: classes.gridList, cols: 4 },
+      items && items.map(function (item) {
+        return React__default.createElement(
+          GridListTile,
+          { key: item.id },
+          React__default.createElement(Card, {
+            title: 'Employers & Employees',
+            subtitle: 'Employers & Employees',
+            description: 'Employers & Employees'
+          }),
+          React__default.createElement(GridListTileBar, {
+            title: 'item.title',
+            actionIcon: React__default.createElement(
+              IconButton,
+              { className: classes.icon },
+              React__default.createElement(InfoIcon, null)
+            )
+          })
+        );
+      })
+    )
+  );
+}
+
+TitlebarGridList.propTypes = {
+  classes: PropTypes__default.object.isRequired
+};
+
+var GridList$1 = styles.withStyles(styles$u)(TitlebarGridList);
+
+var styles$v = function styles$$1(theme) {
   return {
     root: {
       maxWidth: 400,
@@ -37898,9 +37072,9 @@ TextMobileStepper.propTypes = {
   theme: PropTypes__default.object.isRequired
 };
 
-var Slider$1 = styles.withStyles(styles$u, { withTheme: true })(TextMobileStepper);
+var Slider$1 = styles.withStyles(styles$v, { withTheme: true })(TextMobileStepper);
 
-var styles$v = function styles$$1(theme) {
+var styles$w = function styles$$1(theme) {
   return {
     root: {
       width: '90%'
@@ -38042,9 +37216,9 @@ StatusBar.propTypes = {
   classes: PropTypes__default.object
 };
 
-var StatusBar$1 = styles.withStyles(styles$v)(StatusBar);
+var StatusBar$1 = styles.withStyles(styles$w)(StatusBar);
 
-var styles$w = function styles$$1(theme) {
+var styles$x = function styles$$1(theme) {
   return {
     root: {
       width: '90%'
@@ -38250,121 +37424,1089 @@ EnhancedStepper.propTypes = {
   classes: PropTypes__default.object
 };
 
-var Stepper$1 = styles.withStyles(styles$w)(EnhancedStepper);
+var Stepper$1 = styles.withStyles(styles$x)(EnhancedStepper);
 
-var styles$x = function styles$$1(theme) {
+function Footer(_ref) {
+  var props = objectWithoutProperties(_ref, []);
+  var classes = props.classes,
+      company = props.company,
+      website = props.website,
+      trademark = props.trademark;
+
+  return React__default.createElement(
+    "footer",
+    { className: classes.footer },
+    React__default.createElement(
+      "div",
+      { className: classes.container },
+      React__default.createElement(
+        "p",
+        { className: classes.right },
+        React__default.createElement(
+          "span",
+          null,
+          "\xA9 ",
+          1900 + new Date().getYear(),
+          " ",
+          company,
+          " \xA0",
+          React__default.createElement(
+            "a",
+            { href: website, className: classes.a },
+            trademark
+          )
+        )
+      )
+    )
+  );
+}
+
+Footer.propTypes = {
+  classes: PropTypes__default.object.isRequired
+};
+
+var tableHeadStyles = function tableHeadStyles(theme) {
   return {
-    snackBarClose: {
-      fontSize: 20
+    head: {
+      background: '#f5f5f5'
     },
-    snackBarMessage: {
-      display: 'flex'
-    },
-    snackBarIcon: {
-      fontSize: 20
-    },
-    snackBarIconVariant: {
-      opacity: 0.9,
-      marginRight: theme.spacing.unit
-    },
-    success: {
-      backgroundColor: green[600]
-    },
-    error: {
-      backgroundColor: theme.palette.error.dark
-    },
-    info: {
-      backgroundColor: theme.palette.primary.dark
-    },
-    warning: {
-      backgroundColor: amber[700]
+    tableCell: {
+      padding: '4px 8px 4px 8px'
     }
   };
 };
 
-var variantIcon = {
-  success: CheckCircleIcon,
-  warning: WarningIcon,
-  error: ErrorIcon,
-  info: InfoIcon
+var tableHeadOptions = {
+  order: "asc",
+  orderBy: "id",
+  rowCount: 0,
+  numSelected: 0,
+  columns: []
 };
 
-var EnhancedSnackbar = function (_React$Component) {
-  inherits(EnhancedSnackbar, _React$Component);
+var EnhancedTableHead = function (_React$Component) {
+  inherits(EnhancedTableHead, _React$Component);
 
-  function EnhancedSnackbar(props) {
-    classCallCheck(this, EnhancedSnackbar);
+  function EnhancedTableHead(props) {
+    classCallCheck(this, EnhancedTableHead);
 
-    var _this = possibleConstructorReturn(this, (EnhancedSnackbar.__proto__ || Object.getPrototypeOf(EnhancedSnackbar)).call(this, props));
+    var _this = possibleConstructorReturn(this, (EnhancedTableHead.__proto__ || Object.getPrototypeOf(EnhancedTableHead)).call(this, props));
 
-    _this.state = { snackBarOpen: false };
-
-    _this.componentWillReceiveProps = function (nextProps) {
-      _this.setState(nextProps);
-    };
-
-    _this.handleSnackBarClose = function (event, reason) {
-      _this.setState({ snackBarOpen: false });
+    _this.createSortHandler = function (property) {
+      return function (event) {
+        _this.props.onRequestSort(event, property);
+      };
     };
 
     _this.render = function () {
-      var classes = _this.props.classes;
-      var variant = _this.state.variant;
+      var _this$props = _this.props,
+          columns = _this$props.columns,
+          classes = _this$props.classes;
 
-      var Icon$$1 = variantIcon[variant];
 
       return React__default.createElement(
-        Snackbar,
-        {
-          anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'left'
+        TableHead,
+        { className: classes.head },
+        React__default.createElement(
+          TableRow,
+          null,
+          columns.map(function (column) {
+            return column.name === "selectable" ? React__default.createElement(
+              TableCell,
+              {
+                padding: 'checkbox',
+                classes: {
+                  root: classes.tableCell
+                }
+              },
+              React__default.createElement(Checkbox, { indeterminate: _this.props.numSelected > 0 && _this.props.numSelected < _this.props.rowCount, checked: _this.props.numSelected === _this.props.rowCount, onChange: _this.props.onSelectAllClick })
+            ) : column.show === undefined || column.show ? React__default.createElement(
+              TableCell,
+              {
+                key: new Date().getTime() + '-table-head-' + column.name,
+                padding: column.disablePadding ? 'none' : 'default',
+                sortDirection: _this.props.orderBy === column.name ? _this.props.order : false,
+                classes: {
+                  root: classes.tableCell
+                }
+              },
+              column.sort ? React__default.createElement(
+                Tooltip,
+                {
+                  title: 'Sort',
+                  placement: column.numeric ? 'bottom-end' : 'bottom-start',
+                  enterDelay: 300
+                },
+                React__default.createElement(
+                  TableSortLabel,
+                  {
+                    active: _this.props.orderBy === column.name,
+                    direction: _this.props.order,
+                    onClick: _this.createSortHandler(column.name)
+                  },
+                  column.label
+                )
+              ) : column.label
+            ) : null;
+          }, _this)
+        )
+      );
+    };
+
+    _this.state = Object.assign(tableHeadOptions, props);
+    return _this;
+  }
+
+  return EnhancedTableHead;
+}(React__default.Component);
+
+EnhancedTableHead.defaultProps = {
+  order: 'desc',
+  rowCount: 0
+};
+
+EnhancedTableHead.propTypes = {
+  numSelected: PropTypes__default.number.isRequired,
+  onRequestSort: PropTypes__default.func.isRequired,
+  onSelectAllClick: PropTypes__default.func.isRequired,
+  order: PropTypes__default.string.isRequired,
+  // orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes__default.number.isRequired,
+  classes: PropTypes__default.object.isRequired
+};
+
+var TableHead$1 = styles.withStyles(tableHeadStyles)(EnhancedTableHead);
+
+var history = createBrowserHistory();
+
+var styles$y = function styles$$1(theme) {
+  return {
+    tableWrapper: {
+      overflowX: 'auto'
+    },
+    table: {
+      minWidth: 'auto'
+    },
+    paper: {
+      width: '100%',
+      minWidth: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'visible'
+    },
+    chip: {
+      margin: theme.spacing.unit
+    },
+    progress: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      marginTop: -12,
+      marginLeft: -12,
+      zIndex: 10000
+    },
+    tableCell: {
+      padding: '4px 8px 4px 8px'
+    }
+  };
+};
+
+var tableOptions = {
+  order: 'desc',
+  orderBy: 'id',
+  uKey: 'id',
+  selected: [],
+  rows: [],
+  page: 0,
+  rowsPerPage: 10,
+  selectable: false,
+  actions: [],
+  dialogOpen: false,
+  dialog: {},
+  loading: false,
+  filter: {},
+  expanded: null,
+  expandedRow: {}
+};
+
+var EnhancedTable = function (_React$Component) {
+  inherits(EnhancedTable, _React$Component);
+
+  function EnhancedTable(props) {
+    var _this2 = this;
+
+    classCallCheck(this, EnhancedTable);
+
+    var _this = possibleConstructorReturn(this, (EnhancedTable.__proto__ || Object.getPrototypeOf(EnhancedTable)).call(this, props));
+
+    _this.selectedRows = [];
+
+    _this.componentDidMount = function () {
+      _this.loadData();
+    };
+
+    _this.componentWillReceiveProps = function (nextProps) {
+      _this.loadData();
+      _this.setState({
+        rows: nextProps.rows,
+        columns: nextProps.columns,
+        title: nextProps.title,
+        orderBy: nextProps.orderBy || _this.state.orderBy,
+        order: nextProps.order || _this.state.order,
+        rowsCount: nextProps.rowsCount
+      });
+    };
+
+    _this.componentWillUnmount = function () {};
+
+    _this.loadData = function (filterOptions) {
+      filterOptions = filterOptions === undefined ? _this.state.filter : filterOptions;
+      var updatedTableProps = {
+        orderBy: _this.state.orderBy,
+        order: _this.state.order,
+        page: _this.state.page,
+        rowsPerPage: _this.state.rowsPerPage
+      };
+
+      filterOptions = Object.assign({}, filterOptions, updatedTableProps);
+      if (_this.props.loadData) {
+        _this.setState({ filter: filterOptions, loading: true });
+        _this.props.loadData(filterOptions).then(function (records) {
+          _this.setState({
+            loading: false, rows: records.rows, rowsCount: records.count
+          });
+        }, function (error) {
+          _this.setState({ rows: [], rowsCount: 0, loading: false });
+        });
+      } else {
+        _this.setState({ rows: _this.state.rows, rowsCount: _this.state.rows.length, loading: false, filter: filterOptions });
+      }
+    };
+
+    _this.refreshData = function () {
+      _this.loadData();
+    };
+
+    _this.handleRequestSort = function (event, property) {
+      var orderBy = property;
+      var order = 'desc';
+
+      if (_this.state.orderBy === property && _this.state.order === 'desc') {
+        order = 'asc';
+      }
+
+      _this.setState({ order: order, orderBy: orderBy }, function () {
+        console.log("Inside handleRequestSort");
+        _this.loadData();
+      });
+    };
+
+    _this.handleSelectAllClick = function (event, checked) {
+      if (checked) {
+        _this.setState({ selected: _this.state.rows.map(function (n) {
+            return n[_this.props.uKey];
+          }) });
+        return;
+      }
+      _this.setState({ selected: [] });
+    };
+
+    _this.handleClick = function (event, rowData) {
+      if (event.target.tagName === "TD" && _this.props.clickLink) {
+        event.preventDefault();
+        history.push(_this.props.clickLink + rowData[_this.props.uKey]);
+      }
+
+      if (event.target.tagName === "TD" && _this.props.clickFunction) {
+        event.preventDefault();
+        _this.props.clickFunction(_this, rowData);
+      }
+    };
+
+    _this.handleChangePage = function (event, page) {
+      _this.setState({ page: page }, function () {
+        console.log("Inside handleChangePage");
+        _this.loadData();
+      });
+    };
+
+    _this.handleChangeRowsPerPage = function (event) {
+      _this.setState({ rowsPerPage: event.target.value, page: 0 }, function () {
+        console.log("Inside handleChangeRowsPerPage");
+        _this.loadData();
+      });
+    };
+
+    _this.isSelected = function (id) {
+      if (_this.state.selectable) {
+        return _this.state.selected.indexOf(id) !== -1;
+      } else {
+        return false;
+      }
+    };
+
+    _this.openDialog = function (dialogInfo) {
+      _this.setState({ dialogOpen: true, dialog: dialogInfo });
+    };
+
+    _this.closeDialog = function (value) {
+      _this.setState({ dialogOpen: false });
+
+      if (value === "ok" && _this.state.dialog.action) {
+        _this.state.dialog.action();
+      }
+    };
+
+    _this.formatCellData = function (cell, rowData, uKey) {
+      var cellData = rowData;
+      var nestedData = cell.name.split('.');
+      nestedData.map(function (nestedColumn) {
+        if (cellData[nestedColumn]) {
+          cellData = cellData[nestedColumn];
+        } else {
+          cellData = "";
+        }
+
+        return "";
+      });
+
+      var showCellData = true;
+      if (cell.beforeShow) {
+        showCellData = cell.beforeShow(rowData);
+      }
+
+      if (showCellData) {
+        switch (cell.type) {
+          case 'boolean':
+            cellData = cellData ? React__default.createElement(icons.Done, null) : React__default.createElement(icons.Clear, null);
+            break;
+          case 'datetime':
+          case 'daterange':
+            cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY, h:mm:ss a');
+            break;
+          case 'date':
+            cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY');
+            break;
+          case 'month':
+            if (cellData) {
+              cellData = moment(cellData).format('MMMM YYYY');
+            } else {
+              cellData = "";
+            }
+            break;
+          case 'button':
+            cellData = [];
+            cell.buttons.map(function (button) {
+              var buttonLink = "";
+              var showField = true;
+
+              if (button.beforeShow) {
+                showField = button.beforeShow(rowData);
+              }
+
+              if (button.getIcon) {
+                button['icon'] = button.getIcon(rowData[button.field]);
+              }
+
+              if (showField && button.link) {
+                buttonLink = button.link;
+                if (button.param) {
+                  buttonLink = buttonLink + rowData[button.param];
+                }
+
+                if (button.icon === undefined) {
+                  cellData.push(React__default.createElement(Chip, {
+                    label: button.label,
+                    to: buttonLink,
+                    component: Link$1,
+                    className: _this.props.classes.chip,
+                    key: rowData[uKey] + button.label.replace(' ', '-')
+                  }));
+                } else {
+                  cellData.push(React__default.createElement(
+                    IconButton,
+                    { "aria-label": button.label, to: buttonLink, component: Link$1, key: rowData[uKey] + button.label.replace(' ', '-') },
+                    React__default.createElement(button.icon, null)
+                  ));
+                }
+              }
+
+              if (showField && button.action) {
+                if (button.icon === undefined) {
+                  cellData.push(React__default.createElement(Chip, {
+                    label: button.label,
+                    onClick: function onClick() {
+                      return button.action(_this, rowData);
+                    },
+                    className: _this.props.classes.chip,
+                    key: rowData[uKey] + button.label.replace(' ', '-')
+                  }));
+                } else if (button.type === 'fab') {
+                  cellData.push(React__default.createElement(
+                    Fab,
+                    { "aria-label": button.label, onClick: function onClick() {
+                        return button.action(_this, rowData);
+                      }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-'), size: button.size, classes: button.classes },
+                    React__default.createElement(button.icon, null)
+                  ));
+                } else {
+                  cellData.push(React__default.createElement(
+                    IconButton,
+                    { "aria-label": button.label, onClick: function onClick() {
+                        return button.action(_this, rowData);
+                      }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-') },
+                    React__default.createElement(button.icon, null)
+                  ));
+                }
+              }
+
+              return "";
+            });
+            break;
+          case 'render':
+            cellData = cell.render(rowData, _this);
+            break;
+          case 'link':
+            if (cellData && cellData !== "") {
+              cellData = React__default.createElement(
+                Link,
+                {
+                  component: Link$1,
+                  to: cellData,
+                  target: "_blank",
+                  rel: "noopener"
+                },
+                React__default.createElement(LinkIcon, null)
+              );
+            }
+            break;
+          case 'file':
+            if (cellData && cellData !== "") {
+              cellData = React__default.createElement(
+                Link,
+                {
+                  component: Link$1,
+                  to: cellData,
+                  target: "_blank",
+                  rel: "noopener"
+                },
+                React__default.createElement(LinkIcon, null)
+              );
+            }
+            break;
+          case 'image':
+            var imageSource = cellData;
+            cellData = React__default.createElement(
+              IconButton,
+              { "aria-label": "button.label", onClick: function onClick() {
+                  _this.openDialog({
+                    title: "Image",
+                    content: React__default.createElement(Card, {
+                      image: imageSource,
+                      onClose: _this.closeDialog
+                    })
+                  });
+                } },
+              React__default.createElement(Avatar, { alt: "", src: cellData })
+            );
+            break;
+          case 'media':
+            var mediaSource = cellData;
+            cellData = React__default.createElement(
+              IconButton,
+              { "aria-label": cell.label, onClick: function onClick() {
+                  _this.openDialog({
+                    title: "Media",
+                    content: React__default.createElement(Card, {
+                      media: mediaSource,
+                      onClose: _this.closeDialog
+                    })
+                  });
+                } },
+              React__default.createElement(LinkIcon, null)
+            );
+            break;
+          case 'expand':
+            var isExpanded = rowData[uKey] === _this.state.expandedRow[uKey];
+            cellData = React__default.createElement(
+              IconButton,
+              { "aria-label": cell.label, onClick: function onClick() {
+                  _this.toggleExpand(cell, rowData);
+                } },
+              isExpanded && _this.state.expanded ? React__default.createElement(icons.KeyboardArrowUp, null) : React__default.createElement(icons.KeyboardArrowDown, null)
+            );
+            break;
+          default:
+            break;
+        }
+      } else {
+        cellData = "";
+      }
+
+      return cellData;
+    };
+
+    _this.toggleExpand = function () {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cell, rowData) {
+        var expandedRow, expandContent;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                expandedRow = _this.state.expandedRow;
+                expandContent = null;
+
+                if (!(Object.keys(expandedRow).length > 0 && expandedRow[_this.props.uKey] === rowData[_this.props.uKey])) {
+                  _context.next = 6;
+                  break;
+                }
+
+                expandedRow = {};
+                _context.next = 10;
+                break;
+
+              case 6:
+                expandedRow = rowData;
+                _context.next = 9;
+                return _this.getExpandContent(cell, rowData);
+
+              case 9:
+                expandContent = _context.sent;
+
+              case 10:
+
+                _this.setState({ expanded: expandContent, expandedRow: expandedRow });
+
+              case 11:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, _this2);
+      }));
+
+      return function (_x, _x2) {
+        return _ref.apply(this, arguments);
+      };
+    }();
+
+    _this.getExpandContent = function () {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cell, rowData) {
+        var expandContent;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return cell.render(rowData, _this);
+
+              case 2:
+                expandContent = _context2.sent;
+                return _context2.abrupt("return", expandContent);
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, _this2);
+      }));
+
+      return function (_x3, _x4) {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+
+    _this.render = function () {
+      var _this$props = _this.props,
+          title = _this$props.title,
+          pagination = _this$props.pagination,
+          classes = _this$props.classes,
+          uKey = _this$props.uKey,
+          other = objectWithoutProperties(_this$props, ["title", "pagination", "classes", "uKey"]);
+      var _this$state = _this.state,
+          columns = _this$state.columns,
+          rowsCount = _this$state.rowsCount,
+          expanded = _this$state.expanded,
+          expandedRow = _this$state.expandedRow;
+      var _this$state2 = _this.state,
+          order = _this$state2.order,
+          orderBy = _this$state2.orderBy,
+          selected = _this$state2.selected,
+          rowsPerPage = _this$state2.rowsPerPage,
+          page = _this$state2.page,
+          selectable = _this$state2.selectable;
+      var _this$state3 = _this.state,
+          handleSelectAllClick = _this$state3.handleSelectAllClick,
+          handleRequestSort = _this$state3.handleRequestSort;
+
+
+      var rows = [];
+      if (_this.state.loadData) {
+        rows = _this.state.rows ? _this.state.rows : [];
+      } else {
+        rows = _this.state.rows ? _this.state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : [];
+      }
+
+      if (selected !== undefined) {
+        _this.selectedRows = selected;
+      }
+
+      if (handleSelectAllClick !== undefined) {
+        _this.handleSelectAllClick = handleSelectAllClick;
+      }
+
+      if (handleRequestSort !== undefined) {
+        _this.onRequestSort = handleRequestSort;
+      }
+
+      return React__default.createElement(
+        Paper,
+        { className: classes.paper },
+        title ? React__default.createElement(Toolbar$1, _extends$b({
+          title: title,
+          numSelected: _this.selectedRows.length,
+          openDialog: _this.openDialog,
+          closeDialog: _this.closeDialog,
+          refreshData: _this.refreshData
+        }, other)) : null,
+        React__default.createElement(ChipFilter$1, { options: columns, loadData: _this.loadData }),
+        React__default.createElement(
+          "div",
+          { className: classes.tableWrapper },
+          _this.state.loading && React__default.createElement(CircularProgress, { className: classes.progress }),
+          React__default.createElement(
+            Table,
+            { className: classes.table, "aria-labelledby": "tableTitle", key: Date.now() },
+            React__default.createElement(TableHead$1, {
+              selectable: selectable,
+              columns: columns,
+              numSelected: _this.selectedRows.length,
+              order: order,
+              orderBy: orderBy,
+              onSelectAllClick: _this.handleSelectAllClick,
+              onRequestSort: _this.handleRequestSort,
+              rowCount: rowsCount
+            }),
+            React__default.createElement(
+              TableBody,
+              null,
+              !_this.state.loading && rows.length === 0 ? React__default.createElement(
+                TableRow,
+                null,
+                React__default.createElement(
+                  TableCell,
+                  {
+                    colSpan: columns.length,
+                    classes: {
+                      root: classes.tableCell
+                    }
+                  },
+                  React__default.createElement(
+                    Typography,
+                    null,
+                    "Nothing here yet"
+                  )
+                )
+              ) : null,
+              rows.map(function (n) {
+                var isSelected = _this.isSelected(n[uKey]);
+                var isExpanded = n[uKey] === expandedRow[uKey];
+                var expandColumn = isExpanded && columns.find(function (column) {
+                  var showColumn = true;
+                  if (column.beforeShow) {
+                    showColumn = column.beforeShow(n);
+                  }
+
+                  return showColumn && column.type === 'expand';
+                });
+
+                return React__default.createElement(
+                  React__default.Fragment,
+                  null,
+                  React__default.createElement(
+                    TableRow,
+                    {
+                      hover: true,
+                      onClick: function onClick(event) {
+                        return _this.handleClick(event, n);
+                      },
+                      role: "checkbox",
+                      "aria-checked": isSelected,
+                      tabIndex: -1,
+                      key: new Date().getTime() + "-" + (title ? title.replace(' ', '-') : "") + "-" + n[uKey],
+                      selected: isSelected
+                    },
+                    columns.some(function (column) {
+                      return column.span === true;
+                    }) ? columns.map(function (column) {
+                      var cellData = _this.formatCellData(column, n, uKey);
+
+                      return (column.show === undefined || column.show) && column.span ? column.name === "selectable" ? React__default.createElement(
+                        TableCell,
+                        {
+                          padding: "checkbox",
+                          key: column.name,
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        React__default.createElement(Checkbox, { checked: isSelected })
+                      ) : React__default.createElement(
+                        TableCell,
+                        {
+                          key: column.name,
+                          colSpan: columns.length,
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        cellData
+                      ) : null;
+                    }) : columns.map(function (column) {
+                      var cellData = _this.formatCellData(column, n, uKey);
+
+                      return column.show === undefined || column.show ? column.name === "selectable" ? React__default.createElement(
+                        TableCell,
+                        {
+                          padding: "checkbox",
+                          key: column.name,
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        React__default.createElement(Checkbox, { checked: isSelected })
+                      ) : React__default.createElement(
+                        TableCell,
+                        {
+                          key: column.name,
+                          padding: column.disablePadding ? 'none' : 'default',
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        cellData
+                      ) : null;
+                    })
+                  ),
+                  isExpanded && expandColumn && expanded ? React__default.createElement(
+                    TableRow,
+                    null,
+                    React__default.createElement(
+                      TableCell,
+                      { colSpan: columns.length },
+                      expanded
+                    )
+                  ) : null
+                );
+              })
+            )
+          )
+        ),
+        pagination && rows.length > 0 ? React__default.createElement(TablePagination, {
+          component: "div",
+          count: rowsCount,
+          rowsPerPage: rowsPerPage,
+          page: page,
+          rowsPerPageOptions: [5, 10, 25, 50, 100],
+          backIconButtonProps: {
+            'aria-label': 'Previous Page'
           },
-          open: _this.state.snackBarOpen,
-          autoHideDuration: _this.state.snackBarDuration ? _this.state.snackBarDuration : 10000,
-          onClose: _this.props.onClose ? _this.props.onClose : _this.handleSnackBarClose
-        },
-        React__default.createElement(SnackbarContent, {
-          className: classes[_this.state.snackBarType ? _this.state.snackBarType : variant],
-          'aria-describedby': 'snackbar-message-id',
-          message: React__default.createElement(
-            'span',
-            { id: 'snackbar-message-id', className: classes.snackBarMessage },
-            React__default.createElement(Icon$$1, { className: classnames(classes.snackBarIcon, classes.snackBarIconVariant) }),
-            _this.state.snackBarMessage
-          ),
-          action: [React__default.createElement(
-            IconButton,
-            {
-              key: 'close',
-              'aria-label': 'Close',
-              color: 'inherit',
-              className: classes.snackBarClose,
-              onClick: _this.handleSnackBarClose
-            },
-            React__default.createElement(CloseIcon, null)
-          )]
+          nextIconButtonProps: {
+            'aria-label': 'Next Page'
+          },
+          onChangePage: _this.handleChangePage,
+          onChangeRowsPerPage: _this.handleChangeRowsPerPage
+        }) : null,
+        React__default.createElement(Dialog$1, {
+          title: _this.state.dialog.title,
+          open: _this.state.dialogOpen,
+          onClose: _this.closeDialog,
+          type: _this.state.dialog.type,
+          content: _this.state.dialog.content,
+          text: _this.state.dialog.text
         })
       );
     };
 
-    _this.state = props;
+    _this.state = Object.assign({}, tableOptions, props);
     return _this;
   }
 
-  return EnhancedSnackbar;
+  return EnhancedTable;
 }(React__default.Component);
 
-EnhancedSnackbar.defaultProps = {
-  variant: "error"
+EnhancedTable.defaultProps = {
+  pagination: true,
+  rows: [],
+  uKey: 'id'
 };
 
-EnhancedSnackbar.propTypes = {
+EnhancedTable.propTypes = {
   classes: PropTypes__default.object.isRequired,
-  variant: PropTypes__default.string.isRequired
+  pagination: PropTypes__default.bool.isRequired,
+  rows: PropTypes__default.array.isRequired
 };
 
-var Snackbar$1 = styles.withStyles(styles$x)(EnhancedSnackbar);
+var Table$1 = styles.withStyles(styles$y)(EnhancedTable);
+
+var styles$z = function styles$$1(theme) {
+	var _panelDetail, _heading, _headingAction;
+
+	return {
+		root: {
+			width: '100%'
+		},
+		panelDetail: (_panelDetail = {}, defineProperty$1(_panelDetail, theme.breakpoints.only('xs'), {
+			display: 'flex'
+		}), defineProperty$1(_panelDetail, 'display', 'block'), _panelDetail),
+		summaryContent: defineProperty$1({}, theme.breakpoints.down('xs'), {
+			margin: 0
+		}),
+		summaryPanel: defineProperty$1({}, theme.breakpoints.down('xs'), {
+			padding: '0px 8px'
+		}),
+		headingWrapper: {
+			flexBasis: '80%'
+		},
+		heading: (_heading = {
+			fontSize: theme.typography.pxToRem(15)
+		}, defineProperty$1(_heading, theme.breakpoints.only('xs'), {
+			fontSize: theme.typography.pxToRem(12)
+		}), defineProperty$1(_heading, 'display', 'flex'), defineProperty$1(_heading, 'alignItems', 'center'), defineProperty$1(_heading, 'marginLeft', theme.spacing.unit), defineProperty$1(_heading, 'marginRight', theme.spacing.unit), defineProperty$1(_heading, 'flexBasis', '80%'), defineProperty$1(_heading, 'textDecoration', 'none'), _heading),
+		secondaryHeading: {
+			fontSize: theme.typography.pxToRem(15),
+			color: theme.palette.text.secondary
+			// flexBasis: '15%',
+		},
+		headingContent: {
+			flexBasis: '80%'
+		},
+		headingAction: (_headingAction = {}, defineProperty$1(_headingAction, theme.breakpoints.only('xs'), {
+			flexBasis: '24%',
+			marginTop: theme.spacing.unit
+		}), defineProperty$1(_headingAction, theme.breakpoints.between('sm', 'md'), {
+			flexBasis: '12%'
+		}), defineProperty$1(_headingAction, theme.breakpoints.up('md'), {
+			flexBasis: '8%'
+		}), defineProperty$1(_headingAction, theme.breakpoints.between('sm', 'xl'), {
+			display: 'flex',
+			alignItems: 'center',
+			marginLeft: theme.spacing.unit,
+			marginRight: theme.spacing.unit
+		}), _headingAction)
+	};
+};
+
+var EnhancedExpansionPanel = function (_React$Component) {
+	inherits(EnhancedExpansionPanel, _React$Component);
+
+	function EnhancedExpansionPanel(props) {
+		classCallCheck(this, EnhancedExpansionPanel);
+
+		var _this = possibleConstructorReturn(this, (EnhancedExpansionPanel.__proto__ || Object.getPrototypeOf(EnhancedExpansionPanel)).call(this, props));
+
+		_this.state = {
+			expanded: null,
+			loading: false,
+			data: [],
+			content: null
+		};
+
+		_this.componentWillReceiveProps = function (nextProps) {
+			_this.setState({ data: nextProps.data, topActions: nextProps.topActions });
+		};
+
+		_this.handleChange = function (panel, elem) {
+			return function (event, expanded) {
+				_this.setState({ expanded: expanded ? panel : false, content: null, loading: true });
+
+				if (expanded) {
+					if (typeof elem.content === "function") {
+						var contentFn = elem.content();
+						if (contentFn instanceof Promise) {
+							contentFn.then(function (response) {
+								_this.setState({ content: response, loading: false });
+							}).catch(function (error) {
+								_this.setState({ content: error, loading: false });
+							});
+						} else {
+							_this.setState({ content: contentFn, loading: false });
+						}
+					} else {
+						_this.setState({ content: elem.content, loading: false });
+					}
+				} else {
+					_this.setState({ loading: false });
+				}
+			};
+		};
+
+		_this.toggleExpansionPanel = function (panel, elem, expanded) {
+			_this.setState({ expanded: !expanded ? panel : false, content: null, loading: true });
+
+			if (!expanded) {
+				if (typeof elem.content === "function") {
+					var contentFn = elem.content();
+					if (contentFn instanceof Promise) {
+						contentFn.then(function (response) {
+							_this.setState({ content: response, loading: false });
+						}).catch(function (error) {
+							_this.setState({ content: error, loading: false });
+						});
+					} else {
+						_this.setState({ content: contentFn, loading: false });
+					}
+				} else {
+					_this.setState({ content: elem.content, loading: false });
+				}
+			} else {
+				_this.setState({ loading: false });
+			}
+		};
+
+		_this.render = function () {
+			var classes = _this.props.classes;
+			var _this$state = _this.state,
+			    data = _this$state.data,
+			    content = _this$state.content,
+			    expanded = _this$state.expanded,
+			    topActions = _this$state.topActions,
+			    actions = _this$state.actions;
+
+
+			var titleLink = {};
+
+			return React__default.createElement(
+				'div',
+				{ className: classes.root },
+				data.map(function (elem, index) {
+					if (elem) {
+						var panel = 'panel' + index;
+						return React__default.createElement(
+							ExpansionPanel,
+							{ expanded: expanded === panel, key: elem.key },
+							React__default.createElement(
+								ExpansionPanelSummary,
+								{
+									classes: {
+										root: classes.summaryPanel, // class name, e.g. `classes-nesting-root-x`
+										content: classes.summaryContent // class name, e.g. `classes-nesting-label-x`
+									},
+									IconButtonProps: {
+										onClick: function onClick() {
+											return _this.toggleExpansionPanel(panel, elem, expanded === panel);
+										}
+									},
+									expandIcon: React__default.createElement(ExpandMoreIcon, null)
+								},
+								elem.image ? React__default.createElement(Avatar, { alt: "", src: elem.image }) : null,
+								titleLink = elem.link ? Object.assign({}, {
+									component: Link$1,
+									to: elem.link
+								}) : [],
+								elem.title && elem.subheading ? React__default.createElement(
+									'div',
+									{
+										className: classes.headingWrapper
+									},
+									React__default.createElement(
+										Typography,
+										_extends$b({}, titleLink, {
+											className: classes.heading
+										}),
+										typeof elem.title === "function" ? elem.title() : elem.title
+									),
+									React__default.createElement(
+										Typography,
+										_extends$b({}, titleLink, {
+											className: classes.heading
+										}),
+										typeof elem.subheading === "function" ? elem.subheading() : elem.subheading
+									)
+								) : elem.title ? React__default.createElement(
+									Typography,
+									_extends$b({}, titleLink, {
+										className: classes.heading
+									}),
+									typeof elem.title === "function" ? elem.title() : elem.title
+								) : null,
+								React__default.createElement(
+									'div',
+									{ className: classes.headingAction },
+									expanded === panel && topActions ? topActions.map(function (action) {
+										var showAction = action.beforeShow ? action.beforeShow(elem) : true;
+
+										var actionButton = action.icon ? React__default.createElement(
+											Fab,
+											{ 'aria-label': action.title, className: classes.fab, color: action.color, onClick: function onClick() {
+													return action.action(_this, elem);
+												}, size: 'small', key: "fab" },
+											React__default.createElement(action.icon, null)
+										) : React__default.createElement(
+											Button,
+											{ 'aria-label': action.title, variant: 'contained', color: action.color, onClick: function onClick() {
+													return action.action(_this, elem);
+												}, size: 'small', key: "button" },
+											action.label
+										);
+
+										return showAction ? actionButton : null;
+									}) : React__default.createElement(
+										Typography,
+										{ className: classes.secondaryHeading },
+										typeof elem.description === "function" ? elem.description() : elem.description
+									)
+								)
+							),
+							_this.state.loading && React__default.createElement(LinearProgress, null),
+							expanded === panel && content ? React__default.createElement(
+								ExpansionPanelDetails,
+								{
+									classes: {
+										root: classes.panelDetail
+									}
+								},
+								content
+							) : null,
+							expanded === panel && actions ? React__default.createElement(
+								'div',
+								null,
+								React__default.createElement(Divider, null),
+								React__default.createElement(
+									ExpansionPanelActions,
+									null,
+									topActions.map(function (action) {
+										return React__default.createElement(
+											Button,
+											{ 'aria-label': action.title, color: action.color, onClick: function onClick() {
+													return action.action(_this, elem);
+												}, size: 'small' },
+											action.title
+										);
+									})
+								)
+							) : null
+						);
+					} else {
+						return null;
+					}
+				})
+			);
+		};
+
+		_this.state = Object.assign(_this.state, props);
+		return _this;
+	}
+
+	return EnhancedExpansionPanel;
+}(React__default.Component);
+
+EnhancedExpansionPanel.propTypes = {
+	classes: PropTypes__default.object.isRequired
+};
+
+var Accordion = styles.withStyles(styles$z)(EnhancedExpansionPanel);
 
 var async = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
@@ -43976,7 +44118,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var async$1 = unwrapExports(async);
 
-var styles$y = function styles$$1(theme) {
+var styles$A = function styles$$1(theme) {
   return {
     root: {
       // flexGrow: 1,
@@ -44231,735 +44373,8 @@ Filter.propTypes = {
   classes: PropTypes__default.object.isRequired
 };
 
-var Filter$1 = styles.withStyles(styles$y)(Filter);
+var Filter$1 = styles.withStyles(styles$A)(Filter);
 
-var styles$z = function styles$$1(theme) {
-  return {};
-};
-
-var Sort = function (_React$Component) {
-  inherits(Sort, _React$Component);
-
-  function Sort() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    classCallCheck(this, Sort);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Sort.__proto__ || Object.getPrototypeOf(Sort)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      anchorEl: null
-    }, _this.handleOpenMenu = function (event) {
-      _this.setState({ anchorEl: event.currentTarget });
-    }, _this.handleCloseMenu = function () {
-      _this.setState({ anchorEl: null });
-    }, _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          options = _this$props.options,
-          data = _this$props.data,
-          onChange = _this$props.onChange;
-      var anchorEl = _this.state.anchorEl;
-
-      var isMenuOpen = Boolean(anchorEl);
-      var renderSortingMenu = React__default.createElement(
-        Popover,
-        {
-          open: isMenuOpen,
-          anchorEl: anchorEl,
-          onClose: _this.handleCloseMenu,
-          className: classes.popper,
-          anchorOrigin: {
-            vertical: 'top',
-            horizontal: 'right'
-          },
-          transformOrigin: {
-            vertical: 'top',
-            horizontal: 'right'
-          }
-        },
-        React__default.createElement(
-          List,
-          { className: classes.list },
-          React__default.createElement(
-            ListItem,
-            {
-              alignItems: 'flex-start',
-              onClick: function onClick() {
-                _this.handleCloseMenu();
-              }
-            },
-            React__default.createElement(ListItemText, {
-              secondary: 'Sort By : '
-            }),
-            React__default.createElement(
-              ListItemIcon,
-              null,
-              React__default.createElement(SwapVert, null)
-            )
-          ),
-          options.map(function (option) {
-            var sortDirection = data.sortBy === option.name && data.sortDirection === 'DESC' ? 'ASC' : 'DESC';
-
-            return option.sort ? React__default.createElement(
-              ListItem,
-              {
-                key: 'sort-' + option.name,
-                alignItems: 'flex-start'
-              },
-              React__default.createElement(ListItemText, {
-                primary: option.label
-              }),
-              React__default.createElement(
-                ListItemSecondaryAction,
-                null,
-                React__default.createElement(
-                  IconButton,
-                  { 'aria-label': sortDirection,
-                    onClick: function onClick() {
-                      var sortObj = {
-                        sortBy: option.name,
-                        sortDirection: sortDirection
-                      };
-
-                      var tempdata = Object.assign({}, data, sortObj);
-                      onChange(tempdata);
-                      _this.handleCloseMenu();
-                    }
-                  },
-                  data.sortBy === option.name && data.sortDirection === 'DESC' ? React__default.createElement(ArrowUpward, null) : React__default.createElement(ArrowDownward, null)
-                )
-              )
-            ) : null;
-          })
-        )
-      );
-
-      return React__default.createElement(
-        'div',
-        null,
-        React__default.createElement(
-          IconButton,
-          {
-            color: 'inherit',
-            'aria-label': 'open sorting',
-            'aria-haspopup': 'true',
-            onClick: _this.handleOpenMenu
-          },
-          React__default.createElement(SwapVert, null)
-        ),
-        renderSortingMenu
-      );
-    }, _temp), possibleConstructorReturn(_this, _ret);
-  }
-
-  return Sort;
-}(React__default.Component);
-
-styles.withStyles(styles$z)(Sort);
-
-// ##############################
-
-var history$1 = createBrowserHistory();
-
-var styles$A = function styles$$1(theme) {
-	return {
-		icon: {
-			display: 'inline-flex',
-			flexShrink: 0,
-			marginRight: theme.spacing.unit * 2
-		}
-	};
-};
-
-var CustomIcon = function (_React$Component) {
-	inherits(CustomIcon, _React$Component);
-
-	function CustomIcon() {
-		classCallCheck(this, CustomIcon);
-		return possibleConstructorReturn(this, (CustomIcon.__proto__ || Object.getPrototypeOf(CustomIcon)).apply(this, arguments));
-	}
-
-	createClass(CustomIcon, [{
-		key: 'render',
-		value: function render() {
-			var _props = this.props,
-			    name = _props.name,
-			    font = _props.font,
-			    color = _props.color,
-			    size = _props.size,
-			    other = objectWithoutProperties(_props, ['name', 'font', 'color', 'size']);
-
-			return React__default.createElement(Icon, _extends$b({
-				name: 'down-circle',
-				color: 'white',
-				size: 30
-				// style={{}}
-			}, other));
-		}
-	}]);
-	return CustomIcon;
-}(React__default.Component);
-
-var CustomIcon$1 = styles.withStyles(styles$A)(CustomIcon);
-
-var styles$B = function styles$$1(theme) {
-  var _search;
-
-  return {
-    root: {
-      display: 'flex'
-    },
-    grow: {
-      flexGrow: 1
-    },
-    menuButton: {},
-    title: defineProperty$1({
-      display: 'none'
-    }, theme.breakpoints.up('sm'), {
-      display: 'block'
-    }),
-    search: (_search = {
-      position: 'relative',
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: colorManipulator.fade(theme.palette.common.white, 0.15),
-      '&:hover': {
-        backgroundColor: colorManipulator.fade(theme.palette.common.white, 0.25)
-      },
-      marginRight: theme.spacing.unit * 2,
-      marginLeft: theme.spacing.unit * 3,
-      width: '80%'
-    }, defineProperty$1(_search, theme.breakpoints.down('sm'), {
-      marginLeft: theme.spacing.unit * 3,
-      width: 'auto'
-    }), defineProperty$1(_search, theme.breakpoints.down('md'), {
-      marginLeft: theme.spacing.unit * 3,
-      width: '100%'
-    }), _search),
-    searchIcon: {
-      width: theme.spacing.unit * 6,
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-      })
-    },
-    appBarShift: {
-      // marginLeft: drawerWidth,
-      // width: `calc(100% - ${drawerWidth}px)`,
-      // transition: theme.transitions.create(['width', 'margin'], {
-      //   easing: theme.transitions.easing.sharp,
-      //   duration: theme.transitions.duration.enteringScreen,
-      // }),
-    },
-    popper: {
-      zIndex: 1,
-      minWidth: '240px',
-      maxWidth: '360px'
-      // '&[x-placement*="bottom"] $arrow': {
-      //   top: 0,
-      //   left: 0,
-      //   marginTop: '-0.9em',
-      //   width: '3em',
-      //   height: '1em',
-      //   '&::before': {
-      //     borderWidth: '0 1em 1em 1em',
-      //     borderColor: `transparent transparent ${theme.palette.common.white} transparent`,
-      //   },
-      // },
-      // '&[x-placement*="top"] $arrow': {
-      //   bottom: 0,
-      //   left: 0,
-      //   marginBottom: '-0.9em',
-      //   width: '3em',
-      //   height: '1em',
-      //   '&::before': {
-      //     borderWidth: '1em 1em 0 1em',
-      //     borderColor: `${theme.palette.common.white} transparent transparent transparent`,
-      //   },
-      // },
-      // '&[x-placement*="right"] $arrow': {
-      //   left: 0,
-      //   marginLeft: '-0.9em',
-      //   height: '3em',
-      //   width: '1em',
-      //   '&::before': {
-      //     borderWidth: '1em 1em 1em 0',
-      //     borderColor: `transparent ${theme.palette.common.white} transparent transparent`,
-      //   },
-      // },
-      // '&[x-placement*="left"] $arrow': {
-      //   right: 0,
-      //   marginRight: '-0.9em',
-      //   height: '3em',
-      //   width: '1em',
-      //   '&::before': {
-      //     borderWidth: '1em 0 1em 1em',
-      //     borderColor: `transparent transparent transparent ${theme.palette.common.white}`,
-      //   },
-      // },
-    },
-    list: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper
-    },
-    listInline: {
-      display: 'inline'
-    },
-    avatar: {
-      color: theme.palette.text.primary,
-      backgroundColor: theme.palette.common.white,
-      width: theme.spacing.unit * 4,
-      height: theme.spacing.unit * 4
-    },
-    bigAvatar: {
-      margin: 10,
-      width: 60,
-      height: 60
-    },
-    button: {
-      margin: theme.spacing.unit
-    },
-    icon: {
-      margin: theme.spacing.unit,
-      fontSize: 60
-    },
-    toolbar: {
-      paddingLeft: theme.spacing.unit,
-      paddingRight: theme.spacing.unit
-    },
-
-    sectionDesktopStart: defineProperty$1({
-      display: 'none'
-    }, theme.breakpoints.between('sm', 'xl'), {
-      display: 'flex',
-      flexBasis: '20%',
-      justifyContent: 'flex-start'
-    }),
-    sectionMobileStart: defineProperty$1({
-      display: 'flex',
-      flexBasis: '12%',
-      justifyContent: 'flex-start'
-    }, theme.breakpoints.between('sm', 'xl'), {
-      display: 'none'
-    }),
-
-    sectionCentre: defineProperty$1({
-      display: 'flex',
-      justifyContent: 'center',
-      flexBasis: '76%'
-    }, theme.breakpoints.between('sm', 'xl'), {
-      flexBasis: '60%'
-    }),
-
-    sectionDesktopEnd: defineProperty$1({
-      display: 'none'
-    }, theme.breakpoints.between('sm', 'xl'), {
-      display: 'flex',
-      flexBasis: '20%',
-      justifyContent: 'flex-end'
-    }),
-    sectionMobileEnd: defineProperty$1({
-      display: 'flex',
-      flexBasis: '12%',
-      justifyContent: 'flex-end'
-    }, theme.breakpoints.between('sm', 'xl'), {
-      display: 'none'
-    })
-  };
-};
-
-var searchColumns = [{
-  name: 'name', type: 'search', label: 'Search…', placeholder: 'Search…',
-  options: function options(value) {
-    return [];
-  },
-  "dependencies": {
-    "*": [{
-      name: 'id', type: 'hidden',
-      value: function value(dataObj) {
-        return dataObj && dataObj.id ? dataObj.id : "";
-      }
-    }]
-  }
-}];
-
-var MenuAppBar = function (_React$Component) {
-  inherits(MenuAppBar, _React$Component);
-
-  function MenuAppBar() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    classCallCheck(this, MenuAppBar);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = MenuAppBar.__proto__ || Object.getPrototypeOf(MenuAppBar)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      anchorEl: null,
-      mobileMoreAnchorEl: null
-    }, _this.handleOpenMenu = function (event) {
-      _this.setState({ anchorEl: event.currentTarget });
-    }, _this.handleCloseMenu = function () {
-      _this.setState({ anchorEl: null });
-    }, _this.handleMobileMenuOpen = function (event) {
-      _this.setState({ mobileMoreAnchorEl: event.currentTarget });
-    }, _this.handleMobileMenuClose = function () {
-      _this.setState({ mobileMoreAnchorEl: null });
-    }, _this.handleDrawerToggle = function () {
-      _this.setState({ isDrawerOpen: !_this.state.isDrawerOpen });
-    }, _temp), possibleConstructorReturn(_this, _ret);
-  }
-
-  createClass(MenuAppBar, [{
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      var _props = this.props,
-          classes = _props.classes,
-          title = _props.title,
-          logo = _props.logo,
-          routes = _props.routes,
-          data = _props.data,
-          drawer = _props.drawer,
-          items = _props.items;
-      var _state = this.state,
-          anchorEl = _state.anchorEl,
-          mobileMoreAnchorEl = _state.mobileMoreAnchorEl,
-          isDrawerOpen = _state.isDrawerOpen;
-
-      var isMenuOpen = Boolean(anchorEl);
-      var isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-      var nameArr = [];
-      var nameInitialArr = [];
-      var profileImg = null;
-      var profileCompleteFlag = false;
-      if (data !== undefined && data !== null) {
-        if (data.firstName) {
-          nameArr.push(data.firstName);
-          nameInitialArr.push(data.firstName.charAt(0));
-        }
-
-        if (data.middleName) {
-          nameArr.push(data.middleName);
-        }
-
-        if (data.lastName) {
-          nameArr.push(data.lastName);
-          nameInitialArr.push(data.lastName.charAt(0));
-        }
-
-        profileImg = data.image !== undefined && data.image !== "" && data.image !== null ? data.image : null;
-
-        profileCompleteFlag = data.profileComplete;
-      }
-
-      var fullName = nameArr.join(' ');
-      var nameInitial = nameInitialArr.join('');
-
-      var renderMenu = React__default.createElement(
-        Popover,
-        {
-          open: isMenuOpen,
-          anchorEl: anchorEl,
-          onClose: this.handleCloseMenu,
-          className: classes.popper,
-          anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'right'
-          },
-          transformOrigin: {
-            vertical: 'top',
-            horizontal: 'right'
-          }
-        },
-        React__default.createElement(
-          List,
-          { className: classes.list },
-          React__default.createElement(
-            ListItem,
-            { alignItems: 'flex-start' },
-            React__default.createElement(
-              ListItemAvatar,
-              null,
-              profileImg ? React__default.createElement(Avatar, { alt: fullName, src: profileImg, className: classes.bigAvatar }) : React__default.createElement(AccountCircle, { className: classes.icon })
-            ),
-            React__default.createElement(ListItemText, {
-              primary: fullName,
-              secondary: React__default.createElement(
-                React__default.Fragment,
-                null,
-                !profileCompleteFlag ? React__default.createElement(
-                  Button,
-                  {
-                    variant: 'contained',
-                    color: 'primary',
-                    size: 'small',
-                    className: classes.button,
-                    onClick: function onClick() {
-                      _this2.handleCloseMenu();
-                      history$1.push('/complete-profile');
-                    }
-                  },
-                  'Complete KYC'
-                ) : null
-              )
-            })
-          ),
-          items.map(function (item) {
-            return React__default.createElement(
-              'div',
-              {
-                key: 'desktop-' + new Date().getTime() + '-' + (item.label ? item.label.replace(' ', '-') : "")
-              },
-              React__default.createElement(Divider, null),
-              React__default.createElement(
-                ListItem,
-                {
-                  button: true,
-                  onClick: function onClick() {
-                    _this2.handleCloseMenu();
-                    item.action(_this2, data);
-                  }
-                },
-                item.icon ? React__default.createElement(
-                  ListItemIcon,
-                  null,
-                  React__default.createElement(item.icon, null)
-                ) : null,
-                React__default.createElement(ListItemText, { primary: item.label })
-              )
-            );
-          })
-        )
-      );
-
-      var renderMobileMenu = React__default.createElement(
-        Menu,
-        {
-          anchorEl: mobileMoreAnchorEl,
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          transformOrigin: { vertical: 'top', horizontal: 'right' },
-          open: isMobileMenuOpen,
-          onClose: this.handleMobileMenuClose
-        },
-        React__default.createElement(
-          MenuItem,
-          {
-            onClick: function onClick() {
-              _this2.handleCloseMenu();
-            }
-          },
-          React__default.createElement(
-            IconButton,
-            { color: 'inherit' },
-            React__default.createElement(AccountCircle, null)
-          ),
-          React__default.createElement(
-            'p',
-            null,
-            'Profile'
-          )
-        ),
-        items.map(function (item) {
-          return React__default.createElement(
-            'div',
-            {
-              key: 'mobile-' + new Date().getTime() + '-' + (item.label ? item.label.replace(' ', '-') : "")
-            },
-            React__default.createElement(Divider, null),
-            React__default.createElement(
-              MenuItem,
-              {
-                onClick: function onClick() {
-                  _this2.handleCloseMenu();
-                  item.action(_this2, data);
-                }
-              },
-              item.icon ? React__default.createElement(
-                IconButton,
-                { color: 'inherit' },
-                React__default.createElement(item.icon, null)
-              ) : null,
-              React__default.createElement(
-                'p',
-                null,
-                item.label
-              )
-            )
-          );
-        })
-      );
-
-      var renderDrawer = drawer && routes.length > 0 ? React__default.createElement(Drawer$1, {
-        routes: routes,
-        open: isDrawerOpen,
-        title: title,
-        logo: logo,
-        handleDrawerToggle: this.handleDrawerToggle
-      }) : null;
-
-      return React__default.createElement(
-        AppBar,
-        {
-          position: 'fixed',
-          className: classnames(classes.appBar, isDrawerOpen && classes.appBarShift)
-        },
-        React__default.createElement(
-          Toolbar,
-          {
-            disableGutters: !isDrawerOpen,
-            className: classes.toolbar
-          },
-          React__default.createElement(
-            'div',
-            { className: classes.sectionDesktopStart },
-            drawer && routes.length > 0 ? React__default.createElement(
-              IconButton,
-              {
-                color: 'inherit',
-                'aria-label': 'open drawer',
-                onClick: this.handleDrawerToggle,
-                className: classnames(classes.menuButton, isDrawerOpen && classes.hide)
-              },
-              React__default.createElement(MenuIcon, null)
-            ) : null,
-            logo ? React__default.createElement(
-              Link,
-              { component: Link$1, to: '/dashboard' },
-              React__default.createElement(CustomIcon$1, { className: classes.logo })
-            ) : null,
-            React__default.createElement(
-              Typography,
-              { className: classes.title, variant: 'h6', color: 'inherit', noWrap: true },
-              title
-            )
-          ),
-          React__default.createElement(
-            'div',
-            { className: classes.sectionMobileStart },
-            drawer && routes.length > 0 ? React__default.createElement(
-              IconButton,
-              {
-                color: 'inherit',
-                'aria-label': 'open drawer',
-                onClick: this.handleDrawerToggle,
-                className: classnames(classes.menuButton, isDrawerOpen && classes.hide)
-              },
-              React__default.createElement(MenuIcon, null)
-            ) : null
-          ),
-          React__default.createElement(
-            'div',
-            { className: classes.sectionCentre },
-            React__default.createElement(
-              'div',
-              { className: classes.search },
-              React__default.createElement(
-                'div',
-                { className: classes.searchIcon },
-                React__default.createElement(SearchIcon, null)
-              ),
-              React__default.createElement(Form, {
-                fields: searchColumns,
-                buttons: [],
-                loadOnChange: true,
-                loading: false,
-                submitAction: function submitAction(filterData) {
-                  if (filterData && filterData.id) {
-                    history$1.push('/mutual-fund/' + filterData.id);
-                  } else if (filterData && filterData.name) {
-                    var fundName = filterData.name.split(" ").join("-");
-                    history$1.push('/dashboard/' + fundName);
-                  }
-                }
-              })
-            )
-          ),
-          React__default.createElement(
-            'div',
-            { className: classes.sectionDesktopEnd },
-            React__default.createElement(
-              IconButton,
-              {
-                'aria-owns': isMenuOpen ? 'material-appbar' : undefined,
-                'aria-haspopup': 'true',
-                onClick: this.handleOpenMenu,
-                color: 'inherit'
-              },
-              profileImg ? React__default.createElement(Avatar, { alt: fullName, src: profileImg }) : React__default.createElement(
-                Avatar,
-                { alt: fullName, className: classes.avatar },
-                nameInitial
-              )
-            )
-          ),
-          React__default.createElement(
-            'div',
-            { className: classes.sectionMobileEnd },
-            React__default.createElement(
-              IconButton,
-              {
-                'aria-owns': isMobileMenuOpen ? 'material-appbar' : undefined,
-                'aria-haspopup': 'true',
-                onClick: this.handleOpenMenu,
-                color: 'inherit'
-              },
-              profileImg ? React__default.createElement(Avatar, { alt: fullName, src: profileImg }) : React__default.createElement(
-                Avatar,
-                { alt: fullName, className: classes.avatar },
-                nameInitial
-              )
-            )
-          )
-        ),
-        renderMenu,
-        renderMobileMenu,
-        renderDrawer
-      );
-    }
-  }]);
-  return MenuAppBar;
-}(React__default.Component);
-
-MenuAppBar.defaultProps = {
-  title: "",
-  drawer: false,
-  data: {},
-  items: [],
-  routes: []
-};
-
-MenuAppBar.propTypes = {
-  classes: PropTypes__default.object.isRequired,
-  drawer: PropTypes__default.bool.isRequired,
-  data: PropTypes__default.object.isRequired,
-  items: PropTypes__default.array.isRequired,
-  title: PropTypes__default.string.isRequired,
-  routes: PropTypes__default.array.isRequired
-};
-
-var Appbar = styles.withStyles(styles$B)(MenuAppBar);
-
-exports.AppBar = Appbar;
 exports.Drawer = Drawer$1;
 exports.Card = Card;
 exports.ChipFilter = ChipFilter$1;

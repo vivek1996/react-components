@@ -1,11 +1,9 @@
 import React from 'react';
 
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
@@ -19,9 +17,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
-import CheckIcon from '@material-ui/icons/Check';
 
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -32,15 +28,14 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import { DatePicker } from 'material-ui-pickers';
 
 import amber from '@material-ui/core/colors/amber';
-import { Card } from "./../";
-import AutoComplete from "./AutoComplete";
-import AutoSuggest from "./AutoSuggest";
-import Range from "./Range";
-import Select from "./Select";
-// import Toggle from "./Toggle";
-import Toggle from "./Toggle";
-import DateRange from "./DateRange";
-import RichText from "./RichText";
+import Card from "./Card";
+import AutoComplete from "./Fields/AutoComplete";
+import AutoSuggest from "./Fields/AutoSuggest";
+import Range from "./Fields/Range";
+import Select from "./Fields/Select";
+import Toggle from "./Fields/Toggle";
+import DateRange from "./Fields/DateRange";
+import RichText from "./Fields/RichText";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

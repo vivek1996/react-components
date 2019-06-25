@@ -11,9 +11,9 @@ import green from '@material-ui/core/colors/green';
 import CheckIcon from '@material-ui/icons/Check';
 
 import amber from '@material-ui/core/colors/amber';
-import { Snackbar, Toolbar } from "./";
-
-import Field from "./Form/Field";
+import Snackbar from "./Snackbar";
+import Toolbar from "./Toolbar";
+import Field from "./Field";
 
 const styles = theme => ({
   container: {

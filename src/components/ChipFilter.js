@@ -4,7 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 
-import { Form, Popper } from "./";
+import Form from "./Form";
+import Popper from "./Popper";
 
 const styles = theme => ({
   root: {

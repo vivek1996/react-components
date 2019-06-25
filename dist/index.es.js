@@ -1,5 +1,5 @@
-import React, { createContext, createElement, Component, PureComponent, Fragment, cloneElement, forwardRef } from 'react';
-import PropTypes, { oneOfType, object, string, number, instanceOf, oneOf, func, element, arrayOf, bool, any, shape, node } from 'prop-types';
+import React__default, { createContext, createElement, Component, PureComponent, Fragment, cloneElement, forwardRef } from 'react';
+import PropTypes__default, { oneOfType, object, string, number, instanceOf, oneOf, func, element, arrayOf, bool, any, shape, node, array } from 'prop-types';
 import { withStyles, createStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography';
@@ -10,38 +10,75 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Card, CardMedia, CardContent, CardActions, Typography as Typography$1, withStyles as withStyles$1, Toolbar, Grid, Tooltip as Tooltip$1, IconButton as IconButton$1, Button, Fab } from '@material-ui/core';
-import Chip from '@material-ui/core/Chip';
-import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import InfoIcon from '@material-ui/icons/Info';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Tooltip from '@material-ui/core/Tooltip';
-import { lighten, emphasize, fade } from '@material-ui/core/styles/colorManipulator';
-import { Delete, Done, Clear, KeyboardArrowUp, KeyboardArrowDown } from '@material-ui/icons';
 import { isMobile } from 'react-device-detect';
-import Button$1 from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
-import { combineReducers, createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
+import List from '@material-ui/core/List';
+import { Card, CardMedia, CardContent, CardActions, Typography as Typography$1, withStyles as withStyles$1, Toolbar, Grid, Tooltip, IconButton as IconButton$1, Button as Button$1, Fab } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import WarningIcon from '@material-ui/icons/Warning';
+import green from '@material-ui/core/colors/green';
+import amber from '@material-ui/core/colors/amber';
+import { lighten, emphasize } from '@material-ui/core/styles/colorManipulator';
+import { Delete, Done, Clear, KeyboardArrowUp, KeyboardArrowDown } from '@material-ui/icons';
+import reactDom, { findDOMNode, createPortal } from 'react-dom';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import createStyles$1 from '@material-ui/core/styles/createStyles';
+import withStyles$1$1 from '@material-ui/core/styles/withStyles';
+import Toolbar$1 from '@material-ui/core/Toolbar';
+import Popover from '@material-ui/core/Popover';
+import Paper from '@material-ui/core/Paper';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import NoSsr from '@material-ui/core/NoSsr';
+import Chip from '@material-ui/core/Chip';
+import MenuItem from '@material-ui/core/MenuItem';
+import CancelIcon from '@material-ui/icons/Cancel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import Slider from '@material-ui/lab/Slider';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Checkbox from '@material-ui/core/Checkbox';
+import Input from '@material-ui/core/Input';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import CheckIcon from '@material-ui/icons/Check';
+import Popper from '@material-ui/core/Popper';
+import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import MobileStepper from '@material-ui/core/MobileStepper';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepConnector from '@material-ui/core/StepConnector';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Tooltip$1 from '@material-ui/core/Tooltip';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TablePagination from '@material-ui/core/TablePagination';
 import Fab$1 from '@material-ui/core/Fab';
-import Paper from '@material-ui/core/Paper';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Avatar from '@material-ui/core/Avatar';
 import Link from '@material-ui/core/Link';
 import LinkIcon from '@material-ui/icons/Link';
@@ -51,117 +88,6 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import reactDom, { findDOMNode, createPortal } from 'react-dom';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField from '@material-ui/core/TextField';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import createStyles$1 from '@material-ui/core/styles/createStyles';
-import withStyles$1$1 from '@material-ui/core/styles/withStyles';
-import Toolbar$1 from '@material-ui/core/Toolbar';
-import Popover from '@material-ui/core/Popover';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import NoSsr from '@material-ui/core/NoSsr';
-import MenuItem from '@material-ui/core/MenuItem';
-import CancelIcon from '@material-ui/icons/Cancel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Slider from '@material-ui/lab/Slider';
-import { Editor } from '@tinymce/tinymce-react';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import green from '@material-ui/core/colors/green';
-import CheckIcon from '@material-ui/icons/Check';
-import Input from '@material-ui/core/Input';
-import amber from '@material-ui/core/colors/amber';
-import List from '@material-ui/core/List';
-import Popper from '@material-ui/core/Popper';
-import MobileStepper from '@material-ui/core/MobileStepper';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepConnector from '@material-ui/core/StepConnector';
-import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
-import WarningIcon from '@material-ui/icons/Warning';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import SwapVert from '@material-ui/icons/SwapVert';
-import ArrowUpward from '@material-ui/icons/ArrowUpward';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Icon from '@material-ui/core/Icon';
-import AppBar from '@material-ui/core/AppBar';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Menu from '@material-ui/core/Menu';
-
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function commonjsRequire () {
-	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
-}
-
-function unwrapExports (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
-}
-
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-
-var classnames = createCommonjsModule(function (module) {
-/*!
-  Copyright (c) 2016 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/
-/* global define */
-
-(function () {
-
-	var hasOwn = {}.hasOwnProperty;
-
-	function classNames () {
-		var classes = [];
-
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
-
-			var argType = typeof arg;
-
-			if (argType === 'string' || argType === 'number') {
-				classes.push(arg);
-			} else if (Array.isArray(arg)) {
-				classes.push(classNames.apply(null, arg));
-			} else if (argType === 'object') {
-				for (var key in arg) {
-					if (hasOwn.call(arg, key) && arg[key]) {
-						classes.push(key);
-					}
-				}
-			}
-		}
-
-		return classes.join(' ');
-	}
-
-	if (module.exports) {
-		module.exports = classNames;
-	} else {
-		window.classNames = classNames;
-	}
-}());
-});
 
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -223,6 +149,20 @@ if (__DEV__) {
 }
 
 var warning_1 = warning;
+
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function commonjsRequire () {
+	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
+}
+
+function unwrapExports (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
 
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -1185,7 +1125,7 @@ var Router = function (_React$Component) {
         history = _props.history;
 
 
-    invariant_1(children == null || React.Children.count(children) === 1, "A <Router> may have only one child element");
+    invariant_1(children == null || React__default.Children.count(children) === 1, "A <Router> may have only one child element");
 
     // Do this here so we can setState when a <Redirect> changes the
     // location in componentWillMount. This happens e.g. when doing
@@ -1208,21 +1148,21 @@ var Router = function (_React$Component) {
   Router.prototype.render = function render() {
     var children = this.props.children;
 
-    return children ? React.Children.only(children) : null;
+    return children ? React__default.Children.only(children) : null;
   };
 
   return Router;
-}(React.Component);
+}(React__default.Component);
 
 Router.propTypes = {
-  history: PropTypes.object.isRequired,
-  children: PropTypes.node
+  history: PropTypes__default.object.isRequired,
+  children: PropTypes__default.node
 };
 Router.contextTypes = {
-  router: PropTypes.object
+  router: PropTypes__default.object
 };
 Router.childContextTypes = {
-  router: PropTypes.object.isRequired
+  router: PropTypes__default.object.isRequired
 };
 
 // Written in this round about way for babel-transform-imports
@@ -1257,18 +1197,18 @@ var BrowserRouter = function (_React$Component) {
   };
 
   BrowserRouter.prototype.render = function render() {
-    return React.createElement(Router, { history: this.history, children: this.props.children });
+    return React__default.createElement(Router, { history: this.history, children: this.props.children });
   };
 
   return BrowserRouter;
-}(React.Component);
+}(React__default.Component);
 
 BrowserRouter.propTypes = {
-  basename: PropTypes.string,
-  forceRefresh: PropTypes.bool,
-  getUserConfirmation: PropTypes.func,
-  keyLength: PropTypes.number,
-  children: PropTypes.node
+  basename: PropTypes__default.string,
+  forceRefresh: PropTypes__default.bool,
+  getUserConfirmation: PropTypes__default.func,
+  keyLength: PropTypes__default.number,
+  children: PropTypes__default.node
 };
 
 var createHashHistory_1 = createCommonjsModule(function (module, exports) {
@@ -1629,17 +1569,17 @@ var HashRouter = function (_React$Component) {
   };
 
   HashRouter.prototype.render = function render() {
-    return React.createElement(Router, { history: this.history, children: this.props.children });
+    return React__default.createElement(Router, { history: this.history, children: this.props.children });
   };
 
   return HashRouter;
-}(React.Component);
+}(React__default.Component);
 
 HashRouter.propTypes = {
-  basename: PropTypes.string,
-  getUserConfirmation: PropTypes.func,
-  hashType: PropTypes.oneOf(['hashbang', 'noslash', 'slash']),
-  children: PropTypes.node
+  basename: PropTypes__default.string,
+  getUserConfirmation: PropTypes__default.func,
+  hashType: PropTypes__default.oneOf(['hashbang', 'noslash', 'slash']),
+  children: PropTypes__default.node
 };
 
 var _extends$1 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -1708,28 +1648,28 @@ var Link$1 = function (_React$Component) {
 
     var href = this.context.router.history.createHref(typeof to === 'string' ? { pathname: to } : to);
 
-    return React.createElement('a', _extends$1({}, props, { onClick: this.handleClick, href: href, ref: innerRef }));
+    return React__default.createElement('a', _extends$1({}, props, { onClick: this.handleClick, href: href, ref: innerRef }));
   };
 
   return Link$$1;
-}(React.Component);
+}(React__default.Component);
 
 Link$1.propTypes = {
-  onClick: PropTypes.func,
-  target: PropTypes.string,
-  replace: PropTypes.bool,
-  to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  innerRef: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
+  onClick: PropTypes__default.func,
+  target: PropTypes__default.string,
+  replace: PropTypes__default.bool,
+  to: PropTypes__default.oneOfType([PropTypes__default.string, PropTypes__default.object]).isRequired,
+  innerRef: PropTypes__default.oneOfType([PropTypes__default.string, PropTypes__default.func])
 };
 Link$1.defaultProps = {
   replace: false
 };
 Link$1.contextTypes = {
-  router: PropTypes.shape({
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-      replace: PropTypes.func.isRequired,
-      createHref: PropTypes.func.isRequired
+  router: PropTypes__default.shape({
+    history: PropTypes__default.shape({
+      push: PropTypes__default.func.isRequired,
+      replace: PropTypes__default.func.isRequired,
+      createHref: PropTypes__default.func.isRequired
     }).isRequired
   }).isRequired
 };
@@ -2434,18 +2374,18 @@ var MemoryRouter = function (_React$Component) {
   };
 
   MemoryRouter.prototype.render = function render() {
-    return React.createElement(Router, { history: this.history, children: this.props.children });
+    return React__default.createElement(Router, { history: this.history, children: this.props.children });
   };
 
   return MemoryRouter;
-}(React.Component);
+}(React__default.Component);
 
 MemoryRouter.propTypes = {
-  initialEntries: PropTypes.array,
-  initialIndex: PropTypes.number,
-  getUserConfirmation: PropTypes.func,
-  keyLength: PropTypes.number,
-  children: PropTypes.node
+  initialEntries: PropTypes__default.array,
+  initialIndex: PropTypes__default.number,
+  getUserConfirmation: PropTypes__default.func,
+  keyLength: PropTypes__default.number,
+  children: PropTypes__default.node
 };
 
 // Written in this round about way for babel-transform-imports
@@ -2961,7 +2901,7 @@ function _possibleConstructorReturn$5(self, call) { if (!self) { throw new Refer
 function _inherits$5(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var isEmptyChildren = function isEmptyChildren(children) {
-  return React.Children.count(children) === 0;
+  return React__default.Children.count(children) === 0;
 };
 
 /**
@@ -3047,40 +2987,40 @@ var Route = function (_React$Component) {
     var location = this.props.location || route.location;
     var props = { match: match, location: location, history: history, staticContext: staticContext };
 
-    if (component) return match ? React.createElement(component, props) : null;
+    if (component) return match ? React__default.createElement(component, props) : null;
 
     if (render) return match ? render(props) : null;
 
     if (typeof children === "function") return children(props);
 
-    if (children && !isEmptyChildren(children)) return React.Children.only(children);
+    if (children && !isEmptyChildren(children)) return React__default.Children.only(children);
 
     return null;
   };
 
   return Route;
-}(React.Component);
+}(React__default.Component);
 
 Route.propTypes = {
-  computedMatch: PropTypes.object, // private, from <Switch>
-  path: PropTypes.string,
-  exact: PropTypes.bool,
-  strict: PropTypes.bool,
-  sensitive: PropTypes.bool,
-  component: PropTypes.func,
-  render: PropTypes.func,
-  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-  location: PropTypes.object
+  computedMatch: PropTypes__default.object, // private, from <Switch>
+  path: PropTypes__default.string,
+  exact: PropTypes__default.bool,
+  strict: PropTypes__default.bool,
+  sensitive: PropTypes__default.bool,
+  component: PropTypes__default.func,
+  render: PropTypes__default.func,
+  children: PropTypes__default.oneOfType([PropTypes__default.func, PropTypes__default.node]),
+  location: PropTypes__default.object
 };
 Route.contextTypes = {
-  router: PropTypes.shape({
-    history: PropTypes.object.isRequired,
-    route: PropTypes.object.isRequired,
-    staticContext: PropTypes.object
+  router: PropTypes__default.shape({
+    history: PropTypes__default.object.isRequired,
+    route: PropTypes__default.object.isRequired,
+    staticContext: PropTypes__default.object
   })
 };
 Route.childContextTypes = {
-  router: PropTypes.object.isRequired
+  router: PropTypes__default.object.isRequired
 };
 
 // Written in this round about way for babel-transform-imports
@@ -3107,7 +3047,7 @@ var NavLink = function NavLink(_ref) {
       ariaCurrent = _ref.ariaCurrent,
       rest = _objectWithoutProperties$1(_ref, ['to', 'exact', 'strict', 'location', 'activeClassName', 'className', 'activeStyle', 'style', 'isActive', 'ariaCurrent']);
 
-  return React.createElement(Route, {
+  return React__default.createElement(Route, {
     path: (typeof to === 'undefined' ? 'undefined' : _typeof$3(to)) === 'object' ? to.pathname : to,
     exact: exact,
     strict: strict,
@@ -3118,7 +3058,7 @@ var NavLink = function NavLink(_ref) {
 
       var isActive = !!(getIsActive ? getIsActive(match, location) : match);
 
-      return React.createElement(Link$1, _extends$7({
+      return React__default.createElement(Link$1, _extends$7({
         to: to,
         className: isActive ? [className, activeClassName].filter(function (i) {
           return i;
@@ -3132,15 +3072,15 @@ var NavLink = function NavLink(_ref) {
 
 NavLink.propTypes = {
   to: Link$1.propTypes.to,
-  exact: PropTypes.bool,
-  strict: PropTypes.bool,
-  location: PropTypes.object,
-  activeClassName: PropTypes.string,
-  className: PropTypes.string,
-  activeStyle: PropTypes.object,
-  style: PropTypes.object,
-  isActive: PropTypes.func,
-  ariaCurrent: PropTypes.oneOf(['page', 'step', 'location', 'true'])
+  exact: PropTypes__default.bool,
+  strict: PropTypes__default.bool,
+  location: PropTypes__default.object,
+  activeClassName: PropTypes__default.string,
+  className: PropTypes__default.string,
+  activeStyle: PropTypes__default.object,
+  style: PropTypes__default.object,
+  isActive: PropTypes__default.func,
+  ariaCurrent: PropTypes__default.oneOf(['page', 'step', 'location', 'true'])
 };
 
 NavLink.defaultProps = {
@@ -3204,19 +3144,19 @@ var Prompt = function (_React$Component) {
   };
 
   return Prompt;
-}(React.Component);
+}(React__default.Component);
 
 Prompt.propTypes = {
-  when: PropTypes.bool,
-  message: PropTypes.oneOfType([PropTypes.func, PropTypes.string]).isRequired
+  when: PropTypes__default.bool,
+  message: PropTypes__default.oneOfType([PropTypes__default.func, PropTypes__default.string]).isRequired
 };
 Prompt.defaultProps = {
   when: true
 };
 Prompt.contextTypes = {
-  router: PropTypes.shape({
-    history: PropTypes.shape({
-      block: PropTypes.func.isRequired
+  router: PropTypes__default.shape({
+    history: PropTypes__default.shape({
+      block: PropTypes__default.func.isRequired
     }).isRequired
   }).isRequired
 };
@@ -3340,24 +3280,24 @@ var Redirect = function (_React$Component) {
   };
 
   return Redirect;
-}(React.Component);
+}(React__default.Component);
 
 Redirect.propTypes = {
-  computedMatch: PropTypes.object, // private, from <Switch>
-  push: PropTypes.bool,
-  from: PropTypes.string,
-  to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
+  computedMatch: PropTypes__default.object, // private, from <Switch>
+  push: PropTypes__default.bool,
+  from: PropTypes__default.string,
+  to: PropTypes__default.oneOfType([PropTypes__default.string, PropTypes__default.object]).isRequired
 };
 Redirect.defaultProps = {
   push: false
 };
 Redirect.contextTypes = {
-  router: PropTypes.shape({
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-      replace: PropTypes.func.isRequired
+  router: PropTypes__default.shape({
+    history: PropTypes__default.shape({
+      push: PropTypes__default.func.isRequired,
+      replace: PropTypes__default.func.isRequired
     }).isRequired,
-    staticContext: PropTypes.object
+    staticContext: PropTypes__default.object
   }).isRequired
 };
 
@@ -3485,23 +3425,23 @@ var StaticRouter = function (_React$Component) {
       block: this.handleBlock
     };
 
-    return React.createElement(Router, _extends$9({}, props, { history: history }));
+    return React__default.createElement(Router, _extends$9({}, props, { history: history }));
   };
 
   return StaticRouter;
-}(React.Component);
+}(React__default.Component);
 
 StaticRouter.propTypes = {
-  basename: PropTypes.string,
-  context: PropTypes.object.isRequired,
-  location: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+  basename: PropTypes__default.string,
+  context: PropTypes__default.object.isRequired,
+  location: PropTypes__default.oneOfType([PropTypes__default.string, PropTypes__default.object])
 };
 StaticRouter.defaultProps = {
   basename: "",
   location: "/"
 };
 StaticRouter.childContextTypes = {
-  router: PropTypes.object.isRequired
+  router: PropTypes__default.object.isRequired
 };
 
 // Written in this round about way for babel-transform-imports
@@ -3543,8 +3483,8 @@ var Switch$1 = function (_React$Component) {
 
     var match = void 0,
         child = void 0;
-    React.Children.forEach(children, function (element$$1) {
-      if (match == null && React.isValidElement(element$$1)) {
+    React__default.Children.forEach(children, function (element$$1) {
+      if (match == null && React__default.isValidElement(element$$1)) {
         var _element$props = element$$1.props,
             pathProp = _element$props.path,
             exact = _element$props.exact,
@@ -3559,20 +3499,20 @@ var Switch$1 = function (_React$Component) {
       }
     });
 
-    return match ? React.cloneElement(child, { location: location, computedMatch: match }) : null;
+    return match ? React__default.cloneElement(child, { location: location, computedMatch: match }) : null;
   };
 
   return Switch$$1;
-}(React.Component);
+}(React__default.Component);
 
 Switch$1.contextTypes = {
-  router: PropTypes.shape({
-    route: PropTypes.object.isRequired
+  router: PropTypes__default.shape({
+    route: PropTypes__default.object.isRequired
   }).isRequired
 };
 Switch$1.propTypes = {
-  children: PropTypes.node,
-  location: PropTypes.object
+  children: PropTypes__default.node,
+  location: PropTypes__default.object
 };
 
 // Written in this round about way for babel-transform-imports
@@ -3580,6 +3520,51 @@ Switch$1.propTypes = {
 // Written in this round about way for babel-transform-imports
 
 // Written in this round about way for babel-transform-imports
+
+var classnames = createCommonjsModule(function (module) {
+/*!
+  Copyright (c) 2016 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (module.exports) {
+		module.exports = classNames;
+	} else {
+		window.classNames = classNames;
+	}
+}());
+});
 
 var _typeof$4 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -3763,7 +3748,7 @@ var MiniDrawer = function (_React$Component) {
           theme = _props.theme;
 
       var props = this.props;
-      return React.createElement(
+      return React__default.createElement(
         Drawer,
         {
           variant: 'temporary',
@@ -3773,27 +3758,27 @@ var MiniDrawer = function (_React$Component) {
           open: props.open,
           onClose: props.handleDrawerToggle
         },
-        React.createElement(
+        React__default.createElement(
           'div',
           { className: classes.toolbar },
-          props.logo ? React.createElement(
+          props.logo ? React__default.createElement(
             IconButton,
             { 'aria-label': 'Delete' },
-            React.createElement(props.logo, null)
+            React__default.createElement(props.logo, null)
           ) : null,
-          React.createElement(
+          React__default.createElement(
             Typography,
             { variant: 'h6', color: 'inherit', className: classes.flex },
             props.title
           ),
-          React.createElement(
+          React__default.createElement(
             IconButton,
             { onClick: props.handleDrawerToggle },
-            theme.direction === 'rtl' ? React.createElement(ChevronRightIcon, null) : React.createElement(ChevronLeftIcon, null)
+            theme.direction === 'rtl' ? React__default.createElement(ChevronRightIcon, null) : React__default.createElement(ChevronLeftIcon, null)
           )
         ),
-        React.createElement(Divider, null),
-        React.createElement(
+        React__default.createElement(Divider, null),
+        React__default.createElement(
           'div',
           {
             tabIndex: 0,
@@ -3803,7 +3788,7 @@ var MiniDrawer = function (_React$Component) {
           },
           props.routes.map(function (prop, key) {
             if (prop.redirect || prop.sidebar === false) return null;
-            return prop.link ? React.createElement(
+            return prop.link ? React__default.createElement(
               ListItem,
               { button: true,
                 key: key,
@@ -3812,27 +3797,27 @@ var MiniDrawer = function (_React$Component) {
                 target: prop.target ? prop.target : "_blank",
                 rel: 'noopener'
               },
-              React.createElement(
+              React__default.createElement(
                 ListItemIcon,
                 null,
-                typeof prop.icon === 'function' ? React.createElement(prop.icon, null) : prop.icon
+                typeof prop.icon === 'function' ? React__default.createElement(prop.icon, null) : prop.icon
               ),
-              React.createElement(ListItemText, {
+              React__default.createElement(ListItemText, {
                 primary: prop.title
               })
-            ) : React.createElement(
+            ) : React__default.createElement(
               ListItem,
               { button: true,
                 to: prop.path,
                 component: Link$1,
                 key: key
               },
-              React.createElement(
+              React__default.createElement(
                 ListItemIcon,
                 null,
-                typeof prop.icon === 'function' ? React.createElement(prop.icon, null) : prop.icon
+                typeof prop.icon === 'function' ? React__default.createElement(prop.icon, null) : prop.icon
               ),
-              React.createElement(ListItemText, { primary: prop.title })
+              React__default.createElement(ListItemText, { primary: prop.title })
             );
           })
         )
@@ -3840,16 +3825,328 @@ var MiniDrawer = function (_React$Component) {
     }
   }]);
   return MiniDrawer;
-}(React.Component);
+}(React__default.Component);
 
 MiniDrawer.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired,
+  theme: PropTypes__default.object.isRequired
 };
 
 var Drawer$1 = withStyles(styles, { withTheme: true })(MiniDrawer);
 
-var styles$1 = {
+var styles$1 = function styles(theme) {
+  return {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+      paddingRight: theme.spacing.unit,
+      paddingLeft: theme.spacing.unit
+    },
+    header: {
+      alignItems: 'center',
+      display: 'flex',
+      backgroundColor: theme.palette.primary.main,
+      color: '#fff',
+      height: '56px',
+      borderRadius: '3px 3px 0 0',
+      boxSizing: 'border-box',
+      fontWeight: 500,
+      justifyContent: 'space-between',
+      padding: '0 8px 0 16px',
+      minWidth: '300px'
+    },
+    textField: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit
+    },
+    button: {
+      margin: theme.spacing.unit
+    },
+    formControl: {
+      margin: theme.spacing.unit * 3
+    },
+    group: {
+      margin: theme.spacing.unit + 'px 0'
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing.unit,
+      color: 'rgba(255, 255, 255)'
+    },
+    title: {
+      color: 'rgba(255, 255, 255)'
+    },
+    content: {
+      paddingTop: theme.spacing.unit * 3
+    }
+  };
+};
+
+var EnhancedDialog = function (_React$Component) {
+  inherits(EnhancedDialog, _React$Component);
+
+  function EnhancedDialog(props) {
+    classCallCheck(this, EnhancedDialog);
+
+    var _this = possibleConstructorReturn(this, (EnhancedDialog.__proto__ || Object.getPrototypeOf(EnhancedDialog)).call(this, props));
+
+    _this.handleClose = function () {
+      _this.props.onClose();
+    };
+
+    _this.handleCancel = function () {
+      if (_this.props.value) {
+        _this.props.onClose(_this.props.value);
+      } else {
+        _this.props.onClose("cancel");
+      }
+    };
+
+    _this.handleOk = function () {
+      if (_this.state.value) {
+        _this.props.onClose(_this.state.value);
+      } else {
+        _this.props.onClose("ok");
+      }
+    };
+
+    _this.renderActions = function () {
+      switch (_this.state.type) {
+        case 'custom':
+          {
+            return React__default.createElement(
+              DialogActions,
+              null,
+              _this.state.actions.map(function (actionButton) {
+                var btnKey = 'button-' + actionButton.label.replace(' ', '-');
+
+                return React__default.createElement(
+                  Button,
+                  {
+                    variant: actionButton.variant ? actionButton.variant : "contained",
+                    color: actionButton.color ? actionButton.color : "primary",
+                    onClick: function onClick(e) {
+                      return actionButton.action(_this);
+                    },
+                    key: btnKey
+                  },
+                  actionButton.label
+                );
+              })
+            );
+          }
+        case 'confirm':
+          {
+            return React__default.createElement(
+              DialogActions,
+              null,
+              React__default.createElement(
+                Button,
+                { onClick: _this.handleCancel, color: 'primary' },
+                'Cancel'
+              ),
+              React__default.createElement(
+                Button,
+                { onClick: _this.handleOk, color: 'primary' },
+                'Ok'
+              )
+            );
+          }
+        case 'alert':
+          {
+            return React__default.createElement(
+              DialogActions,
+              null,
+              React__default.createElement(
+                Button,
+                { onClick: _this.handleClose, color: 'primary', autoFocus: true },
+                'Ok'
+              )
+            );
+          }
+        default:
+          {
+            return;
+          }
+      }
+    };
+
+    _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          title = _this$props.title,
+          onClose = _this$props.onClose,
+          fullScreen = _this$props.fullScreen,
+          other = objectWithoutProperties(_this$props, ['classes', 'title', 'onClose', 'fullScreen']);
+
+
+      return React__default.createElement(
+        Dialog,
+        _extends$b({
+          fullScreen: fullScreen && isMobile,
+          maxWidth: false,
+          onClose: onClose,
+          'aria-labelledby': 'dialog-title',
+          className: classes.dialog
+        }, other),
+        _this.state.title ? React__default.createElement(
+          DialogTitle,
+          { id: 'dialog-title', className: classes.header, disableTypography: true },
+          React__default.createElement(
+            Typography,
+            { variant: 'h6', className: classes.title },
+            _this.state.title
+          ),
+          onClose ? React__default.createElement(
+            IconButton,
+            { 'aria-label': 'Close', className: classes.closeButton, onClick: onClose },
+            React__default.createElement(CloseIcon, null)
+          ) : null
+        ) : "",
+        React__default.createElement(
+          DialogContent,
+          { className: classes.content },
+          _this.state.text ? React__default.createElement(
+            DialogContentText,
+            null,
+            _this.state.text
+          ) : "",
+          _this.state.content ? _this.state.content : ""
+        ),
+        _this.state.type ? _this.renderActions() : ""
+      );
+    };
+
+    _this.state = props;
+    return _this;
+  }
+
+  createClass(EnhancedDialog, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState(nextProps);
+    }
+  }]);
+  return EnhancedDialog;
+}(React__default.Component);
+
+EnhancedDialog.defaultProps = {
+  fullScreen: true
+};
+
+var Dialog$1 = withStyles(styles$1)(EnhancedDialog);
+
+var styles$2 = function styles(theme) {
+  return {
+    root: {
+      width: '100%',
+      maxWidth: 360,
+      backgroundColor: theme.palette.background.paper
+    }
+  };
+};
+
+var listOptions = {
+  dialogOpen: false,
+  dialog: {}
+};
+
+var EnhanceList = function (_React$Component) {
+  inherits(EnhanceList, _React$Component);
+
+  function EnhanceList(props) {
+    classCallCheck(this, EnhanceList);
+
+    var _this = possibleConstructorReturn(this, (EnhanceList.__proto__ || Object.getPrototypeOf(EnhanceList)).call(this, props));
+
+    _this.openDialog = function (dialogInfo) {
+      _this.setState({ dialogOpen: true, dialog: dialogInfo });
+    };
+
+    _this.closeDialog = function (value) {
+      _this.setState({ dialogOpen: false });
+
+      if (value === "ok" && _this.state.dialog.action) {
+        _this.state.dialog.action();
+      }
+    };
+
+    _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          items = _this$props.items,
+          data = _this$props.data;
+
+
+      return React__default.createElement(
+        'div',
+        { className: classes.root },
+        React__default.createElement(
+          List,
+          { component: 'nav' },
+          items.map(function (item) {
+            var showItem = item.beforeShow ? item.beforeShow(data) : true;
+
+            if (item.getIcon) {
+              item['icon'] = item.getIcon(data[item.field]);
+            }
+
+            var listItemProps = {
+              button: true,
+              key: Date.now() + '-list-item-' + item.label.replace(' ', '-')
+            };
+
+            if (item.action) {
+              listItemProps.onClick = function () {
+                return item.action(_this, data);
+              };
+            } else {
+              listItemProps.to = item.href;
+              listItemProps.component = Link$1;
+            }
+
+            return showItem ? React__default.createElement(
+              ListItem,
+              listItemProps,
+              React__default.createElement(
+                ListItemIcon,
+                null,
+                React__default.createElement(item.icon, null)
+              ),
+              React__default.createElement(ListItemText, { primary: item.label })
+            ) : null;
+          })
+        ),
+        React__default.createElement(Dialog$1, {
+          title: _this.state.dialog.title,
+          open: _this.state.dialogOpen,
+          onClose: _this.closeDialog,
+          type: _this.state.dialog.type,
+          content: _this.state.dialog.content,
+          text: _this.state.dialog.text
+        })
+      );
+    };
+
+    _this.state = Object.assign(listOptions, props);
+    return _this;
+  }
+
+  return EnhanceList;
+}(React__default.Component);
+
+EnhanceList.defaultProps = {
+  data: {}
+};
+
+EnhanceList.propTypes = {
+  classes: PropTypes__default.object.isRequired
+};
+
+var List$1 = withStyles(styles$2)(EnhanceList);
+
+var styles$3 = {
   card: {},
   media: {
     height: 200,
@@ -3888,45 +4185,45 @@ var EnhanceCard = function (_React$Component) {
       var data = _this.state.data;
 
 
-      return React.createElement(
+      return React__default.createElement(
         Card,
         { className: classes.card },
-        image !== undefined ? React.createElement(CardMedia, {
+        image !== undefined ? React__default.createElement(CardMedia, {
           className: classes.media,
           image: image,
           title: title
         }) : null,
-        media !== undefined ? React.createElement(CardMedia, {
+        media !== undefined ? React__default.createElement(CardMedia, {
           className: classes.media,
           src: media,
           title: title
         }) : null,
-        title !== undefined || subtitle !== undefined || description !== undefined || content !== undefined ? React.createElement(
+        title !== undefined || subtitle !== undefined || description !== undefined || content !== undefined ? React__default.createElement(
           CardContent,
           null,
-          title !== undefined ? React.createElement(
+          title !== undefined ? React__default.createElement(
             Typography$1,
             { component: 'h1' },
             title
           ) : null,
-          subtitle !== undefined ? React.createElement(
+          subtitle !== undefined ? React__default.createElement(
             Typography$1,
             { component: 'h6' },
             subtitle
           ) : null,
-          description !== undefined ? React.createElement(
+          description !== undefined ? React__default.createElement(
             Typography$1,
             { component: 'p' },
             description
           ) : null,
           content !== undefined ? content : null
         ) : null,
-        actions ? React.createElement(
+        actions ? React__default.createElement(
           CardActions,
           {
             className: !Array.isArray(actions) && classes.center
           },
-          Array.isArray(actions) ? React.createElement(List$1, _extends$b({
+          Array.isArray(actions) ? React__default.createElement(List$1, _extends$b({
             items: actions,
             data: data
           }, other)) : actions
@@ -3939,310 +4236,298 @@ var EnhanceCard = function (_React$Component) {
   }
 
   return EnhanceCard;
-}(React.Component);
+}(React__default.Component);
 
 EnhanceCard.propTypes = {
-  title: PropTypes.node,
-  subtitle: PropTypes.node,
-  description: PropTypes.node,
-  footer: PropTypes.node,
-  avatar: PropTypes.string
+  title: PropTypes__default.node,
+  subtitle: PropTypes__default.node,
+  description: PropTypes__default.node,
+  footer: PropTypes__default.node,
+  avatar: PropTypes__default.string
 };
 
-var Card$1 = withStyles(styles$1)(EnhanceCard);
+var Card$1 = withStyles(styles$3)(EnhanceCard);
 
-var styles$2 = function styles(theme) {
+var styles$4 = function styles(theme) {
   return {
-    root: {
-      display: 'flex',
-      // justifyContent: 'flex-end',
-      flexWrap: 'inherit',
-      overflowX: 'hidden',
-      overflowY: 'hidden',
-      '&:hover': {
-        overflowX: 'auto'
-      }
-      // [theme.breakpoints.between('sm', 'xl')]: {
-      //   flexWrap: 'wrap',
-      // }
+    snackBarClose: {
+      fontSize: 20
     },
-    chip: {
-      margin: theme.spacing.unit / 2
+    snackBarMessage: {
+      display: 'flex'
     },
-    paper: {
-      marginRight: theme.spacing.unit * 2
+    snackBarIcon: {
+      fontSize: 20
     },
-    chipLabel: {
-      paddingLeft: theme.spacing.unit,
-      paddingRight: theme.spacing.unit
+    snackBarIconVariant: {
+      opacity: 0.9,
+      marginRight: theme.spacing.unit
+    },
+    success: {
+      backgroundColor: green[600]
+    },
+    error: {
+      backgroundColor: theme.palette.error.dark
+    },
+    info: {
+      backgroundColor: theme.palette.primary.dark
+    },
+    warning: {
+      backgroundColor: amber[700]
     }
   };
 };
 
-var ChipFilter = function (_React$Component) {
-  inherits(ChipFilter, _React$Component);
+var variantIcon = {
+  success: CheckCircleIcon,
+  warning: WarningIcon,
+  error: ErrorIcon,
+  info: InfoIcon
+};
 
-  function ChipFilter() {
-    var _ref;
+var EnhancedSnackbar = function (_React$Component) {
+  inherits(EnhancedSnackbar, _React$Component);
 
-    var _temp, _this, _ret;
+  function EnhancedSnackbar(props) {
+    classCallCheck(this, EnhancedSnackbar);
 
-    classCallCheck(this, ChipFilter);
+    var _this = possibleConstructorReturn(this, (EnhancedSnackbar.__proto__ || Object.getPrototypeOf(EnhancedSnackbar)).call(this, props));
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    _this.state = { snackBarOpen: false };
 
-    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = ChipFilter.__proto__ || Object.getPrototypeOf(ChipFilter)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      open: false,
-      dialogOpen: false,
-      dialog: {},
-      filterData: {}
-    }, _this.clearFilter = function (option) {
-      _this.setState(function (state) {
-        var newState = state;
-        delete newState.filterData[option.name];
-        return newState;
-      }, function () {
-        _this.props.loadData(_this.state.filterData);
-      });
-    }, _this.openFilter = function (dialogInfo) {
-      _this.setState({ dialogOpen: true, dialog: dialogInfo });
-    }, _this.closeFilter = function (value) {
-      _this.setState({ dialogOpen: false });
+    _this.componentWillReceiveProps = function (nextProps) {
+      _this.setState(nextProps);
+    };
 
-      if (value === "ok" && _this.state.dialog.action) {
-        _this.state.dialog.action();
-      }
-    }, _this.getSelectedValue = function (option) {
-      var filterData = _this.state.filterData;
-      if (filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0) {
-        return option.label;
-      } else if (['multiselect', 'select', 'radio', 'checkbox'].indexOf(option.type) > -1) {
-        var availableOptions = [];
-        if (option.enum) {
-          availableOptions = option.enum;
-        } else if (option.options) {
-          availableOptions = option.options;
-        } else if (_typeof$4(option.data) === 'object') {
-          availableOptions = option.data;
-        } else if (typeof option.data === 'function') {
-          availableOptions = option.data();
-        }
+    _this.handleSnackBarClose = function (event, reason) {
+      _this.setState({ snackBarOpen: false });
+    };
 
-        var selectedOptions = availableOptions.map(function (availableOption) {
-          return filterData[option.name].indexOf(availableOption.value.toString()) > -1 ? availableOption.label : '';
-        }).filter(function (selectedOption) {
-          return selectedOption !== undefined && selectedOption !== "";
-        });
+    _this.render = function () {
+      var classes = _this.props.classes;
+      var variant = _this.state.variant;
 
-        return selectedOptions.length > 1 ? selectedOptions[0] + ' + ' + (selectedOptions.length - 1) : selectedOptions;
-      } else if (['daterange'].indexOf(option.type) > -1) {
-        return option.label + ' : From ' + filterData[option.name].start + ' To ' + filterData[option.name].end;
-      } else {
-        var _availableOptions = [];
-        if (option.enum) {
-          _availableOptions = option.enum;
-        } else if (option.options) {
-          _availableOptions = option.options;
-        } else if (_typeof$4(option.data) === 'object') {
-          _availableOptions = option.data;
-        } else if (typeof option.data === 'function') {
-          _availableOptions = option.data();
-        }
+      var Icon = variantIcon[variant];
 
-        if (_availableOptions.length > 0) {
-          var _selectedOptions = _availableOptions.map(function (availableOption) {
-            return filterData[option.name].indexOf(availableOption.value.toString()) > -1 ? availableOption.label : '';
-          }).filter(function (selectedOption) {
-            return selectedOption !== undefined && selectedOption !== "";
-          });
-
-          return _selectedOptions.length > 1 ? _selectedOptions[0] + ' + ' + (_selectedOptions.length - 1) : _selectedOptions;
-        } else {
-          return option.label + ' ' + filterData[option.name];
-        }
-      }
-    }, _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          options = _this$props.options;
-      var _this$state = _this.state,
-          open = _this$state.open,
-          filterData = _this$state.filterData;
-
-
-      var filterOptions = options || [];
-      return React.createElement(
-        'div',
-        { className: classes.root },
-        filterOptions.map(function (option) {
-          return option.filter ? React.createElement(Chip, {
-            key: option.name,
-            icon: filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0 ? React.createElement(ArrowDropDown, null) : null,
-            color: filterData[option.name] !== undefined && filterData[option.name] !== "" && (filterData[option.name].length > 0 || Object.keys(filterData[option.name]).length > 0) ? 'primary' : 'default',
-            label: _this.getSelectedValue(option),
-            onClick: function onClick(node$$1) {
-              var tempOption = Object.assign({}, option);
-              delete tempOption.label;
-              _this.openFilter({
-                title: option.label,
-                anchorEl: node$$1.target,
-                content: React.createElement(Form, {
-                  fields: [tempOption],
-                  buttons: [],
-                  data: filterData,
-                  loadOnChange: true,
-                  submitAction: function submitAction(filterData, formInstance) {
-                    if (Object.keys(filterData).length > 0) {
-                      _this.props.loadData(filterData);
-                    }
-
-                    formInstance.setState({ loading: false });
-                    _this.setState({ filterData: filterData });
-                  },
-                  onClose: _this.closeFilter
-                })
-              });
+      return React__default.createElement(
+        Snackbar,
+        {
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'left'
+          },
+          open: _this.state.snackBarOpen,
+          autoHideDuration: _this.state.snackBarDuration ? _this.state.snackBarDuration : 10000,
+          onClose: _this.props.onClose ? _this.props.onClose : _this.handleSnackBarClose
+        },
+        React__default.createElement(SnackbarContent, {
+          className: classes[_this.state.snackBarType ? _this.state.snackBarType : variant],
+          'aria-describedby': 'snackbar-message-id',
+          message: React__default.createElement(
+            'span',
+            { id: 'snackbar-message-id', className: classes.snackBarMessage },
+            React__default.createElement(Icon, { className: classnames(classes.snackBarIcon, classes.snackBarIconVariant) }),
+            _this.state.snackBarMessage
+          ),
+          action: [React__default.createElement(
+            IconButton,
+            {
+              key: 'close',
+              'aria-label': 'Close',
+              color: 'inherit',
+              className: classes.snackBarClose,
+              onClick: _this.handleSnackBarClose
             },
-            onDelete: filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0 ? null : function () {
-              _this.clearFilter(option);
-            },
-            className: classes.chip,
-            'aria-owns': open ? 'menu-list-grow' : undefined,
-            'aria-haspopup': 'true',
-            classes: {
-              label: classes.chipLabel
-            }
-          }) : null;
-        }),
-        React.createElement(Popper$1, {
-          key: _this.state.dialog.key,
-          title: _this.state.dialog.title,
-          open: _this.state.dialogOpen,
-          onClose: _this.closeFilter,
-          type: _this.state.dialog.type,
-          content: _this.state.dialog.content,
-          text: _this.state.dialog.text,
-          arrow: false,
-          arrowRef: null,
-          disablePortal: false,
-          flip: true,
-          placement: "bottom-start",
-          preventOverflow: 'scrollParent',
-          anchorEl: _this.state.dialog.anchorEl
+            React__default.createElement(CloseIcon, null)
+          )]
         })
       );
-    }, _temp), possibleConstructorReturn(_this, _ret);
+    };
+
+    _this.state = props;
+    return _this;
   }
 
-  return ChipFilter;
-}(React.Component);
+  return EnhancedSnackbar;
+}(React__default.Component);
 
-ChipFilter.propTypes = {
-  classes: PropTypes.object.isRequired
+EnhancedSnackbar.defaultProps = {
+  variant: "error"
 };
 
-var ChipFilter$1 = withStyles(styles$2)(ChipFilter);
-
-function Footer(_ref) {
-  var props = objectWithoutProperties(_ref, []);
-  var classes = props.classes,
-      company = props.company,
-      website = props.website,
-      trademark = props.trademark;
-
-  return React.createElement(
-    "footer",
-    { className: classes.footer },
-    React.createElement(
-      "div",
-      { className: classes.container },
-      React.createElement(
-        "p",
-        { className: classes.right },
-        React.createElement(
-          "span",
-          null,
-          "\xA9 ",
-          1900 + new Date().getYear(),
-          " ",
-          company,
-          " \xA0",
-          React.createElement(
-            "a",
-            { href: website, className: classes.a },
-            trademark
-          )
-        )
-      )
-    )
-  );
-}
-
-Footer.propTypes = {
-  classes: PropTypes.object.isRequired
+EnhancedSnackbar.propTypes = {
+  classes: PropTypes__default.object.isRequired,
+  variant: PropTypes__default.string.isRequired
 };
 
-var styles$3 = function styles(theme) {
+var Snackbar$1 = withStyles(styles$4)(EnhancedSnackbar);
+
+var toolbarStyles = function toolbarStyles(theme) {
   return {
-    root: {
+    root: defineProperty$1({
+      // paddingRight: theme.spacing.unit,
+      marginBottom: theme.spacing.unit * 2
+    }, theme.breakpoints.only('xs'), {
+      marginBottom: theme.spacing.unit
+    }),
+    highlight: theme.palette.type === 'light' ? {
+      color: theme.palette.secondary.main,
+      backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+    } : {
+      color: theme.palette.text.primary,
+      backgroundColor: theme.palette.secondary.dark
+    },
+    spacer: {
+      flex: '1 1 100%'
+    },
+    actions: {
       display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      overflow: 'hidden',
-      backgroundColor: theme.palette.background.paper
+      color: theme.palette.text.secondary,
+      flexBasis: '25%',
+      justifyContent: 'flex-end'
     },
-    gridList: {
-      // width: 500,
-      // height: 450,
+    title: {
+      display: 'flex',
+      flex: '0 0 auto',
+      flexBasis: '75%',
+      justifyContent: 'flex-start',
+      alignItems: 'center'
     },
-    icon: {
-      color: 'rgba(255, 255, 255, 0.54)'
+    fab: {
+      margin: theme.spacing.unit * 2
+    },
+    container: {
+      justifyContent: 'space-between'
     }
   };
 };
 
-function TitlebarGridList(props) {
-  var classes = props.classes,
-      items = props.items;
-
-
-  console.log("items", items);
-  return React.createElement(
-    'div',
-    { className: classes.root },
-    React.createElement(
-      GridList,
-      { cellHeight: 200, className: classes.gridList, cols: 4 },
-      items && items.map(function (item) {
-        return React.createElement(
-          GridListTile,
-          { key: item.id },
-          React.createElement(Card$1, {
-            title: 'Employers & Employees',
-            subtitle: 'Employers & Employees',
-            description: 'Employers & Employees'
-          }),
-          React.createElement(GridListTileBar, {
-            title: 'item.title',
-            actionIcon: React.createElement(
-              IconButton,
-              { className: classes.icon },
-              React.createElement(InfoIcon, null)
-            )
-          })
-        );
-      })
-    )
-  );
-}
-
-TitlebarGridList.propTypes = {
-  classes: PropTypes.object.isRequired
+var toolbarOptions = {
+  title: "Table",
+  selectable: false,
+  content: null,
+  actions: []
 };
 
-var GridList$1 = withStyles(styles$3)(TitlebarGridList);
+var EnhancedToolbar = function (_React$Component) {
+  inherits(EnhancedToolbar, _React$Component);
+
+  function EnhancedToolbar(props) {
+    classCallCheck(this, EnhancedToolbar);
+
+    var _this = possibleConstructorReturn(this, (EnhancedToolbar.__proto__ || Object.getPrototypeOf(EnhancedToolbar)).call(this, props));
+
+    _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          other = objectWithoutProperties(_this$props, ['classes']);
+      var _this$state = _this.state,
+          title = _this$state.title,
+          data = _this$state.data,
+          content = _this$state.content;
+
+
+      return React__default.createElement(
+        Toolbar,
+        _extends$b({
+          className: classnames(classes.root, defineProperty$1({}, classes.highlight, _this.state.numSelected > 0))
+        }, other),
+        content ? content : React__default.createElement(
+          Grid,
+          { container: true, className: classes.container },
+          React__default.createElement(
+            Grid,
+            { item: true, className: classes.title },
+            _this.state.selectable ? _this.state.numSelected > 0 ? React__default.createElement(
+              Typography$1,
+              { color: 'inherit', variant: 'subheading' },
+              _this.state.numSelected,
+              ' selected'
+            ) : React__default.createElement(
+              Typography$1,
+              { variant: 'h6', id: 'tableTitle' },
+              title
+            ) : React__default.createElement(
+              Typography$1,
+              { variant: 'h6', id: 'tableTitle' },
+              title
+            )
+          ),
+          React__default.createElement(
+            Grid,
+            { item: true, className: classes.actions },
+            _this.state.selectable && _this.state.numSelected > 0 ? React__default.createElement(
+              Tooltip,
+              { title: 'Delete', placement: 'top-end' },
+              React__default.createElement(
+                IconButton$1,
+                { 'aria-label': 'Delete' },
+                React__default.createElement(Delete, null)
+              )
+            ) : _this.state.actions ? _this.state.actions.map(function (action) {
+              var icon = action.icon ? action.icon : null;
+
+              var actionBtn = void 0;
+              var buttonProps = {
+                "aria-label": action.title,
+                color: action.color,
+                size: action.size
+              };
+
+              if (action.action) {
+                buttonProps.onClick = function () {
+                  return action.action(_this, data);
+                };
+              } else {
+                buttonProps.to = action.href;
+                buttonProps.component = Link$1;
+              }
+
+              actionBtn = icon ? React__default.createElement(
+                Fab,
+                _extends$b({ className: classes.fab }, buttonProps),
+                icon
+              ) : React__default.createElement(
+                Button$1,
+                _extends$b({ variant: 'text' }, buttonProps),
+                action.label
+              );
+
+              return React__default.createElement(
+                Tooltip,
+                { title: action.title, placement: action.placement, key: action.title },
+                actionBtn
+              );
+            }) : ''
+          )
+        )
+      );
+    };
+
+    _this.state = Object.assign(toolbarOptions, props);
+    return _this;
+  }
+
+  createClass(EnhancedToolbar, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState({
+        title: nextProps.title,
+        actions: nextProps.actions,
+        data: nextProps.data,
+        content: nextProps.content
+      });
+    }
+  }]);
+  return EnhancedToolbar;
+}(React__default.Component);
+
+EnhancedToolbar.propTypes = {
+  classes: PropTypes__default.object.isRequired
+  // data: PropTypes.object.isRequired,
+};
+
+var Toolbar$2 = withStyles$1(toolbarStyles)(EnhancedToolbar);
 
 var moment = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
@@ -4827,20 +5112,20 @@ var moment = createCommonjsModule(function (module, exports) {
     }
 
     function makeFormatFunction(format) {
-        var array = format.match(formattingTokens), i, length;
+        var array$$1 = format.match(formattingTokens), i, length;
 
-        for (i = 0, length = array.length; i < length; i++) {
-            if (formatTokenFunctions[array[i]]) {
-                array[i] = formatTokenFunctions[array[i]];
+        for (i = 0, length = array$$1.length; i < length; i++) {
+            if (formatTokenFunctions[array$$1[i]]) {
+                array$$1[i] = formatTokenFunctions[array$$1[i]];
             } else {
-                array[i] = removeFormattingTokens(array[i]);
+                array$$1[i] = removeFormattingTokens(array$$1[i]);
             }
         }
 
         return function (mom) {
             var output = '', i;
             for (i = 0; i < length; i++) {
-                output += isFunction(array[i]) ? array[i].call(mom, format) : array[i];
+                output += isFunction(array$$1[i]) ? array$$1[i].call(mom, format) : array$$1[i];
             }
             return output;
         };
@@ -4934,8 +5219,8 @@ var moment = createCommonjsModule(function (module, exports) {
             token = [token];
         }
         if (isNumber(callback)) {
-            func$$1 = function (input, array) {
-                array[callback] = toInt(input);
+            func$$1 = function (input, array$$1) {
+                array$$1[callback] = toInt(input);
             };
         }
         for (i = 0; i < token.length; i++) {
@@ -4944,7 +5229,7 @@ var moment = createCommonjsModule(function (module, exports) {
     }
 
     function addWeekParseToken (token, callback) {
-        addParseToken(token, function (input, array, config, token) {
+        addParseToken(token, function (input, array$$1, config, token) {
             config._w = config._w || {};
             callback(input, config._w, config, token);
         });
@@ -4998,14 +5283,14 @@ var moment = createCommonjsModule(function (module, exports) {
     addRegexToken('YYYYYY', match1to6, match6);
 
     addParseToken(['YYYYY', 'YYYYYY'], YEAR);
-    addParseToken('YYYY', function (input, array) {
-        array[YEAR] = input.length === 2 ? hooks.parseTwoDigitYear(input) : toInt(input);
+    addParseToken('YYYY', function (input, array$$1) {
+        array$$1[YEAR] = input.length === 2 ? hooks.parseTwoDigitYear(input) : toInt(input);
     });
-    addParseToken('YY', function (input, array) {
-        array[YEAR] = hooks.parseTwoDigitYear(input);
+    addParseToken('YY', function (input, array$$1) {
+        array$$1[YEAR] = hooks.parseTwoDigitYear(input);
     });
-    addParseToken('Y', function (input, array) {
-        array[YEAR] = parseInt(input, 10);
+    addParseToken('Y', function (input, array$$1) {
+        array$$1[YEAR] = parseInt(input, 10);
     });
 
     // HELPERS
@@ -5150,15 +5435,15 @@ var moment = createCommonjsModule(function (module, exports) {
         return locale.monthsRegex(isStrict);
     });
 
-    addParseToken(['M', 'MM'], function (input, array) {
-        array[MONTH] = toInt(input) - 1;
+    addParseToken(['M', 'MM'], function (input, array$$1) {
+        array$$1[MONTH] = toInt(input) - 1;
     });
 
-    addParseToken(['MMM', 'MMMM'], function (input, array, config, token) {
+    addParseToken(['MMM', 'MMMM'], function (input, array$$1, config, token) {
         var month = config._locale.monthsParse(input, token, config._strict);
         // if we didn't find a month name, mark the date as invalid.
         if (month != null) {
-            array[MONTH] = month;
+            array$$1[MONTH] = month;
         } else {
             getParsingFlags(config).invalidMonth = input;
         }
@@ -5963,43 +6248,43 @@ var moment = createCommonjsModule(function (module, exports) {
     addRegexToken('Hmmss', match5to6);
 
     addParseToken(['H', 'HH'], HOUR);
-    addParseToken(['k', 'kk'], function (input, array, config) {
+    addParseToken(['k', 'kk'], function (input, array$$1, config) {
         var kInput = toInt(input);
-        array[HOUR] = kInput === 24 ? 0 : kInput;
+        array$$1[HOUR] = kInput === 24 ? 0 : kInput;
     });
-    addParseToken(['a', 'A'], function (input, array, config) {
+    addParseToken(['a', 'A'], function (input, array$$1, config) {
         config._isPm = config._locale.isPM(input);
         config._meridiem = input;
     });
-    addParseToken(['h', 'hh'], function (input, array, config) {
-        array[HOUR] = toInt(input);
+    addParseToken(['h', 'hh'], function (input, array$$1, config) {
+        array$$1[HOUR] = toInt(input);
         getParsingFlags(config).bigHour = true;
     });
-    addParseToken('hmm', function (input, array, config) {
+    addParseToken('hmm', function (input, array$$1, config) {
         var pos = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos));
-        array[MINUTE] = toInt(input.substr(pos));
+        array$$1[HOUR] = toInt(input.substr(0, pos));
+        array$$1[MINUTE] = toInt(input.substr(pos));
         getParsingFlags(config).bigHour = true;
     });
-    addParseToken('hmmss', function (input, array, config) {
+    addParseToken('hmmss', function (input, array$$1, config) {
         var pos1 = input.length - 4;
         var pos2 = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos1));
-        array[MINUTE] = toInt(input.substr(pos1, 2));
-        array[SECOND] = toInt(input.substr(pos2));
+        array$$1[HOUR] = toInt(input.substr(0, pos1));
+        array$$1[MINUTE] = toInt(input.substr(pos1, 2));
+        array$$1[SECOND] = toInt(input.substr(pos2));
         getParsingFlags(config).bigHour = true;
     });
-    addParseToken('Hmm', function (input, array, config) {
+    addParseToken('Hmm', function (input, array$$1, config) {
         var pos = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos));
-        array[MINUTE] = toInt(input.substr(pos));
+        array$$1[HOUR] = toInt(input.substr(0, pos));
+        array$$1[MINUTE] = toInt(input.substr(pos));
     });
-    addParseToken('Hmmss', function (input, array, config) {
+    addParseToken('Hmmss', function (input, array$$1, config) {
         var pos1 = input.length - 4;
         var pos2 = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos1));
-        array[MINUTE] = toInt(input.substr(pos1, 2));
-        array[SECOND] = toInt(input.substr(pos2));
+        array$$1[HOUR] = toInt(input.substr(0, pos1));
+        array$$1[MINUTE] = toInt(input.substr(pos1, 2));
+        array$$1[SECOND] = toInt(input.substr(pos2));
     });
 
     // LOCALES
@@ -7059,7 +7344,7 @@ var moment = createCommonjsModule(function (module, exports) {
 
     addRegexToken('Z',  matchShortOffset);
     addRegexToken('ZZ', matchShortOffset);
-    addParseToken(['Z', 'ZZ'], function (input, array, config) {
+    addParseToken(['Z', 'ZZ'], function (input, array$$1, config) {
         config._useUTC = true;
         config._tzm = offsetFromString(matchShortOffset, input);
     });
@@ -7973,8 +8258,8 @@ var moment = createCommonjsModule(function (module, exports) {
     // PARSING
 
     addRegexToken('Q', match1);
-    addParseToken('Q', function (input, array) {
-        array[MONTH] = (toInt(input) - 1) * 3;
+    addParseToken('Q', function (input, array$$1) {
+        array$$1[MONTH] = (toInt(input) - 1) * 3;
     });
 
     // MOMENTS
@@ -8006,8 +8291,8 @@ var moment = createCommonjsModule(function (module, exports) {
     });
 
     addParseToken(['D', 'DD'], DATE);
-    addParseToken('Do', function (input, array) {
-        array[DATE] = toInt(input.match(match1to2)[0]);
+    addParseToken('Do', function (input, array$$1) {
+        array$$1[DATE] = toInt(input.match(match1to2)[0]);
     });
 
     // MOMENTS
@@ -8029,7 +8314,7 @@ var moment = createCommonjsModule(function (module, exports) {
 
     addRegexToken('DDD',  match1to3);
     addRegexToken('DDDD', match3);
-    addParseToken(['DDD', 'DDDD'], function (input, array, config) {
+    addParseToken(['DDD', 'DDDD'], function (input, array$$1, config) {
         config._dayOfYear = toInt(input);
     });
 
@@ -8136,8 +8421,8 @@ var moment = createCommonjsModule(function (module, exports) {
         addRegexToken(token, matchUnsigned);
     }
 
-    function parseMs(input, array) {
-        array[MILLISECOND] = toInt(('0.' + input) * 1000);
+    function parseMs(input, array$$1) {
+        array$$1[MILLISECOND] = toInt(('0.' + input) * 1000);
     }
 
     for (token = 'S'; token.length <= 9; token += 'S') {
@@ -8784,10 +9069,10 @@ var moment = createCommonjsModule(function (module, exports) {
 
     addRegexToken('x', matchSigned);
     addRegexToken('X', matchTimestamp);
-    addParseToken('X', function (input, array, config) {
+    addParseToken('X', function (input, array$$1, config) {
         config._d = new Date(parseFloat(input, 10) * 1000);
     });
-    addParseToken('x', function (input, array, config) {
+    addParseToken('x', function (input, array$$1, config) {
         config._d = new Date(toInt(input));
     });
 
@@ -8843,1573 +9128,6 @@ var moment = createCommonjsModule(function (module, exports) {
 
 })));
 });
-
-var tableHeadStyles = function tableHeadStyles(theme) {
-  return {
-    head: {
-      background: '#f5f5f5'
-    },
-    tableCell: {
-      padding: '4px 8px 4px 8px'
-    }
-  };
-};
-
-var tableHeadOptions = {
-  order: "asc",
-  orderBy: "id",
-  rowCount: 0,
-  numSelected: 0,
-  columns: []
-};
-
-var EnhancedTableHead = function (_React$Component) {
-  inherits(EnhancedTableHead, _React$Component);
-
-  function EnhancedTableHead(props) {
-    classCallCheck(this, EnhancedTableHead);
-
-    var _this = possibleConstructorReturn(this, (EnhancedTableHead.__proto__ || Object.getPrototypeOf(EnhancedTableHead)).call(this, props));
-
-    _this.createSortHandler = function (property) {
-      return function (event) {
-        _this.props.onRequestSort(event, property);
-      };
-    };
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          columns = _this$props.columns,
-          classes = _this$props.classes;
-
-
-      return React.createElement(
-        TableHead,
-        { className: classes.head },
-        React.createElement(
-          TableRow,
-          null,
-          columns.map(function (column) {
-            return column.name === "selectable" ? React.createElement(
-              TableCell,
-              {
-                padding: 'checkbox',
-                classes: {
-                  root: classes.tableCell
-                }
-              },
-              React.createElement(Checkbox, { indeterminate: _this.props.numSelected > 0 && _this.props.numSelected < _this.props.rowCount, checked: _this.props.numSelected === _this.props.rowCount, onChange: _this.props.onSelectAllClick })
-            ) : column.show === undefined || column.show ? React.createElement(
-              TableCell,
-              {
-                key: new Date().getTime() + '-table-head-' + column.name,
-                padding: column.disablePadding ? 'none' : 'default',
-                sortDirection: _this.props.orderBy === column.name ? _this.props.order : false,
-                classes: {
-                  root: classes.tableCell
-                }
-              },
-              column.sort ? React.createElement(
-                Tooltip,
-                {
-                  title: 'Sort',
-                  placement: column.numeric ? 'bottom-end' : 'bottom-start',
-                  enterDelay: 300
-                },
-                React.createElement(
-                  TableSortLabel,
-                  {
-                    active: _this.props.orderBy === column.name,
-                    direction: _this.props.order,
-                    onClick: _this.createSortHandler(column.name)
-                  },
-                  column.label
-                )
-              ) : column.label
-            ) : null;
-          }, _this)
-        )
-      );
-    };
-
-    _this.state = Object.assign(tableHeadOptions, props);
-    return _this;
-  }
-
-  return EnhancedTableHead;
-}(React.Component);
-
-EnhancedTableHead.defaultProps = {
-  order: 'desc',
-  rowCount: 0
-};
-
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.string.isRequired,
-  // orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-  classes: PropTypes.object.isRequired
-};
-
-var TableHead$1 = withStyles(tableHeadStyles)(EnhancedTableHead);
-
-var toolbarStyles = function toolbarStyles(theme) {
-  return {
-    root: defineProperty$1({
-      // paddingRight: theme.spacing.unit,
-      marginBottom: theme.spacing.unit * 2
-    }, theme.breakpoints.only('xs'), {
-      marginBottom: theme.spacing.unit
-    }),
-    highlight: theme.palette.type === 'light' ? {
-      color: theme.palette.secondary.main,
-      backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-    } : {
-      color: theme.palette.text.primary,
-      backgroundColor: theme.palette.secondary.dark
-    },
-    spacer: {
-      flex: '1 1 100%'
-    },
-    actions: {
-      display: 'flex',
-      color: theme.palette.text.secondary,
-      flexBasis: '25%',
-      justifyContent: 'flex-end'
-    },
-    title: {
-      display: 'flex',
-      flex: '0 0 auto',
-      flexBasis: '75%',
-      justifyContent: 'flex-start',
-      alignItems: 'center'
-    },
-    fab: {
-      margin: theme.spacing.unit * 2
-    },
-    container: {
-      justifyContent: 'space-between'
-    }
-  };
-};
-
-var toolbarOptions = {
-  title: "Table",
-  selectable: false,
-  content: null,
-  actions: []
-};
-
-var EnhancedToolbar = function (_React$Component) {
-  inherits(EnhancedToolbar, _React$Component);
-
-  function EnhancedToolbar(props) {
-    classCallCheck(this, EnhancedToolbar);
-
-    var _this = possibleConstructorReturn(this, (EnhancedToolbar.__proto__ || Object.getPrototypeOf(EnhancedToolbar)).call(this, props));
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          other = objectWithoutProperties(_this$props, ['classes']);
-      var _this$state = _this.state,
-          title = _this$state.title,
-          data = _this$state.data,
-          content = _this$state.content;
-
-
-      return React.createElement(
-        Toolbar,
-        _extends$b({
-          className: classnames(classes.root, defineProperty$1({}, classes.highlight, _this.state.numSelected > 0))
-        }, other),
-        content ? content : React.createElement(
-          Grid,
-          { container: true, className: classes.container },
-          React.createElement(
-            Grid,
-            { item: true, className: classes.title },
-            _this.state.selectable ? _this.state.numSelected > 0 ? React.createElement(
-              Typography$1,
-              { color: 'inherit', variant: 'subheading' },
-              _this.state.numSelected,
-              ' selected'
-            ) : React.createElement(
-              Typography$1,
-              { variant: 'h6', id: 'tableTitle' },
-              title
-            ) : React.createElement(
-              Typography$1,
-              { variant: 'h6', id: 'tableTitle' },
-              title
-            )
-          ),
-          React.createElement(
-            Grid,
-            { item: true, className: classes.actions },
-            _this.state.selectable && _this.state.numSelected > 0 ? React.createElement(
-              Tooltip$1,
-              { title: 'Delete', placement: 'top-end' },
-              React.createElement(
-                IconButton$1,
-                { 'aria-label': 'Delete' },
-                React.createElement(Delete, null)
-              )
-            ) : _this.state.actions ? _this.state.actions.map(function (action) {
-              var icon = action.icon ? action.icon : null;
-
-              var actionBtn = void 0;
-              var buttonProps = {
-                "aria-label": action.title,
-                color: action.color,
-                size: action.size
-              };
-
-              if (action.action) {
-                buttonProps.onClick = function () {
-                  return action.action(_this, data);
-                };
-              } else {
-                buttonProps.to = action.href;
-                buttonProps.component = Link$1;
-              }
-
-              actionBtn = icon ? React.createElement(
-                Fab,
-                _extends$b({ className: classes.fab }, buttonProps),
-                icon
-              ) : React.createElement(
-                Button,
-                _extends$b({ variant: 'text' }, buttonProps),
-                action.label
-              );
-
-              return React.createElement(
-                Tooltip$1,
-                { title: action.title, placement: action.placement, key: action.title },
-                actionBtn
-              );
-            }) : ''
-          )
-        )
-      );
-    };
-
-    _this.state = Object.assign(toolbarOptions, props);
-    return _this;
-  }
-
-  createClass(EnhancedToolbar, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState({
-        title: nextProps.title,
-        actions: nextProps.actions,
-        data: nextProps.data,
-        content: nextProps.content
-      });
-    }
-  }]);
-  return EnhancedToolbar;
-}(React.Component);
-
-EnhancedToolbar.propTypes = {
-  classes: PropTypes.object.isRequired
-  // data: PropTypes.object.isRequired,
-};
-
-var Toolbar$2 = withStyles$1(toolbarStyles)(EnhancedToolbar);
-
-var styles$4 = function styles(theme) {
-  return {
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      flexWrap: 'wrap',
-      paddingRight: theme.spacing.unit,
-      paddingLeft: theme.spacing.unit
-    },
-    header: {
-      alignItems: 'center',
-      display: 'flex',
-      backgroundColor: theme.palette.primary.main,
-      color: '#fff',
-      height: '56px',
-      borderRadius: '3px 3px 0 0',
-      boxSizing: 'border-box',
-      fontWeight: 500,
-      justifyContent: 'space-between',
-      padding: '0 8px 0 16px',
-      minWidth: '300px'
-    },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit
-    },
-    button: {
-      margin: theme.spacing.unit
-    },
-    formControl: {
-      margin: theme.spacing.unit * 3
-    },
-    group: {
-      margin: theme.spacing.unit + 'px 0'
-    },
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing.unit,
-      color: 'rgba(255, 255, 255)'
-    },
-    title: {
-      color: 'rgba(255, 255, 255)'
-    },
-    content: {
-      paddingTop: theme.spacing.unit * 3
-    }
-  };
-};
-
-var EnhancedDialog = function (_React$Component) {
-  inherits(EnhancedDialog, _React$Component);
-
-  function EnhancedDialog(props) {
-    classCallCheck(this, EnhancedDialog);
-
-    var _this = possibleConstructorReturn(this, (EnhancedDialog.__proto__ || Object.getPrototypeOf(EnhancedDialog)).call(this, props));
-
-    _this.handleClose = function () {
-      _this.props.onClose();
-    };
-
-    _this.handleCancel = function () {
-      if (_this.props.value) {
-        _this.props.onClose(_this.props.value);
-      } else {
-        _this.props.onClose("cancel");
-      }
-    };
-
-    _this.handleOk = function () {
-      if (_this.state.value) {
-        _this.props.onClose(_this.state.value);
-      } else {
-        _this.props.onClose("ok");
-      }
-    };
-
-    _this.renderActions = function () {
-      switch (_this.state.type) {
-        case 'custom':
-          {
-            return React.createElement(
-              DialogActions,
-              null,
-              _this.state.actions.map(function (actionButton) {
-                var btnKey = 'button-' + actionButton.label.replace(' ', '-');
-
-                return React.createElement(
-                  Button$1,
-                  {
-                    variant: actionButton.variant ? actionButton.variant : "contained",
-                    color: actionButton.color ? actionButton.color : "primary",
-                    onClick: function onClick(e) {
-                      return actionButton.action(_this);
-                    },
-                    key: btnKey
-                  },
-                  actionButton.label
-                );
-              })
-            );
-          }
-        case 'confirm':
-          {
-            return React.createElement(
-              DialogActions,
-              null,
-              React.createElement(
-                Button$1,
-                { onClick: _this.handleCancel, color: 'primary' },
-                'Cancel'
-              ),
-              React.createElement(
-                Button$1,
-                { onClick: _this.handleOk, color: 'primary' },
-                'Ok'
-              )
-            );
-          }
-        case 'alert':
-          {
-            return React.createElement(
-              DialogActions,
-              null,
-              React.createElement(
-                Button$1,
-                { onClick: _this.handleClose, color: 'primary', autoFocus: true },
-                'Ok'
-              )
-            );
-          }
-        default:
-          {
-            return;
-          }
-      }
-    };
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          title = _this$props.title,
-          onClose = _this$props.onClose,
-          fullScreen = _this$props.fullScreen,
-          other = objectWithoutProperties(_this$props, ['classes', 'title', 'onClose', 'fullScreen']);
-
-
-      return React.createElement(
-        Dialog,
-        _extends$b({
-          fullScreen: fullScreen && isMobile,
-          maxWidth: false,
-          onClose: onClose,
-          'aria-labelledby': 'dialog-title',
-          className: classes.dialog
-        }, other),
-        _this.state.title ? React.createElement(
-          DialogTitle,
-          { id: 'dialog-title', className: classes.header, disableTypography: true },
-          React.createElement(
-            Typography,
-            { variant: 'h6', className: classes.title },
-            _this.state.title
-          ),
-          onClose ? React.createElement(
-            IconButton,
-            { 'aria-label': 'Close', className: classes.closeButton, onClick: onClose },
-            React.createElement(CloseIcon, null)
-          ) : null
-        ) : "",
-        React.createElement(
-          DialogContent,
-          { className: classes.content },
-          _this.state.text ? React.createElement(
-            DialogContentText,
-            null,
-            _this.state.text
-          ) : "",
-          _this.state.content ? _this.state.content : ""
-        ),
-        _this.state.type ? _this.renderActions() : ""
-      );
-    };
-
-    _this.state = props;
-    return _this;
-  }
-
-  createClass(EnhancedDialog, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState(nextProps);
-    }
-  }]);
-  return EnhancedDialog;
-}(React.Component);
-
-EnhancedDialog.defaultProps = {
-  fullScreen: true
-};
-
-var Dialog$1 = withStyles(styles$4)(EnhancedDialog);
-
-var history = createBrowserHistory();
-
-var alertConstants = {
-    SUCCESS: 'ALERT_SUCCESS',
-    ERROR: 'ALERT_ERROR',
-    CLEAR: 'ALERT_CLEAR'
-};
-
-var userConstants = {
-    REGISTER_REQUEST: 'USERS_REGISTER_REQUEST',
-    REGISTER_SUCCESS: 'USERS_REGISTER_SUCCESS',
-    REGISTER_FAILURE: 'USERS_REGISTER_FAILURE',
-
-    LOGIN_REQUEST: 'USERS_LOGIN_REQUEST',
-    LOGIN_SUCCESS: 'USERS_LOGIN_SUCCESS',
-    LOGIN_FAILURE: 'USERS_LOGIN_FAILURE',
-
-    LOGOUT: 'USERS_LOGOUT',
-
-    GETALL_REQUEST: 'USERS_GETALL_REQUEST',
-    GETALL_SUCCESS: 'USERS_GETALL_SUCCESS',
-    GETALL_FAILURE: 'USERS_GETALL_FAILURE',
-
-    DELETE_REQUEST: 'USERS_DELETE_REQUEST',
-    DELETE_SUCCESS: 'USERS_DELETE_SUCCESS',
-    DELETE_FAILURE: 'USERS_DELETE_FAILURE'
-};
-
-var user = JSON.parse(localStorage.getItem('user'));
-var initialState = user ? { loggedIn: true, user: user } : {};
-
-function authentication() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-  var action = arguments[1];
-
-  switch (action.type) {
-    case userConstants.LOGIN_REQUEST:
-      return {
-        loggingIn: true,
-        user: action.user
-      };
-    case userConstants.LOGIN_SUCCESS:
-      return {
-        loggedIn: true,
-        user: action.user
-      };
-    case userConstants.LOGIN_FAILURE:
-      return {};
-    case userConstants.LOGOUT:
-      return {};
-    default:
-      return state;
-  }
-}
-
-function registration() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var action = arguments[1];
-
-  switch (action.type) {
-    case userConstants.REGISTER_REQUEST:
-      return { registering: true };
-    case userConstants.REGISTER_SUCCESS:
-      return {};
-    case userConstants.REGISTER_FAILURE:
-      return {};
-    default:
-      return state;
-  }
-}
-
-function users() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var action = arguments[1];
-
-  switch (action.type) {
-    case userConstants.GETALL_REQUEST:
-      return {
-        loading: true
-      };
-    case userConstants.GETALL_SUCCESS:
-      return {
-        items: action.users
-      };
-    case userConstants.GETALL_FAILURE:
-      return {
-        error: action.error
-      };
-    case userConstants.DELETE_REQUEST:
-      // add 'deleting:true' property to user being deleted
-      return _extends$b({}, state, {
-        items: state.items.map(function (user) {
-          return user.id === action.id ? _extends$b({}, user, { deleting: true }) : user;
-        })
-      });
-    case userConstants.DELETE_SUCCESS:
-      // remove deleted user from state
-      return {
-        items: state.items.filter(function (user) {
-          return user.id !== action.id;
-        })
-      };
-    case userConstants.DELETE_FAILURE:
-      // remove 'deleting:true' property and add 'deleteError:[error]' property to user 
-      return _extends$b({}, state, {
-        items: state.items.map(function (user) {
-          if (user.id === action.id) {
-            // make copy of user without 'deleting:true' property
-            var deleting = user.deleting,
-                userCopy = objectWithoutProperties(user, ['deleting']);
-            // return copy of user with 'deleteError:[error]' property
-
-            return _extends$b({}, userCopy, { deleteError: action.error });
-          }
-
-          return user;
-        })
-      });
-    default:
-      return state;
-  }
-}
-
-function alert() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var action = arguments[1];
-
-  switch (action.type) {
-    case alertConstants.SUCCESS:
-      return {
-        type: 'alert-success',
-        message: action.message
-      };
-    case alertConstants.ERROR:
-      return {
-        type: 'alert-danger',
-        message: action.message
-      };
-    case alertConstants.CLEAR:
-      return {};
-    default:
-      return state;
-  }
-}
-
-var rootReducer = combineReducers({
-  authentication: authentication,
-  registration: registration,
-  users: users,
-  alert: alert
-});
-
-var loggerMiddleware = createLogger();
-
-var store = createStore(rootReducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
-
-var styles$5 = function styles(theme) {
-  return {
-    tableWrapper: {
-      overflowX: 'auto'
-    },
-    table: {
-      minWidth: 'auto'
-    },
-    paper: {
-      width: '100%',
-      minWidth: 'auto',
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'visible'
-    },
-    chip: {
-      margin: theme.spacing.unit
-    },
-    progress: {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      marginTop: -12,
-      marginLeft: -12,
-      zIndex: 10000
-    },
-    tableCell: {
-      padding: '4px 8px 4px 8px'
-    }
-  };
-};
-
-var tableOptions = {
-  order: 'desc',
-  orderBy: 'id',
-  uKey: 'id',
-  selected: [],
-  rows: [],
-  page: 0,
-  rowsPerPage: 10,
-  selectable: false,
-  actions: [],
-  dialogOpen: false,
-  dialog: {},
-  loading: false,
-  filter: {},
-  expanded: null,
-  expandedRow: {}
-};
-
-var EnhancedTable = function (_React$Component) {
-  inherits(EnhancedTable, _React$Component);
-
-  function EnhancedTable(props) {
-    var _this2 = this;
-
-    classCallCheck(this, EnhancedTable);
-
-    var _this = possibleConstructorReturn(this, (EnhancedTable.__proto__ || Object.getPrototypeOf(EnhancedTable)).call(this, props));
-
-    _this.selectedRows = [];
-
-    _this.componentDidMount = function () {
-      _this.loadData();
-    };
-
-    _this.componentWillReceiveProps = function (nextProps) {
-      _this.loadData();
-      _this.setState({
-        rows: nextProps.rows,
-        columns: nextProps.columns,
-        title: nextProps.title,
-        orderBy: nextProps.orderBy || _this.state.orderBy,
-        order: nextProps.order || _this.state.order,
-        rowsCount: nextProps.rowsCount
-      });
-    };
-
-    _this.componentWillUnmount = function () {};
-
-    _this.loadData = function (filterOptions) {
-      filterOptions = filterOptions === undefined ? _this.state.filter : filterOptions;
-      var updatedTableProps = {
-        orderBy: _this.state.orderBy,
-        order: _this.state.order,
-        page: _this.state.page,
-        rowsPerPage: _this.state.rowsPerPage
-      };
-
-      filterOptions = Object.assign({}, filterOptions, updatedTableProps);
-      if (_this.props.loadData) {
-        _this.setState({ filter: filterOptions, loading: true });
-        _this.props.loadData(filterOptions).then(function (records) {
-          _this.setState({
-            loading: false, rows: records.rows, rowsCount: records.count
-          });
-        }, function (error) {
-          _this.setState({ rows: [], rowsCount: 0, loading: false });
-        });
-      } else {
-        _this.setState({ rows: _this.state.rows, rowsCount: _this.state.rows.length, loading: false, filter: filterOptions });
-      }
-    };
-
-    _this.refreshData = function () {
-      _this.loadData();
-    };
-
-    _this.handleRequestSort = function (event, property) {
-      var orderBy = property;
-      var order = 'desc';
-
-      if (_this.state.orderBy === property && _this.state.order === 'desc') {
-        order = 'asc';
-      }
-
-      _this.setState({ order: order, orderBy: orderBy }, function () {
-        console.log("Inside handleRequestSort");
-        _this.loadData();
-      });
-    };
-
-    _this.handleSelectAllClick = function (event, checked) {
-      if (checked) {
-        _this.setState({ selected: _this.state.rows.map(function (n) {
-            return n[_this.props.uKey];
-          }) });
-        return;
-      }
-      _this.setState({ selected: [] });
-    };
-
-    _this.handleClick = function (event, rowData) {
-      if (event.target.tagName === "TD" && _this.props.clickLink) {
-        event.preventDefault();
-        history.push(_this.props.clickLink + rowData[_this.props.uKey]);
-      }
-
-      if (event.target.tagName === "TD" && _this.props.clickFunction) {
-        event.preventDefault();
-        _this.props.clickFunction(_this, rowData);
-      }
-    };
-
-    _this.handleChangePage = function (event, page) {
-      _this.setState({ page: page }, function () {
-        console.log("Inside handleChangePage");
-        _this.loadData();
-      });
-    };
-
-    _this.handleChangeRowsPerPage = function (event) {
-      _this.setState({ rowsPerPage: event.target.value, page: 0 }, function () {
-        console.log("Inside handleChangeRowsPerPage");
-        _this.loadData();
-      });
-    };
-
-    _this.isSelected = function (id) {
-      if (_this.state.selectable) {
-        return _this.state.selected.indexOf(id) !== -1;
-      } else {
-        return false;
-      }
-    };
-
-    _this.openDialog = function (dialogInfo) {
-      _this.setState({ dialogOpen: true, dialog: dialogInfo });
-    };
-
-    _this.closeDialog = function (value) {
-      _this.setState({ dialogOpen: false });
-
-      if (value === "ok" && _this.state.dialog.action) {
-        _this.state.dialog.action();
-      }
-    };
-
-    _this.formatCellData = function (cell, rowData, uKey) {
-      var cellData = rowData;
-      var nestedData = cell.name.split('.');
-      nestedData.map(function (nestedColumn) {
-        if (cellData[nestedColumn]) {
-          cellData = cellData[nestedColumn];
-        } else {
-          cellData = "";
-        }
-
-        return "";
-      });
-
-      var showCellData = true;
-      if (cell.beforeShow) {
-        showCellData = cell.beforeShow(rowData);
-      }
-
-      if (showCellData) {
-        switch (cell.type) {
-          case 'boolean':
-            cellData = cellData ? React.createElement(Done, null) : React.createElement(Clear, null);
-            break;
-          case 'datetime':
-          case 'daterange':
-            cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY, h:mm:ss a');
-            break;
-          case 'date':
-            cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY');
-            break;
-          case 'month':
-            if (cellData) {
-              cellData = moment(cellData).format('MMMM YYYY');
-            } else {
-              cellData = "";
-            }
-            break;
-          case 'button':
-            cellData = [];
-            cell.buttons.map(function (button) {
-              var buttonLink = "";
-              var showField = true;
-
-              if (button.beforeShow) {
-                showField = button.beforeShow(rowData);
-              }
-
-              if (button.getIcon) {
-                button['icon'] = button.getIcon(rowData[button.field]);
-              }
-
-              if (showField && button.link) {
-                buttonLink = button.link;
-                if (button.param) {
-                  buttonLink = buttonLink + rowData[button.param];
-                }
-
-                if (button.icon === undefined) {
-                  cellData.push(React.createElement(Chip, {
-                    label: button.label,
-                    to: buttonLink,
-                    component: Link$1,
-                    className: _this.props.classes.chip,
-                    key: rowData[uKey] + button.label.replace(' ', '-')
-                  }));
-                } else {
-                  cellData.push(React.createElement(
-                    IconButton,
-                    { "aria-label": button.label, to: buttonLink, component: Link$1, key: rowData[uKey] + button.label.replace(' ', '-') },
-                    React.createElement(button.icon, null)
-                  ));
-                }
-              }
-
-              if (showField && button.action) {
-                if (button.icon === undefined) {
-                  cellData.push(React.createElement(Chip, {
-                    label: button.label,
-                    onClick: function onClick() {
-                      return button.action(_this, rowData);
-                    },
-                    className: _this.props.classes.chip,
-                    key: rowData[uKey] + button.label.replace(' ', '-')
-                  }));
-                } else if (button.type === 'fab') {
-                  cellData.push(React.createElement(
-                    Fab$1,
-                    { "aria-label": button.label, onClick: function onClick() {
-                        return button.action(_this, rowData);
-                      }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-'), size: button.size, classes: button.classes },
-                    React.createElement(button.icon, null)
-                  ));
-                } else {
-                  cellData.push(React.createElement(
-                    IconButton,
-                    { "aria-label": button.label, onClick: function onClick() {
-                        return button.action(_this, rowData);
-                      }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-') },
-                    React.createElement(button.icon, null)
-                  ));
-                }
-              }
-
-              return "";
-            });
-            break;
-          case 'render':
-            cellData = cell.render(rowData, _this);
-            break;
-          case 'link':
-            if (cellData && cellData !== "") {
-              cellData = React.createElement(
-                Link,
-                {
-                  component: Link$1,
-                  to: cellData,
-                  target: "_blank",
-                  rel: "noopener"
-                },
-                React.createElement(LinkIcon, null)
-              );
-            }
-            break;
-          case 'file':
-            if (cellData && cellData !== "") {
-              cellData = React.createElement(
-                Link,
-                {
-                  component: Link$1,
-                  to: cellData,
-                  target: "_blank",
-                  rel: "noopener"
-                },
-                React.createElement(LinkIcon, null)
-              );
-            }
-            break;
-          case 'image':
-            var imageSource = cellData;
-            cellData = React.createElement(
-              IconButton,
-              { "aria-label": "button.label", onClick: function onClick() {
-                  _this.openDialog({
-                    title: "Image",
-                    content: React.createElement(Card$1, {
-                      image: imageSource,
-                      onClose: _this.closeDialog
-                    })
-                  });
-                } },
-              React.createElement(Avatar, { alt: "", src: cellData })
-            );
-            break;
-          case 'media':
-            var mediaSource = cellData;
-            cellData = React.createElement(
-              IconButton,
-              { "aria-label": cell.label, onClick: function onClick() {
-                  _this.openDialog({
-                    title: "Media",
-                    content: React.createElement(Card$1, {
-                      media: mediaSource,
-                      onClose: _this.closeDialog
-                    })
-                  });
-                } },
-              React.createElement(LinkIcon, null)
-            );
-            break;
-          case 'expand':
-            var isExpanded = rowData[uKey] === _this.state.expandedRow[uKey];
-            cellData = React.createElement(
-              IconButton,
-              { "aria-label": cell.label, onClick: function onClick() {
-                  _this.toggleExpand(cell, rowData);
-                } },
-              isExpanded && _this.state.expanded ? React.createElement(KeyboardArrowUp, null) : React.createElement(KeyboardArrowDown, null)
-            );
-            break;
-          default:
-            break;
-        }
-      } else {
-        cellData = "";
-      }
-
-      return cellData;
-    };
-
-    _this.toggleExpand = function () {
-      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cell, rowData) {
-        var expandedRow, expandContent;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                expandedRow = _this.state.expandedRow;
-                expandContent = null;
-
-                if (!(Object.keys(expandedRow).length > 0 && expandedRow[_this.props.uKey] === rowData[_this.props.uKey])) {
-                  _context.next = 6;
-                  break;
-                }
-
-                expandedRow = {};
-                _context.next = 10;
-                break;
-
-              case 6:
-                expandedRow = rowData;
-                _context.next = 9;
-                return _this.getExpandContent(cell, rowData);
-
-              case 9:
-                expandContent = _context.sent;
-
-              case 10:
-
-                _this.setState({ expanded: expandContent, expandedRow: expandedRow });
-
-              case 11:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, _this2);
-      }));
-
-      return function (_x, _x2) {
-        return _ref.apply(this, arguments);
-      };
-    }();
-
-    _this.getExpandContent = function () {
-      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cell, rowData) {
-        var expandContent;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return cell.render(rowData, _this);
-
-              case 2:
-                expandContent = _context2.sent;
-                return _context2.abrupt("return", expandContent);
-
-              case 4:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, _this2);
-      }));
-
-      return function (_x3, _x4) {
-        return _ref2.apply(this, arguments);
-      };
-    }();
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          title = _this$props.title,
-          pagination = _this$props.pagination,
-          classes = _this$props.classes,
-          uKey = _this$props.uKey,
-          other = objectWithoutProperties(_this$props, ["title", "pagination", "classes", "uKey"]);
-      var _this$state = _this.state,
-          columns = _this$state.columns,
-          rowsCount = _this$state.rowsCount,
-          expanded = _this$state.expanded,
-          expandedRow = _this$state.expandedRow;
-      var _this$state2 = _this.state,
-          order = _this$state2.order,
-          orderBy = _this$state2.orderBy,
-          selected = _this$state2.selected,
-          rowsPerPage = _this$state2.rowsPerPage,
-          page = _this$state2.page,
-          selectable = _this$state2.selectable;
-      var _this$state3 = _this.state,
-          handleSelectAllClick = _this$state3.handleSelectAllClick,
-          handleRequestSort = _this$state3.handleRequestSort;
-
-
-      var rows = [];
-      if (_this.state.loadData) {
-        rows = _this.state.rows ? _this.state.rows : [];
-      } else {
-        rows = _this.state.rows ? _this.state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : [];
-      }
-
-      if (selected !== undefined) {
-        _this.selectedRows = selected;
-      }
-
-      if (handleSelectAllClick !== undefined) {
-        _this.handleSelectAllClick = handleSelectAllClick;
-      }
-
-      if (handleRequestSort !== undefined) {
-        _this.onRequestSort = handleRequestSort;
-      }
-
-      return React.createElement(
-        Paper,
-        { className: classes.paper },
-        title ? React.createElement(Toolbar$2, _extends$b({
-          title: title,
-          numSelected: _this.selectedRows.length,
-          openDialog: _this.openDialog,
-          closeDialog: _this.closeDialog,
-          refreshData: _this.refreshData
-        }, other)) : null,
-        React.createElement(ChipFilter$1, { options: columns, loadData: _this.loadData }),
-        React.createElement(
-          "div",
-          { className: classes.tableWrapper },
-          _this.state.loading && React.createElement(CircularProgress, { className: classes.progress }),
-          React.createElement(
-            Table,
-            { className: classes.table, "aria-labelledby": "tableTitle", key: Date.now() },
-            React.createElement(TableHead$1, {
-              selectable: selectable,
-              columns: columns,
-              numSelected: _this.selectedRows.length,
-              order: order,
-              orderBy: orderBy,
-              onSelectAllClick: _this.handleSelectAllClick,
-              onRequestSort: _this.handleRequestSort,
-              rowCount: rowsCount
-            }),
-            React.createElement(
-              TableBody,
-              null,
-              !_this.state.loading && rows.length === 0 ? React.createElement(
-                TableRow,
-                null,
-                React.createElement(
-                  TableCell,
-                  {
-                    colSpan: columns.length,
-                    classes: {
-                      root: classes.tableCell
-                    }
-                  },
-                  React.createElement(
-                    Typography,
-                    null,
-                    "Nothing here yet"
-                  )
-                )
-              ) : null,
-              rows.map(function (n) {
-                var isSelected = _this.isSelected(n[uKey]);
-                var isExpanded = n[uKey] === expandedRow[uKey];
-                var expandColumn = isExpanded && columns.find(function (column) {
-                  var showColumn = true;
-                  if (column.beforeShow) {
-                    showColumn = column.beforeShow(n);
-                  }
-
-                  return showColumn && column.type === 'expand';
-                });
-
-                return React.createElement(
-                  React.Fragment,
-                  null,
-                  React.createElement(
-                    TableRow,
-                    {
-                      hover: true,
-                      onClick: function onClick(event) {
-                        return _this.handleClick(event, n);
-                      },
-                      role: "checkbox",
-                      "aria-checked": isSelected,
-                      tabIndex: -1,
-                      key: new Date().getTime() + "-" + (title ? title.replace(' ', '-') : "") + "-" + n[uKey],
-                      selected: isSelected
-                    },
-                    columns.some(function (column) {
-                      return column.span === true;
-                    }) ? columns.map(function (column) {
-                      var cellData = _this.formatCellData(column, n, uKey);
-
-                      return (column.show === undefined || column.show) && column.span ? column.name === "selectable" ? React.createElement(
-                        TableCell,
-                        {
-                          padding: "checkbox",
-                          key: column.name,
-                          classes: {
-                            root: classes.tableCell
-                          }
-                        },
-                        React.createElement(Checkbox, { checked: isSelected })
-                      ) : React.createElement(
-                        TableCell,
-                        {
-                          key: column.name,
-                          colSpan: columns.length,
-                          classes: {
-                            root: classes.tableCell
-                          }
-                        },
-                        cellData
-                      ) : null;
-                    }) : columns.map(function (column) {
-                      var cellData = _this.formatCellData(column, n, uKey);
-
-                      return column.show === undefined || column.show ? column.name === "selectable" ? React.createElement(
-                        TableCell,
-                        {
-                          padding: "checkbox",
-                          key: column.name,
-                          classes: {
-                            root: classes.tableCell
-                          }
-                        },
-                        React.createElement(Checkbox, { checked: isSelected })
-                      ) : React.createElement(
-                        TableCell,
-                        {
-                          key: column.name,
-                          padding: column.disablePadding ? 'none' : 'default',
-                          classes: {
-                            root: classes.tableCell
-                          }
-                        },
-                        cellData
-                      ) : null;
-                    })
-                  ),
-                  isExpanded && expandColumn && expanded ? React.createElement(
-                    TableRow,
-                    null,
-                    React.createElement(
-                      TableCell,
-                      { colSpan: columns.length },
-                      expanded
-                    )
-                  ) : null
-                );
-              })
-            )
-          )
-        ),
-        pagination && rows.length > 0 ? React.createElement(TablePagination, {
-          component: "div",
-          count: rowsCount,
-          rowsPerPage: rowsPerPage,
-          page: page,
-          rowsPerPageOptions: [5, 10, 25, 50, 100],
-          backIconButtonProps: {
-            'aria-label': 'Previous Page'
-          },
-          nextIconButtonProps: {
-            'aria-label': 'Next Page'
-          },
-          onChangePage: _this.handleChangePage,
-          onChangeRowsPerPage: _this.handleChangeRowsPerPage
-        }) : null,
-        React.createElement(Dialog$1, {
-          title: _this.state.dialog.title,
-          open: _this.state.dialogOpen,
-          onClose: _this.closeDialog,
-          type: _this.state.dialog.type,
-          content: _this.state.dialog.content,
-          text: _this.state.dialog.text
-        })
-      );
-    };
-
-    _this.state = Object.assign({}, tableOptions, props);
-    return _this;
-  }
-
-  return EnhancedTable;
-}(React.Component);
-
-EnhancedTable.defaultProps = {
-  pagination: true,
-  rows: [],
-  uKey: 'id'
-};
-
-EnhancedTable.propTypes = {
-  classes: PropTypes.object.isRequired,
-  pagination: PropTypes.bool.isRequired,
-  rows: PropTypes.array.isRequired
-};
-
-var Table$1 = withStyles(styles$5)(EnhancedTable);
-
-var styles$6 = function styles(theme) {
-	var _panelDetail, _heading, _headingAction;
-
-	return {
-		root: {
-			width: '100%'
-		},
-		panelDetail: (_panelDetail = {}, defineProperty$1(_panelDetail, theme.breakpoints.only('xs'), {
-			display: 'flex'
-		}), defineProperty$1(_panelDetail, 'display', 'block'), _panelDetail),
-		summaryContent: defineProperty$1({}, theme.breakpoints.down('xs'), {
-			margin: 0
-		}),
-		summaryPanel: defineProperty$1({}, theme.breakpoints.down('xs'), {
-			padding: '0px 8px'
-		}),
-		headingWrapper: {
-			flexBasis: '80%'
-		},
-		heading: (_heading = {
-			fontSize: theme.typography.pxToRem(15)
-		}, defineProperty$1(_heading, theme.breakpoints.only('xs'), {
-			fontSize: theme.typography.pxToRem(12)
-		}), defineProperty$1(_heading, 'display', 'flex'), defineProperty$1(_heading, 'alignItems', 'center'), defineProperty$1(_heading, 'marginLeft', theme.spacing.unit), defineProperty$1(_heading, 'marginRight', theme.spacing.unit), defineProperty$1(_heading, 'flexBasis', '80%'), defineProperty$1(_heading, 'textDecoration', 'none'), _heading),
-		secondaryHeading: {
-			fontSize: theme.typography.pxToRem(15),
-			color: theme.palette.text.secondary
-			// flexBasis: '15%',
-		},
-		headingContent: {
-			flexBasis: '80%'
-		},
-		headingAction: (_headingAction = {}, defineProperty$1(_headingAction, theme.breakpoints.only('xs'), {
-			flexBasis: '24%',
-			marginTop: theme.spacing.unit
-		}), defineProperty$1(_headingAction, theme.breakpoints.between('sm', 'md'), {
-			flexBasis: '12%'
-		}), defineProperty$1(_headingAction, theme.breakpoints.up('md'), {
-			flexBasis: '8%'
-		}), defineProperty$1(_headingAction, theme.breakpoints.between('sm', 'xl'), {
-			display: 'flex',
-			alignItems: 'center',
-			marginLeft: theme.spacing.unit,
-			marginRight: theme.spacing.unit
-		}), _headingAction)
-	};
-};
-
-var EnhancedExpansionPanel = function (_React$Component) {
-	inherits(EnhancedExpansionPanel, _React$Component);
-
-	function EnhancedExpansionPanel(props) {
-		classCallCheck(this, EnhancedExpansionPanel);
-
-		var _this = possibleConstructorReturn(this, (EnhancedExpansionPanel.__proto__ || Object.getPrototypeOf(EnhancedExpansionPanel)).call(this, props));
-
-		_this.state = {
-			expanded: null,
-			loading: false,
-			data: [],
-			content: null
-		};
-
-		_this.componentWillReceiveProps = function (nextProps) {
-			_this.setState({ data: nextProps.data, topActions: nextProps.topActions });
-		};
-
-		_this.handleChange = function (panel, elem) {
-			return function (event, expanded) {
-				_this.setState({ expanded: expanded ? panel : false, content: null, loading: true });
-
-				if (expanded) {
-					if (typeof elem.content === "function") {
-						var contentFn = elem.content();
-						if (contentFn instanceof Promise) {
-							contentFn.then(function (response) {
-								_this.setState({ content: response, loading: false });
-							}).catch(function (error) {
-								_this.setState({ content: error, loading: false });
-							});
-						} else {
-							_this.setState({ content: contentFn, loading: false });
-						}
-					} else {
-						_this.setState({ content: elem.content, loading: false });
-					}
-				} else {
-					_this.setState({ loading: false });
-				}
-			};
-		};
-
-		_this.toggleExpansionPanel = function (panel, elem, expanded) {
-			_this.setState({ expanded: !expanded ? panel : false, content: null, loading: true });
-
-			if (!expanded) {
-				if (typeof elem.content === "function") {
-					var contentFn = elem.content();
-					if (contentFn instanceof Promise) {
-						contentFn.then(function (response) {
-							_this.setState({ content: response, loading: false });
-						}).catch(function (error) {
-							_this.setState({ content: error, loading: false });
-						});
-					} else {
-						_this.setState({ content: contentFn, loading: false });
-					}
-				} else {
-					_this.setState({ content: elem.content, loading: false });
-				}
-			} else {
-				_this.setState({ loading: false });
-			}
-		};
-
-		_this.render = function () {
-			var classes = _this.props.classes;
-			var _this$state = _this.state,
-			    data = _this$state.data,
-			    content = _this$state.content,
-			    expanded = _this$state.expanded,
-			    topActions = _this$state.topActions,
-			    actions = _this$state.actions;
-
-
-			var titleLink = {};
-
-			return React.createElement(
-				'div',
-				{ className: classes.root },
-				data.map(function (elem, index) {
-					if (elem) {
-						var panel = 'panel' + index;
-						return React.createElement(
-							ExpansionPanel,
-							{ expanded: expanded === panel, key: elem.key },
-							React.createElement(
-								ExpansionPanelSummary,
-								{
-									classes: {
-										root: classes.summaryPanel, // class name, e.g. `classes-nesting-root-x`
-										content: classes.summaryContent // class name, e.g. `classes-nesting-label-x`
-									},
-									IconButtonProps: {
-										onClick: function onClick() {
-											return _this.toggleExpansionPanel(panel, elem, expanded === panel);
-										}
-									},
-									expandIcon: React.createElement(ExpandMoreIcon, null)
-								},
-								elem.image ? React.createElement(Avatar, { alt: "", src: elem.image }) : null,
-								titleLink = elem.link ? Object.assign({}, {
-									component: Link$1,
-									to: elem.link
-								}) : [],
-								elem.title && elem.subheading ? React.createElement(
-									'div',
-									{
-										className: classes.headingWrapper
-									},
-									React.createElement(
-										Typography,
-										_extends$b({}, titleLink, {
-											className: classes.heading
-										}),
-										typeof elem.title === "function" ? elem.title() : elem.title
-									),
-									React.createElement(
-										Typography,
-										_extends$b({}, titleLink, {
-											className: classes.heading
-										}),
-										typeof elem.subheading === "function" ? elem.subheading() : elem.subheading
-									)
-								) : elem.title ? React.createElement(
-									Typography,
-									_extends$b({}, titleLink, {
-										className: classes.heading
-									}),
-									typeof elem.title === "function" ? elem.title() : elem.title
-								) : null,
-								React.createElement(
-									'div',
-									{ className: classes.headingAction },
-									expanded === panel && topActions ? topActions.map(function (action) {
-										var showAction = action.beforeShow ? action.beforeShow(elem) : true;
-
-										var actionButton = action.icon ? React.createElement(
-											Fab$1,
-											{ 'aria-label': action.title, className: classes.fab, color: action.color, onClick: function onClick() {
-													return action.action(_this, elem);
-												}, size: 'small', key: "fab" },
-											React.createElement(action.icon, null)
-										) : React.createElement(
-											Button$1,
-											{ 'aria-label': action.title, variant: 'contained', color: action.color, onClick: function onClick() {
-													return action.action(_this, elem);
-												}, size: 'small', key: "button" },
-											action.label
-										);
-
-										return showAction ? actionButton : null;
-									}) : React.createElement(
-										Typography,
-										{ className: classes.secondaryHeading },
-										typeof elem.description === "function" ? elem.description() : elem.description
-									)
-								)
-							),
-							_this.state.loading && React.createElement(LinearProgress, null),
-							expanded === panel && content ? React.createElement(
-								ExpansionPanelDetails,
-								{
-									classes: {
-										root: classes.panelDetail
-									}
-								},
-								content
-							) : null,
-							expanded === panel && actions ? React.createElement(
-								'div',
-								null,
-								React.createElement(Divider, null),
-								React.createElement(
-									ExpansionPanelActions,
-									null,
-									topActions.map(function (action) {
-										return React.createElement(
-											Button$1,
-											{ 'aria-label': action.title, color: action.color, onClick: function onClick() {
-													return action.action(_this, elem);
-												}, size: 'small' },
-											action.title
-										);
-									})
-								)
-							) : null
-						);
-					} else {
-						return null;
-					}
-				})
-			);
-		};
-
-		_this.state = Object.assign(_this.state, props);
-		return _this;
-	}
-
-	return EnhancedExpansionPanel;
-}(React.Component);
-
-EnhancedExpansionPanel.propTypes = {
-	classes: PropTypes.object.isRequired
-};
-
-var Accordion = withStyles(styles$6)(EnhancedExpansionPanel);
 
 var MomentUtils = /** @class */ (function () {
     function MomentUtils(_a) {
@@ -10669,7 +9387,7 @@ function __rest(s, e) {
 }
 
 var reactTextMask = createCommonjsModule(function (module, exports) {
-!function(e,t){module.exports=t(React);}(commonjsGlobal,function(e){return function(e){function t(n){if(r[n])return r[n].exports;var o=r[n]={exports:{},id:n,loaded:!1};return e[n].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var r={};return t.m=e,t.c=r,t.p="",t(0)}([function(e,t,r){function n(e){return e&&e.__esModule?e:{default:e}}function o(e,t){var r={};for(var n in e)t.indexOf(n)>=0||Object.prototype.hasOwnProperty.call(e,n)&&(r[n]=e[n]);return r}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return !t||"object"!=typeof t&&"function"!=typeof t?e:t}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t);}Object.defineProperty(t,"__esModule",{value:!0}),t.conformToMask=void 0;var s=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n]);}return e},l=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n);}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),f=r(3);Object.defineProperty(t,"conformToMask",{enumerable:!0,get:function(){return n(f).default}});var c=r(11),p=n(c),d=r(9),h=n(d),v=r(5),y=n(v),m=r(2),b=function(e){function t(){var e;i(this,t);for(var r=arguments.length,n=Array(r),o=0;o<r;o++)n[o]=arguments[o];var u=a(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(n)));return u.setRef=u.setRef.bind(u),u.onBlur=u.onBlur.bind(u),u.onChange=u.onChange.bind(u),u}return u(t,e),l(t,[{key:"setRef",value:function(e){this.inputElement=e;}},{key:"initTextMask",value:function(){var e=this.props,t=this.props.value;this.textMaskInputElement=(0, y.default)(s({inputElement:this.inputElement},e)),this.textMaskInputElement.update(t);}},{key:"componentDidMount",value:function(){this.initTextMask();}},{key:"componentDidUpdate",value:function(e){var t=this.props,r=t.value,n=t.pipe,o=t.mask,i=t.guide,a=t.placeholderChar,u=t.showMask,s={guide:i,placeholderChar:a,showMask:u},l="function"==typeof n&&"function"==typeof e.pipe?n.toString()!==e.pipe.toString():(0, m.isNil)(n)&&!(0, m.isNil)(e.pipe)||!(0, m.isNil)(n)&&(0, m.isNil)(e.pipe),f=o.toString()!==e.mask.toString(),c=Object.keys(s).some(function(t){return s[t]!==e[t]})||f||l,p=r!==this.inputElement.value;(p||c)&&this.initTextMask();}},{key:"render",value:function e(){var t=this.props,e=t.render,r=o(t,["render"]);return delete r.mask,delete r.guide,delete r.pipe,delete r.placeholderChar,delete r.keepCharPositions,delete r.value,delete r.onBlur,delete r.onChange,delete r.showMask,e(this.setRef,s({onBlur:this.onBlur,onChange:this.onChange,defaultValue:this.props.value},r))}},{key:"onChange",value:function(e){this.textMaskInputElement.update(),"function"==typeof this.props.onChange&&this.props.onChange(e);}},{key:"onBlur",value:function(e){"function"==typeof this.props.onBlur&&this.props.onBlur(e);}}]),t}(p.default.PureComponent);t.default=b,b.propTypes={mask:h.default.oneOfType([h.default.array,h.default.func,h.default.bool,h.default.shape({mask:h.default.oneOfType([h.default.array,h.default.func]),pipe:h.default.func})]).isRequired,guide:h.default.bool,value:h.default.oneOfType([h.default.string,h.default.number]),pipe:h.default.func,placeholderChar:h.default.string,keepCharPositions:h.default.bool,showMask:h.default.bool},b.defaultProps={render:function(e,t){return p.default.createElement("input",s({ref:e},t))}};},function(e,t){Object.defineProperty(t,"__esModule",{value:!0}),t.placeholderChar="_",t.strFunction="function";},function(e,t,r){function n(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:f,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:l.placeholderChar;if(!o(e))throw new Error("Text-mask:convertMaskToPlaceholder; The mask property must be an array.");if(e.indexOf(t)!==-1)throw new Error("Placeholder character must not be used as part of the mask. Please specify a character that is not present in your mask as your placeholder character.\n\n"+("The placeholder character that was received is: "+JSON.stringify(t)+"\n\n")+("The mask that was received is: "+JSON.stringify(e)));return e.map(function(e){return e instanceof RegExp?t:e}).join("")}function o(e){return Array.isArray&&Array.isArray(e)||e instanceof Array}function i(e){return "string"==typeof e||e instanceof String}function a(e){return "number"==typeof e&&void 0===e.length&&!isNaN(e)}function u(e){return "undefined"==typeof e||null===e}function s(e){for(var t=[],r=void 0;r=e.indexOf(c),r!==-1;)t.push(r),e.splice(r,1);return {maskWithoutCaretTraps:e,indexes:t}}Object.defineProperty(t,"__esModule",{value:!0}),t.convertMaskToPlaceholder=n,t.isArray=o,t.isString=i,t.isNumber=a,t.isNil=u,t.processCaretTraps=s;var l=r(1),f=[],c="[]";},function(e,t,r){function n(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:s,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:u,r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};if(!(0, i.isArray)(t)){if(("undefined"==typeof t?"undefined":o(t))!==a.strFunction)throw new Error("Text-mask:conformToMask; The mask property must be an array.");t=t(e,r),t=(0, i.processCaretTraps)(t).maskWithoutCaretTraps;}var n=r.guide,l=void 0===n||n,f=r.previousConformedValue,c=void 0===f?s:f,p=r.placeholderChar,d=void 0===p?a.placeholderChar:p,h=r.placeholder,v=void 0===h?(0, i.convertMaskToPlaceholder)(t,d):h,y=r.currentCaretPosition,m=r.keepCharPositions,b=l===!1&&void 0!==c,g=e.length,k=c.length,C=v.length,O=t.length,T=g-k,P=T>0,x=y+(P?-T:0),w=x+Math.abs(T);if(m===!0&&!P){for(var S=s,_=x;_<w;_++)v[_]===d&&(S+=d);e=e.slice(0,x)+S+e.slice(x,g);}for(var M=e.split(s).map(function(e,t){return {char:e,isNew:t>=x&&t<w}}),j=g-1;j>=0;j--){var E=M[j].char;if(E!==d){var R=j>=x&&k===O;E===v[R?j-T:j]&&M.splice(j,1);}}var V=s,N=!1;e:for(var A=0;A<C;A++){var B=v[A];if(B===d){if(M.length>0)for(;M.length>0;){var I=M.shift(),F=I.char,q=I.isNew;if(F===d&&b!==!0){V+=d;continue e}if(t[A].test(F)){if(m===!0&&q!==!1&&c!==s&&l!==!1&&P){for(var D=M.length,L=null,W=0;W<D;W++){var J=M[W];if(J.char!==d&&J.isNew===!1)break;if(J.char===d){L=W;break}}null!==L?(V+=F,M.splice(L,1)):A--;}else V+=F;continue e}N=!0;}b===!1&&(V+=v.substr(A,C));break}V+=B;}if(b&&P===!1){for(var U=null,H=0;H<V.length;H++)v[H]===d&&(U=H);V=null!==U?V.substr(0,U+1):s;}return {conformedValue:V,meta:{someCharsRejected:N}}}Object.defineProperty(t,"__esModule",{value:!0});var o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};t.default=n;var i=r(2),a=r(1),u=[],s="";},function(e,t){function r(e){var t=e.previousConformedValue,r=void 0===t?o:t,i=e.previousPlaceholder,a=void 0===i?o:i,u=e.currentCaretPosition,s=void 0===u?0:u,l=e.conformedValue,f=e.rawValue,c=e.placeholderChar,p=e.placeholder,d=e.indexesOfPipedChars,h=void 0===d?n:d,v=e.caretTrapIndexes,y=void 0===v?n:v;if(0===s||!f.length)return 0;var m=f.length,b=r.length,g=p.length,k=l.length,C=m-b,O=C>0,T=0===b,P=C>1&&!O&&!T;if(P)return s;var x=O&&(r===l||l===p),w=0,S=void 0,_=void 0;if(x)w=s-C;else{var M=l.toLowerCase(),j=f.toLowerCase(),E=j.substr(0,s).split(o),R=E.filter(function(e){return M.indexOf(e)!==-1});_=R[R.length-1];var V=a.substr(0,R.length).split(o).filter(function(e){return e!==c}).length,N=p.substr(0,R.length).split(o).filter(function(e){return e!==c}).length,A=N!==V,B=void 0!==a[R.length-1]&&void 0!==p[R.length-2]&&a[R.length-1]!==c&&a[R.length-1]!==p[R.length-1]&&a[R.length-1]===p[R.length-2];!O&&(A||B)&&V>0&&p.indexOf(_)>-1&&void 0!==f[s]&&(S=!0,_=f[s]);for(var I=h.map(function(e){return M[e]}),F=I.filter(function(e){return e===_}).length,q=R.filter(function(e){return e===_}).length,D=p.substr(0,p.indexOf(c)).split(o).filter(function(e,t){return e===_&&f[t]!==e}).length,L=D+q+F+(S?1:0),W=0,J=0;J<k;J++){var U=M[J];if(w=J+1,U===_&&W++,W>=L)break}}if(O){for(var H=w,Y=w;Y<=g;Y++)if(p[Y]===c&&(H=Y),p[Y]===c||y.indexOf(Y)!==-1||Y===g)return H}else if(S){for(var z=w-1;z>=0;z--)if(l[z]===_||y.indexOf(z)!==-1||0===z)return z}else for(var G=w;G>=0;G--)if(p[G-1]===c||y.indexOf(G)!==-1||0===G)return G}Object.defineProperty(t,"__esModule",{value:!0}),t.default=r;var n=[],o="";},function(e,t,r){function n(e){return e&&e.__esModule?e:{default:e}}function o(e){var t={previousConformedValue:void 0,previousPlaceholder:void 0};return {state:t,update:function(r){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:e,o=n.inputElement,l=n.mask,c=n.guide,y=n.pipe,b=n.placeholderChar,g=void 0===b?h.placeholderChar:b,k=n.keepCharPositions,C=void 0!==k&&k,O=n.showMask,T=void 0!==O&&O;if("undefined"==typeof r&&(r=o.value),r!==t.previousConformedValue){("undefined"==typeof l?"undefined":s(l))===m&&void 0!==l.pipe&&void 0!==l.mask&&(y=l.pipe,l=l.mask);var P=void 0,x=void 0;if(l instanceof Array&&(P=(0, d.convertMaskToPlaceholder)(l,g)),l!==!1){var w=a(r),S=o.selectionEnd,_=t.previousConformedValue,M=t.previousPlaceholder,j=void 0;if(("undefined"==typeof l?"undefined":s(l))===h.strFunction){if(x=l(w,{currentCaretPosition:S,previousConformedValue:_,placeholderChar:g}),x===!1)return;var E=(0, d.processCaretTraps)(x),R=E.maskWithoutCaretTraps,V=E.indexes;x=R,j=V,P=(0, d.convertMaskToPlaceholder)(x,g);}else x=l;var N={previousConformedValue:_,guide:c,placeholderChar:g,pipe:y,placeholder:P,currentCaretPosition:S,keepCharPositions:C},A=(0, p.default)(w,x,N),B=A.conformedValue,I=("undefined"==typeof y?"undefined":s(y))===h.strFunction,F={};I&&(F=y(B,u({rawValue:w},N)),F===!1?F={value:_,rejected:!0}:(0, d.isString)(F)&&(F={value:F}));var q=I?F.value:B,D=(0, f.default)({previousConformedValue:_,previousPlaceholder:M,conformedValue:q,placeholder:P,rawValue:w,currentCaretPosition:S,placeholderChar:g,indexesOfPipedChars:F.indexesOfPipedChars,caretTrapIndexes:j}),L=q===P&&0===D,W=T?P:v,J=L?W:q;t.previousConformedValue=J,t.previousPlaceholder=P,o.value!==J&&(o.value=J,i(o,D));}}}}}function i(e,t){document.activeElement===e&&(b?g(function(){return e.setSelectionRange(t,t,y)},0):e.setSelectionRange(t,t,y));}function a(e){if((0, d.isString)(e))return e;if((0, d.isNumber)(e))return String(e);if(void 0===e||null===e)return v;throw new Error("The 'value' provided to Text Mask needs to be a string or a number. The value received was:\n\n "+JSON.stringify(e))}Object.defineProperty(t,"__esModule",{value:!0});var u=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n]);}return e},s="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};t.default=o;var l=r(4),f=n(l),c=r(3),p=n(c),d=r(2),h=r(1),v="",y="none",m="object",b="undefined"!=typeof navigator&&/Android/i.test(navigator.userAgent),g="undefined"!=typeof requestAnimationFrame?requestAnimationFrame:setTimeout;},function(e,t){function r(e){return function(){return e}}var n=function(){};n.thatReturns=r,n.thatReturnsFalse=r(!1),n.thatReturnsTrue=r(!0),n.thatReturnsNull=r(null),n.thatReturnsThis=function(){return this},n.thatReturnsArgument=function(e){return e},e.exports=n;},function(e,t,r){function n(e,t,r,n,i,a,u,s){if(!e){var l;if(void 0===t)l=new Error("Minified exception occurred; use the non-minified dev environment for the full error message and additional helpful warnings.");else{var f=[r,n,i,a,u,s],c=0;l=new Error(t.replace(/%s/g,function(){return f[c++]})),l.name="Invariant Violation";}throw l.framesToPop=1,l}}e.exports=n;},function(e,t,r){var n=r(6),o=r(7),i=r(10);e.exports=function(){function e(e,t,r,n,a,u){u!==i&&o(!1,"Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types");}function t(){return e}e.isRequired=e;var r={array:e,bool:e,func:e,number:e,object:e,string:e,symbol:e,any:e,arrayOf:t,element:e,instanceOf:t,node:e,objectOf:t,oneOf:t,oneOfType:t,shape:t,exact:t};return r.checkPropTypes=n,r.PropTypes=r,r};},function(e,t,r){e.exports=r(8)();},function(e,t){var r="SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";e.exports=r;},function(t,r){t.exports=e;}])});
+!function(e,t){module.exports=t(React__default);}(commonjsGlobal,function(e){return function(e){function t(n){if(r[n])return r[n].exports;var o=r[n]={exports:{},id:n,loaded:!1};return e[n].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var r={};return t.m=e,t.c=r,t.p="",t(0)}([function(e,t,r){function n(e){return e&&e.__esModule?e:{default:e}}function o(e,t){var r={};for(var n in e)t.indexOf(n)>=0||Object.prototype.hasOwnProperty.call(e,n)&&(r[n]=e[n]);return r}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return !t||"object"!=typeof t&&"function"!=typeof t?e:t}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t);}Object.defineProperty(t,"__esModule",{value:!0}),t.conformToMask=void 0;var s=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n]);}return e},l=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n);}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),f=r(3);Object.defineProperty(t,"conformToMask",{enumerable:!0,get:function(){return n(f).default}});var c=r(11),p=n(c),d=r(9),h=n(d),v=r(5),y=n(v),m=r(2),b=function(e){function t(){var e;i(this,t);for(var r=arguments.length,n=Array(r),o=0;o<r;o++)n[o]=arguments[o];var u=a(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(n)));return u.setRef=u.setRef.bind(u),u.onBlur=u.onBlur.bind(u),u.onChange=u.onChange.bind(u),u}return u(t,e),l(t,[{key:"setRef",value:function(e){this.inputElement=e;}},{key:"initTextMask",value:function(){var e=this.props,t=this.props.value;this.textMaskInputElement=(0, y.default)(s({inputElement:this.inputElement},e)),this.textMaskInputElement.update(t);}},{key:"componentDidMount",value:function(){this.initTextMask();}},{key:"componentDidUpdate",value:function(e){var t=this.props,r=t.value,n=t.pipe,o=t.mask,i=t.guide,a=t.placeholderChar,u=t.showMask,s={guide:i,placeholderChar:a,showMask:u},l="function"==typeof n&&"function"==typeof e.pipe?n.toString()!==e.pipe.toString():(0, m.isNil)(n)&&!(0, m.isNil)(e.pipe)||!(0, m.isNil)(n)&&(0, m.isNil)(e.pipe),f=o.toString()!==e.mask.toString(),c=Object.keys(s).some(function(t){return s[t]!==e[t]})||f||l,p=r!==this.inputElement.value;(p||c)&&this.initTextMask();}},{key:"render",value:function e(){var t=this.props,e=t.render,r=o(t,["render"]);return delete r.mask,delete r.guide,delete r.pipe,delete r.placeholderChar,delete r.keepCharPositions,delete r.value,delete r.onBlur,delete r.onChange,delete r.showMask,e(this.setRef,s({onBlur:this.onBlur,onChange:this.onChange,defaultValue:this.props.value},r))}},{key:"onChange",value:function(e){this.textMaskInputElement.update(),"function"==typeof this.props.onChange&&this.props.onChange(e);}},{key:"onBlur",value:function(e){"function"==typeof this.props.onBlur&&this.props.onBlur(e);}}]),t}(p.default.PureComponent);t.default=b,b.propTypes={mask:h.default.oneOfType([h.default.array,h.default.func,h.default.bool,h.default.shape({mask:h.default.oneOfType([h.default.array,h.default.func]),pipe:h.default.func})]).isRequired,guide:h.default.bool,value:h.default.oneOfType([h.default.string,h.default.number]),pipe:h.default.func,placeholderChar:h.default.string,keepCharPositions:h.default.bool,showMask:h.default.bool},b.defaultProps={render:function(e,t){return p.default.createElement("input",s({ref:e},t))}};},function(e,t){Object.defineProperty(t,"__esModule",{value:!0}),t.placeholderChar="_",t.strFunction="function";},function(e,t,r){function n(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:f,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:l.placeholderChar;if(!o(e))throw new Error("Text-mask:convertMaskToPlaceholder; The mask property must be an array.");if(e.indexOf(t)!==-1)throw new Error("Placeholder character must not be used as part of the mask. Please specify a character that is not present in your mask as your placeholder character.\n\n"+("The placeholder character that was received is: "+JSON.stringify(t)+"\n\n")+("The mask that was received is: "+JSON.stringify(e)));return e.map(function(e){return e instanceof RegExp?t:e}).join("")}function o(e){return Array.isArray&&Array.isArray(e)||e instanceof Array}function i(e){return "string"==typeof e||e instanceof String}function a(e){return "number"==typeof e&&void 0===e.length&&!isNaN(e)}function u(e){return "undefined"==typeof e||null===e}function s(e){for(var t=[],r=void 0;r=e.indexOf(c),r!==-1;)t.push(r),e.splice(r,1);return {maskWithoutCaretTraps:e,indexes:t}}Object.defineProperty(t,"__esModule",{value:!0}),t.convertMaskToPlaceholder=n,t.isArray=o,t.isString=i,t.isNumber=a,t.isNil=u,t.processCaretTraps=s;var l=r(1),f=[],c="[]";},function(e,t,r){function n(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:s,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:u,r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};if(!(0, i.isArray)(t)){if(("undefined"==typeof t?"undefined":o(t))!==a.strFunction)throw new Error("Text-mask:conformToMask; The mask property must be an array.");t=t(e,r),t=(0, i.processCaretTraps)(t).maskWithoutCaretTraps;}var n=r.guide,l=void 0===n||n,f=r.previousConformedValue,c=void 0===f?s:f,p=r.placeholderChar,d=void 0===p?a.placeholderChar:p,h=r.placeholder,v=void 0===h?(0, i.convertMaskToPlaceholder)(t,d):h,y=r.currentCaretPosition,m=r.keepCharPositions,b=l===!1&&void 0!==c,g=e.length,k=c.length,C=v.length,O=t.length,T=g-k,P=T>0,x=y+(P?-T:0),w=x+Math.abs(T);if(m===!0&&!P){for(var S=s,_=x;_<w;_++)v[_]===d&&(S+=d);e=e.slice(0,x)+S+e.slice(x,g);}for(var M=e.split(s).map(function(e,t){return {char:e,isNew:t>=x&&t<w}}),j=g-1;j>=0;j--){var E=M[j].char;if(E!==d){var R=j>=x&&k===O;E===v[R?j-T:j]&&M.splice(j,1);}}var V=s,N=!1;e:for(var A=0;A<C;A++){var B=v[A];if(B===d){if(M.length>0)for(;M.length>0;){var I=M.shift(),F=I.char,q=I.isNew;if(F===d&&b!==!0){V+=d;continue e}if(t[A].test(F)){if(m===!0&&q!==!1&&c!==s&&l!==!1&&P){for(var D=M.length,L=null,W=0;W<D;W++){var J=M[W];if(J.char!==d&&J.isNew===!1)break;if(J.char===d){L=W;break}}null!==L?(V+=F,M.splice(L,1)):A--;}else V+=F;continue e}N=!0;}b===!1&&(V+=v.substr(A,C));break}V+=B;}if(b&&P===!1){for(var U=null,H=0;H<V.length;H++)v[H]===d&&(U=H);V=null!==U?V.substr(0,U+1):s;}return {conformedValue:V,meta:{someCharsRejected:N}}}Object.defineProperty(t,"__esModule",{value:!0});var o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};t.default=n;var i=r(2),a=r(1),u=[],s="";},function(e,t){function r(e){var t=e.previousConformedValue,r=void 0===t?o:t,i=e.previousPlaceholder,a=void 0===i?o:i,u=e.currentCaretPosition,s=void 0===u?0:u,l=e.conformedValue,f=e.rawValue,c=e.placeholderChar,p=e.placeholder,d=e.indexesOfPipedChars,h=void 0===d?n:d,v=e.caretTrapIndexes,y=void 0===v?n:v;if(0===s||!f.length)return 0;var m=f.length,b=r.length,g=p.length,k=l.length,C=m-b,O=C>0,T=0===b,P=C>1&&!O&&!T;if(P)return s;var x=O&&(r===l||l===p),w=0,S=void 0,_=void 0;if(x)w=s-C;else{var M=l.toLowerCase(),j=f.toLowerCase(),E=j.substr(0,s).split(o),R=E.filter(function(e){return M.indexOf(e)!==-1});_=R[R.length-1];var V=a.substr(0,R.length).split(o).filter(function(e){return e!==c}).length,N=p.substr(0,R.length).split(o).filter(function(e){return e!==c}).length,A=N!==V,B=void 0!==a[R.length-1]&&void 0!==p[R.length-2]&&a[R.length-1]!==c&&a[R.length-1]!==p[R.length-1]&&a[R.length-1]===p[R.length-2];!O&&(A||B)&&V>0&&p.indexOf(_)>-1&&void 0!==f[s]&&(S=!0,_=f[s]);for(var I=h.map(function(e){return M[e]}),F=I.filter(function(e){return e===_}).length,q=R.filter(function(e){return e===_}).length,D=p.substr(0,p.indexOf(c)).split(o).filter(function(e,t){return e===_&&f[t]!==e}).length,L=D+q+F+(S?1:0),W=0,J=0;J<k;J++){var U=M[J];if(w=J+1,U===_&&W++,W>=L)break}}if(O){for(var H=w,Y=w;Y<=g;Y++)if(p[Y]===c&&(H=Y),p[Y]===c||y.indexOf(Y)!==-1||Y===g)return H}else if(S){for(var z=w-1;z>=0;z--)if(l[z]===_||y.indexOf(z)!==-1||0===z)return z}else for(var G=w;G>=0;G--)if(p[G-1]===c||y.indexOf(G)!==-1||0===G)return G}Object.defineProperty(t,"__esModule",{value:!0}),t.default=r;var n=[],o="";},function(e,t,r){function n(e){return e&&e.__esModule?e:{default:e}}function o(e){var t={previousConformedValue:void 0,previousPlaceholder:void 0};return {state:t,update:function(r){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:e,o=n.inputElement,l=n.mask,c=n.guide,y=n.pipe,b=n.placeholderChar,g=void 0===b?h.placeholderChar:b,k=n.keepCharPositions,C=void 0!==k&&k,O=n.showMask,T=void 0!==O&&O;if("undefined"==typeof r&&(r=o.value),r!==t.previousConformedValue){("undefined"==typeof l?"undefined":s(l))===m&&void 0!==l.pipe&&void 0!==l.mask&&(y=l.pipe,l=l.mask);var P=void 0,x=void 0;if(l instanceof Array&&(P=(0, d.convertMaskToPlaceholder)(l,g)),l!==!1){var w=a(r),S=o.selectionEnd,_=t.previousConformedValue,M=t.previousPlaceholder,j=void 0;if(("undefined"==typeof l?"undefined":s(l))===h.strFunction){if(x=l(w,{currentCaretPosition:S,previousConformedValue:_,placeholderChar:g}),x===!1)return;var E=(0, d.processCaretTraps)(x),R=E.maskWithoutCaretTraps,V=E.indexes;x=R,j=V,P=(0, d.convertMaskToPlaceholder)(x,g);}else x=l;var N={previousConformedValue:_,guide:c,placeholderChar:g,pipe:y,placeholder:P,currentCaretPosition:S,keepCharPositions:C},A=(0, p.default)(w,x,N),B=A.conformedValue,I=("undefined"==typeof y?"undefined":s(y))===h.strFunction,F={};I&&(F=y(B,u({rawValue:w},N)),F===!1?F={value:_,rejected:!0}:(0, d.isString)(F)&&(F={value:F}));var q=I?F.value:B,D=(0, f.default)({previousConformedValue:_,previousPlaceholder:M,conformedValue:q,placeholder:P,rawValue:w,currentCaretPosition:S,placeholderChar:g,indexesOfPipedChars:F.indexesOfPipedChars,caretTrapIndexes:j}),L=q===P&&0===D,W=T?P:v,J=L?W:q;t.previousConformedValue=J,t.previousPlaceholder=P,o.value!==J&&(o.value=J,i(o,D));}}}}}function i(e,t){document.activeElement===e&&(b?g(function(){return e.setSelectionRange(t,t,y)},0):e.setSelectionRange(t,t,y));}function a(e){if((0, d.isString)(e))return e;if((0, d.isNumber)(e))return String(e);if(void 0===e||null===e)return v;throw new Error("The 'value' provided to Text Mask needs to be a string or a number. The value received was:\n\n "+JSON.stringify(e))}Object.defineProperty(t,"__esModule",{value:!0});var u=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n]);}return e},s="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};t.default=o;var l=r(4),f=n(l),c=r(3),p=n(c),d=r(2),h=r(1),v="",y="none",m="object",b="undefined"!=typeof navigator&&/Android/i.test(navigator.userAgent),g="undefined"!=typeof requestAnimationFrame?requestAnimationFrame:setTimeout;},function(e,t){function r(e){return function(){return e}}var n=function(){};n.thatReturns=r,n.thatReturnsFalse=r(!1),n.thatReturnsTrue=r(!0),n.thatReturnsNull=r(null),n.thatReturnsThis=function(){return this},n.thatReturnsArgument=function(e){return e},e.exports=n;},function(e,t,r){function n(e,t,r,n,i,a,u,s){if(!e){var l;if(void 0===t)l=new Error("Minified exception occurred; use the non-minified dev environment for the full error message and additional helpful warnings.");else{var f=[r,n,i,a,u,s],c=0;l=new Error(t.replace(/%s/g,function(){return f[c++]})),l.name="Invariant Violation";}throw l.framesToPop=1,l}}e.exports=n;},function(e,t,r){var n=r(6),o=r(7),i=r(10);e.exports=function(){function e(e,t,r,n,a,u){u!==i&&o(!1,"Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types");}function t(){return e}e.isRequired=e;var r={array:e,bool:e,func:e,number:e,object:e,string:e,symbol:e,any:e,arrayOf:t,element:e,instanceOf:t,node:e,objectOf:t,oneOf:t,oneOfType:t,shape:t,exact:t};return r.checkPropTypes=n,r.PropTypes=r,r};},function(e,t,r){e.exports=r(8)();},function(e,t){var r="SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";e.exports=r;},function(t,r){t.exports=e;}])});
 });
 
 var MaskedInput = unwrapExports(reactTextMask);
@@ -10894,8 +9612,8 @@ var _inherits = _interopDefault(inherits$1);
 var _typeof = _interopDefault(_typeof_1);
 var _objectWithoutProperties = _interopDefault(objectWithoutProperties$1);
 var _extends = _interopDefault(_extends_1);
-var React$$1 = _interopDefault(React);
-var PropTypes$$1 = _interopDefault(PropTypes);
+var React = _interopDefault(React__default);
+var PropTypes = _interopDefault(PropTypes__default);
 var warning = _interopDefault(warning_1$2);
 
 function defineProperty(object$$1, property, attr) {
@@ -11046,18 +9764,18 @@ function (_React$PureComponent) {
   }]);
 
   return EventListener;
-}(React$$1.PureComponent);
+}(React.PureComponent);
 
 EventListener.propTypes = process.env.NODE_ENV !== "production" ? {
   /**
    * You can provide a single child too.
    */
-  children: PropTypes$$1.node,
+  children: PropTypes.node,
 
   /**
    * The DOM target to listen to.
    */
-  target: PropTypes$$1.oneOfType([PropTypes$$1.object, PropTypes$$1.string]).isRequired
+  target: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired
 } : {};
 
 exports.withOptions = withOptions;
@@ -11277,15 +9995,15 @@ function polyfill(Component$$1) {
 }
 
 var reactLifecyclesCompat_es = /*#__PURE__*/Object.freeze({
-	polyfill: polyfill
+  polyfill: polyfill
 });
 
-var PropTypes$1 = createCommonjsModule(function (module, exports) {
+var PropTypes = createCommonjsModule(function (module, exports) {
 
 exports.__esModule = true;
 exports.classNamesShape = exports.timeoutsShape = void 0;
 
-var _propTypes = _interopRequireDefault(PropTypes);
+var _propTypes = _interopRequireDefault(PropTypes__default);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11310,18 +10028,18 @@ var classNamesShape = process.env.NODE_ENV !== 'production' ? _propTypes.default
 exports.classNamesShape = classNamesShape;
 });
 
-unwrapExports(PropTypes$1);
-var PropTypes_1 = PropTypes$1.classNamesShape;
-var PropTypes_2 = PropTypes$1.timeoutsShape;
+unwrapExports(PropTypes);
+var PropTypes_1 = PropTypes.classNamesShape;
+var PropTypes_2 = PropTypes.timeoutsShape;
 
 var Transition_1 = createCommonjsModule(function (module, exports) {
 
 exports.__esModule = true;
 exports.default = exports.EXITING = exports.ENTERED = exports.ENTERING = exports.EXITED = exports.UNMOUNTED = void 0;
 
-var PropTypes$$1 = _interopRequireWildcard(PropTypes);
+var PropTypes$$1 = _interopRequireWildcard(PropTypes__default);
 
-var _react = _interopRequireDefault(React);
+var _react = _interopRequireDefault(React__default);
 
 var _reactDom = _interopRequireDefault(reactDom);
 
@@ -11827,7 +10545,7 @@ Transition.propTypes = process.env.NODE_ENV !== "production" ? {
    * @type {number | { enter?: number, exit?: number, appear?: number }}
    */
   timeout: function timeout(props) {
-    var pt = PropTypes$1.timeoutsShape;
+    var pt = PropTypes.timeoutsShape;
     if (!props.addEndListener) pt = pt.isRequired;
 
     for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -11937,13 +10655,13 @@ var CSSTransition_1 = createCommonjsModule(function (module, exports) {
 exports.__esModule = true;
 exports.default = void 0;
 
-var PropTypes$$1 = _interopRequireWildcard(PropTypes);
+var PropTypes$$1 = _interopRequireWildcard(PropTypes__default);
 
 var _addClass = _interopRequireDefault(addClass_1);
 
 var _removeClass = _interopRequireDefault(removeClass);
 
-var _react = _interopRequireDefault(React);
+var _react = _interopRequireDefault(React__default);
 
 var _Transition = _interopRequireDefault(Transition_1);
 
@@ -12244,7 +10962,7 @@ CSSTransition.propTypes = process.env.NODE_ENV !== "production" ? _extends({}, _
    *  exitDone?: string,
    * }}
    */
-  classNames: PropTypes$1.classNamesShape,
+  classNames: PropTypes.classNamesShape,
 
   /**
    * A `<Transition>` callback fired immediately after the 'enter' or 'appear' class is
@@ -12318,11 +11036,11 @@ exports.getNextChildMapping = getNextChildMapping;
  */
 function getChildMapping(children, mapFn) {
   var mapper = function mapper(child) {
-    return mapFn && (0, React.isValidElement)(child) ? mapFn(child) : child;
+    return mapFn && (0, React__default.isValidElement)(child) ? mapFn(child) : child;
   };
 
   var result = Object.create(null);
-  if (children) React.Children.map(children, function (c) {
+  if (children) React__default.Children.map(children, function (c) {
     return c;
   }).forEach(function (child) {
     // run the map function here instead so that the key is the computed one
@@ -12401,7 +11119,7 @@ function getProp(child, prop, props) {
 
 function getInitialChildMapping(props, onExited) {
   return getChildMapping(props.children, function (child) {
-    return (0, React.cloneElement)(child, {
+    return (0, React__default.cloneElement)(child, {
       onExited: onExited.bind(null, child),
       in: true,
       appear: getProp(child, 'appear', props),
@@ -12416,15 +11134,15 @@ function getNextChildMapping(nextProps, prevChildMapping, onExited) {
   var children = mergeChildMappings(prevChildMapping, nextChildMapping);
   Object.keys(children).forEach(function (key) {
     var child = children[key];
-    if (!(0, React.isValidElement)(child)) return;
+    if (!(0, React__default.isValidElement)(child)) return;
     var hasPrev = key in prevChildMapping;
     var hasNext = key in nextChildMapping;
     var prevChild = prevChildMapping[key];
-    var isLeaving = (0, React.isValidElement)(prevChild) && !prevChild.props.in; // item is new (entering)
+    var isLeaving = (0, React__default.isValidElement)(prevChild) && !prevChild.props.in; // item is new (entering)
 
     if (hasNext && (!hasPrev || isLeaving)) {
       // console.log('entering', key)
-      children[key] = (0, React.cloneElement)(child, {
+      children[key] = (0, React__default.cloneElement)(child, {
         onExited: onExited.bind(null, child),
         in: true,
         exit: getProp(child, 'exit', nextProps),
@@ -12433,14 +11151,14 @@ function getNextChildMapping(nextProps, prevChildMapping, onExited) {
     } else if (!hasNext && hasPrev && !isLeaving) {
       // item is old (exiting)
       // console.log('leaving', key)
-      children[key] = (0, React.cloneElement)(child, {
+      children[key] = (0, React__default.cloneElement)(child, {
         in: false
       });
-    } else if (hasNext && hasPrev && (0, React.isValidElement)(prevChild)) {
+    } else if (hasNext && hasPrev && (0, React__default.isValidElement)(prevChild)) {
       // item hasn't changed transition states
       // copy over the last transition props;
       // console.log('unchanged', key)
-      children[key] = (0, React.cloneElement)(child, {
+      children[key] = (0, React__default.cloneElement)(child, {
         onExited: onExited.bind(null, child),
         in: prevChild.props.in,
         exit: getProp(child, 'exit', nextProps),
@@ -12463,9 +11181,9 @@ var TransitionGroup_1 = createCommonjsModule(function (module, exports) {
 exports.__esModule = true;
 exports.default = void 0;
 
-var _propTypes = _interopRequireDefault(PropTypes);
+var _propTypes = _interopRequireDefault(PropTypes__default);
 
-var _react = _interopRequireDefault(React);
+var _react = _interopRequireDefault(React__default);
 
 
 
@@ -12675,9 +11393,9 @@ var ReplaceTransition_1 = createCommonjsModule(function (module, exports) {
 exports.__esModule = true;
 exports.default = void 0;
 
-var _propTypes = _interopRequireDefault(PropTypes);
+var _propTypes = _interopRequireDefault(PropTypes__default);
 
-var _react = _interopRequireDefault(React);
+var _react = _interopRequireDefault(React__default);
 
 
 
@@ -13205,9 +11923,9 @@ var getError = function (value, props) {
 };
 
 var KeyboardIcon = function (props) {
-  return React.createElement(SvgIcon, __assign({}, props), React.createElement("path", {
+  return React__default.createElement(SvgIcon, __assign({}, props), React__default.createElement("path", {
     d: "M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"
-  }), React.createElement("path", {
+  }), React__default.createElement("path", {
     fill: "none",
     d: "M0 0h24v24H0z"
   }));
@@ -13555,16 +12273,16 @@ var ModalDialog = function (_a) {
       root: clearable || showTodayButton ? classes.dialogActions : undefined,
       action: clsx(classes.dialogAction, (_d = {}, _d[classes.clearableDialogAction] = clearable, _d[classes.todayDialogAction] = !clearable && showTodayButton, _d))
     }
-  }, clearable && createElement(Button$1, {
+  }, clearable && createElement(Button, {
     color: "primary",
     onClick: onClear
-  }, clearLabel), !clearable && showTodayButton && createElement(Button$1, {
+  }, clearLabel), !clearable && showTodayButton && createElement(Button, {
     color: "primary",
     onClick: onSetToday
-  }, todayLabel), createElement(Button$1, {
+  }, todayLabel), createElement(Button, {
     color: "primary",
     onClick: onDismiss
-  }, cancelLabel), createElement(Button$1, {
+  }, cancelLabel), createElement(Button, {
     color: "primary",
     onClick: onAccept
   }, okLabel)));
@@ -13572,7 +12290,7 @@ var ModalDialog = function (_a) {
 ModalDialog.displayName = 'ModalDialog';
 var dialogHeight = 405;
 var dialogHeightWithTabs = 455;
-var styles$7 = createStyles({
+var styles$5 = createStyles({
   dialogRoot: {
     minWidth: DIALOG_WIDTH,
     minHeight: dialogHeight
@@ -13608,7 +12326,7 @@ var styles$7 = createStyles({
   dialogAction: {// empty but may be needed for override
   }
 });
-var ModalDialog$1 = withStyles(styles$7, {
+var ModalDialog$1 = withStyles(styles$5, {
   name: 'MuiPickersModal'
 })(ModalDialog);
 
@@ -13860,18 +12578,18 @@ var ToolbarButton$1 = withStyles$1$1(styles$2$1, {
 })(ToolbarButton);
 
 var ArrowLeftIcon = function (props) {
-  return React.createElement(SvgIcon, __assign({}, props), React.createElement("path", {
+  return React__default.createElement(SvgIcon, __assign({}, props), React__default.createElement("path", {
     d: "M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
-  }), React.createElement("path", {
+  }), React__default.createElement("path", {
     fill: "none",
     d: "M0 0h24v24H0V0z"
   }));
 };
 
 var ArrowRightIcon = function (props) {
-  return React.createElement(SvgIcon, __assign({}, props), React.createElement("path", {
+  return React__default.createElement(SvgIcon, __assign({}, props), React__default.createElement("path", {
     d: "M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
-  }), React.createElement("path", {
+  }), React__default.createElement("path", {
     fill: "none",
     d: "M0 0h24v24H0V0z"
   }));
@@ -14450,7 +13168,7 @@ function (_super) {
   };
   return Calendar;
 }(Component);
-var styles$6$1 = function (theme) {
+var styles$6 = function (theme) {
   return {
     transitionContainer: {
       minHeight: 36 * 6,
@@ -14462,7 +13180,7 @@ var styles$6$1 = function (theme) {
     }
   };
 };
-var Calendar$1 = withStyles$1$1(styles$6$1, {
+var Calendar$1 = withStyles$1$1(styles$6, {
   name: 'MuiPickersCalendar',
   withTheme: true
 })(withUtils()(Calendar));
@@ -14512,7 +13230,7 @@ function (_super) {
   };
   return Month;
 }(PureComponent);
-var styles$7$1 = function (theme) {
+var styles$7 = function (theme) {
   return createStyles$1({
     root: {
       flex: '1 0 33.33%',
@@ -14540,7 +13258,7 @@ var styles$7$1 = function (theme) {
     }
   });
 };
-var Month$1 = withStyles$1$1(styles$7$1, {
+var Month$1 = withStyles$1$1(styles$7, {
   name: 'MuiPickersMonth'
 })(Month);
 
@@ -16448,21 +15166,21 @@ var DatetimePickerHeader = withStyles$1$1(styles$h, {
 })(withUtils()(DateTimePickerHeader));
 
 var DateRangeIcon = function (props) {
-  return React.createElement(SvgIcon, __assign({}, props), React.createElement("path", {
+  return React__default.createElement(SvgIcon, __assign({}, props), React__default.createElement("path", {
     d: "M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"
-  }), React.createElement("path", {
+  }), React__default.createElement("path", {
     fill: "none",
     d: "M0 0h24v24H0z"
   }));
 };
 
 var TimeIcon = function (props) {
-  return React.createElement(SvgIcon, __assign({}, props), React.createElement("path", {
+  return React__default.createElement(SvgIcon, __assign({}, props), React__default.createElement("path", {
     d: "M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
-  }), React.createElement("path", {
+  }), React__default.createElement("path", {
     fill: "none",
     d: "M0 0h24v24H0z"
-  }), React.createElement("path", {
+  }), React__default.createElement("path", {
     d: "M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"
   }));
 };
@@ -18342,11 +17060,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18571,7 +17289,7 @@ var AutosizeInput = function (_Component) {
 	}]);
 
 	return AutosizeInput;
-}(React.Component);
+}(React__default.Component);
 
 AutosizeInput.propTypes = {
 	className: _propTypes2.default.string, // className for the outer element
@@ -19255,10 +17973,10 @@ function (_Component) {
 }(Component);
 
 _defineProperty(MenuPlacer, "contextTypes", {
-  getPortalPlacement: PropTypes.func
+  getPortalPlacement: PropTypes__default.func
 });
 
-var Menu$1 = function Menu$$1(props) {
+var Menu = function Menu(props) {
   var children = props.children,
       className = props.className,
       cx = props.cx,
@@ -19270,7 +17988,7 @@ var Menu$1 = function Menu$$1(props) {
   css(getStyles('menu', props)), {
     menu: true
   }, className);
-  return React.createElement("div", _extends$c({
+  return React__default.createElement("div", _extends$c({
     className: cn
   }, innerProps, {
     ref: innerRef
@@ -19299,7 +18017,7 @@ var MenuList = function MenuList(props) {
       getStyles = props.getStyles,
       isMulti = props.isMulti,
       innerRef = props.innerRef;
-  return React.createElement("div", {
+  return React__default.createElement("div", {
     className: cx(
     /*#__PURE__*/
     css(getStyles('menuList', props)), {
@@ -19331,7 +18049,7 @@ var NoOptionsMessage = function NoOptionsMessage(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$c({
+  return React__default.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('noOptionsMessage', props)), {
@@ -19349,7 +18067,7 @@ var LoadingMessage = function LoadingMessage(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$c({
+  return React__default.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('loadingMessage', props)), {
@@ -19446,7 +18164,7 @@ function (_Component2) {
         rect: rect
       }; // same wrapper element whether fixed or portalled
 
-      var menuWrapper = React.createElement("div", {
+      var menuWrapper = React__default.createElement("div", {
         className:
         /*#__PURE__*/
 
@@ -19461,7 +18179,7 @@ function (_Component2) {
 }(Component);
 
 _defineProperty(MenuPortal, "childContextTypes", {
-  getPortalPlacement: PropTypes.func
+  getPortalPlacement: PropTypes__default.func
 });
 
 var isArray = Array.isArray;
@@ -19856,7 +18574,7 @@ var createFilter = function createFilter(config) {
 };
 
 var A11yText = function A11yText(props) {
-  return React.createElement("span", _extends$c({
+  return React__default.createElement("span", _extends$c({
     className:
     /*#__PURE__*/
 
@@ -19903,7 +18621,7 @@ function (_Component) {
           emotion = _this$props.emotion,
           props = _objectWithoutProperties$5(_this$props, ["in", "out", "onExited", "appear", "enter", "exit", "innerRef", "emotion"]);
 
-      return React.createElement("input", _extends$c({
+      return React__default.createElement("input", _extends$c({
         ref: innerRef
       }, props, {
         className:
@@ -20194,7 +18912,7 @@ function (_PureComponent) {
        * actually does the scroll locking
        */
 
-      return React.createElement("div", null, React.createElement("div", {
+      return React__default.createElement("div", null, React__default.createElement("div", {
         onClick: this.blurSelectInput,
         className:
         /*#__PURE__*/
@@ -20207,9 +18925,9 @@ function (_PureComponent) {
           right: 0,
           top: 0
         })
-      }), React.createElement(NodeResolver, {
+      }), React__default.createElement(NodeResolver, {
         innerRef: this.getScrollTarget
-      }, children), touchScrollTarget ? React.createElement(ScrollLock, {
+      }, children), touchScrollTarget ? React__default.createElement(ScrollLock, {
         touchScrollTarget: touchScrollTarget
       }) : null);
     }
@@ -20371,7 +19089,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return React.createElement(NodeResolver, {
+      return React__default.createElement(NodeResolver, {
         innerRef: this.getScrollTarget
       }, this.props.children);
     }
@@ -20398,7 +19116,7 @@ function (_Component2) {
           isEnabled = _this$props2.isEnabled,
           props = _objectWithoutProperties$5(_this$props2, ["isEnabled"]);
 
-      return isEnabled ? React.createElement(ScrollCaptor, props) : this.props.children;
+      return isEnabled ? React__default.createElement(ScrollCaptor, props) : this.props.children;
     }
   }]);
 
@@ -20492,7 +19210,7 @@ var SelectContainer = function SelectContainer(props) {
       innerProps = props.innerProps,
       isDisabled = props.isDisabled,
       isRtl = props.isRtl;
-  return React.createElement("div", _extends$c({
+  return React__default.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('container', props)), {
@@ -20538,7 +19256,7 @@ function (_Component) {
           isMulti = _this$props.isMulti,
           getStyles = _this$props.getStyles,
           hasValue = _this$props.hasValue;
-      return React.createElement("div", {
+      return React__default.createElement("div", {
         className: cx(
         /*#__PURE__*/
         css(getStyles('valueContainer', this.props)), {
@@ -20568,7 +19286,7 @@ var IndicatorsContainer = function IndicatorsContainer(props) {
       className = props.className,
       cx = props.cx,
       getStyles = props.getStyles;
-  return React.createElement("div", {
+  return React__default.createElement("div", {
     className: cx(
     /*#__PURE__*/
     css(getStyles('indicatorsContainer', props)), {
@@ -20584,7 +19302,7 @@ var Svg = function Svg(_ref) {
   var size = _ref.size,
       props = _objectWithoutProperties$5(_ref, ["size"]);
 
-  return React.createElement("svg", _extends$c({
+  return React__default.createElement("svg", _extends$c({
     height: size,
     width: size,
     viewBox: "0 0 20 20",
@@ -20605,16 +19323,16 @@ var Svg = function Svg(_ref) {
 };
 
 var CrossIcon = function CrossIcon(props) {
-  return React.createElement(Svg, _extends$c({
+  return React__default.createElement(Svg, _extends$c({
     size: 20
-  }, props), React.createElement("path", {
+  }, props), React__default.createElement("path", {
     d: "M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
   }));
 };
 var DownChevron = function DownChevron(props) {
-  return React.createElement(Svg, _extends$c({
+  return React__default.createElement(Svg, _extends$c({
     size: 20
-  }, props), React.createElement("path", {
+  }, props), React__default.createElement("path", {
     d: "M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
   }));
 }; // ==============================
@@ -20645,14 +19363,14 @@ var DropdownIndicator = function DropdownIndicator(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$c({}, innerProps, {
+  return React__default.createElement("div", _extends$c({}, innerProps, {
     className: cx(
     /*#__PURE__*/
     css(getStyles('dropdownIndicator', props)), {
       'indicator': true,
       'dropdown-indicator': true
     }, className)
-  }), children || React.createElement(DownChevron, null));
+  }), children || React__default.createElement(DownChevron, null));
 };
 var clearIndicatorCSS = baseCSS;
 var ClearIndicator = function ClearIndicator(props) {
@@ -20661,14 +19379,14 @@ var ClearIndicator = function ClearIndicator(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$c({}, innerProps, {
+  return React__default.createElement("div", _extends$c({}, innerProps, {
     className: cx(
     /*#__PURE__*/
     css(getStyles('clearIndicator', props)), {
       'indicator': true,
       'clear-indicator': true
     }, className)
-  }), children || React.createElement(CrossIcon, null));
+  }), children || React__default.createElement(CrossIcon, null));
 }; // ==============================
 // Separator
 // ==============================
@@ -20692,7 +19410,7 @@ var IndicatorSeparator = function IndicatorSeparator(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("span", _extends$c({}, innerProps, {
+  return React__default.createElement("span", _extends$c({}, innerProps, {
     className: cx(
     /*#__PURE__*/
     css(getStyles('indicatorSeparator', props)), {
@@ -20730,7 +19448,7 @@ var LoadingDot = function LoadingDot(_ref5) {
   var color = _ref5.color,
       delay = _ref5.delay,
       offset = _ref5.offset;
-  return React.createElement("span", {
+  return React__default.createElement("span", {
     className:
     /*#__PURE__*/
 
@@ -20768,22 +19486,22 @@ var LoadingIndicator = function LoadingIndicator(props) {
     keyframesInjected = true;
   }
 
-  return React.createElement("div", _extends$c({}, innerProps, {
+  return React__default.createElement("div", _extends$c({}, innerProps, {
     className: cx(
     /*#__PURE__*/
     css(getStyles('loadingIndicator', props)), {
       'indicator': true,
       'loading-indicator': true
     }, className)
-  }), React.createElement(LoadingDot, {
+  }), React__default.createElement(LoadingDot, {
     color: color,
     delay: 0,
     offset: isRtl
-  }), React.createElement(LoadingDot, {
+  }), React__default.createElement(LoadingDot, {
     color: color,
     delay: 160,
     offset: true
-  }), React.createElement(LoadingDot, {
+  }), React__default.createElement(LoadingDot, {
     color: color,
     delay: 320,
     offset: !isRtl
@@ -20833,7 +19551,7 @@ var Control = function Control(props) {
       innerRef = props.innerRef,
       innerProps = props.innerProps,
       menuIsOpen = props.menuIsOpen;
-  return React.createElement("div", _extends$c({
+  return React__default.createElement("div", _extends$c({
     ref: innerRef,
     className: cx(
     /*#__PURE__*/
@@ -20864,18 +19582,18 @@ var Group = function Group(props) {
       label = props.label,
       theme = props.theme,
       selectProps = props.selectProps;
-  return React.createElement("div", {
+  return React__default.createElement("div", {
     className: cx(
     /*#__PURE__*/
     css(getStyles('group', props)), {
       'group': true
     }, className)
-  }, React.createElement(Heading, _extends$c({}, headingProps, {
+  }, React__default.createElement(Heading, _extends$c({}, headingProps, {
     selectProps: selectProps,
     theme: theme,
     getStyles: getStyles,
     cx: cx
-  }), label), React.createElement("div", null, children));
+  }), label), React__default.createElement("div", null, children));
 };
 
 var groupHeadingCSS = function groupHeadingCSS(_ref2) {
@@ -20901,7 +19619,7 @@ var GroupHeading = function GroupHeading(props) {
       selectProps = props.selectProps,
       cleanProps = _objectWithoutProperties$5(props, ["className", "cx", "getStyles", "theme", "selectProps"]);
 
-  return React.createElement("div", _extends$c({
+  return React__default.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('groupHeading', _objectSpread({
@@ -20950,7 +19668,7 @@ var Input$2 = function Input$$1(_ref2) {
       selectProps = _ref2.selectProps,
       props = _objectWithoutProperties$5(_ref2, ["className", "cx", "getStyles", "innerRef", "isHidden", "isDisabled", "theme", "selectProps"]);
 
-  return React.createElement("div", {
+  return React__default.createElement("div", {
     className:
     /*#__PURE__*/
 
@@ -20958,7 +19676,7 @@ var Input$2 = function Input$$1(_ref2) {
     css(getStyles('input', _objectSpread({
       theme: theme
     }, props)))
-  }, React.createElement(AutosizeInput, _extends$c({
+  }, React__default.createElement(AutosizeInput, _extends$c({
     className: cx(null, {
       'input': true
     }, className),
@@ -21021,7 +19739,7 @@ var multiValueRemoveCSS = function multiValueRemoveCSS(_ref3) {
 var MultiValueGeneric = function MultiValueGeneric(_ref4) {
   var children = _ref4.children,
       innerProps = _ref4.innerProps;
-  return React.createElement("div", innerProps, children);
+  return React__default.createElement("div", innerProps, children);
 };
 var MultiValueContainer = MultiValueGeneric;
 var MultiValueLabel = MultiValueGeneric;
@@ -21042,7 +19760,7 @@ function (_Component) {
       var _this$props = this.props,
           children = _this$props.children,
           innerProps = _this$props.innerProps;
-      return React.createElement("div", innerProps, children || React.createElement(CrossIcon, {
+      return React__default.createElement("div", innerProps, children || React__default.createElement(CrossIcon, {
         size: 14
       }));
     }
@@ -21105,15 +19823,15 @@ function (_Component2) {
         }, className)
       }, removeProps);
 
-      return React.createElement(Container, {
+      return React__default.createElement(Container, {
         data: data,
         innerProps: containerInnerProps,
         selectProps: selectProps
-      }, React.createElement(Label, {
+      }, React__default.createElement(Label, {
         data: data,
         innerProps: labelInnerProps,
         selectProps: selectProps
-      }, children), React.createElement(Remove, {
+      }, children), React__default.createElement(Remove, {
         data: data,
         innerProps: removeInnerProps,
         selectProps: selectProps
@@ -21163,7 +19881,7 @@ var Option = function Option(props) {
       isSelected = props.isSelected,
       innerRef = props.innerRef,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$c({
+  return React__default.createElement("div", _extends$c({
     ref: innerRef,
     className: cx(
     /*#__PURE__*/
@@ -21197,7 +19915,7 @@ var Placeholder = function Placeholder(props) {
       cx = props.cx,
       getStyles = props.getStyles,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$c({
+  return React__default.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('placeholder', props)), {
@@ -21233,7 +19951,7 @@ var SingleValue = function SingleValue(props) {
       getStyles = props.getStyles,
       isDisabled = props.isDisabled,
       innerProps = props.innerProps;
-  return React.createElement("div", _extends$c({
+  return React__default.createElement("div", _extends$c({
     className: cx(
     /*#__PURE__*/
     css(getStyles('singleValue', props)), {
@@ -21255,7 +19973,7 @@ var components = {
   IndicatorSeparator: IndicatorSeparator,
   Input: Input$2,
   LoadingIndicator: LoadingIndicator,
-  Menu: Menu$1,
+  Menu: Menu,
   MenuList: MenuList,
   MenuPortal: MenuPortal,
   LoadingMessage: LoadingMessage,
@@ -22726,7 +21444,7 @@ function (_Component) {
 
       if (!isSearchable) {
         // use a dummy input to maintain focus/blur functionality
-        return React.createElement(DummyInput, {
+        return React__default.createElement(DummyInput, {
           id: id,
           innerRef: this.getInputRef,
           onBlur: this.onInputBlur,
@@ -22749,7 +21467,7 @@ function (_Component) {
           cx = _this$commonProps.cx,
           theme = _this$commonProps.theme,
           selectProps = _this$commonProps.selectProps;
-      return React.createElement(Input$$1, _extends$c({
+      return React__default.createElement(Input$$1, _extends$c({
         autoCapitalize: "none",
         autoComplete: "off",
         autoCorrect: "off",
@@ -22795,7 +21513,7 @@ function (_Component) {
           isFocused = _this$state8.isFocused;
 
       if (!this.hasValue() || !controlShouldRenderValue) {
-        return inputValue ? null : React.createElement(Placeholder, _extends$c({}, commonProps, {
+        return inputValue ? null : React__default.createElement(Placeholder, _extends$c({}, commonProps, {
           key: "placeholder",
           isDisabled: isDisabled,
           isFocused: isFocused
@@ -22805,7 +21523,7 @@ function (_Component) {
       if (isMulti) {
         var selectValues = selectValue.map(function (opt) {
           var isOptionFocused = opt === focusedValue;
-          return React.createElement(MultiValue, _extends$c({}, commonProps, {
+          return React__default.createElement(MultiValue, _extends$c({}, commonProps, {
             components: {
               Container: MultiValueContainer,
               Label: MultiValueLabel,
@@ -22837,7 +21555,7 @@ function (_Component) {
       }
 
       var singleValue = selectValue[0];
-      return React.createElement(SingleValue, _extends$c({}, commonProps, {
+      return React__default.createElement(SingleValue, _extends$c({}, commonProps, {
         data: singleValue,
         isDisabled: isDisabled
       }), this.formatOptionLabel(singleValue, 'value'));
@@ -22861,7 +21579,7 @@ function (_Component) {
         onTouchEnd: this.onClearIndicatorTouchEnd,
         'aria-hidden': 'true'
       };
-      return React.createElement(ClearIndicator, _extends$c({}, commonProps, {
+      return React__default.createElement(ClearIndicator, _extends$c({}, commonProps, {
         innerProps: innerProps,
         isFocused: isFocused
       }));
@@ -22879,7 +21597,7 @@ function (_Component) {
       var innerProps = {
         'aria-hidden': 'true'
       };
-      return React.createElement(LoadingIndicator, _extends$c({}, commonProps, {
+      return React__default.createElement(LoadingIndicator, _extends$c({}, commonProps, {
         innerProps: innerProps,
         isDisabled: isDisabled,
         isFocused: isFocused
@@ -22896,7 +21614,7 @@ function (_Component) {
       var commonProps = this.commonProps;
       var isDisabled = this.props.isDisabled;
       var isFocused = this.state.isFocused;
-      return React.createElement(IndicatorSeparator, _extends$c({}, commonProps, {
+      return React__default.createElement(IndicatorSeparator, _extends$c({}, commonProps, {
         isDisabled: isDisabled,
         isFocused: isFocused
       }));
@@ -22914,7 +21632,7 @@ function (_Component) {
         onTouchEnd: this.onDropdownIndicatorTouchEnd,
         'aria-hidden': 'true'
       };
-      return React.createElement(DropdownIndicator, _extends$c({}, commonProps, {
+      return React__default.createElement(DropdownIndicator, _extends$c({}, commonProps, {
         innerProps: innerProps,
         isDisabled: isDisabled,
         isFocused: isFocused
@@ -22961,7 +21679,7 @@ function (_Component) {
         // focused option changes so we calculate additional props based on that
         var isFocused = focusedOption === props.data;
         props.innerRef = isFocused ? _this5.getFocusedOptionRef : undefined;
-        return React.createElement(Option, _extends$c({}, commonProps, props, {
+        return React__default.createElement(Option, _extends$c({}, commonProps, props, {
           isFocused: isFocused
         }), _this5.formatOptionLabel(props.data, 'menu'));
       };
@@ -22975,7 +21693,7 @@ function (_Component) {
                 group = _objectWithoutProperties$5(item, ["type"]);
 
             var headingId = "".concat(item.key, "-heading");
-            return React.createElement(Group, _extends$c({}, commonProps, group, {
+            return React__default.createElement(Group, _extends$c({}, commonProps, group, {
               Heading: GroupHeading,
               headingProps: {
                 id: headingId
@@ -22993,14 +21711,14 @@ function (_Component) {
           inputValue: inputValue
         });
         if (message === null) return null;
-        menuUI = React.createElement(LoadingMessage$$1, commonProps, message);
+        menuUI = React__default.createElement(LoadingMessage$$1, commonProps, message);
       } else {
         var _message = noOptionsMessage({
           inputValue: inputValue
         });
 
         if (_message === null) return null;
-        menuUI = React.createElement(NoOptionsMessage$$1, commonProps, _message);
+        menuUI = React__default.createElement(NoOptionsMessage$$1, commonProps, _message);
       }
 
       var menuPlacementProps = {
@@ -23010,12 +21728,12 @@ function (_Component) {
         menuPosition: menuPosition,
         menuShouldScrollIntoView: menuShouldScrollIntoView
       };
-      var menuElement = React.createElement(MenuPlacer, _extends$c({}, commonProps, menuPlacementProps), function (_ref6) {
+      var menuElement = React__default.createElement(MenuPlacer, _extends$c({}, commonProps, menuPlacementProps), function (_ref6) {
         var ref = _ref6.ref,
             _ref6$placerProps = _ref6.placerProps,
             placement = _ref6$placerProps.placement,
             maxHeight = _ref6$placerProps.maxHeight;
-        return React.createElement(Menu$$1, _extends$c({}, commonProps, menuPlacementProps, {
+        return React__default.createElement(Menu$$1, _extends$c({}, commonProps, menuPlacementProps, {
           innerRef: ref,
           innerProps: {
             onMouseDown: _this5.onMenuMouseDown,
@@ -23023,13 +21741,13 @@ function (_Component) {
           },
           isLoading: isLoading,
           placement: placement
-        }), React.createElement(ScrollCaptorSwitch, {
+        }), React__default.createElement(ScrollCaptorSwitch, {
           isEnabled: captureMenuScroll,
           onTopArrive: onMenuScrollToTop,
           onBottomArrive: onMenuScrollToBottom
-        }, React.createElement(ScrollBlock, {
+        }, React__default.createElement(ScrollBlock, {
           isEnabled: menuShouldBlockScroll
-        }, React.createElement(MenuList$$1, _extends$c({}, commonProps, {
+        }, React__default.createElement(MenuList$$1, _extends$c({}, commonProps, {
           innerRef: _this5.getMenuListRef,
           isLoading: isLoading,
           maxHeight: maxHeight
@@ -23038,7 +21756,7 @@ function (_Component) {
       // so we use the same component. the actual portalling logic is forked
       // within the component based on `menuPosition`
 
-      return menuPortalTarget || menuPosition === 'fixed' ? React.createElement(MenuPortal$$1, _extends$c({}, commonProps, {
+      return menuPortalTarget || menuPosition === 'fixed' ? React__default.createElement(MenuPortal$$1, _extends$c({}, commonProps, {
         appendTo: menuPortalTarget,
         controlElement: this.controlRef,
         menuPlacement: menuPlacement,
@@ -23063,29 +21781,29 @@ function (_Component) {
           var value = selectValue.map(function (opt) {
             return _this6.getOptionValue(opt);
           }).join(delimiter);
-          return React.createElement("input", {
+          return React__default.createElement("input", {
             name: name,
             type: "hidden",
             value: value
           });
         } else {
           var input = selectValue.length > 0 ? selectValue.map(function (opt, i) {
-            return React.createElement("input", {
+            return React__default.createElement("input", {
               key: "i-".concat(i),
               name: name,
               type: "hidden",
               value: _this6.getOptionValue(opt)
             });
-          }) : React.createElement("input", {
+          }) : React__default.createElement("input", {
             name: name,
             type: "hidden"
           });
-          return React.createElement("div", null, input);
+          return React__default.createElement("div", null, input);
         }
       } else {
         var _value = selectValue[0] ? this.getOptionValue(selectValue[0]) : '';
 
-        return React.createElement("input", {
+        return React__default.createElement("input", {
           name: name,
           type: "hidden",
           value: _value
@@ -23096,11 +21814,11 @@ function (_Component) {
     key: "renderLiveRegion",
     value: function renderLiveRegion() {
       if (!this.state.isFocused) return null;
-      return React.createElement(A11yText, {
+      return React__default.createElement(A11yText, {
         "aria-live": "assertive"
-      }, React.createElement("p", {
+      }, React__default.createElement("p", {
         id: "aria-selection-event"
-      }, "\xA0", this.state.ariaLiveSelection), React.createElement("p", {
+      }, "\xA0", this.state.ariaLiveSelection), React__default.createElement("p", {
         id: "aria-context"
       }, "\xA0", this.constructAriaLiveMessage()));
     }
@@ -23119,7 +21837,7 @@ function (_Component) {
           menuIsOpen = _this$props20.menuIsOpen;
       var isFocused = this.state.isFocused;
       var commonProps = this.commonProps = this.getCommonProps();
-      return React.createElement(SelectContainer, _extends$c({}, commonProps, {
+      return React__default.createElement(SelectContainer, _extends$c({}, commonProps, {
         className: className,
         innerProps: {
           id: id,
@@ -23127,7 +21845,7 @@ function (_Component) {
         },
         isDisabled: isDisabled,
         isFocused: isFocused
-      }), this.renderLiveRegion(), React.createElement(Control, _extends$c({}, commonProps, {
+      }), this.renderLiveRegion(), React__default.createElement(Control, _extends$c({}, commonProps, {
         innerRef: this.getControlRef,
         innerProps: {
           onMouseDown: this.onControlMouseDown,
@@ -23136,9 +21854,9 @@ function (_Component) {
         isDisabled: isDisabled,
         isFocused: isFocused,
         menuIsOpen: menuIsOpen
-      }), React.createElement(ValueContainer, _extends$c({}, commonProps, {
+      }), React__default.createElement(ValueContainer, _extends$c({}, commonProps, {
         isDisabled: isDisabled
-      }), this.renderPlaceholderOrValue(), this.renderInput()), React.createElement(IndicatorsContainer, _extends$c({}, commonProps, {
+      }), this.renderPlaceholderOrValue(), this.renderInput()), React__default.createElement(IndicatorsContainer, _extends$c({}, commonProps, {
         isDisabled: isDisabled
       }), this.renderClearIndicator(), this.renderLoadingIndicator(), this.renderIndicatorSeparator(), this.renderDropdownIndicator())), this.renderMenu(), this.renderFormField());
     }
@@ -23262,7 +21980,7 @@ var manageState = function manageState(SelectComponent) {
             defaultValue = _this$props2.defaultValue,
             props = _objectWithoutProperties$5(_this$props2, ["defaultInputValue", "defaultMenuIsOpen", "defaultValue"]);
 
-        return React.createElement(SelectComponent, _extends$c({}, props, {
+        return React__default.createElement(SelectComponent, _extends$c({}, props, {
           ref: function ref(_ref) {
             _this2.select = _ref;
           },
@@ -23459,7 +22177,7 @@ var makeAsyncSelect = function makeAsyncSelect(SelectComponent) {
             loadedOptions = _this$state.loadedOptions,
             passEmptyOptions = _this$state.passEmptyOptions;
         var options = passEmptyOptions ? [] : inputValue && loadedInputValue ? loadedOptions : defaultOptions || [];
-        return React.createElement(SelectComponent, _extends$c({}, props, {
+        return React__default.createElement(SelectComponent, _extends$c({}, props, {
           ref: function ref(_ref) {
             _this3.select = _ref;
           },
@@ -23611,7 +22329,7 @@ var makeCreatableSelect = function makeCreatableSelect(SelectComponent) {
         var props = _extends$c({}, this.props);
 
         var options = this.state.options;
-        return React.createElement(SelectComponent, _extends$c({}, props, {
+        return React__default.createElement(SelectComponent, _extends$c({}, props, {
           ref: function ref(_ref) {
             _this2.select = _ref;
           },
@@ -23643,7 +22361,7 @@ var AnimatedInput = function AnimatedInput(WrappedComponent) {
         exit = _ref.exit,
         props = _objectWithoutProperties$5(_ref, ["in", "onExited", "appear", "enter", "exit"]);
 
-    return React.createElement(WrappedComponent, props);
+    return React__default.createElement(WrappedComponent, props);
   };
 };
 
@@ -23670,7 +22388,7 @@ var Fade = function Fade(_ref) {
       opacity: 0
     }
   };
-  return React.createElement(reactTransitionGroup_1, {
+  return React__default.createElement(reactTransitionGroup_1, {
     mountOnEnter: true,
     unmountOnExit: true,
     in: inProp,
@@ -23679,7 +22397,7 @@ var Fade = function Fade(_ref) {
     var innerProps = {
       style: _objectSpread({}, transition[state])
     };
-    return React.createElement(Tag, _extends$c({
+    return React__default.createElement(Tag, _extends$c({
       innerProps: innerProps
     }, props));
   });
@@ -23779,7 +22497,7 @@ function (_Component) {
           children = _this$props.children,
           inProp = _this$props.in;
       var width = this.state.width;
-      return React.createElement(reactTransitionGroup_1, {
+      return React__default.createElement(reactTransitionGroup_1, {
         enter: false,
         mountOnEnter: true,
         unmountOnExit: true,
@@ -23788,7 +22506,7 @@ function (_Component) {
       }, function (state) {
         var style = _objectSpread({}, _this2.getStyle(width), _this2.getTransition(state));
 
-        return React.createElement("div", {
+        return React__default.createElement("div", {
           ref: _this2.getWidth,
           style: style
         }, children);
@@ -23805,10 +22523,10 @@ var AnimatedMultiValue = function AnimatedMultiValue(WrappedComponent) {
         onExited = _ref.onExited,
         props = _objectWithoutProperties$5(_ref, ["in", "onExited"]);
 
-    return React.createElement(Collapse, {
+    return React__default.createElement(Collapse, {
       in: inProp,
       onExited: onExited
-    }, React.createElement(WrappedComponent, _extends$c({
+    }, React__default.createElement(WrappedComponent, _extends$c({
       cropWithEllipsis: inProp
     }, props)));
   };
@@ -23816,7 +22534,7 @@ var AnimatedMultiValue = function AnimatedMultiValue(WrappedComponent) {
 
 var AnimatedPlaceholder = function AnimatedPlaceholder(WrappedComponent) {
   return function (props) {
-    return React.createElement(Fade, _extends$c({
+    return React__default.createElement(Fade, _extends$c({
       component: WrappedComponent,
       duration: props.isMulti ? collapseDuration : 1
     }, props));
@@ -23825,7 +22543,7 @@ var AnimatedPlaceholder = function AnimatedPlaceholder(WrappedComponent) {
 
 var AnimatedSingleValue = function AnimatedSingleValue(WrappedComponent) {
   return function (props) {
-    return React.createElement(Fade, _extends$c({
+    return React__default.createElement(Fade, _extends$c({
       component: WrappedComponent
     }, props));
   };
@@ -23834,7 +22552,7 @@ var AnimatedSingleValue = function AnimatedSingleValue(WrappedComponent) {
 // make ValueContainer a transition group
 var AnimatedValueContainer = function AnimatedValueContainer(WrappedComponent) {
   return function (props) {
-    return React.createElement(reactTransitionGroup_2, _extends$c({
+    return React__default.createElement(reactTransitionGroup_2, _extends$c({
       component: WrappedComponent
     }, props));
   };
@@ -23922,7 +22640,7 @@ var styles$j = function styles(theme) {
 };
 
 function NoOptionsMessage$1(props) {
-  return React.createElement(
+  return React__default.createElement(
     Typography,
     _extends$b({
       color: 'textSecondary',
@@ -23936,11 +22654,11 @@ function inputComponent(_ref) {
   var inputRef = _ref.inputRef,
       props = objectWithoutProperties(_ref, ['inputRef']);
 
-  return React.createElement('div', _extends$b({ ref: inputRef }, props));
+  return React__default.createElement('div', _extends$b({ ref: inputRef }, props));
 }
 
 function Control$1(props) {
-  return React.createElement(TextField, _extends$b({
+  return React__default.createElement(TextField, _extends$b({
     fullWidth: true,
     InputProps: {
       inputComponent: inputComponent,
@@ -23954,7 +22672,7 @@ function Control$1(props) {
 }
 
 function Option$1(props) {
-  return React.createElement(
+  return React__default.createElement(
     MenuItem,
     _extends$b({
       buttonRef: props.innerRef,
@@ -23969,7 +22687,7 @@ function Option$1(props) {
 }
 
 function Placeholder$2(props) {
-  return React.createElement(
+  return React__default.createElement(
     Typography,
     _extends$b({
       color: 'textSecondary',
@@ -23980,7 +22698,7 @@ function Placeholder$2(props) {
 }
 
 function SingleValue$2(props) {
-  return React.createElement(
+  return React__default.createElement(
     Typography,
     _extends$b({ className: props.selectProps.classes.singleValue }, props.innerProps),
     props.children
@@ -23988,7 +22706,7 @@ function SingleValue$2(props) {
 }
 
 function ValueContainer$2(props) {
-  return React.createElement(
+  return React__default.createElement(
     'div',
     { className: props.selectProps.classes.valueContainer },
     props.children
@@ -23996,17 +22714,17 @@ function ValueContainer$2(props) {
 }
 
 function MultiValue$2(props) {
-  return React.createElement(Chip, {
+  return React__default.createElement(Chip, {
     tabIndex: -1,
     label: props.children,
     className: classnames(props.selectProps.classes.chip, defineProperty$1({}, props.selectProps.classes.chipFocused, props.isFocused)),
     onDelete: props.removeProps.onClick,
-    deleteIcon: React.createElement(CancelIcon, props.removeProps)
+    deleteIcon: React__default.createElement(CancelIcon, props.removeProps)
   });
 }
 
-function Menu$2(props) {
-  return React.createElement(
+function Menu$1(props) {
+  return React__default.createElement(
     Paper,
     _extends$b({ square: true, className: props.selectProps.classes.paper }, props.innerProps),
     props.children
@@ -24015,7 +22733,7 @@ function Menu$2(props) {
 
 var components$1 = {
   Control: Control$1,
-  Menu: Menu$2,
+  Menu: Menu$1,
   MultiValue: MultiValue$2,
   NoOptionsMessage: NoOptionsMessage$1,
   Option: Option$1,
@@ -24067,10 +22785,10 @@ var AutoComplete = function (_React$Component) {
         }
       };
 
-      return React.createElement(
+      return React__default.createElement(
         NoSsr,
         null,
-        React.createElement(index$1$1, {
+        React__default.createElement(index$1$1, {
           classes: classes,
           styles: selectStyles,
           options: suggestions,
@@ -24083,11 +22801,11 @@ var AutoComplete = function (_React$Component) {
     }
   }]);
   return AutoComplete;
-}(React.Component);
+}(React__default.Component);
 
 AutoComplete.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired,
+  theme: PropTypes__default.object.isRequired
 };
 
 var AutoComplete$1 = withStyles(styles$j, { withTheme: true })(AutoComplete);
@@ -24204,13 +22922,13 @@ var _Symbol = Symbol$1;
  * @param {Function} iteratee The function invoked per iteration.
  * @returns {Array} Returns the new mapped array.
  */
-function arrayMap(array, iteratee) {
+function arrayMap(array$$1, iteratee) {
   var index = -1,
-      length = array == null ? 0 : array.length,
+      length = array$$1 == null ? 0 : array$$1.length,
       result = Array(length);
 
   while (++index < length) {
-    result[index] = iteratee(array[index], index, array);
+    result[index] = iteratee(array$$1[index], index, array$$1);
   }
   return result;
 }
@@ -24792,11 +23510,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -24848,7 +23566,7 @@ var SectionTitle = function (_Component) {
   }]);
 
   return SectionTitle;
-}(React.Component);
+}(React__default.Component);
 
 SectionTitle.propTypes = {
   section: _propTypes2.default.any.isRequired,
@@ -24873,11 +23591,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -24985,7 +23703,7 @@ var Item = function (_Component) {
   }]);
 
   return Item;
-}(React.Component);
+}(React__default.Component);
 
 Item.propTypes = {
   sectionIndex: _propTypes2.default.number,
@@ -25016,11 +23734,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -25115,7 +23833,7 @@ var ItemsList = function (_Component) {
   }]);
 
   return ItemsList;
-}(React.Component);
+}(React__default.Component);
 
 ItemsList.propTypes = {
   items: _propTypes2.default.array.isRequired,
@@ -25151,11 +23869,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -25531,7 +24249,7 @@ var Autowhatever = function (_Component) {
   }]);
 
   return Autowhatever;
-}(React.Component);
+}(React__default.Component);
 
 Autowhatever.propTypes = {
   id: _propTypes2.default.string, // Used in aria-* attributes. If multiple Autowhatever's are rendered on a page, they must have unique ids.
@@ -25657,11 +24375,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -26183,7 +24901,7 @@ var Autosuggest = function (_Component) {
   }]);
 
   return Autosuggest;
-}(React.Component);
+}(React__default.Component);
 
 Autosuggest.propTypes = {
   suggestions: _propTypes2.default.array.isRequired,
@@ -26792,18 +25510,18 @@ var AutoSuggest = function (_React$Component) {
       var matches = match(suggestionLabel, query);
       var parts = parse$1(suggestionLabel, matches);
 
-      return React.createElement(
+      return React__default.createElement(
         MenuItem,
         { selected: isHighlighted, component: 'div', className: classes.suggestionItem },
-        React.createElement(
+        React__default.createElement(
           'div',
           null,
           parts.map(function (part, index) {
-            return part.highlight ? React.createElement(
+            return part.highlight ? React__default.createElement(
               'span',
               { key: String(index), style: { fontWeight: 500 } },
               part.text
-            ) : React.createElement(
+            ) : React__default.createElement(
               'strong',
               { key: String(index), style: { fontWeight: 300 } },
               part.text
@@ -26819,7 +25537,7 @@ var AutoSuggest = function (_React$Component) {
           disableUnderline = inputProps.disableUnderline,
           other = objectWithoutProperties(inputProps, ['classes', 'inputRef', 'ref', 'disableUnderline']);
 
-      return React.createElement(TextField, _extends$b({
+      return React__default.createElement(TextField, _extends$b({
         fullWidth: true,
         InputProps: {
           disableUnderline: disableUnderline,
@@ -26860,7 +25578,7 @@ var AutoSuggest = function (_React$Component) {
         onSuggestionSelected: this.props.onSelect
       };
 
-      return React.createElement(dist$3, _extends$b({}, autosuggestProps, {
+      return React__default.createElement(dist$3, _extends$b({}, autosuggestProps, {
         inputProps: {
           classes: classes,
           placeholder: this.props.placeholder,
@@ -26876,7 +25594,7 @@ var AutoSuggest = function (_React$Component) {
           suggestion: classes.suggestion
         },
         renderSuggestionsContainer: function renderSuggestionsContainer(options) {
-          return React.createElement(
+          return React__default.createElement(
             Paper,
             _extends$b({}, options.containerProps, { square: true }),
             options.children
@@ -26886,10 +25604,10 @@ var AutoSuggest = function (_React$Component) {
     }
   }]);
   return AutoSuggest;
-}(React.Component);
+}(React__default.Component);
 
 AutoSuggest.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired
 };
 
 var AutoSuggest$1 = withStyles(styles$k)(AutoSuggest);
@@ -26941,23 +25659,23 @@ var EnhancedRange = function (_React$Component) {
           data = _this$state.data,
           value = _this$state.value;
 
-      return React.createElement(
+      return React__default.createElement(
         FormControl,
         { error: _this.props.error, 'aria-describedby': _this.props.name + '-error-text' },
-        _this.props.label ? React.createElement(
+        _this.props.label ? React__default.createElement(
           FormLabel,
           null,
           _this.props.label
         ) : null,
-        React.createElement(
+        React__default.createElement(
           'div',
           { key: 'wrapper-' + _this.props.name, className: classes.wrapper },
-          React.createElement(
+          React__default.createElement(
             'div',
             { className: classes.rangeMin },
             (typeof _this.props.minText === 'function' ? _this.props.minText(data) : _this.props.minText) || (typeof _this.props.min === 'function' ? _this.props.min(data) : _this.props.min)
           ),
-          React.createElement(Slider, {
+          React__default.createElement(Slider, {
             key: 'slider-' + _this.props.name,
             id: _this.props.name,
             name: _this.props.name,
@@ -26970,18 +25688,18 @@ var EnhancedRange = function (_React$Component) {
               _this.props.onChange(_this.props.name, value);
             }
           }),
-          React.createElement(
+          React__default.createElement(
             'div',
             { className: classes.rangeMax },
             (typeof _this.props.maxText === 'function' ? _this.props.maxText(data) : _this.props.maxText) || (typeof _this.props.max === 'function' ? _this.props.max(data) : _this.props.max)
           )
         ),
-        _this.props.error ? React.createElement(
+        _this.props.error ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-error-text', component: 'span' },
           _this.props.title
         ) : null,
-        _this.props.helptext ? React.createElement(
+        _this.props.helptext ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-help-text', component: 'span' },
           typeof _this.props.helptext === 'function' ? _this.props.helptext(data) : _this.props.helptext
@@ -26994,11 +25712,11 @@ var EnhancedRange = function (_React$Component) {
   }
 
   return EnhancedRange;
-}(React.Component);
+}(React__default.Component);
 
 EnhancedRange.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired,
+  theme: PropTypes__default.object.isRequired
 };
 
 var Range = withStyles(styles$l, { withTheme: true })(EnhancedRange);
@@ -27057,14 +25775,14 @@ var EnhancedSelect = function (_React$Component) {
           value = _this$state.value;
 
 
-      return React.createElement(
+      return React__default.createElement(
         FormControl,
         {
           error: typeof _this.props.error === 'function' ? _this.props.error(data) : _this.props.error,
           'aria-describedby': _this.props.name + '-error-text',
           key: 'form-control-' + _this.props.name
         },
-        React.createElement(
+        React__default.createElement(
           TextField,
           {
             select: true,
@@ -27086,7 +25804,7 @@ var EnhancedSelect = function (_React$Component) {
             }
           },
           selectOptions.map(function (option) {
-            return React.createElement(
+            return React__default.createElement(
               MenuItem,
               {
                 key: 'select-' + _this.props.name + '-' + (option.id || option.value),
@@ -27097,17 +25815,17 @@ var EnhancedSelect = function (_React$Component) {
             );
           })
         ),
-        _this.props.error ? React.createElement(
+        _this.props.error ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-error-text' },
           typeof _this.props.title === 'function' ? _this.props.title(data) : _this.props.title
         ) : null,
-        _this.props.helptext ? React.createElement(
+        _this.props.helptext ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-help-text' },
           typeof _this.props.helptext === 'function' ? _this.props.helptext(data) : _this.props.helptext
         ) : null,
-        _this.props.helplink ? React.createElement(
+        _this.props.helplink ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-help-text' },
           typeof _this.props.helplink === 'function' ? _this.props.helplink(data) : _this.props.helplink
@@ -27120,11 +25838,11 @@ var EnhancedSelect = function (_React$Component) {
   }
 
   return EnhancedSelect;
-}(React.Component);
+}(React__default.Component);
 
 EnhancedSelect.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired,
+  theme: PropTypes__default.object.isRequired
 };
 
 var Select$1 = withStyles(styles$m, { withTheme: true })(EnhancedSelect);
@@ -27224,7 +25942,7 @@ var Toggle = function (_React$Component) {
       var isSelected = _this.state.isSelected;
 
 
-      return React.createElement(
+      return React__default.createElement(
         'div',
         { className: classes.root },
         options.map(function (option) {
@@ -27232,7 +25950,7 @@ var Toggle = function (_React$Component) {
           var optionLabel = (typeof option === 'undefined' ? 'undefined' : _typeof$4(option)) === 'object' && option.hasOwnProperty('label') ? option.label : option;
           var selected = isSelected === optionValue ? true : false;
 
-          return React.createElement(
+          return React__default.createElement(
             Typography,
             {
               value: optionValue,
@@ -27252,10 +25970,10 @@ var Toggle = function (_React$Component) {
   }
 
   return Toggle;
-}(React.Component);
+}(React__default.Component);
 
 Toggle.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired
 };
 
 var Toggle$1 = withStyles(styles$n)(Toggle);
@@ -28415,7 +27133,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
 
 var factory_1 = factory;
 
-if (typeof React === 'undefined') {
+if (typeof React__default === 'undefined') {
   throw Error(
     'create-react-class could not find the React object. If you are using script tags, ' +
       'make sure that React is being loaded before create-react-class.'
@@ -28423,11 +27141,11 @@ if (typeof React === 'undefined') {
 }
 
 // Hack to grab NoopUpdateQueue from isomorphic React
-var ReactNoopUpdateQueue = new React.Component().updater;
+var ReactNoopUpdateQueue = new React__default.Component().updater;
 
 var createReactClass = factory_1(
-  React.Component,
-  React.isValidElement,
+  React__default.Component,
+  React__default.isValidElement,
   ReactNoopUpdateQueue
 );
 
@@ -28817,9 +27535,9 @@ var immutable = createCommonjsModule(function (module, exports) {
 
 
   createClass(ArraySeq, IndexedSeq);
-    function ArraySeq(array) {
-      this._array = array;
-      this.size = array.length;
+    function ArraySeq(array$$1) {
+      this._array = array$$1;
+      this.size = array$$1.length;
     }
 
     ArraySeq.prototype.get = function(index, notSetValue) {
@@ -28827,10 +27545,10 @@ var immutable = createCommonjsModule(function (module, exports) {
     };
 
     ArraySeq.prototype.__iterate = function(fn, reverse) {
-      var array = this._array;
-      var maxIndex = array.length - 1;
+      var array$$1 = this._array;
+      var maxIndex = array$$1.length - 1;
       for (var ii = 0; ii <= maxIndex; ii++) {
-        if (fn(array[reverse ? maxIndex - ii : ii], ii, this) === false) {
+        if (fn(array$$1[reverse ? maxIndex - ii : ii], ii, this) === false) {
           return ii + 1;
         }
       }
@@ -28838,13 +27556,13 @@ var immutable = createCommonjsModule(function (module, exports) {
     };
 
     ArraySeq.prototype.__iterator = function(type, reverse) {
-      var array = this._array;
-      var maxIndex = array.length - 1;
+      var array$$1 = this._array;
+      var maxIndex = array$$1.length - 1;
       var ii = 0;
       return new Iterator(function() 
         {return ii > maxIndex ?
           iteratorDone() :
-          iteratorValue(type, ii, array[reverse ? maxIndex - ii++ : ii++])}
+          iteratorValue(type, ii, array$$1[reverse ? maxIndex - ii++ : ii++])}
       );
     };
 
@@ -30457,17 +29175,17 @@ var immutable = createCommonjsModule(function (module, exports) {
     return x & 0x7f;
   }
 
-  function setIn(array, idx, val, canEdit) {
-    var newArray = canEdit ? array : arrCopy(array);
+  function setIn(array$$1, idx, val, canEdit) {
+    var newArray = canEdit ? array$$1 : arrCopy(array$$1);
     newArray[idx] = val;
     return newArray;
   }
 
-  function spliceIn(array, idx, val, canEdit) {
-    var newLen = array.length + 1;
+  function spliceIn(array$$1, idx, val, canEdit) {
+    var newLen = array$$1.length + 1;
     if (canEdit && idx + 1 === newLen) {
-      array[idx] = val;
-      return array;
+      array$$1[idx] = val;
+      return array$$1;
     }
     var newArray = new Array(newLen);
     var after = 0;
@@ -30476,17 +29194,17 @@ var immutable = createCommonjsModule(function (module, exports) {
         newArray[ii] = val;
         after = -1;
       } else {
-        newArray[ii] = array[ii + after];
+        newArray[ii] = array$$1[ii + after];
       }
     }
     return newArray;
   }
 
-  function spliceOut(array, idx, canEdit) {
-    var newLen = array.length - 1;
+  function spliceOut(array$$1, idx, canEdit) {
+    var newLen = array$$1.length - 1;
     if (canEdit && idx === newLen) {
-      array.pop();
-      return array;
+      array$$1.pop();
+      return array$$1;
     }
     var newArray = new Array(newLen);
     var after = 0;
@@ -30494,7 +29212,7 @@ var immutable = createCommonjsModule(function (module, exports) {
       if (ii === idx) {
         after = 1;
       }
-      newArray[ii] = array[ii + after];
+      newArray[ii] = array$$1[ii + after];
     }
     return newArray;
   }
@@ -30707,8 +29425,8 @@ var immutable = createCommonjsModule(function (module, exports) {
 
 
 
-    function VNode(array, ownerID) {
-      this.array = array;
+    function VNode(array$$1, ownerID) {
+      this.array = array$$1;
       this.ownerID = ownerID;
     }
 
@@ -30791,7 +29509,7 @@ var immutable = createCommonjsModule(function (module, exports) {
     }
 
     function iterateLeaf(node$$1, offset) {
-      var array = offset === tailPos ? tail && tail.array : node$$1 && node$$1.array;
+      var array$$1 = offset === tailPos ? tail && tail.array : node$$1 && node$$1.array;
       var from = offset > left ? 0 : left - offset;
       var to = right - offset;
       if (to > SIZE) {
@@ -30802,13 +29520,13 @@ var immutable = createCommonjsModule(function (module, exports) {
           return DONE;
         }
         var idx = reverse ? --to : from++;
-        return array && array[idx];
+        return array$$1 && array$$1[idx];
       };
     }
 
     function iterateNode(node$$1, level, offset) {
       var values;
-      var array = node$$1 && node$$1.array;
+      var array$$1 = node$$1 && node$$1.array;
       var from = offset > left ? 0 : (left - offset) >> level;
       var to = ((right - offset) >> level) + 1;
       if (to > SIZE) {
@@ -30828,7 +29546,7 @@ var immutable = createCommonjsModule(function (module, exports) {
           }
           var idx = reverse ? --to : from++;
           values = iterateNodeOrLeaf(
-            array && array[idx], level - SHIFT, offset + (idx << level)
+            array$$1 && array$$1[idx], level - SHIFT, offset + (idx << level)
           );
         } while (true);
       };
@@ -32714,9 +31432,9 @@ var immutable = createCommonjsModule(function (module, exports) {
 
     toArray: function() {
       assertNotInfinite(this.size);
-      var array = new Array(this.size || 0);
-      this.valueSeq().__iterate(function(v, i)  { array[i] = v; });
-      return array;
+      var array$$1 = new Array(this.size || 0);
+      this.valueSeq().__iterate(function(v, i)  { array$$1[i] = v; });
+      return array$$1;
     },
 
     toIndexedSeq: function() {
@@ -33602,7 +32320,7 @@ var _bemCx2 = _interopRequireDefault(bemCx_1);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33818,11 +32536,11 @@ Object.defineProperty(exports, "__esModule", {
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -34015,11 +32733,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -34351,11 +33069,11 @@ Object.defineProperty(exports, "__esModule", {
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -34411,11 +33129,11 @@ Object.defineProperty(exports, "__esModule", {
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -34464,11 +33182,11 @@ Object.defineProperty(exports, "__esModule", {
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -34522,11 +33240,11 @@ Object.defineProperty(exports, "__esModule", {
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -34808,11 +33526,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -34987,11 +33705,11 @@ Object.defineProperty(exports, "__esModule", {
 
 
 
-var _react2 = _interopRequireDefault(React);
+var _react2 = _interopRequireDefault(React__default);
 
 
 
-var _propTypes2 = _interopRequireDefault(PropTypes);
+var _propTypes2 = _interopRequireDefault(PropTypes__default);
 
 
 
@@ -35646,14 +34364,14 @@ var EnhancedDateRange = function (_React$Component) {
       var data = _this.state.data;
 
 
-      return React.createElement(
+      return React__default.createElement(
         FormControl,
         {
           error: typeof _this.props.error === 'function' ? _this.props.error(data) : _this.props.error,
           'aria-describedby': _this.props.name + '-error-text',
           key: 'form-control-' + _this.props.name
         },
-        React.createElement(DateRangePicker, {
+        React__default.createElement(DateRangePicker, {
           selectionType: 'range',
           minimumDate: _this.props.min ? _this.props.min : moment().startOf('month').subtract(3, 'months'),
           maximumDate: _this.props.max ? _this.props.max : moment(),
@@ -35661,17 +34379,17 @@ var EnhancedDateRange = function (_React$Component) {
           value: _this.state.dates,
           onSelect: _this.onSelect
         }),
-        _this.props.error ? React.createElement(
+        _this.props.error ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-error-text' },
           typeof _this.props.title === 'function' ? _this.props.title(data) : _this.props.title
         ) : null,
-        _this.props.helptext ? React.createElement(
+        _this.props.helptext ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-help-text' },
           typeof _this.props.helptext === 'function' ? _this.props.helptext(data) : _this.props.helptext
         ) : null,
-        _this.props.helplink ? React.createElement(
+        _this.props.helplink ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-help-text' },
           typeof _this.props.helplink === 'function' ? _this.props.helplink(data) : _this.props.helplink
@@ -35684,14 +34402,325 @@ var EnhancedDateRange = function (_React$Component) {
   }
 
   return EnhancedDateRange;
-}(React.Component);
+}(React__default.Component);
 
 EnhancedDateRange.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired,
+  theme: PropTypes__default.object.isRequired
 };
 
 var DateRange = withStyles(styles$o, { withTheme: true })(EnhancedDateRange);
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var __assign$1 = (undefined && undefined.__assign) || function () {
+    __assign$1 = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign$1.apply(this, arguments);
+};
+var eventPropTypes = {
+    onActivate: func,
+    onAddUndo: func,
+    onBeforeAddUndo: func,
+    onBeforeExecCommand: func,
+    onBeforeGetContent: func,
+    onBeforeRenderUI: func,
+    onBeforeSetContent: func,
+    onBeforePaste: func,
+    onBlur: func,
+    onChange: func,
+    onClearUndos: func,
+    onClick: func,
+    onContextMenu: func,
+    onCopy: func,
+    onCut: func,
+    onDblclick: func,
+    onDeactivate: func,
+    onDirty: func,
+    onDrag: func,
+    onDragDrop: func,
+    onDragEnd: func,
+    onDragGesture: func,
+    onDragOver: func,
+    onDrop: func,
+    onExecCommand: func,
+    onFocus: func,
+    onFocusIn: func,
+    onFocusOut: func,
+    onGetContent: func,
+    onHide: func,
+    onInit: func,
+    onKeyDown: func,
+    onKeyPress: func,
+    onKeyUp: func,
+    onLoadContent: func,
+    onMouseDown: func,
+    onMouseEnter: func,
+    onMouseLeave: func,
+    onMouseMove: func,
+    onMouseOut: func,
+    onMouseOver: func,
+    onMouseUp: func,
+    onNodeChange: func,
+    onObjectResizeStart: func,
+    onObjectResized: func,
+    onObjectSelected: func,
+    onPaste: func,
+    onPostProcess: func,
+    onPostRender: func,
+    onPreProcess: func,
+    onProgressState: func,
+    onRedo: func,
+    onRemove: func,
+    onReset: func,
+    onSaveContent: func,
+    onSelectionChange: func,
+    onSetAttrib: func,
+    onSetContent: func,
+    onShow: func,
+    onSubmit: func,
+    onUndo: func,
+    onVisualAid: func
+};
+var EditorPropTypes = __assign$1({ apiKey: string, id: string, inline: bool, init: object, initialValue: string, onEditorChange: func, value: string, tagName: string, cloudChannel: string, plugins: oneOfType([string, array]), toolbar: oneOfType([string, array]), disabled: bool, textareaName: string }, eventPropTypes);
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var isValidKey = function (keys) { return function (key) { return keys.indexOf(key) !== -1; }; };
+// tslint:disable-next-line:ban-types
+var isFunction = function (x) { return typeof x === 'function'; };
+var bindHandlers = function (props, editor, initEvent) {
+    Object.keys(props)
+        .filter(isValidKey(Object.keys(eventPropTypes)))
+        .forEach(function (key) {
+        var handler = props[key];
+        if (isFunction(handler)) {
+            if (key === 'onInit') {
+                handler(initEvent, editor);
+            }
+            else {
+                editor.on(key.substring(2), function (e) { return handler(e, editor); });
+            }
+        }
+    });
+};
+var unique = 0;
+var uuid = function (prefix) {
+    var date = new Date();
+    var time = date.getTime();
+    var random = Math.floor(Math.random() * 1000000000);
+    unique++;
+    return prefix + '_' + random + unique + String(time);
+};
+var isTextarea = function (element$$1) {
+    return element$$1 !== null && element$$1.tagName.toLowerCase() === 'textarea';
+};
+var normalizePluginArray = function (plugins) {
+    if (typeof plugins === 'undefined' || plugins === '') {
+        return [];
+    }
+    return Array.isArray(plugins) ? plugins : plugins.split(' ');
+};
+var mergePlugins = function (initPlugins, inputPlugins) {
+    return normalizePluginArray(initPlugins).concat(normalizePluginArray(inputPlugins));
+};
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var injectScriptTag = function (scriptId, doc, url, callback) {
+    var scriptTag = doc.createElement('script');
+    scriptTag.type = 'application/javascript';
+    scriptTag.id = scriptId;
+    scriptTag.addEventListener('load', callback);
+    scriptTag.src = url;
+    if (doc.head) {
+        doc.head.appendChild(scriptTag);
+    }
+};
+var create = function () {
+    return {
+        listeners: [],
+        scriptId: uuid('tiny-script'),
+        scriptLoaded: false
+    };
+};
+var load = function (state, doc, url, callback) {
+    if (state.scriptLoaded) {
+        callback();
+    }
+    else {
+        state.listeners.push(callback);
+        if (!doc.getElementById(state.scriptId)) {
+            injectScriptTag(state.scriptId, doc, url, function () {
+                state.listeners.forEach(function (fn) { return fn(); });
+                state.scriptLoaded = true;
+            });
+        }
+    }
+};
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var getGlobal = function () { return (typeof window !== 'undefined' ? window : global); };
+var getTinymce = function () {
+    var global = getGlobal();
+    return global && global.tinymce ? global.tinymce : null;
+};
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var __extends$1 = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign$2 = (undefined && undefined.__assign) || function () {
+    __assign$2 = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign$2.apply(this, arguments);
+};
+var scriptState = create();
+var Editor = /** @class */ (function (_super) {
+    __extends$1(Editor, _super);
+    function Editor() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.element = null;
+        _this.initialise = function () {
+            var finalInit = __assign$2({}, _this.props.init, { target: _this.element, readonly: _this.props.disabled, inline: _this.inline, plugins: mergePlugins(_this.props.init && _this.props.init.plugins, _this.props.plugins), toolbar: _this.props.toolbar || (_this.props.init && _this.props.init.toolbar), setup: function (editor) {
+                    _this.editor = editor;
+                    editor.on('init', function (e) {
+                        _this.initEditor(e, editor);
+                    });
+                    if (_this.props.init && typeof _this.props.init.setup === 'function') {
+                        _this.props.init.setup(editor);
+                    }
+                } });
+            if (isTextarea(_this.element)) {
+                _this.element.style.visibility = '';
+            }
+            getTinymce().init(finalInit);
+        };
+        return _this;
+    }
+    Editor.prototype.componentWillMount = function () {
+        this.id = this.id || this.props.id || uuid('tiny-react');
+        this.inline = this.props.inline ? this.props.inline : this.props.init && this.props.init.inline;
+    };
+    Editor.prototype.componentDidMount = function () {
+        if (getTinymce() !== null) {
+            this.initialise();
+        }
+        else if (this.element && this.element.ownerDocument) {
+            var doc = this.element.ownerDocument;
+            var channel = this.props.cloudChannel;
+            var apiKey = this.props.apiKey ? this.props.apiKey : 'no-api-key';
+            load(scriptState, doc, "https://cdn.tiny.cloud/1/" + apiKey + "/tinymce/" + channel + "/tinymce.min.js", this.initialise);
+        }
+    };
+    Editor.prototype.componentWillUnmount = function () {
+        if (getTinymce() !== null) {
+            getTinymce().remove(this.editor);
+        }
+    };
+    Editor.prototype.componentWillReceiveProps = function (nextProps) {
+        if (this.editor && this.editor.initialized) {
+            this.currentContent = this.currentContent || this.editor.getContent();
+            if (typeof nextProps.value === 'string' && nextProps.value !== this.props.value && nextProps.value !== this.currentContent) {
+                this.editor.setContent(nextProps.value);
+            }
+            if (typeof nextProps.disabled === 'boolean' && nextProps.disabled !== this.props.disabled) {
+                this.editor.setMode(nextProps.disabled ? 'readonly' : 'design');
+            }
+        }
+    };
+    Editor.prototype.render = function () {
+        return this.inline ? this.renderInline() : this.renderIframe();
+    };
+    Editor.prototype.initEditor = function (initEvent, editor) {
+        var _this = this;
+        var value = typeof this.props.value === 'string' ? this.props.value : typeof this.props.initialValue === 'string' ? this.props.initialValue : '';
+        editor.setContent(value);
+        if (isFunction(this.props.onEditorChange)) {
+            editor.on('change keyup setcontent', function (e) {
+                _this.currentContent = editor.getContent();
+                if (isFunction(_this.props.onEditorChange)) {
+                    _this.props.onEditorChange(_this.currentContent, editor);
+                }
+            });
+        }
+        bindHandlers(this.props, editor, initEvent);
+    };
+    Editor.prototype.renderInline = function () {
+        var _this = this;
+        var _a = this.props.tagName, tagName = _a === void 0 ? 'div' : _a;
+        return createElement(tagName, {
+            ref: function (elm) { return (_this.element = elm); },
+            id: this.id
+        });
+    };
+    Editor.prototype.renderIframe = function () {
+        var _this = this;
+        return createElement("textarea", { ref: function (elm) { return (_this.element = elm); }, style: { visibility: 'hidden' }, id: this.id, name: this.props.textareaName });
+    };
+    Editor.propTypes = EditorPropTypes;
+    Editor.defaultProps = {
+        cloudChannel: '5'
+    };
+    return Editor;
+}(Component));
+
+/**
+ * Copyright (c) 2017-present, Ephox, Inc.
+ *
+ * This source code is licensed under the Apache 2 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
 
 var styles$p = function styles(theme) {
   return {};
@@ -35730,14 +34759,14 @@ var EnhancedRichText = function (_React$Component) {
           value = _this$state.value;
 
 
-      return React.createElement(
+      return React__default.createElement(
         FormControl,
         {
           error: typeof _this.props.error === 'function' ? _this.props.error(data) : _this.props.error,
           'aria-describedby': _this.props.name + '-error-text',
           key: 'form-control-' + _this.props.name
         },
-        React.createElement(Editor, {
+        React__default.createElement(Editor, {
           key: _this.state.keyValue,
           initialValue: typeof value === 'function' ? value(data) : value === undefined ? "" : value,
           init: {
@@ -35747,17 +34776,17 @@ var EnhancedRichText = function (_React$Component) {
           onChange: _this.handleEditorChange,
           onKeyUp: _this.handleEditorChange
         }),
-        _this.props.error ? React.createElement(
+        _this.props.error ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-error-text' },
           typeof _this.props.title === 'function' ? _this.props.title(data) : _this.props.title
         ) : null,
-        _this.props.helptext ? React.createElement(
+        _this.props.helptext ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-help-text' },
           typeof _this.props.helptext === 'function' ? _this.props.helptext(data) : _this.props.helptext
         ) : null,
-        _this.props.helplink ? React.createElement(
+        _this.props.helplink ? React__default.createElement(
           FormHelperText,
           { id: _this.props.name + '-help-text' },
           typeof _this.props.helplink === 'function' ? _this.props.helplink(data) : _this.props.helplink
@@ -35770,11 +34799,11 @@ var EnhancedRichText = function (_React$Component) {
   }
 
   return EnhancedRichText;
-}(React.Component);
+}(React__default.Component);
 
 EnhancedRichText.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired,
+  theme: PropTypes__default.object.isRequired
 };
 
 var RichText = withStyles(styles$p, { withTheme: true })(EnhancedRichText);
@@ -36183,19 +35212,19 @@ var Field = function (_React$Component) {
           step = _this$state2.step;
 
 
-      var fieldLabel = label !== undefined ? React.createElement(
+      var fieldLabel = label !== undefined ? React__default.createElement(
         FormLabel,
         { component: 'legend' },
         label
       ) : null;
 
-      var fieldHelpText = _this.props.helptext !== undefined ? React.createElement(
+      var fieldHelpText = _this.props.helptext !== undefined ? React__default.createElement(
         FormHelperText,
         { id: name + '-help-text' },
         typeof _this.props.helptext === 'function' ? _this.props.helptext(data) : _this.props.helptext
       ) : null;
 
-      var fieldHelpLink = _this.props.helplink !== undefined ? React.createElement(
+      var fieldHelpLink = _this.props.helplink !== undefined ? React__default.createElement(
         FormHelperText,
         {
           id: name + '-help-link',
@@ -36208,7 +35237,7 @@ var Field = function (_React$Component) {
 
       var fieldErrorName = name + '-error-text';
       var fieldErrorData = typeof _this.props.error === 'function' ? _this.props.error(data) : _this.props.error || false;
-      var fieldError = fieldErrorData ? React.createElement(
+      var fieldError = fieldErrorData ? React__default.createElement(
         FormHelperText,
         { id: fieldErrorName },
         typeof _this.props.title === 'function' ? _this.props.title(data) : _this.props.title
@@ -36239,7 +35268,7 @@ var Field = function (_React$Component) {
 
       switch (type) {
         case 'radio':
-          field = React.createElement(
+          field = React__default.createElement(
             FormControl,
             {
               component: 'fieldset',
@@ -36248,7 +35277,7 @@ var Field = function (_React$Component) {
               key: fieldKey
             },
             fieldLabel,
-            React.createElement(
+            React__default.createElement(
               RadioGroup,
               {
                 'aria-label': label,
@@ -36259,9 +35288,9 @@ var Field = function (_React$Component) {
                 onChange: _this.handleChange
               },
               fieldOptions.map(function (option) {
-                return React.createElement(FormControlLabel, {
+                return React__default.createElement(FormControlLabel, {
                   value: option.value,
-                  control: React.createElement(Radio, null),
+                  control: React__default.createElement(Radio, null),
                   label: option.label,
                   disabled: option.disabled ? true : false,
                   key: new Date().getTime() + '-radio-group-' + option.label
@@ -36271,17 +35300,17 @@ var Field = function (_React$Component) {
           );
           break;
         case 'boolean':
-          field = React.createElement(
+          field = React__default.createElement(
             FormControl,
             {
               key: fieldKey
             },
             fieldLabel,
-            React.createElement(
+            React__default.createElement(
               FormGroup,
               null,
-              React.createElement(FormControlLabel, {
-                control: React.createElement(Switch, {
+              React__default.createElement(FormControlLabel, {
+                control: React__default.createElement(Switch, {
                   id: name,
                   name: name,
                   value: fieldValue,
@@ -36298,10 +35327,10 @@ var Field = function (_React$Component) {
           );
           break;
         case 'switch':
-          field = React.createElement(
+          field = React__default.createElement(
             FormGroup,
             { className: classes.formGroup, row: true },
-            prefix ? React.createElement(
+            prefix ? React__default.createElement(
               FormLabel,
               {
                 classes: {
@@ -36310,7 +35339,7 @@ var Field = function (_React$Component) {
               },
               typeof prefix === 'function' ? prefix(data) : prefix
             ) : null,
-            React.createElement(Switch, {
+            React__default.createElement(Switch, {
               id: name,
               label: "helllo",
               name: name,
@@ -36319,7 +35348,7 @@ var Field = function (_React$Component) {
               disabled: disabled ? true : false,
               checked: fieldValue
             }),
-            suffix ? React.createElement(
+            suffix ? React__default.createElement(
               FormLabel,
               {
                 classes: {
@@ -36333,7 +35362,7 @@ var Field = function (_React$Component) {
           break;
         case 'toggle':
           _this.props = Object.assign({}, _this.props, { value: fieldValue });
-          field = React.createElement(
+          field = React__default.createElement(
             FormControl,
             {
               className: classes.formControl,
@@ -36341,7 +35370,7 @@ var Field = function (_React$Component) {
               'aria-describedby': fieldErrorName,
               key: fieldKey
             },
-            React.createElement(Toggle$1
+            React__default.createElement(Toggle$1
             // onChange={this.handleToggleChange}
             , _extends$b({ onChange: _this.handleChangeData,
 
@@ -36360,7 +35389,7 @@ var Field = function (_React$Component) {
           break;
         case 'toggle-2':
           _this.props = Object.assign({}, _this.props, { value: fieldValue });
-          field = React.createElement(Toggle$1, _extends$b({
+          field = React__default.createElement(Toggle$1, _extends$b({
             data: data,
             value: fieldValue
             // onChange={this.handleToggleChange}
@@ -36372,14 +35401,14 @@ var Field = function (_React$Component) {
           break;
         case 'select':
           _this.props = Object.assign({}, _this.props, { value: fieldValue });
-          field = React.createElement(Select$1, _extends$b({
+          field = React__default.createElement(Select$1, _extends$b({
             data: data,
             value: fieldValue,
             onChange: _this.handleChange
           }, _this.props));
           break;
         case 'multiselect':
-          field = React.createElement(
+          field = React__default.createElement(
             Select$1,
             {
               multiple: true,
@@ -36392,9 +35421,9 @@ var Field = function (_React$Component) {
               margin: 'dense',
               required: required ? true : false,
               disabled: disabled ? true : false,
-              input: React.createElement(Input, { id: 'select-multiple-chip' }),
+              input: React__default.createElement(Input, { id: 'select-multiple-chip' }),
               renderValue: function renderValue(selected) {
-                return React.createElement(
+                return React__default.createElement(
                   'div',
                   { className: classes.chips },
                   selected.map(function (value) {
@@ -36407,14 +35436,14 @@ var Field = function (_React$Component) {
                       });
                     }
 
-                    return React.createElement(Chip, { key: selectedOption.value, label: selectedOption.label, className: classes.chip });
+                    return React__default.createElement(Chip, { key: selectedOption.value, label: selectedOption.label, className: classes.chip });
                   })
                 );
               },
               MenuProps: MenuProps
             },
             fieldOptions.map(function (fieldOption) {
-              return React.createElement(
+              return React__default.createElement(
                 MenuItem,
                 {
                   key: name + '-' + fieldOption.value,
@@ -36426,7 +35455,7 @@ var Field = function (_React$Component) {
           );
           break;
         case 'autocomplete':
-          field = React.createElement(AutoComplete$1, {
+          field = React__default.createElement(AutoComplete$1, {
             multiple: true,
             key: name,
             id: name,
@@ -36438,9 +35467,9 @@ var Field = function (_React$Component) {
             required: required ? true : false,
             disabled: disabled ? true : false,
             helperText: placeholder,
-            input: React.createElement(Input, { id: 'select-multiple-chip' }),
+            input: React__default.createElement(Input, { id: 'select-multiple-chip' }),
             renderValue: function renderValue(selected) {
-              return React.createElement(
+              return React__default.createElement(
                 'div',
                 { className: classes.chips },
                 selected.map(function (value) {
@@ -36453,7 +35482,7 @@ var Field = function (_React$Component) {
                     });
                   }
 
-                  return React.createElement(Chip, { key: selectedOption.value, label: selectedOption.label, className: classes.chip });
+                  return React__default.createElement(Chip, { key: selectedOption.value, label: selectedOption.label, className: classes.chip });
                 })
               );
             },
@@ -36461,7 +35490,7 @@ var Field = function (_React$Component) {
           });
           break;
         case 'autosuggest':
-          field = React.createElement(
+          field = React__default.createElement(
             FormControl,
             {
               className: classes.formControl,
@@ -36469,7 +35498,7 @@ var Field = function (_React$Component) {
               'aria-describedby': fieldErrorName,
               key: fieldKey
             },
-            React.createElement(AutoSuggest$1, {
+            React__default.createElement(AutoSuggest$1, {
               data: data,
               key: name,
               placeholder: placeholder,
@@ -36487,7 +35516,7 @@ var Field = function (_React$Component) {
           );
           break;
         case 'search':
-          field = React.createElement(AutoSuggest$1, {
+          field = React__default.createElement(AutoSuggest$1, {
             key: name,
             placeholder: placeholder ? placeholder : 'Search…',
             suggestions: fieldOptions,
@@ -36506,7 +35535,7 @@ var Field = function (_React$Component) {
           });
           break;
         case 'file':
-          field = React.createElement(TextField, {
+          field = React__default.createElement(TextField, {
             key: name,
             id: name,
             name: name,
@@ -36523,11 +35552,11 @@ var Field = function (_React$Component) {
           });
           break;
         case 'image':
-          field = React.createElement(
+          field = React__default.createElement(
             'div',
             null,
-            preview && (typeof value === 'function' || data[name]) ? React.createElement(Card$1, { media: fieldValue.data }) : null,
-            React.createElement(TextField, (_React$createElement = {
+            preview && (typeof value === 'function' || data[name]) ? React__default.createElement(Card$1, { media: fieldValue.data }) : null,
+            React__default.createElement(TextField, (_React$createElement = {
               key: name,
               id: name,
               name: name,
@@ -36545,14 +35574,14 @@ var Field = function (_React$Component) {
           );
           break;
         case 'richtext':
-          field = React.createElement(RichText, _extends$b(defineProperty$1({
+          field = React__default.createElement(RichText, _extends$b(defineProperty$1({
             data: data,
             value: fieldValue,
             onChange: _this.richTextChange
           }, 'onChange', _this.handleChangeData), _this.props));
           break;
         case 'hidden':
-          field = React.createElement('input', {
+          field = React__default.createElement('input', {
             key: name,
             id: name,
             name: name,
@@ -36564,7 +35593,7 @@ var Field = function (_React$Component) {
           break;
         case 'range':
           _this.props = Object.assign({}, _this.props, { value: fieldValue });
-          field = React.createElement(Range, _extends$b({
+          field = React__default.createElement(Range, _extends$b({
             key: 'range-' + name,
             data: data,
             value: fieldValue
@@ -36573,19 +35602,19 @@ var Field = function (_React$Component) {
           }, _this.props));
           break;
         case 'checkbox':
-          field = fieldOptions ? React.createElement(
+          field = fieldOptions ? React__default.createElement(
             FormControl,
             { component: 'fieldset', required: required, className: classes.textField, key: fieldKey, error: fieldErrorData, 'aria-describedby': fieldErrorName },
             fieldLabel,
-            React.createElement(
+            React__default.createElement(
               FormGroup,
               {
                 'aria-label': label,
                 className: classes.group
               },
               fieldOptions.map(function (option) {
-                return React.createElement(FormControlLabel, {
-                  control: React.createElement(Checkbox, {
+                return React__default.createElement(FormControlLabel, {
+                  control: React__default.createElement(Checkbox, {
                     onChange: _this.handleCheckboxChange,
                     value: option.value,
                     name: name,
@@ -36597,24 +35626,24 @@ var Field = function (_React$Component) {
               })
             ),
             fieldError
-          ) : React.createElement(
+          ) : React__default.createElement(
             FormControl,
             { component: 'fieldset', required: required, className: classes.textField, key: fieldKey, error: fieldErrorData, 'aria-describedby': fieldErrorName },
-            React.createElement(
+            React__default.createElement(
               FormGroup,
               {
                 'aria-label': label,
                 className: classes.group
               },
-              React.createElement(FormControlLabel, {
-                control: React.createElement(Checkbox, {
+              React__default.createElement(FormControlLabel, {
+                control: React__default.createElement(Checkbox, {
                   onChange: _this.handleCheckboxChange,
                   value: value,
                   name: name,
                   disabled: disabled ? true : false,
                   checked: fieldValue
                 }),
-                label: React.createElement(
+                label: React__default.createElement(
                   Typography,
                   { variant: 'caption' },
                   label
@@ -36625,7 +35654,7 @@ var Field = function (_React$Component) {
           );
           break;
         case 'date':
-          field = React.createElement(
+          field = React__default.createElement(
             FormControl,
             {
               className: classes.formControl,
@@ -36633,10 +35662,10 @@ var Field = function (_React$Component) {
               'aria-describedby': fieldErrorName,
               key: fieldKey
             },
-            React.createElement(
+            React__default.createElement(
               MuiPickersUtilsProvider,
               { utils: MomentUtils },
-              React.createElement(DatePickerModal$1, {
+              React__default.createElement(DatePickerModal$1, {
                 key: name,
                 id: name,
                 name: name,
@@ -36665,12 +35694,12 @@ var Field = function (_React$Component) {
                 InputProps: {
                   disabled: typeof disabled === 'function' ? disabled(data) : disabled,
                   readOnly: typeof readonly === 'function' ? readonly(data) : readonly,
-                  startAdornment: prefix ? React.createElement(
+                  startAdornment: prefix ? React__default.createElement(
                     InputAdornment,
                     { position: 'start' },
                     prefix
                   ) : null,
-                  endAdornment: suffix ? React.createElement(
+                  endAdornment: suffix ? React__default.createElement(
                     InputAdornment,
                     { position: 'end' },
                     suffix
@@ -36690,7 +35719,7 @@ var Field = function (_React$Component) {
           );
           break;
         case 'daterange':
-          field = React.createElement(DateRange, _extends$b({
+          field = React__default.createElement(DateRange, _extends$b({
             data: data,
             value: fieldValue,
             fields: _this.state.fields
@@ -36699,22 +35728,22 @@ var Field = function (_React$Component) {
           }, _this.props));
           break;
         default:
-          field = fieldOptions.length > 0 ? multiple !== undefined && multiple ? React.createElement(
+          field = fieldOptions.length > 0 ? multiple !== undefined && multiple ? React__default.createElement(
             FormControl,
             { component: 'fieldset', required: required ? true : false,
               className: classes.textField,
               key: fieldKey
             },
             fieldLabel,
-            React.createElement(
+            React__default.createElement(
               FormGroup,
               {
                 'aria-label': label,
                 className: classes.group
               },
               fieldOptions.map(function (option) {
-                return React.createElement(FormControlLabel, {
-                  control: React.createElement(Checkbox, {
+                return React__default.createElement(FormControlLabel, {
+                  control: React__default.createElement(Checkbox, {
                     onChange: _this.handleCheckboxChange,
                     value: option.value,
                     name: name,
@@ -36725,7 +35754,7 @@ var Field = function (_React$Component) {
                 });
               })
             )
-          ) : React.createElement(
+          ) : React__default.createElement(
             FormControl,
             {
               component: 'fieldset',
@@ -36733,7 +35762,7 @@ var Field = function (_React$Component) {
               className: classes.textField,
               key: fieldKey },
             fieldLabel,
-            React.createElement(
+            React__default.createElement(
               RadioGroup,
               {
                 'aria-label': label,
@@ -36744,10 +35773,10 @@ var Field = function (_React$Component) {
                 onChange: _this.handleChange
               },
               fieldOptions.map(function (option) {
-                return React.createElement(FormControlLabel, { value: option.value, control: React.createElement(Radio, null), label: option.label, disabled: option.disabled ? true : false });
+                return React__default.createElement(FormControlLabel, { value: option.value, control: React__default.createElement(Radio, null), label: option.label, disabled: option.disabled ? true : false });
               })
             )
-          ) : React.createElement(
+          ) : React__default.createElement(
             FormControl,
             {
               className: classes.formControl,
@@ -36755,7 +35784,7 @@ var Field = function (_React$Component) {
               'aria-describedby': fieldErrorName,
               key: fieldKey
             },
-            React.createElement(TextField, {
+            React__default.createElement(TextField, {
               key: name,
               id: name,
               name: name,
@@ -36772,12 +35801,12 @@ var Field = function (_React$Component) {
               , InputProps: {
                 disabled: typeof disabled === 'function' ? disabled(data) : disabled,
                 readOnly: typeof readonly === 'function' ? readonly(data) : readonly,
-                startAdornment: prefix ? React.createElement(
+                startAdornment: prefix ? React__default.createElement(
                   InputAdornment,
                   { position: 'start' },
                   prefix
                 ) : null,
-                endAdornment: suffix ? React.createElement(
+                endAdornment: suffix ? React__default.createElement(
                   InputAdornment,
                   { position: 'end' },
                   suffix
@@ -36984,16 +36013,16 @@ var Field = function (_React$Component) {
   // }
 
   return Field;
-}(React.Component);
+}(React__default.Component);
 
 Field.defaultProps = {
   buttons: []
 };
 
 Field.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  buttons: PropTypes.array.isRequired
+  classes: PropTypes__default.object.isRequired,
+  theme: PropTypes__default.object.isRequired,
+  buttons: PropTypes__default.array.isRequired
 };
 
 var Field$1 = withStyles$1(styles$q, { withTheme: true })(Field);
@@ -37159,7 +36188,7 @@ var EnhancedForm = function (_React$Component) {
   // }
 
   return EnhancedForm;
-}(React.Component);
+}(React__default.Component);
 
 var _initialiseProps = function _initialiseProps() {
   var _this2 = this;
@@ -37330,16 +36359,16 @@ var _initialiseProps = function _initialiseProps() {
 
     var buttonClassname = classnames((_classNames = {}, defineProperty$1(_classNames, classes.buttonSuccess, success), defineProperty$1(_classNames, classes.button, !success), _classNames));
 
-    return React.createElement(
+    return React__default.createElement(
       'div',
       null,
-      title ? React.createElement(Toolbar$2, { title: title }) : "",
-      React.createElement(
+      title ? React__default.createElement(Toolbar$2, { title: title }) : "",
+      React__default.createElement(
         'form',
         { className: classes.container, onSubmit: _this2.handleSubmit, autoComplete: 'off', noValidate: _this2.props.novalidate ? _this2.props.novalidate : false },
         fields.map(function (formField) {
 
-          return React.createElement(Field$1, _extends$b({
+          return React__default.createElement(Field$1, _extends$b({
             data: data,
             onChange: _this2.handleFieldChange
           }, formField));
@@ -37349,8 +36378,8 @@ var _initialiseProps = function _initialiseProps() {
           switch (formButton.type) {
             case 'button':
               var btnKey = 'button-' + formButton.label.replace(' ', '-');
-              field = React.createElement(
-                Button$1,
+              field = React__default.createElement(
+                Button,
                 {
                   variant: formButton.variant ? formButton.variant : "contained",
                   color: formButton.color ? formButton.color : "secondary",
@@ -37361,15 +36390,15 @@ var _initialiseProps = function _initialiseProps() {
                   key: btnKey,
                   disabled: _this2.state[btnKey] && (_this2.state[btnKey].disabled || _this2.state[btnKey].loading) || success || loading || formButton.disabled
                 },
-                _this2.state[btnKey] && _this2.state[btnKey].success ? React.createElement(CheckIcon, null) : '',
+                _this2.state[btnKey] && _this2.state[btnKey].success ? React__default.createElement(CheckIcon, null) : '',
                 ' ',
                 formButton.label,
-                _this2.state[btnKey] && _this2.state[btnKey].loading && React.createElement(CircularProgress, { size: 24, className: classes.buttonProgress })
+                _this2.state[btnKey] && _this2.state[btnKey].loading && React__default.createElement(CircularProgress, { size: 24, className: classes.buttonProgress })
               );
               break;
             default:
-              field = React.createElement(
-                Button$1,
+              field = React__default.createElement(
+                Button,
                 {
                   variant: 'contained',
                   color: formButton.color ? formButton.color : "primary",
@@ -37378,10 +36407,10 @@ var _initialiseProps = function _initialiseProps() {
                   className: buttonClassname,
                   key: new Date().getTime() + '-button-' + formButton.label
                 },
-                success ? React.createElement(CheckIcon, null) : '',
+                success ? React__default.createElement(CheckIcon, null) : '',
                 ' ',
                 formButton.label,
-                loading && React.createElement(CircularProgress, { size: 24, className: classes.buttonProgress })
+                loading && React__default.createElement(CircularProgress, { size: 24, className: classes.buttonProgress })
               );
               break;
           }
@@ -37389,7 +36418,7 @@ var _initialiseProps = function _initialiseProps() {
           return field;
         })
       ),
-      React.createElement(Snackbar$1, {
+      React__default.createElement(Snackbar$1, {
         variant: _this2.state.snackBarType,
         snackBarDuration: 10000,
         snackBarOpen: _this2.state.snackBarOpen,
@@ -37405,123 +36434,14 @@ EnhancedForm.defaultProps = {
 };
 
 EnhancedForm.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  buttons: PropTypes.array.isRequired
+  classes: PropTypes__default.object.isRequired,
+  theme: PropTypes__default.object.isRequired,
+  buttons: PropTypes__default.array.isRequired
 };
 
 var Form = withStyles$1(styles$r, { withTheme: true })(EnhancedForm);
 
 var styles$s = function styles(theme) {
-  return {
-    root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper
-    }
-  };
-};
-
-var listOptions = {
-  dialogOpen: false,
-  dialog: {}
-};
-
-var EnhanceList = function (_React$Component) {
-  inherits(EnhanceList, _React$Component);
-
-  function EnhanceList(props) {
-    classCallCheck(this, EnhanceList);
-
-    var _this = possibleConstructorReturn(this, (EnhanceList.__proto__ || Object.getPrototypeOf(EnhanceList)).call(this, props));
-
-    _this.openDialog = function (dialogInfo) {
-      _this.setState({ dialogOpen: true, dialog: dialogInfo });
-    };
-
-    _this.closeDialog = function (value) {
-      _this.setState({ dialogOpen: false });
-
-      if (value === "ok" && _this.state.dialog.action) {
-        _this.state.dialog.action();
-      }
-    };
-
-    _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          items = _this$props.items,
-          data = _this$props.data;
-
-
-      return React.createElement(
-        'div',
-        { className: classes.root },
-        React.createElement(
-          List,
-          { component: 'nav' },
-          items.map(function (item) {
-            var showItem = item.beforeShow ? item.beforeShow(data) : true;
-
-            if (item.getIcon) {
-              item['icon'] = item.getIcon(data[item.field]);
-            }
-
-            var listItemProps = {
-              button: true,
-              key: Date.now() + '-list-item-' + item.label.replace(' ', '-')
-            };
-
-            if (item.action) {
-              listItemProps.onClick = function () {
-                return item.action(_this, data);
-              };
-            } else {
-              listItemProps.to = item.href;
-              listItemProps.component = Link$1;
-            }
-
-            return showItem ? React.createElement(
-              ListItem,
-              listItemProps,
-              React.createElement(
-                ListItemIcon,
-                null,
-                React.createElement(item.icon, null)
-              ),
-              React.createElement(ListItemText, { primary: item.label })
-            ) : null;
-          })
-        ),
-        React.createElement(Dialog$1, {
-          title: _this.state.dialog.title,
-          open: _this.state.dialogOpen,
-          onClose: _this.closeDialog,
-          type: _this.state.dialog.type,
-          content: _this.state.dialog.content,
-          text: _this.state.dialog.text
-        })
-      );
-    };
-
-    _this.state = Object.assign(listOptions, props);
-    return _this;
-  }
-
-  return EnhanceList;
-}(React.Component);
-
-EnhanceList.defaultProps = {
-  data: {}
-};
-
-EnhanceList.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-var List$1 = withStyles(styles$s)(EnhanceList);
-
-var styles$t = function styles(theme) {
   return {
     paper: {
       maxWidth: 360,
@@ -37669,16 +36589,16 @@ var EnhancedPopper = function (_React$Component) {
       switch (_this.state.type) {
         case 'confirm':
           {
-            return React.createElement(
+            return React__default.createElement(
               DialogActions,
               null,
-              React.createElement(
-                Button$1,
+              React__default.createElement(
+                Button,
                 { onClick: _this.handleCancel, color: 'primary' },
                 'Cancel'
               ),
-              React.createElement(
-                Button$1,
+              React__default.createElement(
+                Button,
                 { onClick: _this.handleOk, color: 'primary' },
                 'Ok'
               )
@@ -37686,11 +36606,11 @@ var EnhancedPopper = function (_React$Component) {
           }
         case 'alert':
           {
-            return React.createElement(
+            return React__default.createElement(
               DialogActions,
               null,
-              React.createElement(
-                Button$1,
+              React__default.createElement(
+                Button,
                 { onClick: _this.handleClose, color: 'primary', autoFocus: true },
                 'Ok'
               )
@@ -37722,7 +36642,7 @@ var EnhancedPopper = function (_React$Component) {
           anchorEl = _props.anchorEl;
 
 
-      return React.createElement(
+      return React__default.createElement(
         Popper,
         {
           open: open,
@@ -37740,27 +36660,27 @@ var EnhancedPopper = function (_React$Component) {
             }
           }
         },
-        React.createElement(
+        React__default.createElement(
           Paper,
           { className: classes.paper },
-          this.state.title ? React.createElement(
+          this.state.title ? React__default.createElement(
             DialogTitle,
             { id: 'dialog-title', className: classes.header, disableTypography: true },
-            React.createElement(
+            React__default.createElement(
               Typography,
               { variant: 'h6', className: classes.title },
               this.state.title
             ),
-            onClose ? React.createElement(
+            onClose ? React__default.createElement(
               IconButton,
               { 'aria-label': 'Close', className: classes.closeButton, onClick: onClose },
-              React.createElement(CloseIcon, null)
+              React__default.createElement(CloseIcon, null)
             ) : null
           ) : "",
-          React.createElement(
+          React__default.createElement(
             DialogContent,
             { className: classes.content },
-            this.state.text ? React.createElement(
+            this.state.text ? React__default.createElement(
               DialogContentText,
               null,
               this.state.text
@@ -37773,15 +36693,269 @@ var EnhancedPopper = function (_React$Component) {
     }
   }]);
   return EnhancedPopper;
-}(React.Component);
+}(React__default.Component);
 
 EnhancedPopper.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired
 };
 
-var Popper$1 = withStyles(styles$t)(EnhancedPopper);
+var Popper$1 = withStyles(styles$s)(EnhancedPopper);
+
+var styles$t = function styles(theme) {
+  return {
+    root: {
+      display: 'flex',
+      // justifyContent: 'flex-end',
+      flexWrap: 'inherit',
+      overflowX: 'hidden',
+      overflowY: 'hidden',
+      '&:hover': {
+        overflowX: 'auto'
+      }
+      // [theme.breakpoints.between('sm', 'xl')]: {
+      //   flexWrap: 'wrap',
+      // }
+    },
+    chip: {
+      margin: theme.spacing.unit / 2
+    },
+    paper: {
+      marginRight: theme.spacing.unit * 2
+    },
+    chipLabel: {
+      paddingLeft: theme.spacing.unit,
+      paddingRight: theme.spacing.unit
+    }
+  };
+};
+
+var ChipFilter = function (_React$Component) {
+  inherits(ChipFilter, _React$Component);
+
+  function ChipFilter() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    classCallCheck(this, ChipFilter);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = ChipFilter.__proto__ || Object.getPrototypeOf(ChipFilter)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      open: false,
+      dialogOpen: false,
+      dialog: {},
+      filterData: {}
+    }, _this.clearFilter = function (option) {
+      _this.setState(function (state) {
+        var newState = state;
+        delete newState.filterData[option.name];
+        return newState;
+      }, function () {
+        _this.props.loadData(_this.state.filterData);
+      });
+    }, _this.openFilter = function (dialogInfo) {
+      _this.setState({ dialogOpen: true, dialog: dialogInfo });
+    }, _this.closeFilter = function (value) {
+      _this.setState({ dialogOpen: false });
+
+      if (value === "ok" && _this.state.dialog.action) {
+        _this.state.dialog.action();
+      }
+    }, _this.getSelectedValue = function (option) {
+      var filterData = _this.state.filterData;
+      if (filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0) {
+        return option.label;
+      } else if (['multiselect', 'select', 'radio', 'checkbox'].indexOf(option.type) > -1) {
+        var availableOptions = [];
+        if (option.enum) {
+          availableOptions = option.enum;
+        } else if (option.options) {
+          availableOptions = option.options;
+        } else if (_typeof$4(option.data) === 'object') {
+          availableOptions = option.data;
+        } else if (typeof option.data === 'function') {
+          availableOptions = option.data();
+        }
+
+        var selectedOptions = availableOptions.map(function (availableOption) {
+          return filterData[option.name].indexOf(availableOption.value.toString()) > -1 ? availableOption.label : '';
+        }).filter(function (selectedOption) {
+          return selectedOption !== undefined && selectedOption !== "";
+        });
+
+        return selectedOptions.length > 1 ? selectedOptions[0] + ' + ' + (selectedOptions.length - 1) : selectedOptions;
+      } else if (['daterange'].indexOf(option.type) > -1) {
+        return option.label + ' : From ' + filterData[option.name].start + ' To ' + filterData[option.name].end;
+      } else {
+        var _availableOptions = [];
+        if (option.enum) {
+          _availableOptions = option.enum;
+        } else if (option.options) {
+          _availableOptions = option.options;
+        } else if (_typeof$4(option.data) === 'object') {
+          _availableOptions = option.data;
+        } else if (typeof option.data === 'function') {
+          _availableOptions = option.data();
+        }
+
+        if (_availableOptions.length > 0) {
+          var _selectedOptions = _availableOptions.map(function (availableOption) {
+            return filterData[option.name].indexOf(availableOption.value.toString()) > -1 ? availableOption.label : '';
+          }).filter(function (selectedOption) {
+            return selectedOption !== undefined && selectedOption !== "";
+          });
+
+          return _selectedOptions.length > 1 ? _selectedOptions[0] + ' + ' + (_selectedOptions.length - 1) : _selectedOptions;
+        } else {
+          return option.label + ' ' + filterData[option.name];
+        }
+      }
+    }, _this.render = function () {
+      var _this$props = _this.props,
+          classes = _this$props.classes,
+          options = _this$props.options;
+      var _this$state = _this.state,
+          open = _this$state.open,
+          filterData = _this$state.filterData;
+
+
+      var filterOptions = options || [];
+      return React__default.createElement(
+        'div',
+        { className: classes.root },
+        filterOptions.map(function (option) {
+          return option.filter ? React__default.createElement(Chip, {
+            key: option.name,
+            icon: filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0 ? React__default.createElement(ArrowDropDown, null) : null,
+            color: filterData[option.name] !== undefined && filterData[option.name] !== "" && (filterData[option.name].length > 0 || Object.keys(filterData[option.name]).length > 0) ? 'primary' : 'default',
+            label: _this.getSelectedValue(option),
+            onClick: function onClick(node$$1) {
+              var tempOption = Object.assign({}, option);
+              delete tempOption.label;
+              _this.openFilter({
+                title: option.label,
+                anchorEl: node$$1.target,
+                content: React__default.createElement(Form, {
+                  fields: [tempOption],
+                  buttons: [],
+                  data: filterData,
+                  loadOnChange: true,
+                  submitAction: function submitAction(filterData, formInstance) {
+                    if (Object.keys(filterData).length > 0) {
+                      _this.props.loadData(filterData);
+                    }
+
+                    formInstance.setState({ loading: false });
+                    _this.setState({ filterData: filterData });
+                  },
+                  onClose: _this.closeFilter
+                })
+              });
+            },
+            onDelete: filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0 ? null : function () {
+              _this.clearFilter(option);
+            },
+            className: classes.chip,
+            'aria-owns': open ? 'menu-list-grow' : undefined,
+            'aria-haspopup': 'true',
+            classes: {
+              label: classes.chipLabel
+            }
+          }) : null;
+        }),
+        React__default.createElement(Popper$1, {
+          key: _this.state.dialog.key,
+          title: _this.state.dialog.title,
+          open: _this.state.dialogOpen,
+          onClose: _this.closeFilter,
+          type: _this.state.dialog.type,
+          content: _this.state.dialog.content,
+          text: _this.state.dialog.text,
+          arrow: false,
+          arrowRef: null,
+          disablePortal: false,
+          flip: true,
+          placement: "bottom-start",
+          preventOverflow: 'scrollParent',
+          anchorEl: _this.state.dialog.anchorEl
+        })
+      );
+    }, _temp), possibleConstructorReturn(_this, _ret);
+  }
+
+  return ChipFilter;
+}(React__default.Component);
+
+ChipFilter.propTypes = {
+  classes: PropTypes__default.object.isRequired
+};
+
+var ChipFilter$1 = withStyles(styles$t)(ChipFilter);
 
 var styles$u = function styles(theme) {
+  return {
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      backgroundColor: theme.palette.background.paper
+    },
+    gridList: {
+      // width: 500,
+      // height: 450,
+    },
+    icon: {
+      color: 'rgba(255, 255, 255, 0.54)'
+    }
+  };
+};
+
+function TitlebarGridList(props) {
+  var classes = props.classes,
+      items = props.items;
+
+
+  console.log("items", items);
+  return React__default.createElement(
+    'div',
+    { className: classes.root },
+    React__default.createElement(
+      GridList,
+      { cellHeight: 200, className: classes.gridList, cols: 4 },
+      items && items.map(function (item) {
+        return React__default.createElement(
+          GridListTile,
+          { key: item.id },
+          React__default.createElement(Card$1, {
+            title: 'Employers & Employees',
+            subtitle: 'Employers & Employees',
+            description: 'Employers & Employees'
+          }),
+          React__default.createElement(GridListTileBar, {
+            title: 'item.title',
+            actionIcon: React__default.createElement(
+              IconButton,
+              { className: classes.icon },
+              React__default.createElement(InfoIcon, null)
+            )
+          })
+        );
+      })
+    )
+  );
+}
+
+TitlebarGridList.propTypes = {
+  classes: PropTypes__default.object.isRequired
+};
+
+var GridList$1 = withStyles(styles$u)(TitlebarGridList);
+
+var styles$v = function styles(theme) {
   return {
     root: {
       maxWidth: 400,
@@ -37846,35 +37020,35 @@ var TextMobileStepper = function (_React$Component) {
 
       var maxSteps = steps.length;
 
-      return React.createElement(
+      return React__default.createElement(
         'div',
         { className: classes.root },
-        React.createElement(
+        React__default.createElement(
           Paper,
           { square: true, elevation: 0, className: classes.header },
-          React.createElement(
+          React__default.createElement(
             Typography,
             null,
             steps[activeStep].title
           )
         ),
         steps[activeStep].content,
-        React.createElement(MobileStepper, {
+        React__default.createElement(MobileStepper, {
           steps: maxSteps,
           variant: 'text',
           position: 'static',
           activeStep: activeStep,
           className: classes.mobileStepper,
-          nextButton: React.createElement(
-            Button$1,
+          nextButton: React__default.createElement(
+            Button,
             { size: 'small', onClick: this.handleNext, disabled: activeStep === maxSteps - 1 },
             'Next',
-            theme.direction === 'rtl' ? React.createElement(KeyboardArrowLeft, null) : React.createElement(KeyboardArrowRight, null)
+            theme.direction === 'rtl' ? React__default.createElement(KeyboardArrowLeft, null) : React__default.createElement(KeyboardArrowRight, null)
           ),
-          backButton: React.createElement(
-            Button$1,
+          backButton: React__default.createElement(
+            Button,
             { size: 'small', onClick: this.handleBack, disabled: activeStep === 0 },
-            theme.direction === 'rtl' ? React.createElement(KeyboardArrowRight, null) : React.createElement(KeyboardArrowLeft, null),
+            theme.direction === 'rtl' ? React__default.createElement(KeyboardArrowRight, null) : React__default.createElement(KeyboardArrowLeft, null),
             'Back'
           )
         })
@@ -37882,16 +37056,16 @@ var TextMobileStepper = function (_React$Component) {
     }
   }]);
   return TextMobileStepper;
-}(React.Component);
+}(React__default.Component);
 
 TextMobileStepper.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired,
+  theme: PropTypes__default.object.isRequired
 };
 
-var Slider$1 = withStyles(styles$u, { withTheme: true })(TextMobileStepper);
+var Slider$1 = withStyles(styles$v, { withTheme: true })(TextMobileStepper);
 
-var styles$v = function styles(theme) {
+var styles$w = function styles(theme) {
   return {
     root: {
       width: '90%'
@@ -37971,7 +37145,7 @@ var StatusBar = function (_React$Component) {
           steps = _props.steps;
       var activeStep = this.state.activeStep;
 
-      var connector = React.createElement(StepConnector, {
+      var connector = React__default.createElement(StepConnector, {
         classes: {
           active: classes.connectorActive,
           completed: classes.connectorCompleted,
@@ -37980,7 +37154,7 @@ var StatusBar = function (_React$Component) {
         }
       });
 
-      return React.createElement(
+      return React__default.createElement(
         Stepper,
         { activeStep: activeStep, connector: connector, alternativeLabel: true },
         steps.map(function (step) {
@@ -38013,10 +37187,10 @@ var StatusBar = function (_React$Component) {
             };
           }
 
-          return React.createElement(
+          return React__default.createElement(
             Step,
             _extends$b({ key: step.label }, props),
-            React.createElement(
+            React__default.createElement(
               StepLabel,
               labelProps,
               step.label
@@ -38027,15 +37201,15 @@ var StatusBar = function (_React$Component) {
     }
   }]);
   return StatusBar;
-}(React.Component);
+}(React__default.Component);
 
 StatusBar.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes__default.object
 };
 
-var StatusBar$1 = withStyles(styles$v)(StatusBar);
+var StatusBar$1 = withStyles(styles$w)(StatusBar);
 
-var styles$w = function styles(theme) {
+var styles$x = function styles(theme) {
   return {
     root: {
       width: '90%'
@@ -38142,17 +37316,17 @@ var EnhancedStepper = function (_React$Component) {
       var activeStep = this.state.activeStep;
 
 
-      return React.createElement(
+      return React__default.createElement(
         'div',
         { className: classes.root },
-        React.createElement(
+        React__default.createElement(
           Stepper,
           { activeStep: activeStep },
           steps.map(function (label, index) {
             var props = {};
             var labelProps = {};
             if (_this2.isStepOptional(index)) {
-              labelProps.optional = React.createElement(
+              labelProps.optional = React__default.createElement(
                 Typography,
                 { variant: 'caption' },
                 'Optional'
@@ -38161,10 +37335,10 @@ var EnhancedStepper = function (_React$Component) {
             if (_this2.isStepSkipped(index)) {
               props.completed = false;
             }
-            return React.createElement(
+            return React__default.createElement(
               Step,
               _extends$b({ key: label }, props),
-              React.createElement(
+              React__default.createElement(
                 StepLabel,
                 labelProps,
                 label
@@ -38172,35 +37346,35 @@ var EnhancedStepper = function (_React$Component) {
             );
           })
         ),
-        React.createElement(
+        React__default.createElement(
           'div',
           null,
-          activeStep === steps.length ? React.createElement(
+          activeStep === steps.length ? React__default.createElement(
             'div',
             null,
-            React.createElement(
+            React__default.createElement(
               Typography,
               { className: classes.instructions },
               'All steps completed - you\'re finished'
             ),
-            React.createElement(
-              Button$1,
+            React__default.createElement(
+              Button,
               { onClick: this.handleReset, className: classes.button },
               'Reset'
             )
-          ) : React.createElement(
+          ) : React__default.createElement(
             'div',
             null,
-            React.createElement(
+            React__default.createElement(
               Typography,
               { className: classes.instructions },
               getStepContent(activeStep)
             ),
-            React.createElement(
+            React__default.createElement(
               'div',
               null,
-              React.createElement(
-                Button$1,
+              React__default.createElement(
+                Button,
                 {
                   disabled: activeStep === 0,
                   onClick: this.handleBack,
@@ -38208,8 +37382,8 @@ var EnhancedStepper = function (_React$Component) {
                 },
                 'Back'
               ),
-              this.isStepOptional(activeStep) && React.createElement(
-                Button$1,
+              this.isStepOptional(activeStep) && React__default.createElement(
+                Button,
                 {
                   variant: 'contained',
                   color: 'primary',
@@ -38218,8 +37392,8 @@ var EnhancedStepper = function (_React$Component) {
                 },
                 'Skip'
               ),
-              React.createElement(
-                Button$1,
+              React__default.createElement(
+                Button,
                 {
                   variant: 'contained',
                   color: 'primary',
@@ -38235,127 +37409,1095 @@ var EnhancedStepper = function (_React$Component) {
     }
   }]);
   return EnhancedStepper;
-}(React.Component);
+}(React__default.Component);
 
 EnhancedStepper.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes__default.object
 };
 
-var Stepper$1 = withStyles(styles$w)(EnhancedStepper);
+var Stepper$1 = withStyles(styles$x)(EnhancedStepper);
 
-var styles$x = function styles(theme) {
+function Footer(_ref) {
+  var props = objectWithoutProperties(_ref, []);
+  var classes = props.classes,
+      company = props.company,
+      website = props.website,
+      trademark = props.trademark;
+
+  return React__default.createElement(
+    "footer",
+    { className: classes.footer },
+    React__default.createElement(
+      "div",
+      { className: classes.container },
+      React__default.createElement(
+        "p",
+        { className: classes.right },
+        React__default.createElement(
+          "span",
+          null,
+          "\xA9 ",
+          1900 + new Date().getYear(),
+          " ",
+          company,
+          " \xA0",
+          React__default.createElement(
+            "a",
+            { href: website, className: classes.a },
+            trademark
+          )
+        )
+      )
+    )
+  );
+}
+
+Footer.propTypes = {
+  classes: PropTypes__default.object.isRequired
+};
+
+var tableHeadStyles = function tableHeadStyles(theme) {
   return {
-    snackBarClose: {
-      fontSize: 20
+    head: {
+      background: '#f5f5f5'
     },
-    snackBarMessage: {
-      display: 'flex'
-    },
-    snackBarIcon: {
-      fontSize: 20
-    },
-    snackBarIconVariant: {
-      opacity: 0.9,
-      marginRight: theme.spacing.unit
-    },
-    success: {
-      backgroundColor: green[600]
-    },
-    error: {
-      backgroundColor: theme.palette.error.dark
-    },
-    info: {
-      backgroundColor: theme.palette.primary.dark
-    },
-    warning: {
-      backgroundColor: amber[700]
+    tableCell: {
+      padding: '4px 8px 4px 8px'
     }
   };
 };
 
-var variantIcon = {
-  success: CheckCircleIcon,
-  warning: WarningIcon,
-  error: ErrorIcon,
-  info: InfoIcon
+var tableHeadOptions = {
+  order: "asc",
+  orderBy: "id",
+  rowCount: 0,
+  numSelected: 0,
+  columns: []
 };
 
-var EnhancedSnackbar = function (_React$Component) {
-  inherits(EnhancedSnackbar, _React$Component);
+var EnhancedTableHead = function (_React$Component) {
+  inherits(EnhancedTableHead, _React$Component);
 
-  function EnhancedSnackbar(props) {
-    classCallCheck(this, EnhancedSnackbar);
+  function EnhancedTableHead(props) {
+    classCallCheck(this, EnhancedTableHead);
 
-    var _this = possibleConstructorReturn(this, (EnhancedSnackbar.__proto__ || Object.getPrototypeOf(EnhancedSnackbar)).call(this, props));
+    var _this = possibleConstructorReturn(this, (EnhancedTableHead.__proto__ || Object.getPrototypeOf(EnhancedTableHead)).call(this, props));
 
-    _this.state = { snackBarOpen: false };
-
-    _this.componentWillReceiveProps = function (nextProps) {
-      _this.setState(nextProps);
-    };
-
-    _this.handleSnackBarClose = function (event, reason) {
-      _this.setState({ snackBarOpen: false });
+    _this.createSortHandler = function (property) {
+      return function (event) {
+        _this.props.onRequestSort(event, property);
+      };
     };
 
     _this.render = function () {
-      var classes = _this.props.classes;
-      var variant = _this.state.variant;
+      var _this$props = _this.props,
+          columns = _this$props.columns,
+          classes = _this$props.classes;
 
-      var Icon$$1 = variantIcon[variant];
 
-      return React.createElement(
-        Snackbar,
-        {
-          anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'left'
+      return React__default.createElement(
+        TableHead,
+        { className: classes.head },
+        React__default.createElement(
+          TableRow,
+          null,
+          columns.map(function (column) {
+            return column.name === "selectable" ? React__default.createElement(
+              TableCell,
+              {
+                padding: 'checkbox',
+                classes: {
+                  root: classes.tableCell
+                }
+              },
+              React__default.createElement(Checkbox, { indeterminate: _this.props.numSelected > 0 && _this.props.numSelected < _this.props.rowCount, checked: _this.props.numSelected === _this.props.rowCount, onChange: _this.props.onSelectAllClick })
+            ) : column.show === undefined || column.show ? React__default.createElement(
+              TableCell,
+              {
+                key: new Date().getTime() + '-table-head-' + column.name,
+                padding: column.disablePadding ? 'none' : 'default',
+                sortDirection: _this.props.orderBy === column.name ? _this.props.order : false,
+                classes: {
+                  root: classes.tableCell
+                }
+              },
+              column.sort ? React__default.createElement(
+                Tooltip$1,
+                {
+                  title: 'Sort',
+                  placement: column.numeric ? 'bottom-end' : 'bottom-start',
+                  enterDelay: 300
+                },
+                React__default.createElement(
+                  TableSortLabel,
+                  {
+                    active: _this.props.orderBy === column.name,
+                    direction: _this.props.order,
+                    onClick: _this.createSortHandler(column.name)
+                  },
+                  column.label
+                )
+              ) : column.label
+            ) : null;
+          }, _this)
+        )
+      );
+    };
+
+    _this.state = Object.assign(tableHeadOptions, props);
+    return _this;
+  }
+
+  return EnhancedTableHead;
+}(React__default.Component);
+
+EnhancedTableHead.defaultProps = {
+  order: 'desc',
+  rowCount: 0
+};
+
+EnhancedTableHead.propTypes = {
+  numSelected: PropTypes__default.number.isRequired,
+  onRequestSort: PropTypes__default.func.isRequired,
+  onSelectAllClick: PropTypes__default.func.isRequired,
+  order: PropTypes__default.string.isRequired,
+  // orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes__default.number.isRequired,
+  classes: PropTypes__default.object.isRequired
+};
+
+var TableHead$1 = withStyles(tableHeadStyles)(EnhancedTableHead);
+
+var history = createBrowserHistory();
+
+var styles$y = function styles(theme) {
+  return {
+    tableWrapper: {
+      overflowX: 'auto'
+    },
+    table: {
+      minWidth: 'auto'
+    },
+    paper: {
+      width: '100%',
+      minWidth: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'visible'
+    },
+    chip: {
+      margin: theme.spacing.unit
+    },
+    progress: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      marginTop: -12,
+      marginLeft: -12,
+      zIndex: 10000
+    },
+    tableCell: {
+      padding: '4px 8px 4px 8px'
+    }
+  };
+};
+
+var tableOptions = {
+  order: 'desc',
+  orderBy: 'id',
+  uKey: 'id',
+  selected: [],
+  rows: [],
+  page: 0,
+  rowsPerPage: 10,
+  selectable: false,
+  actions: [],
+  dialogOpen: false,
+  dialog: {},
+  loading: false,
+  filter: {},
+  expanded: null,
+  expandedRow: {}
+};
+
+var EnhancedTable = function (_React$Component) {
+  inherits(EnhancedTable, _React$Component);
+
+  function EnhancedTable(props) {
+    var _this2 = this;
+
+    classCallCheck(this, EnhancedTable);
+
+    var _this = possibleConstructorReturn(this, (EnhancedTable.__proto__ || Object.getPrototypeOf(EnhancedTable)).call(this, props));
+
+    _this.selectedRows = [];
+
+    _this.componentDidMount = function () {
+      _this.loadData();
+    };
+
+    _this.componentWillReceiveProps = function (nextProps) {
+      _this.loadData();
+      _this.setState({
+        rows: nextProps.rows,
+        columns: nextProps.columns,
+        title: nextProps.title,
+        orderBy: nextProps.orderBy || _this.state.orderBy,
+        order: nextProps.order || _this.state.order,
+        rowsCount: nextProps.rowsCount
+      });
+    };
+
+    _this.componentWillUnmount = function () {};
+
+    _this.loadData = function (filterOptions) {
+      filterOptions = filterOptions === undefined ? _this.state.filter : filterOptions;
+      var updatedTableProps = {
+        orderBy: _this.state.orderBy,
+        order: _this.state.order,
+        page: _this.state.page,
+        rowsPerPage: _this.state.rowsPerPage
+      };
+
+      filterOptions = Object.assign({}, filterOptions, updatedTableProps);
+      if (_this.props.loadData) {
+        _this.setState({ filter: filterOptions, loading: true });
+        _this.props.loadData(filterOptions).then(function (records) {
+          _this.setState({
+            loading: false, rows: records.rows, rowsCount: records.count
+          });
+        }, function (error) {
+          _this.setState({ rows: [], rowsCount: 0, loading: false });
+        });
+      } else {
+        _this.setState({ rows: _this.state.rows, rowsCount: _this.state.rows.length, loading: false, filter: filterOptions });
+      }
+    };
+
+    _this.refreshData = function () {
+      _this.loadData();
+    };
+
+    _this.handleRequestSort = function (event, property) {
+      var orderBy = property;
+      var order = 'desc';
+
+      if (_this.state.orderBy === property && _this.state.order === 'desc') {
+        order = 'asc';
+      }
+
+      _this.setState({ order: order, orderBy: orderBy }, function () {
+        console.log("Inside handleRequestSort");
+        _this.loadData();
+      });
+    };
+
+    _this.handleSelectAllClick = function (event, checked) {
+      if (checked) {
+        _this.setState({ selected: _this.state.rows.map(function (n) {
+            return n[_this.props.uKey];
+          }) });
+        return;
+      }
+      _this.setState({ selected: [] });
+    };
+
+    _this.handleClick = function (event, rowData) {
+      if (event.target.tagName === "TD" && _this.props.clickLink) {
+        event.preventDefault();
+        history.push(_this.props.clickLink + rowData[_this.props.uKey]);
+      }
+
+      if (event.target.tagName === "TD" && _this.props.clickFunction) {
+        event.preventDefault();
+        _this.props.clickFunction(_this, rowData);
+      }
+    };
+
+    _this.handleChangePage = function (event, page) {
+      _this.setState({ page: page }, function () {
+        console.log("Inside handleChangePage");
+        _this.loadData();
+      });
+    };
+
+    _this.handleChangeRowsPerPage = function (event) {
+      _this.setState({ rowsPerPage: event.target.value, page: 0 }, function () {
+        console.log("Inside handleChangeRowsPerPage");
+        _this.loadData();
+      });
+    };
+
+    _this.isSelected = function (id) {
+      if (_this.state.selectable) {
+        return _this.state.selected.indexOf(id) !== -1;
+      } else {
+        return false;
+      }
+    };
+
+    _this.openDialog = function (dialogInfo) {
+      _this.setState({ dialogOpen: true, dialog: dialogInfo });
+    };
+
+    _this.closeDialog = function (value) {
+      _this.setState({ dialogOpen: false });
+
+      if (value === "ok" && _this.state.dialog.action) {
+        _this.state.dialog.action();
+      }
+    };
+
+    _this.formatCellData = function (cell, rowData, uKey) {
+      var cellData = rowData;
+      var nestedData = cell.name.split('.');
+      nestedData.map(function (nestedColumn) {
+        if (cellData[nestedColumn]) {
+          cellData = cellData[nestedColumn];
+        } else {
+          cellData = "";
+        }
+
+        return "";
+      });
+
+      var showCellData = true;
+      if (cell.beforeShow) {
+        showCellData = cell.beforeShow(rowData);
+      }
+
+      if (showCellData) {
+        switch (cell.type) {
+          case 'boolean':
+            cellData = cellData ? React__default.createElement(Done, null) : React__default.createElement(Clear, null);
+            break;
+          case 'datetime':
+          case 'daterange':
+            cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY, h:mm:ss a');
+            break;
+          case 'date':
+            cellData = cellData === null || cellData === "" ? '' : moment(cellData).format('MMMM Do YYYY');
+            break;
+          case 'month':
+            if (cellData) {
+              cellData = moment(cellData).format('MMMM YYYY');
+            } else {
+              cellData = "";
+            }
+            break;
+          case 'button':
+            cellData = [];
+            cell.buttons.map(function (button) {
+              var buttonLink = "";
+              var showField = true;
+
+              if (button.beforeShow) {
+                showField = button.beforeShow(rowData);
+              }
+
+              if (button.getIcon) {
+                button['icon'] = button.getIcon(rowData[button.field]);
+              }
+
+              if (showField && button.link) {
+                buttonLink = button.link;
+                if (button.param) {
+                  buttonLink = buttonLink + rowData[button.param];
+                }
+
+                if (button.icon === undefined) {
+                  cellData.push(React__default.createElement(Chip, {
+                    label: button.label,
+                    to: buttonLink,
+                    component: Link$1,
+                    className: _this.props.classes.chip,
+                    key: rowData[uKey] + button.label.replace(' ', '-')
+                  }));
+                } else {
+                  cellData.push(React__default.createElement(
+                    IconButton,
+                    { "aria-label": button.label, to: buttonLink, component: Link$1, key: rowData[uKey] + button.label.replace(' ', '-') },
+                    React__default.createElement(button.icon, null)
+                  ));
+                }
+              }
+
+              if (showField && button.action) {
+                if (button.icon === undefined) {
+                  cellData.push(React__default.createElement(Chip, {
+                    label: button.label,
+                    onClick: function onClick() {
+                      return button.action(_this, rowData);
+                    },
+                    className: _this.props.classes.chip,
+                    key: rowData[uKey] + button.label.replace(' ', '-')
+                  }));
+                } else if (button.type === 'fab') {
+                  cellData.push(React__default.createElement(
+                    Fab$1,
+                    { "aria-label": button.label, onClick: function onClick() {
+                        return button.action(_this, rowData);
+                      }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-'), size: button.size, classes: button.classes },
+                    React__default.createElement(button.icon, null)
+                  ));
+                } else {
+                  cellData.push(React__default.createElement(
+                    IconButton,
+                    { "aria-label": button.label, onClick: function onClick() {
+                        return button.action(_this, rowData);
+                      }, color: button.color, key: rowData[uKey] + button.label.replace(' ', '-') },
+                    React__default.createElement(button.icon, null)
+                  ));
+                }
+              }
+
+              return "";
+            });
+            break;
+          case 'render':
+            cellData = cell.render(rowData, _this);
+            break;
+          case 'link':
+            if (cellData && cellData !== "") {
+              cellData = React__default.createElement(
+                Link,
+                {
+                  component: Link$1,
+                  to: cellData,
+                  target: "_blank",
+                  rel: "noopener"
+                },
+                React__default.createElement(LinkIcon, null)
+              );
+            }
+            break;
+          case 'file':
+            if (cellData && cellData !== "") {
+              cellData = React__default.createElement(
+                Link,
+                {
+                  component: Link$1,
+                  to: cellData,
+                  target: "_blank",
+                  rel: "noopener"
+                },
+                React__default.createElement(LinkIcon, null)
+              );
+            }
+            break;
+          case 'image':
+            var imageSource = cellData;
+            cellData = React__default.createElement(
+              IconButton,
+              { "aria-label": "button.label", onClick: function onClick() {
+                  _this.openDialog({
+                    title: "Image",
+                    content: React__default.createElement(Card$1, {
+                      image: imageSource,
+                      onClose: _this.closeDialog
+                    })
+                  });
+                } },
+              React__default.createElement(Avatar, { alt: "", src: cellData })
+            );
+            break;
+          case 'media':
+            var mediaSource = cellData;
+            cellData = React__default.createElement(
+              IconButton,
+              { "aria-label": cell.label, onClick: function onClick() {
+                  _this.openDialog({
+                    title: "Media",
+                    content: React__default.createElement(Card$1, {
+                      media: mediaSource,
+                      onClose: _this.closeDialog
+                    })
+                  });
+                } },
+              React__default.createElement(LinkIcon, null)
+            );
+            break;
+          case 'expand':
+            var isExpanded = rowData[uKey] === _this.state.expandedRow[uKey];
+            cellData = React__default.createElement(
+              IconButton,
+              { "aria-label": cell.label, onClick: function onClick() {
+                  _this.toggleExpand(cell, rowData);
+                } },
+              isExpanded && _this.state.expanded ? React__default.createElement(KeyboardArrowUp, null) : React__default.createElement(KeyboardArrowDown, null)
+            );
+            break;
+          default:
+            break;
+        }
+      } else {
+        cellData = "";
+      }
+
+      return cellData;
+    };
+
+    _this.toggleExpand = function () {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cell, rowData) {
+        var expandedRow, expandContent;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                expandedRow = _this.state.expandedRow;
+                expandContent = null;
+
+                if (!(Object.keys(expandedRow).length > 0 && expandedRow[_this.props.uKey] === rowData[_this.props.uKey])) {
+                  _context.next = 6;
+                  break;
+                }
+
+                expandedRow = {};
+                _context.next = 10;
+                break;
+
+              case 6:
+                expandedRow = rowData;
+                _context.next = 9;
+                return _this.getExpandContent(cell, rowData);
+
+              case 9:
+                expandContent = _context.sent;
+
+              case 10:
+
+                _this.setState({ expanded: expandContent, expandedRow: expandedRow });
+
+              case 11:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, _this2);
+      }));
+
+      return function (_x, _x2) {
+        return _ref.apply(this, arguments);
+      };
+    }();
+
+    _this.getExpandContent = function () {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cell, rowData) {
+        var expandContent;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return cell.render(rowData, _this);
+
+              case 2:
+                expandContent = _context2.sent;
+                return _context2.abrupt("return", expandContent);
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, _this2);
+      }));
+
+      return function (_x3, _x4) {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+
+    _this.render = function () {
+      var _this$props = _this.props,
+          title = _this$props.title,
+          pagination = _this$props.pagination,
+          classes = _this$props.classes,
+          uKey = _this$props.uKey,
+          other = objectWithoutProperties(_this$props, ["title", "pagination", "classes", "uKey"]);
+      var _this$state = _this.state,
+          columns = _this$state.columns,
+          rowsCount = _this$state.rowsCount,
+          expanded = _this$state.expanded,
+          expandedRow = _this$state.expandedRow;
+      var _this$state2 = _this.state,
+          order = _this$state2.order,
+          orderBy = _this$state2.orderBy,
+          selected = _this$state2.selected,
+          rowsPerPage = _this$state2.rowsPerPage,
+          page = _this$state2.page,
+          selectable = _this$state2.selectable;
+      var _this$state3 = _this.state,
+          handleSelectAllClick = _this$state3.handleSelectAllClick,
+          handleRequestSort = _this$state3.handleRequestSort;
+
+
+      var rows = [];
+      if (_this.state.loadData) {
+        rows = _this.state.rows ? _this.state.rows : [];
+      } else {
+        rows = _this.state.rows ? _this.state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : [];
+      }
+
+      if (selected !== undefined) {
+        _this.selectedRows = selected;
+      }
+
+      if (handleSelectAllClick !== undefined) {
+        _this.handleSelectAllClick = handleSelectAllClick;
+      }
+
+      if (handleRequestSort !== undefined) {
+        _this.onRequestSort = handleRequestSort;
+      }
+
+      return React__default.createElement(
+        Paper,
+        { className: classes.paper },
+        title ? React__default.createElement(Toolbar$2, _extends$b({
+          title: title,
+          numSelected: _this.selectedRows.length,
+          openDialog: _this.openDialog,
+          closeDialog: _this.closeDialog,
+          refreshData: _this.refreshData
+        }, other)) : null,
+        React__default.createElement(ChipFilter$1, { options: columns, loadData: _this.loadData }),
+        React__default.createElement(
+          "div",
+          { className: classes.tableWrapper },
+          _this.state.loading && React__default.createElement(CircularProgress, { className: classes.progress }),
+          React__default.createElement(
+            Table,
+            { className: classes.table, "aria-labelledby": "tableTitle", key: Date.now() },
+            React__default.createElement(TableHead$1, {
+              selectable: selectable,
+              columns: columns,
+              numSelected: _this.selectedRows.length,
+              order: order,
+              orderBy: orderBy,
+              onSelectAllClick: _this.handleSelectAllClick,
+              onRequestSort: _this.handleRequestSort,
+              rowCount: rowsCount
+            }),
+            React__default.createElement(
+              TableBody,
+              null,
+              !_this.state.loading && rows.length === 0 ? React__default.createElement(
+                TableRow,
+                null,
+                React__default.createElement(
+                  TableCell,
+                  {
+                    colSpan: columns.length,
+                    classes: {
+                      root: classes.tableCell
+                    }
+                  },
+                  React__default.createElement(
+                    Typography,
+                    null,
+                    "Nothing here yet"
+                  )
+                )
+              ) : null,
+              rows.map(function (n) {
+                var isSelected = _this.isSelected(n[uKey]);
+                var isExpanded = n[uKey] === expandedRow[uKey];
+                var expandColumn = isExpanded && columns.find(function (column) {
+                  var showColumn = true;
+                  if (column.beforeShow) {
+                    showColumn = column.beforeShow(n);
+                  }
+
+                  return showColumn && column.type === 'expand';
+                });
+
+                return React__default.createElement(
+                  React__default.Fragment,
+                  null,
+                  React__default.createElement(
+                    TableRow,
+                    {
+                      hover: true,
+                      onClick: function onClick(event) {
+                        return _this.handleClick(event, n);
+                      },
+                      role: "checkbox",
+                      "aria-checked": isSelected,
+                      tabIndex: -1,
+                      key: new Date().getTime() + "-" + (title ? title.replace(' ', '-') : "") + "-" + n[uKey],
+                      selected: isSelected
+                    },
+                    columns.some(function (column) {
+                      return column.span === true;
+                    }) ? columns.map(function (column) {
+                      var cellData = _this.formatCellData(column, n, uKey);
+
+                      return (column.show === undefined || column.show) && column.span ? column.name === "selectable" ? React__default.createElement(
+                        TableCell,
+                        {
+                          padding: "checkbox",
+                          key: column.name,
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        React__default.createElement(Checkbox, { checked: isSelected })
+                      ) : React__default.createElement(
+                        TableCell,
+                        {
+                          key: column.name,
+                          colSpan: columns.length,
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        cellData
+                      ) : null;
+                    }) : columns.map(function (column) {
+                      var cellData = _this.formatCellData(column, n, uKey);
+
+                      return column.show === undefined || column.show ? column.name === "selectable" ? React__default.createElement(
+                        TableCell,
+                        {
+                          padding: "checkbox",
+                          key: column.name,
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        React__default.createElement(Checkbox, { checked: isSelected })
+                      ) : React__default.createElement(
+                        TableCell,
+                        {
+                          key: column.name,
+                          padding: column.disablePadding ? 'none' : 'default',
+                          classes: {
+                            root: classes.tableCell
+                          }
+                        },
+                        cellData
+                      ) : null;
+                    })
+                  ),
+                  isExpanded && expandColumn && expanded ? React__default.createElement(
+                    TableRow,
+                    null,
+                    React__default.createElement(
+                      TableCell,
+                      { colSpan: columns.length },
+                      expanded
+                    )
+                  ) : null
+                );
+              })
+            )
+          )
+        ),
+        pagination && rows.length > 0 ? React__default.createElement(TablePagination, {
+          component: "div",
+          count: rowsCount,
+          rowsPerPage: rowsPerPage,
+          page: page,
+          rowsPerPageOptions: [5, 10, 25, 50, 100],
+          backIconButtonProps: {
+            'aria-label': 'Previous Page'
           },
-          open: _this.state.snackBarOpen,
-          autoHideDuration: _this.state.snackBarDuration ? _this.state.snackBarDuration : 10000,
-          onClose: _this.props.onClose ? _this.props.onClose : _this.handleSnackBarClose
-        },
-        React.createElement(SnackbarContent, {
-          className: classes[_this.state.snackBarType ? _this.state.snackBarType : variant],
-          'aria-describedby': 'snackbar-message-id',
-          message: React.createElement(
-            'span',
-            { id: 'snackbar-message-id', className: classes.snackBarMessage },
-            React.createElement(Icon$$1, { className: classnames(classes.snackBarIcon, classes.snackBarIconVariant) }),
-            _this.state.snackBarMessage
-          ),
-          action: [React.createElement(
-            IconButton,
-            {
-              key: 'close',
-              'aria-label': 'Close',
-              color: 'inherit',
-              className: classes.snackBarClose,
-              onClick: _this.handleSnackBarClose
-            },
-            React.createElement(CloseIcon, null)
-          )]
+          nextIconButtonProps: {
+            'aria-label': 'Next Page'
+          },
+          onChangePage: _this.handleChangePage,
+          onChangeRowsPerPage: _this.handleChangeRowsPerPage
+        }) : null,
+        React__default.createElement(Dialog$1, {
+          title: _this.state.dialog.title,
+          open: _this.state.dialogOpen,
+          onClose: _this.closeDialog,
+          type: _this.state.dialog.type,
+          content: _this.state.dialog.content,
+          text: _this.state.dialog.text
         })
       );
     };
 
-    _this.state = props;
+    _this.state = Object.assign({}, tableOptions, props);
     return _this;
   }
 
-  return EnhancedSnackbar;
-}(React.Component);
+  return EnhancedTable;
+}(React__default.Component);
 
-EnhancedSnackbar.defaultProps = {
-  variant: "error"
+EnhancedTable.defaultProps = {
+  pagination: true,
+  rows: [],
+  uKey: 'id'
 };
 
-EnhancedSnackbar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  variant: PropTypes.string.isRequired
+EnhancedTable.propTypes = {
+  classes: PropTypes__default.object.isRequired,
+  pagination: PropTypes__default.bool.isRequired,
+  rows: PropTypes__default.array.isRequired
 };
 
-var Snackbar$1 = withStyles(styles$x)(EnhancedSnackbar);
+var Table$1 = withStyles(styles$y)(EnhancedTable);
+
+var styles$z = function styles(theme) {
+	var _panelDetail, _heading, _headingAction;
+
+	return {
+		root: {
+			width: '100%'
+		},
+		panelDetail: (_panelDetail = {}, defineProperty$1(_panelDetail, theme.breakpoints.only('xs'), {
+			display: 'flex'
+		}), defineProperty$1(_panelDetail, 'display', 'block'), _panelDetail),
+		summaryContent: defineProperty$1({}, theme.breakpoints.down('xs'), {
+			margin: 0
+		}),
+		summaryPanel: defineProperty$1({}, theme.breakpoints.down('xs'), {
+			padding: '0px 8px'
+		}),
+		headingWrapper: {
+			flexBasis: '80%'
+		},
+		heading: (_heading = {
+			fontSize: theme.typography.pxToRem(15)
+		}, defineProperty$1(_heading, theme.breakpoints.only('xs'), {
+			fontSize: theme.typography.pxToRem(12)
+		}), defineProperty$1(_heading, 'display', 'flex'), defineProperty$1(_heading, 'alignItems', 'center'), defineProperty$1(_heading, 'marginLeft', theme.spacing.unit), defineProperty$1(_heading, 'marginRight', theme.spacing.unit), defineProperty$1(_heading, 'flexBasis', '80%'), defineProperty$1(_heading, 'textDecoration', 'none'), _heading),
+		secondaryHeading: {
+			fontSize: theme.typography.pxToRem(15),
+			color: theme.palette.text.secondary
+			// flexBasis: '15%',
+		},
+		headingContent: {
+			flexBasis: '80%'
+		},
+		headingAction: (_headingAction = {}, defineProperty$1(_headingAction, theme.breakpoints.only('xs'), {
+			flexBasis: '24%',
+			marginTop: theme.spacing.unit
+		}), defineProperty$1(_headingAction, theme.breakpoints.between('sm', 'md'), {
+			flexBasis: '12%'
+		}), defineProperty$1(_headingAction, theme.breakpoints.up('md'), {
+			flexBasis: '8%'
+		}), defineProperty$1(_headingAction, theme.breakpoints.between('sm', 'xl'), {
+			display: 'flex',
+			alignItems: 'center',
+			marginLeft: theme.spacing.unit,
+			marginRight: theme.spacing.unit
+		}), _headingAction)
+	};
+};
+
+var EnhancedExpansionPanel = function (_React$Component) {
+	inherits(EnhancedExpansionPanel, _React$Component);
+
+	function EnhancedExpansionPanel(props) {
+		classCallCheck(this, EnhancedExpansionPanel);
+
+		var _this = possibleConstructorReturn(this, (EnhancedExpansionPanel.__proto__ || Object.getPrototypeOf(EnhancedExpansionPanel)).call(this, props));
+
+		_this.state = {
+			expanded: null,
+			loading: false,
+			data: [],
+			content: null
+		};
+
+		_this.componentWillReceiveProps = function (nextProps) {
+			_this.setState({ data: nextProps.data, topActions: nextProps.topActions });
+		};
+
+		_this.handleChange = function (panel, elem) {
+			return function (event, expanded) {
+				_this.setState({ expanded: expanded ? panel : false, content: null, loading: true });
+
+				if (expanded) {
+					if (typeof elem.content === "function") {
+						var contentFn = elem.content();
+						if (contentFn instanceof Promise) {
+							contentFn.then(function (response) {
+								_this.setState({ content: response, loading: false });
+							}).catch(function (error) {
+								_this.setState({ content: error, loading: false });
+							});
+						} else {
+							_this.setState({ content: contentFn, loading: false });
+						}
+					} else {
+						_this.setState({ content: elem.content, loading: false });
+					}
+				} else {
+					_this.setState({ loading: false });
+				}
+			};
+		};
+
+		_this.toggleExpansionPanel = function (panel, elem, expanded) {
+			_this.setState({ expanded: !expanded ? panel : false, content: null, loading: true });
+
+			if (!expanded) {
+				if (typeof elem.content === "function") {
+					var contentFn = elem.content();
+					if (contentFn instanceof Promise) {
+						contentFn.then(function (response) {
+							_this.setState({ content: response, loading: false });
+						}).catch(function (error) {
+							_this.setState({ content: error, loading: false });
+						});
+					} else {
+						_this.setState({ content: contentFn, loading: false });
+					}
+				} else {
+					_this.setState({ content: elem.content, loading: false });
+				}
+			} else {
+				_this.setState({ loading: false });
+			}
+		};
+
+		_this.render = function () {
+			var classes = _this.props.classes;
+			var _this$state = _this.state,
+			    data = _this$state.data,
+			    content = _this$state.content,
+			    expanded = _this$state.expanded,
+			    topActions = _this$state.topActions,
+			    actions = _this$state.actions;
+
+
+			var titleLink = {};
+
+			return React__default.createElement(
+				'div',
+				{ className: classes.root },
+				data.map(function (elem, index) {
+					if (elem) {
+						var panel = 'panel' + index;
+						return React__default.createElement(
+							ExpansionPanel,
+							{ expanded: expanded === panel, key: elem.key },
+							React__default.createElement(
+								ExpansionPanelSummary,
+								{
+									classes: {
+										root: classes.summaryPanel, // class name, e.g. `classes-nesting-root-x`
+										content: classes.summaryContent // class name, e.g. `classes-nesting-label-x`
+									},
+									IconButtonProps: {
+										onClick: function onClick() {
+											return _this.toggleExpansionPanel(panel, elem, expanded === panel);
+										}
+									},
+									expandIcon: React__default.createElement(ExpandMoreIcon, null)
+								},
+								elem.image ? React__default.createElement(Avatar, { alt: "", src: elem.image }) : null,
+								titleLink = elem.link ? Object.assign({}, {
+									component: Link$1,
+									to: elem.link
+								}) : [],
+								elem.title && elem.subheading ? React__default.createElement(
+									'div',
+									{
+										className: classes.headingWrapper
+									},
+									React__default.createElement(
+										Typography,
+										_extends$b({}, titleLink, {
+											className: classes.heading
+										}),
+										typeof elem.title === "function" ? elem.title() : elem.title
+									),
+									React__default.createElement(
+										Typography,
+										_extends$b({}, titleLink, {
+											className: classes.heading
+										}),
+										typeof elem.subheading === "function" ? elem.subheading() : elem.subheading
+									)
+								) : elem.title ? React__default.createElement(
+									Typography,
+									_extends$b({}, titleLink, {
+										className: classes.heading
+									}),
+									typeof elem.title === "function" ? elem.title() : elem.title
+								) : null,
+								React__default.createElement(
+									'div',
+									{ className: classes.headingAction },
+									expanded === panel && topActions ? topActions.map(function (action) {
+										var showAction = action.beforeShow ? action.beforeShow(elem) : true;
+
+										var actionButton = action.icon ? React__default.createElement(
+											Fab$1,
+											{ 'aria-label': action.title, className: classes.fab, color: action.color, onClick: function onClick() {
+													return action.action(_this, elem);
+												}, size: 'small', key: "fab" },
+											React__default.createElement(action.icon, null)
+										) : React__default.createElement(
+											Button,
+											{ 'aria-label': action.title, variant: 'contained', color: action.color, onClick: function onClick() {
+													return action.action(_this, elem);
+												}, size: 'small', key: "button" },
+											action.label
+										);
+
+										return showAction ? actionButton : null;
+									}) : React__default.createElement(
+										Typography,
+										{ className: classes.secondaryHeading },
+										typeof elem.description === "function" ? elem.description() : elem.description
+									)
+								)
+							),
+							_this.state.loading && React__default.createElement(LinearProgress, null),
+							expanded === panel && content ? React__default.createElement(
+								ExpansionPanelDetails,
+								{
+									classes: {
+										root: classes.panelDetail
+									}
+								},
+								content
+							) : null,
+							expanded === panel && actions ? React__default.createElement(
+								'div',
+								null,
+								React__default.createElement(Divider, null),
+								React__default.createElement(
+									ExpansionPanelActions,
+									null,
+									topActions.map(function (action) {
+										return React__default.createElement(
+											Button,
+											{ 'aria-label': action.title, color: action.color, onClick: function onClick() {
+													return action.action(_this, elem);
+												}, size: 'small' },
+											action.title
+										);
+									})
+								)
+							) : null
+						);
+					} else {
+						return null;
+					}
+				})
+			);
+		};
+
+		_this.state = Object.assign(_this.state, props);
+		return _this;
+	}
+
+	return EnhancedExpansionPanel;
+}(React__default.Component);
+
+EnhancedExpansionPanel.propTypes = {
+	classes: PropTypes__default.object.isRequired
+};
+
+var Accordion = withStyles(styles$z)(EnhancedExpansionPanel);
 
 var async = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
@@ -39647,16 +39789,16 @@ var applyEachSeries = applyEach$1(mapSeries);
  * @param {Function} iteratee The function invoked per iteration.
  * @returns {Array} Returns `array`.
  */
-function arrayEach(array, iteratee) {
+function arrayEach(array$$1, iteratee) {
   var index = -1,
-      length = array == null ? 0 : array.length;
+      length = array$$1 == null ? 0 : array$$1.length;
 
   while (++index < length) {
-    if (iteratee(array[index], index, array) === false) {
+    if (iteratee(array$$1[index], index, array$$1) === false) {
       break;
     }
   }
-  return array;
+  return array$$1;
 }
 
 /**
@@ -39719,12 +39861,12 @@ function baseForOwn(object$$1, iteratee) {
  * @param {boolean} [fromRight] Specify iterating from right to left.
  * @returns {number} Returns the index of the matched value, else `-1`.
  */
-function baseFindIndex(array, predicate, fromIndex, fromRight) {
-  var length = array.length,
+function baseFindIndex(array$$1, predicate, fromIndex, fromRight) {
+  var length = array$$1.length,
       index = fromIndex + (fromRight ? 1 : -1);
 
   while ((fromRight ? index-- : ++index < length)) {
-    if (predicate(array[index], index, array)) {
+    if (predicate(array$$1[index], index, array$$1)) {
       return index;
     }
   }
@@ -39752,12 +39894,12 @@ function baseIsNaN(value) {
  * @param {number} fromIndex The index to search from.
  * @returns {number} Returns the index of the matched value, else `-1`.
  */
-function strictIndexOf(array, value, fromIndex) {
+function strictIndexOf(array$$1, value, fromIndex) {
   var index = fromIndex - 1,
-      length = array.length;
+      length = array$$1.length;
 
   while (++index < length) {
-    if (array[index] === value) {
+    if (array$$1[index] === value) {
       return index;
     }
   }
@@ -39773,10 +39915,10 @@ function strictIndexOf(array, value, fromIndex) {
  * @param {number} fromIndex The index to search from.
  * @returns {number} Returns the index of the matched value, else `-1`.
  */
-function baseIndexOf(array, value, fromIndex) {
+function baseIndexOf(array$$1, value, fromIndex) {
   return value === value
-    ? strictIndexOf(array, value, fromIndex)
-    : baseFindIndex(array, baseIsNaN, fromIndex);
+    ? strictIndexOf(array$$1, value, fromIndex)
+    : baseFindIndex(array$$1, baseIsNaN, fromIndex);
 }
 
 /**
@@ -40034,13 +40176,13 @@ var auto = function (tasks, concurrency, callback) {
  * @param {Function} iteratee The function invoked per iteration.
  * @returns {Array} Returns the new mapped array.
  */
-function arrayMap(array, iteratee) {
+function arrayMap(array$$1, iteratee) {
   var index = -1,
-      length = array == null ? 0 : array.length,
+      length = array$$1 == null ? 0 : array$$1.length,
       result = Array(length);
 
   while (++index < length) {
-    result[index] = iteratee(array[index], index, array);
+    result[index] = iteratee(array$$1[index], index, array$$1);
   }
   return result;
 }
@@ -40110,9 +40252,9 @@ function baseToString(value) {
  * @param {number} [end=array.length] The end position.
  * @returns {Array} Returns the slice of `array`.
  */
-function baseSlice(array, start, end) {
+function baseSlice(array$$1, start, end) {
   var index = -1,
-      length = array.length;
+      length = array$$1.length;
 
   if (start < 0) {
     start = -start > length ? 0 : (length + start);
@@ -40126,7 +40268,7 @@ function baseSlice(array, start, end) {
 
   var result = Array(length);
   while (++index < length) {
-    result[index] = array[index + start];
+    result[index] = array$$1[index + start];
   }
   return result;
 }
@@ -40140,10 +40282,10 @@ function baseSlice(array, start, end) {
  * @param {number} [end=array.length] The end position.
  * @returns {Array} Returns the cast slice.
  */
-function castSlice(array, start, end) {
-  var length = array.length;
+function castSlice(array$$1, start, end) {
+  var length = array$$1.length;
   end = end === undefined ? length : end;
-  return (!start && end >= length) ? array : baseSlice(array, start, end);
+  return (!start && end >= length) ? array$$1 : baseSlice(array$$1, start, end);
 }
 
 /**
@@ -42592,8 +42734,8 @@ function race(tasks, callback) {
  * `iteratee` functions have finished. Result is the reduced value. Invoked with
  * (err, result).
  */
-function reduceRight (array, memo, iteratee, callback) {
-    var reversed = slice(array).reverse();
+function reduceRight (array$$1, memo, iteratee, callback) {
+    var reversed = slice(array$$1).reverse();
     reduce(reversed, memo, iteratee, callback);
 }
 
@@ -43967,7 +44109,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var async$1 = unwrapExports(async);
 
-var styles$y = function styles(theme) {
+var styles$A = function styles(theme) {
   return {
     root: {
       // flexGrow: 1,
@@ -44005,7 +44147,7 @@ var styles$y = function styles(theme) {
 };
 
 function NoOptionsMessage$2(props) {
-  return React.createElement(
+  return React__default.createElement(
     Typography,
     _extends$b({
       color: 'textSecondary',
@@ -44019,11 +44161,11 @@ function inputComponent$1(_ref) {
   var inputRef = _ref.inputRef,
       props = objectWithoutProperties(_ref, ['inputRef']);
 
-  return React.createElement('div', _extends$b({ ref: inputRef }, props));
+  return React__default.createElement('div', _extends$b({ ref: inputRef }, props));
 }
 
 function Control$2(props) {
-  return React.createElement(TextField, {
+  return React__default.createElement(TextField, {
     fullWidth: true,
     InputProps: {
       inputComponent: inputComponent$1,
@@ -44037,7 +44179,7 @@ function Control$2(props) {
 }
 
 function Option$2(props) {
-  return React.createElement(
+  return React__default.createElement(
     MenuItem,
     _extends$b({
       buttonRef: props.innerRef,
@@ -44052,7 +44194,7 @@ function Option$2(props) {
 }
 
 function Placeholder$3(props) {
-  return React.createElement(
+  return React__default.createElement(
     Typography,
     _extends$b({
       color: 'textSecondary',
@@ -44063,7 +44205,7 @@ function Placeholder$3(props) {
 }
 
 function SingleValue$3(props) {
-  return React.createElement(
+  return React__default.createElement(
     Typography,
     _extends$b({ className: props.selectProps.classes.singleValue }, props.innerProps),
     props.children
@@ -44071,7 +44213,7 @@ function SingleValue$3(props) {
 }
 
 function ValueContainer$3(props) {
-  return React.createElement(
+  return React__default.createElement(
     'div',
     { className: props.selectProps.classes.valueContainer },
     props.children
@@ -44079,7 +44221,7 @@ function ValueContainer$3(props) {
 }
 
 function MultiValue$3(props) {
-  return React.createElement(Chip, {
+  return React__default.createElement(Chip, {
     tabIndex: -1,
     label: props.data.label + ' : ' + props.data.value,
     className: classnames(props.selectProps.classes.chip, defineProperty$1({}, props.selectProps.classes.chipFocused, props.isFocused)),
@@ -44144,10 +44286,10 @@ var Filter = function (_React$Component) {
         return option.filter;
       });
 
-      return filterValues.length > 0 ? React.createElement(
+      return filterValues.length > 0 ? React__default.createElement(
         'div',
         { className: classes.root },
-        React.createElement(index$1$1, {
+        React__default.createElement(index$1$1, {
           classes: classes,
           options: filterValues,
           components: components$2,
@@ -44156,12 +44298,12 @@ var Filter = function (_React$Component) {
           placeholder: 'Add a filter',
           isMulti: true
         }),
-        React.createElement(Dialog$1, {
+        React__default.createElement(Dialog$1, {
           title: "Filter Data",
           open: _this.state.dialogOpen,
           onClose: _this.closeDialog,
           type: _this.state.dialog.type,
-          content: React.createElement(Form, {
+          content: React__default.createElement(Form, {
             fields: _this.state.filterForm,
             buttons: [{ type: 'submit', label: 'Apply' }, {
               type: 'button',
@@ -44216,739 +44358,13 @@ var Filter = function (_React$Component) {
   }
 
   return Filter;
-}(React.Component);
+}(React__default.Component);
 
 Filter.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes__default.object.isRequired
 };
 
-var Filter$1 = withStyles(styles$y)(Filter);
+var Filter$1 = withStyles(styles$A)(Filter);
 
-var styles$z = function styles(theme) {
-  return {};
-};
-
-var Sort = function (_React$Component) {
-  inherits(Sort, _React$Component);
-
-  function Sort() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    classCallCheck(this, Sort);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Sort.__proto__ || Object.getPrototypeOf(Sort)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      anchorEl: null
-    }, _this.handleOpenMenu = function (event) {
-      _this.setState({ anchorEl: event.currentTarget });
-    }, _this.handleCloseMenu = function () {
-      _this.setState({ anchorEl: null });
-    }, _this.render = function () {
-      var _this$props = _this.props,
-          classes = _this$props.classes,
-          options = _this$props.options,
-          data = _this$props.data,
-          onChange = _this$props.onChange;
-      var anchorEl = _this.state.anchorEl;
-
-      var isMenuOpen = Boolean(anchorEl);
-      var renderSortingMenu = React.createElement(
-        Popover,
-        {
-          open: isMenuOpen,
-          anchorEl: anchorEl,
-          onClose: _this.handleCloseMenu,
-          className: classes.popper,
-          anchorOrigin: {
-            vertical: 'top',
-            horizontal: 'right'
-          },
-          transformOrigin: {
-            vertical: 'top',
-            horizontal: 'right'
-          }
-        },
-        React.createElement(
-          List,
-          { className: classes.list },
-          React.createElement(
-            ListItem,
-            {
-              alignItems: 'flex-start',
-              onClick: function onClick() {
-                _this.handleCloseMenu();
-              }
-            },
-            React.createElement(ListItemText, {
-              secondary: 'Sort By : '
-            }),
-            React.createElement(
-              ListItemIcon,
-              null,
-              React.createElement(SwapVert, null)
-            )
-          ),
-          options.map(function (option) {
-            var sortDirection = data.sortBy === option.name && data.sortDirection === 'DESC' ? 'ASC' : 'DESC';
-
-            return option.sort ? React.createElement(
-              ListItem,
-              {
-                key: 'sort-' + option.name,
-                alignItems: 'flex-start'
-              },
-              React.createElement(ListItemText, {
-                primary: option.label
-              }),
-              React.createElement(
-                ListItemSecondaryAction,
-                null,
-                React.createElement(
-                  IconButton,
-                  { 'aria-label': sortDirection,
-                    onClick: function onClick() {
-                      var sortObj = {
-                        sortBy: option.name,
-                        sortDirection: sortDirection
-                      };
-
-                      var tempdata = Object.assign({}, data, sortObj);
-                      onChange(tempdata);
-                      _this.handleCloseMenu();
-                    }
-                  },
-                  data.sortBy === option.name && data.sortDirection === 'DESC' ? React.createElement(ArrowUpward, null) : React.createElement(ArrowDownward, null)
-                )
-              )
-            ) : null;
-          })
-        )
-      );
-
-      return React.createElement(
-        'div',
-        null,
-        React.createElement(
-          IconButton,
-          {
-            color: 'inherit',
-            'aria-label': 'open sorting',
-            'aria-haspopup': 'true',
-            onClick: _this.handleOpenMenu
-          },
-          React.createElement(SwapVert, null)
-        ),
-        renderSortingMenu
-      );
-    }, _temp), possibleConstructorReturn(_this, _ret);
-  }
-
-  return Sort;
-}(React.Component);
-
-withStyles(styles$z)(Sort);
-
-// ##############################
-
-var history$1 = createBrowserHistory();
-
-var styles$A = function styles(theme) {
-	return {
-		icon: {
-			display: 'inline-flex',
-			flexShrink: 0,
-			marginRight: theme.spacing.unit * 2
-		}
-	};
-};
-
-var CustomIcon = function (_React$Component) {
-	inherits(CustomIcon, _React$Component);
-
-	function CustomIcon() {
-		classCallCheck(this, CustomIcon);
-		return possibleConstructorReturn(this, (CustomIcon.__proto__ || Object.getPrototypeOf(CustomIcon)).apply(this, arguments));
-	}
-
-	createClass(CustomIcon, [{
-		key: 'render',
-		value: function render() {
-			var _props = this.props,
-			    name = _props.name,
-			    font = _props.font,
-			    color = _props.color,
-			    size = _props.size,
-			    other = objectWithoutProperties(_props, ['name', 'font', 'color', 'size']);
-
-			return React.createElement(Icon, _extends$b({
-				name: 'down-circle',
-				color: 'white',
-				size: 30
-				// style={{}}
-			}, other));
-		}
-	}]);
-	return CustomIcon;
-}(React.Component);
-
-var CustomIcon$1 = withStyles(styles$A)(CustomIcon);
-
-var styles$B = function styles(theme) {
-  var _search;
-
-  return {
-    root: {
-      display: 'flex'
-    },
-    grow: {
-      flexGrow: 1
-    },
-    menuButton: {},
-    title: defineProperty$1({
-      display: 'none'
-    }, theme.breakpoints.up('sm'), {
-      display: 'block'
-    }),
-    search: (_search = {
-      position: 'relative',
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
-      '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25)
-      },
-      marginRight: theme.spacing.unit * 2,
-      marginLeft: theme.spacing.unit * 3,
-      width: '80%'
-    }, defineProperty$1(_search, theme.breakpoints.down('sm'), {
-      marginLeft: theme.spacing.unit * 3,
-      width: 'auto'
-    }), defineProperty$1(_search, theme.breakpoints.down('md'), {
-      marginLeft: theme.spacing.unit * 3,
-      width: '100%'
-    }), _search),
-    searchIcon: {
-      width: theme.spacing.unit * 6,
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-      })
-    },
-    appBarShift: {
-      // marginLeft: drawerWidth,
-      // width: `calc(100% - ${drawerWidth}px)`,
-      // transition: theme.transitions.create(['width', 'margin'], {
-      //   easing: theme.transitions.easing.sharp,
-      //   duration: theme.transitions.duration.enteringScreen,
-      // }),
-    },
-    popper: {
-      zIndex: 1,
-      minWidth: '240px',
-      maxWidth: '360px'
-      // '&[x-placement*="bottom"] $arrow': {
-      //   top: 0,
-      //   left: 0,
-      //   marginTop: '-0.9em',
-      //   width: '3em',
-      //   height: '1em',
-      //   '&::before': {
-      //     borderWidth: '0 1em 1em 1em',
-      //     borderColor: `transparent transparent ${theme.palette.common.white} transparent`,
-      //   },
-      // },
-      // '&[x-placement*="top"] $arrow': {
-      //   bottom: 0,
-      //   left: 0,
-      //   marginBottom: '-0.9em',
-      //   width: '3em',
-      //   height: '1em',
-      //   '&::before': {
-      //     borderWidth: '1em 1em 0 1em',
-      //     borderColor: `${theme.palette.common.white} transparent transparent transparent`,
-      //   },
-      // },
-      // '&[x-placement*="right"] $arrow': {
-      //   left: 0,
-      //   marginLeft: '-0.9em',
-      //   height: '3em',
-      //   width: '1em',
-      //   '&::before': {
-      //     borderWidth: '1em 1em 1em 0',
-      //     borderColor: `transparent ${theme.palette.common.white} transparent transparent`,
-      //   },
-      // },
-      // '&[x-placement*="left"] $arrow': {
-      //   right: 0,
-      //   marginRight: '-0.9em',
-      //   height: '3em',
-      //   width: '1em',
-      //   '&::before': {
-      //     borderWidth: '1em 0 1em 1em',
-      //     borderColor: `transparent transparent transparent ${theme.palette.common.white}`,
-      //   },
-      // },
-    },
-    list: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper
-    },
-    listInline: {
-      display: 'inline'
-    },
-    avatar: {
-      color: theme.palette.text.primary,
-      backgroundColor: theme.palette.common.white,
-      width: theme.spacing.unit * 4,
-      height: theme.spacing.unit * 4
-    },
-    bigAvatar: {
-      margin: 10,
-      width: 60,
-      height: 60
-    },
-    button: {
-      margin: theme.spacing.unit
-    },
-    icon: {
-      margin: theme.spacing.unit,
-      fontSize: 60
-    },
-    toolbar: {
-      paddingLeft: theme.spacing.unit,
-      paddingRight: theme.spacing.unit
-    },
-
-    sectionDesktopStart: defineProperty$1({
-      display: 'none'
-    }, theme.breakpoints.between('sm', 'xl'), {
-      display: 'flex',
-      flexBasis: '20%',
-      justifyContent: 'flex-start'
-    }),
-    sectionMobileStart: defineProperty$1({
-      display: 'flex',
-      flexBasis: '12%',
-      justifyContent: 'flex-start'
-    }, theme.breakpoints.between('sm', 'xl'), {
-      display: 'none'
-    }),
-
-    sectionCentre: defineProperty$1({
-      display: 'flex',
-      justifyContent: 'center',
-      flexBasis: '76%'
-    }, theme.breakpoints.between('sm', 'xl'), {
-      flexBasis: '60%'
-    }),
-
-    sectionDesktopEnd: defineProperty$1({
-      display: 'none'
-    }, theme.breakpoints.between('sm', 'xl'), {
-      display: 'flex',
-      flexBasis: '20%',
-      justifyContent: 'flex-end'
-    }),
-    sectionMobileEnd: defineProperty$1({
-      display: 'flex',
-      flexBasis: '12%',
-      justifyContent: 'flex-end'
-    }, theme.breakpoints.between('sm', 'xl'), {
-      display: 'none'
-    })
-  };
-};
-
-var searchColumns = [{
-  name: 'name', type: 'search', label: 'Search…', placeholder: 'Search…',
-  options: function options(value) {
-    return [];
-  },
-  "dependencies": {
-    "*": [{
-      name: 'id', type: 'hidden',
-      value: function value(dataObj) {
-        return dataObj && dataObj.id ? dataObj.id : "";
-      }
-    }]
-  }
-}];
-
-var MenuAppBar = function (_React$Component) {
-  inherits(MenuAppBar, _React$Component);
-
-  function MenuAppBar() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    classCallCheck(this, MenuAppBar);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = MenuAppBar.__proto__ || Object.getPrototypeOf(MenuAppBar)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      anchorEl: null,
-      mobileMoreAnchorEl: null
-    }, _this.handleOpenMenu = function (event) {
-      _this.setState({ anchorEl: event.currentTarget });
-    }, _this.handleCloseMenu = function () {
-      _this.setState({ anchorEl: null });
-    }, _this.handleMobileMenuOpen = function (event) {
-      _this.setState({ mobileMoreAnchorEl: event.currentTarget });
-    }, _this.handleMobileMenuClose = function () {
-      _this.setState({ mobileMoreAnchorEl: null });
-    }, _this.handleDrawerToggle = function () {
-      _this.setState({ isDrawerOpen: !_this.state.isDrawerOpen });
-    }, _temp), possibleConstructorReturn(_this, _ret);
-  }
-
-  createClass(MenuAppBar, [{
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      var _props = this.props,
-          classes = _props.classes,
-          title = _props.title,
-          logo = _props.logo,
-          routes = _props.routes,
-          data = _props.data,
-          drawer = _props.drawer,
-          items = _props.items;
-      var _state = this.state,
-          anchorEl = _state.anchorEl,
-          mobileMoreAnchorEl = _state.mobileMoreAnchorEl,
-          isDrawerOpen = _state.isDrawerOpen;
-
-      var isMenuOpen = Boolean(anchorEl);
-      var isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-      var nameArr = [];
-      var nameInitialArr = [];
-      var profileImg = null;
-      var profileCompleteFlag = false;
-      if (data !== undefined && data !== null) {
-        if (data.firstName) {
-          nameArr.push(data.firstName);
-          nameInitialArr.push(data.firstName.charAt(0));
-        }
-
-        if (data.middleName) {
-          nameArr.push(data.middleName);
-        }
-
-        if (data.lastName) {
-          nameArr.push(data.lastName);
-          nameInitialArr.push(data.lastName.charAt(0));
-        }
-
-        profileImg = data.image !== undefined && data.image !== "" && data.image !== null ? data.image : null;
-
-        profileCompleteFlag = data.profileComplete;
-      }
-
-      var fullName = nameArr.join(' ');
-      var nameInitial = nameInitialArr.join('');
-
-      var renderMenu = React.createElement(
-        Popover,
-        {
-          open: isMenuOpen,
-          anchorEl: anchorEl,
-          onClose: this.handleCloseMenu,
-          className: classes.popper,
-          anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'right'
-          },
-          transformOrigin: {
-            vertical: 'top',
-            horizontal: 'right'
-          }
-        },
-        React.createElement(
-          List,
-          { className: classes.list },
-          React.createElement(
-            ListItem,
-            { alignItems: 'flex-start' },
-            React.createElement(
-              ListItemAvatar,
-              null,
-              profileImg ? React.createElement(Avatar, { alt: fullName, src: profileImg, className: classes.bigAvatar }) : React.createElement(AccountCircle, { className: classes.icon })
-            ),
-            React.createElement(ListItemText, {
-              primary: fullName,
-              secondary: React.createElement(
-                React.Fragment,
-                null,
-                !profileCompleteFlag ? React.createElement(
-                  Button$1,
-                  {
-                    variant: 'contained',
-                    color: 'primary',
-                    size: 'small',
-                    className: classes.button,
-                    onClick: function onClick() {
-                      _this2.handleCloseMenu();
-                      history$1.push('/complete-profile');
-                    }
-                  },
-                  'Complete KYC'
-                ) : null
-              )
-            })
-          ),
-          items.map(function (item) {
-            return React.createElement(
-              'div',
-              {
-                key: 'desktop-' + new Date().getTime() + '-' + (item.label ? item.label.replace(' ', '-') : "")
-              },
-              React.createElement(Divider, null),
-              React.createElement(
-                ListItem,
-                {
-                  button: true,
-                  onClick: function onClick() {
-                    _this2.handleCloseMenu();
-                    item.action(_this2, data);
-                  }
-                },
-                item.icon ? React.createElement(
-                  ListItemIcon,
-                  null,
-                  React.createElement(item.icon, null)
-                ) : null,
-                React.createElement(ListItemText, { primary: item.label })
-              )
-            );
-          })
-        )
-      );
-
-      var renderMobileMenu = React.createElement(
-        Menu,
-        {
-          anchorEl: mobileMoreAnchorEl,
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          transformOrigin: { vertical: 'top', horizontal: 'right' },
-          open: isMobileMenuOpen,
-          onClose: this.handleMobileMenuClose
-        },
-        React.createElement(
-          MenuItem,
-          {
-            onClick: function onClick() {
-              _this2.handleCloseMenu();
-            }
-          },
-          React.createElement(
-            IconButton,
-            { color: 'inherit' },
-            React.createElement(AccountCircle, null)
-          ),
-          React.createElement(
-            'p',
-            null,
-            'Profile'
-          )
-        ),
-        items.map(function (item) {
-          return React.createElement(
-            'div',
-            {
-              key: 'mobile-' + new Date().getTime() + '-' + (item.label ? item.label.replace(' ', '-') : "")
-            },
-            React.createElement(Divider, null),
-            React.createElement(
-              MenuItem,
-              {
-                onClick: function onClick() {
-                  _this2.handleCloseMenu();
-                  item.action(_this2, data);
-                }
-              },
-              item.icon ? React.createElement(
-                IconButton,
-                { color: 'inherit' },
-                React.createElement(item.icon, null)
-              ) : null,
-              React.createElement(
-                'p',
-                null,
-                item.label
-              )
-            )
-          );
-        })
-      );
-
-      var renderDrawer = drawer && routes.length > 0 ? React.createElement(Drawer$1, {
-        routes: routes,
-        open: isDrawerOpen,
-        title: title,
-        logo: logo,
-        handleDrawerToggle: this.handleDrawerToggle
-      }) : null;
-
-      return React.createElement(
-        AppBar,
-        {
-          position: 'fixed',
-          className: classnames(classes.appBar, isDrawerOpen && classes.appBarShift)
-        },
-        React.createElement(
-          Toolbar$1,
-          {
-            disableGutters: !isDrawerOpen,
-            className: classes.toolbar
-          },
-          React.createElement(
-            'div',
-            { className: classes.sectionDesktopStart },
-            drawer && routes.length > 0 ? React.createElement(
-              IconButton,
-              {
-                color: 'inherit',
-                'aria-label': 'open drawer',
-                onClick: this.handleDrawerToggle,
-                className: classnames(classes.menuButton, isDrawerOpen && classes.hide)
-              },
-              React.createElement(MenuIcon, null)
-            ) : null,
-            logo ? React.createElement(
-              Link,
-              { component: Link$1, to: '/dashboard' },
-              React.createElement(CustomIcon$1, { className: classes.logo })
-            ) : null,
-            React.createElement(
-              Typography,
-              { className: classes.title, variant: 'h6', color: 'inherit', noWrap: true },
-              title
-            )
-          ),
-          React.createElement(
-            'div',
-            { className: classes.sectionMobileStart },
-            drawer && routes.length > 0 ? React.createElement(
-              IconButton,
-              {
-                color: 'inherit',
-                'aria-label': 'open drawer',
-                onClick: this.handleDrawerToggle,
-                className: classnames(classes.menuButton, isDrawerOpen && classes.hide)
-              },
-              React.createElement(MenuIcon, null)
-            ) : null
-          ),
-          React.createElement(
-            'div',
-            { className: classes.sectionCentre },
-            React.createElement(
-              'div',
-              { className: classes.search },
-              React.createElement(
-                'div',
-                { className: classes.searchIcon },
-                React.createElement(SearchIcon, null)
-              ),
-              React.createElement(Form, {
-                fields: searchColumns,
-                buttons: [],
-                loadOnChange: true,
-                loading: false,
-                submitAction: function submitAction(filterData) {
-                  if (filterData && filterData.id) {
-                    history$1.push('/mutual-fund/' + filterData.id);
-                  } else if (filterData && filterData.name) {
-                    var fundName = filterData.name.split(" ").join("-");
-                    history$1.push('/dashboard/' + fundName);
-                  }
-                }
-              })
-            )
-          ),
-          React.createElement(
-            'div',
-            { className: classes.sectionDesktopEnd },
-            React.createElement(
-              IconButton,
-              {
-                'aria-owns': isMenuOpen ? 'material-appbar' : undefined,
-                'aria-haspopup': 'true',
-                onClick: this.handleOpenMenu,
-                color: 'inherit'
-              },
-              profileImg ? React.createElement(Avatar, { alt: fullName, src: profileImg }) : React.createElement(
-                Avatar,
-                { alt: fullName, className: classes.avatar },
-                nameInitial
-              )
-            )
-          ),
-          React.createElement(
-            'div',
-            { className: classes.sectionMobileEnd },
-            React.createElement(
-              IconButton,
-              {
-                'aria-owns': isMobileMenuOpen ? 'material-appbar' : undefined,
-                'aria-haspopup': 'true',
-                onClick: this.handleOpenMenu,
-                color: 'inherit'
-              },
-              profileImg ? React.createElement(Avatar, { alt: fullName, src: profileImg }) : React.createElement(
-                Avatar,
-                { alt: fullName, className: classes.avatar },
-                nameInitial
-              )
-            )
-          )
-        ),
-        renderMenu,
-        renderMobileMenu,
-        renderDrawer
-      );
-    }
-  }]);
-  return MenuAppBar;
-}(React.Component);
-
-MenuAppBar.defaultProps = {
-  title: "",
-  drawer: false,
-  data: {},
-  items: [],
-  routes: []
-};
-
-MenuAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  drawer: PropTypes.bool.isRequired,
-  data: PropTypes.object.isRequired,
-  items: PropTypes.array.isRequired,
-  title: PropTypes.string.isRequired,
-  routes: PropTypes.array.isRequired
-};
-
-var Appbar = withStyles(styles$B)(MenuAppBar);
-
-export { Appbar as AppBar, Drawer$1 as Drawer, Card$1 as Card, ChipFilter$1 as ChipFilter, GridList$1 as GridList, Popper$1 as Popper, Slider$1 as Slider, StatusBar$1 as StatusBar, Stepper$1 as Stepper, Snackbar$1 as Snackbar, Footer, Table$1 as Table, Accordion, Dialog$1 as Dialog, Form, List$1 as List, Toolbar$2 as Toolbar, Filter$1 as Filter };
+export { Drawer$1 as Drawer, Card$1 as Card, ChipFilter$1 as ChipFilter, GridList$1 as GridList, Popper$1 as Popper, Slider$1 as Slider, StatusBar$1 as StatusBar, Stepper$1 as Stepper, Snackbar$1 as Snackbar, Footer, Table$1 as Table, Accordion, Dialog$1 as Dialog, Form, List$1 as List, Toolbar$2 as Toolbar, Filter$1 as Filter };
 //# sourceMappingURL=index.es.js.map

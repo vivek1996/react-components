@@ -9,6 +9,7 @@ import Table from "./Table/Table";
 import Accordion from "./Accordion";
 import Dialog from "./Dialog";
 import Form from "./Form";
+import Field from "./Field";
 import List from "./List";
 
 import Popper from "./Popper";
@@ -20,4 +21,4 @@ import Toolbar from "./Toolbar";
 import Filter from "./Filter";
 import Sort from "./Sort";
 
-export { Drawer, Card, ChipFilter, Footer, GridList, Table, Dialog, Accordion, Form, List, Popper, Slider, StatusBar, Stepper, Snackbar, Toolbar, Filter, Sort };
+export { Drawer, Card, ChipFilter, Footer, GridList, Table, Dialog, Accordion, Form, Field, List, Popper, Slider, StatusBar, Stepper, Snackbar, Toolbar, Filter, Sort };

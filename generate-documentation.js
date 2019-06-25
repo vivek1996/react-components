@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const reactDocs = require("react-docgen");
 // The React components to load
-const componentFolder = "./src/component/";
+const componentFolder = "./src/components/";
 // Where the JSON file ends up
 const componentJsonPath = "./docs/components.json";
 const componentDataArray = [];

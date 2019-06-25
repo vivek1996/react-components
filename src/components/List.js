@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import { Dialog } from "./";
+import Dialog from "./Dialog";
 
 const styles = theme => ({
   root: {

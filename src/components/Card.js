@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import PropTypes from "prop-types";
 
-import {List} from './';
+import List from './List';
 
 const styles = {
   card: {},
