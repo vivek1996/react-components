@@ -19,12 +19,18 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
-import {Done, Clear } from '@material-ui/icons';
 import LinkIcon from '@material-ui/icons/Link';
+import {Done, Clear } from '@material-ui/icons';
+import { KeyboardArrowUp, KeyboardArrowDown } from "@material-ui/icons";
 
 import TableHead from './TableHead';
-import { history, request } from './../../helpers';
-import { Toolbar, Dialog, Filter, Card } from "./../";
+import Toolbar from "./../Toolbar";
+// import Filter from "./../Filter";
+import Dialog from "./../Dialog";
+import Card from "./../Card";
+import ChipFilter from "./../ChipFilter";
+
+import { history } from './../../_helpers';
 
 const styles = theme => ({
   tableWrapper: {
@@ -36,7 +42,7 @@ const styles = theme => ({
   paper: {
     width: '100%',
     minWidth: 'auto',
-    display: 'grid',
+    display: 'flex',
     flexDirection: 'column',
     overflow: 'visible',
   },
@@ -57,17 +63,21 @@ const styles = theme => ({
 });
 
 const tableOptions = {
-  order: 'asc',
+  order: 'desc',
   orderBy: 'id',
+  uKey: 'id',
   selected: [],
-  data: [],
+  rows: [],
   page: 0,
   rowsPerPage: 10,
   selectable: false,
   actions: [],
   dialogOpen: false,
   dialog: {},
-  loading: false
+  loading: false,
+  filter: {},
+  expanded: null,
+  expandedRow: {}
 }
 
 class EnhancedTable extends React.Component {
@@ -75,7 +85,7 @@ class EnhancedTable extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = Object.assign(tableOptions, props);
+    this.state = Object.assign({}, tableOptions, props);
   }
 
   componentDidMount = () => {
@@ -83,39 +93,43 @@ class EnhancedTable extends React.Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
+    this.loadData();
     this.setState({ 
       rows: nextProps.rows, 
       columns: nextProps.columns, 
       title: nextProps.title, 
-      orderBy: nextProps.orderBy, 
-      order: nextProps.order, 
-      rowsCount: nextProps.rowsCount, 
-      uKey: nextProps.uKey 
+      orderBy: nextProps.orderBy || this.state.orderBy, 
+      order: nextProps.order || this.state.order, 
+      rowsCount: nextProps.rowsCount
     });
   }
 
   componentWillUnmount = () => {}
 
-  loadData = (filterOptions = {orderBy:this.state.orderBy, order:this.state.order}) => {
-    if(this.props.url) {
-      this.setState({loading: true});
-      request.get(this.props.url)
-      .then(
-        response => {
+  loadData = (filterOptions) => {
+    filterOptions = (filterOptions === undefined) ? this.state.filter : filterOptions;
+    let updatedTableProps = {
+      orderBy:this.state.orderBy, 
+      order:this.state.order,
+      page: this.state.page,
+      rowsPerPage: this.state.rowsPerPage
+    };
+
+    filterOptions = Object.assign({}, filterOptions, updatedTableProps);
+    if(this.props.loadData) {
+      this.setState({filter: filterOptions, loading: true});
+      this.props.loadData(filterOptions).then(
+        records => {
           this.setState({
-            rows: (response.rows) ? response.rows : response, 
-            rowsCount: (response.count) ? response.count : response.length, 
-            loading: false
+            loading: false, rows: records.rows, rowsCount: records.count
           });
         },
         error => {
           this.setState({rows: [], rowsCount: 0, loading: false});
         }
       );
-    } else if(this.props.loadData) {
-      this.props.loadData(filterOptions, this);
     } else {
-      this.setState({rows: this.state.rows, rowsCount: this.state.rows.length, loading: false});
+      this.setState({rows: this.state.rows, rowsCount: this.state.rows.length, loading: false, filter: filterOptions});
     }
   }
 
@@ -131,17 +145,10 @@ class EnhancedTable extends React.Component {
         order = 'asc';
     }
 
-    if(this.props.url) {
-      this.loadData({order: order, orderBy: property});
-    } else if(this.props.loadData) {
-      this.props.loadData({order: order, orderBy: property}, this);
-    } else {
-      (order === 'desc')
-        ? this.state.rows.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
-        : this.state.rows.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
-    }
-
-    this.setState({ order, orderBy });
+    this.setState({ order, orderBy }, () => {
+      console.log("Inside handleRequestSort");
+      this.loadData();
+    });
   };
 
   handleSelectAllClick = (event, checked) => {
@@ -155,7 +162,7 @@ class EnhancedTable extends React.Component {
   handleClick = (event, rowData) => {
     if(event.target.tagName === "TD" && this.props.clickLink) {
       event.preventDefault();
-      history.push(this.props.clickLink + rowData[this.state.uKey]);
+      history.push(this.props.clickLink + rowData[this.props.uKey]);
     }
     
     if(event.target.tagName === "TD" && this.props.clickFunction) {
@@ -165,23 +172,17 @@ class EnhancedTable extends React.Component {
   };
 
   handleChangePage = (event, page) => {
-    if(this.props.url) {
-      this.loadData({page: page});
-    } else if(this.props.loadData) {
-      this.props.loadData({page: page}, this);
-    }
-
-    this.setState({ page: page });
+    this.setState({ page: page }, () => {
+      console.log("Inside handleChangePage");
+      this.loadData();
+    });
   };
 
   handleChangeRowsPerPage = event => {
-    if(this.props.url) {
-      this.loadData({rowsPerPage: event.target.value});
-    } else if(this.props.loadData) {
-      this.props.loadData({rowsPerPage: event.target.value}, this);
-    }
-
-    this.setState({ rowsPerPage: event.target.value });
+    this.setState({ rowsPerPage: event.target.value, page: 0 }, () => {
+      console.log("Inside handleChangeRowsPerPage");
+      this.loadData();
+    });
   };
 
   isSelected = id => {
@@ -217,165 +218,204 @@ class EnhancedTable extends React.Component {
       return "";
     });
 
-    switch(cell.type) {
-      case 'boolean':
-        cellData = cellData ? <Done /> : <Clear />;
-        break;
-      case 'datetime':
-        cellData = (cellData === null || cellData === "") ? '' : moment(cellData).format('MMMM Do YYYY, h:mm:ss a');
-        break;
-      case 'date':
-        cellData = (cellData === null || cellData === "") ? '' : moment(cellData).format('MMMM Do YYYY');
-        break;
-      case 'month':
-        if(cellData) {
-          cellData = moment(cellData).format('MMMM YYYY');
-        } else {
-          cellData = "";
-        }
-        break;
-      case 'button':
-        cellData = [];
-        cell.buttons.map(button => {
-          let buttonLink  = "";
-          let showField   = true;
+    let showCellData = true;
+    if(cell.beforeShow) {
+      showCellData = cell.beforeShow(rowData);
+    }
 
-          if(button.beforeShow) {
-            showField = button.beforeShow(rowData);
+    if(showCellData) {
+      switch(cell.type) {
+        case 'boolean':
+          cellData = cellData ? <Done /> : <Clear />;
+          break;
+        case 'datetime':
+        case 'daterange':
+          cellData = (cellData === null || cellData === "") ? '' : moment(cellData).format('MMMM Do YYYY, h:mm:ss a');
+          break;
+        case 'date':
+          cellData = (cellData === null || cellData === "") ? '' : moment(cellData).format('MMMM Do YYYY');
+          break;
+        case 'month':
+          if(cellData) {
+            cellData = moment(cellData).format('MMMM YYYY');
+          } else {
+            cellData = "";
           }
+          break;
+        case 'button':
+          cellData = [];
+          cell.buttons.map(button => {
+            let buttonLink  = "";
+            let showField   = true;
 
-          if(button.getIcon) {
-            button['icon'] = button.getIcon(rowData[button.field]);
-          }
-
-          if(showField && button.link) {
-            buttonLink = button.link;
-            if(button.param) {
-              buttonLink = buttonLink + rowData[button.param];
+            if(button.beforeShow) {
+              showField = button.beforeShow(rowData);
             }
 
-            if(button.icon === undefined) {
-              cellData.push(<Chip
-                label={button.label}
-                to={buttonLink} 
+            if(button.getIcon) {
+              button['icon'] = button.getIcon(rowData[button.field]);
+            }
+
+            if(showField && button.link) {
+              buttonLink = button.link;
+              if(button.param) {
+                buttonLink = buttonLink + rowData[button.param];
+              }
+
+              if(button.icon === undefined) {
+                cellData.push(<Chip
+                  label={button.label}
+                  to={buttonLink} 
+                  component={RouterLink}
+                  className={this.props.classes.chip}
+                  key={rowData[uKey] + button.label.replace(' ', '-')}
+                />);
+              } else {
+                cellData.push(<IconButton aria-label={button.label} to={buttonLink} component={RouterLink} key={rowData[uKey] + button.label.replace(' ', '-')} >
+                  <button.icon />
+                </IconButton>);
+              }
+            }
+
+            if(showField && button.action) {
+              if(button.icon === undefined) {
+                cellData.push(<Chip
+                  label={button.label}
+                  onClick={() => button.action(this, rowData)}
+                  className={this.props.classes.chip}
+                  key={rowData[uKey] + button.label.replace(' ', '-')}
+                />);
+              } else if(button.type === 'fab') {
+                cellData.push(<Fab aria-label={button.label} onClick={() => button.action(this, rowData)} color={button.color} key={rowData[uKey] + button.label.replace(' ', '-')} size={button.size} classes={button.classes}>
+                  <button.icon />
+                </Fab>);
+              } else {
+                cellData.push(<IconButton aria-label={button.label} onClick={() => button.action(this, rowData)} color={button.color} key={rowData[uKey] + button.label.replace(' ', '-')}>
+                  <button.icon />
+                </IconButton>);
+              }
+            }
+
+            return "";
+          });
+          break;
+        case 'render':
+          cellData = cell.render(rowData, this);
+          break;
+        case 'link':
+          if(cellData && cellData !== "") {
+            cellData = (
+              <Link 
                 component={RouterLink}
-                className={this.props.classes.chip}
-                key={rowData[uKey] + button.label.replace(' ', '-')}
-              />);
-            } else {
-              cellData.push(<IconButton aria-label={button.label} to={buttonLink} component={RouterLink} key={rowData[uKey] + button.label.replace(' ', '-')} >
-                <button.icon />
-              </IconButton>);
-            }
+                to={cellData}
+                target="_blank"
+                rel="noopener"
+              >
+                <LinkIcon />
+              </Link>
+            );
           }
-
-          if(showField && button.action) {
-            if(button.icon === undefined) {
-              cellData.push(<Chip
-                label={button.label}
-                onClick={() => button.action(this, rowData)}
-                className={this.props.classes.chip}
-                key={rowData[uKey] + button.label.replace(' ', '-')}
-              />);
-            } else if(button.type === 'fab') {
-              cellData.push(<Fab aria-label={button.label} onClick={() => button.action(this, rowData)} color={button.color} key={rowData[uKey] + button.label.replace(' ', '-')} size={button.size} classes={button.classes}>
-                <button.icon />
-              </Fab>);
-            } else {
-              cellData.push(<IconButton aria-label={button.label} onClick={() => button.action(this, rowData)} color={button.color} key={rowData[uKey] + button.label.replace(' ', '-')}>
-                <button.icon />
-              </IconButton>);
-            }
+          break;
+        case 'file':
+          if(cellData && cellData !== "") {
+            cellData = (
+              <Link 
+                component={RouterLink}
+                to={cellData}
+                target="_blank"
+                rel="noopener"
+              >
+                <LinkIcon />
+              </Link>
+            );
           }
-
-          return "";
-        });
-        break;
-      case 'render':
-        cellData = cell.render(rowData, this);
-        break;
-      case 'link':
-        if(cellData && cellData !== "") {
+          break;
+        case 'image':
+          let imageSource = cellData;
           cellData = (
-            <Link 
-              component={RouterLink}
-              to={cellData}
-              target="_blank"
-              rel="noopener"
-            >
-              <LinkIcon />
-            </Link>
+            <IconButton aria-label={"button.label"} onClick={() => {
+              this.openDialog({
+                title: "Image",
+                content: <Card 
+                  image={imageSource}
+                  onClose={this.closeDialog}
+                />
+              });
+            }}>
+              <Avatar alt={""} src={cellData} />
+            </IconButton>
           );
-        }
-        break;
-      case 'file':
-        if(cellData && cellData !== "") {
+          break;
+        case 'media':
+          let mediaSource = cellData;
           cellData = (
-            <Link 
-              component={RouterLink}
-              to={cellData}
-              target="_blank"
-              rel="noopener"
-            >
+            <IconButton aria-label={cell.label} onClick={() => {
+              this.openDialog({
+                title: "Media",
+                content: <Card 
+                  media={mediaSource}
+                  onClose={this.closeDialog}
+                />
+              });
+            }}>
               <LinkIcon />
-            </Link>
+            </IconButton>
           );
-        }
-        break;
-      case 'image':
-        let imageSource = cellData;
-        cellData = (
-          <IconButton aria-label={"button.label"} onClick={() => {
-            this.openDialog({
-              title: "Image",
-              content: <Card 
-                image={imageSource}
-                onClose={this.closeDialog}
-              />
-            });
-          }}>
-            <Avatar alt={""} src={cellData} />
-          </IconButton>
-        );
-        break;
-      case 'media':
-        let mediaSource = cellData;
-        cellData = (
-          <IconButton aria-label={cell.label} onClick={() => {
-            this.openDialog({
-              title: "Media",
-              content: <Card 
-                media={mediaSource}
-                onClose={this.closeDialog}
-              />
-            });
-          }}>
-            <LinkIcon />
-          </IconButton>
-        );
-        break;
-      default:
-        break;
+          break;
+        case 'expand':
+          const isExpanded = (rowData[uKey] === this.state.expandedRow[uKey]);
+          cellData = (
+            <IconButton aria-label={cell.label} onClick={() => {
+              this.toggleExpand(cell, rowData);
+            }}>
+              {
+                (isExpanded && this.state.expanded) ? <KeyboardArrowUp /> : <KeyboardArrowDown />
+              }
+            </IconButton>
+          );
+          break;
+        default:
+          break;
+      }
+    } else {
+      cellData = "";
     }
 
     return cellData;
   }
 
+  toggleExpand = async (cell, rowData) => {
+    let expandedRow   = this.state.expandedRow;
+    let expandContent = null;
+    if(Object.keys(expandedRow).length > 0 
+      && expandedRow[this.props.uKey] === rowData[this.props.uKey]) {
+      expandedRow = {};
+    } else {
+      expandedRow   = rowData;
+      expandContent = await this.getExpandContent(cell, rowData);
+    }
+
+    this.setState({expanded: expandContent, expandedRow: expandedRow});
+  }
+
+  getExpandContent = async (cell, rowData) => {
+    let expandContent = await cell.render(rowData, this);
+    return expandContent;
+  }
+
   render = () => {
-    const { title, pagination, classes, ...other } = this.props;
+    const { title, pagination, classes, uKey, ...other } = this.props;
     
-    const { columns, rowsCount } = this.state;
-    const { order, orderBy, selected, rowsPerPage, page, uKey, selectable } = this.state;
+    const { columns, rowsCount, expanded, expandedRow } = this.state;
+    const { order, orderBy, selected, rowsPerPage, page, selectable } = this.state;
     const { handleSelectAllClick, handleRequestSort } = this.state;
 
     let rows = [];
-    if(this.state.url || this.state.loadData) {
+    if(this.state.loadData) {
       rows = (this.state.rows) ? this.state.rows : [];
     } else {
       rows = (this.state.rows) ? this.state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : [];
     }
-    
-    // const rowsCount = (this.state.rowsCount) ? this.state.rowsCount : ((this.state.rows) ? this.state.rows.length : 0);
     
     if(selected !== undefined) {
       this.selectedRows = selected;
@@ -389,7 +429,6 @@ class EnhancedTable extends React.Component {
       this.onRequestSort = handleRequestSort;
     }
     
-    // const emptyRows = rowsPerPage - Math.min(rowsPerPage, rowsCount - page * rowsPerPage);
     return (
       <Paper className={classes.paper}>
         {(title) ? (
@@ -402,7 +441,9 @@ class EnhancedTable extends React.Component {
             {...other} 
           />
         ) : null}
-        <Filter options={columns} loadData={this.loadData} />
+
+        <ChipFilter options={columns} loadData={this.loadData} />
+
         <div className={classes.tableWrapper}>
           {this.state.loading && <CircularProgress className={classes.progress} />}
           <Table className={classes.table} aria-labelledby="tableTitle" key={Date.now()}>
@@ -430,88 +471,106 @@ class EnhancedTable extends React.Component {
                 </TableCell>
               </TableRow>
             ) : null}
+            
             {rows.map(n => {
               const isSelected = this.isSelected(n[uKey]);
+              const isExpanded = (n[uKey] === expandedRow[uKey]);
+              let expandColumn = isExpanded && columns.find(function(column) {
+                let showColumn = true;
+                if(column.beforeShow) {
+                  showColumn = column.beforeShow(n);
+                }
+
+                return (showColumn && column.type === 'expand');
+              });
+
               return (
-                <TableRow
-                  hover
-                  onClick={event => this.handleClick(event, n)}
-                  role="checkbox"
-                  aria-checked={isSelected}
-                  tabIndex={-1}
-                  key={`${(new Date()).getTime()}-${(title) ? title.replace(' ', '-') : ""}-${n[uKey]}`}
-                  selected={isSelected}
-                >
-                  {(columns.some(column => column.span === true)) ? (
-                    columns.map(column => {
-                      let cellData = this.formatCellData(column, n, uKey);
+                <React.Fragment>
+                  <TableRow
+                    hover
+                    onClick={event => this.handleClick(event, n)}
+                    role="checkbox"
+                    aria-checked={isSelected}
+                    tabIndex={-1}
+                    key={`${(new Date()).getTime()}-${(title) ? title.replace(' ', '-') : ""}-${n[uKey]}`}
+                    selected={isSelected}
+                  >
+                    {(columns.some(column => column.span === true)) ? (
+                      columns.map(column => {
+                        let cellData = this.formatCellData(column, n, uKey);
 
-                      return ((column.show === undefined || column.show) && column.span) ? (
-                        (column.name === "selectable") ? (
-                          <TableCell 
-                            padding="checkbox" 
-                            key={column.name}
-                            classes={{
-                              root: classes.tableCell
-                            }}
-                          >
-                            <Checkbox checked={isSelected} />
-                          </TableCell>
-                        ) : (
-                          <TableCell 
-                            key={column.name} 
-                            colSpan={columns.length}
-                            classes={{
-                              root: classes.tableCell
-                            }}
-                          >
-                            {cellData}
-                          </TableCell>
-                        )
-                      ) : null;
-                    })
-                  ) : (
-                    columns.map(column => {
-                      let cellData = this.formatCellData(column, n, uKey);
+                        return ((column.show === undefined || column.show) && column.span) ? (
+                          (column.name === "selectable") ? (
+                            <TableCell 
+                              padding="checkbox" 
+                              key={column.name}
+                              classes={{
+                                root: classes.tableCell
+                              }}
+                            >
+                              <Checkbox checked={isSelected} />
+                            </TableCell>
+                          ) : (
+                            <TableCell 
+                              key={column.name} 
+                              colSpan={columns.length}
+                              classes={{
+                                root: classes.tableCell
+                              }}
+                            >
+                              {cellData}
+                            </TableCell>
+                          )
+                        ) : null;
+                      })
+                    ) : (
+                      columns.map(column => {
+                        let cellData = this.formatCellData(column, n, uKey);
 
-                      return (column.show === undefined || column.show) ? (
-                        (column.name === "selectable") ? (
-                          <TableCell 
-                            padding="checkbox" 
-                            key={column.name}
-                            classes={{
-                              root: classes.tableCell
-                            }}
-                          >
-                            <Checkbox checked={isSelected} />
-                          </TableCell>
-                        ) : (
-                          <TableCell 
-                            key={column.name} 
-                            padding={column.disablePadding ? 'none' : 'default'}
-                            classes={{
-                              root: classes.tableCell
-                            }}
-                          >
-                            {cellData}
-                          </TableCell>
-                        )
-                      ) : null;
-                    })
-                  )}
-                </TableRow>
+                        return (column.show === undefined || column.show) ? (
+                          (column.name === "selectable") ? (
+                            <TableCell 
+                              padding="checkbox" 
+                              key={column.name}
+                              classes={{
+                                root: classes.tableCell
+                              }}
+                            >
+                              <Checkbox checked={isSelected} />
+                            </TableCell>
+                          ) : (
+                            <TableCell 
+                              key={column.name} 
+                              padding={column.disablePadding ? 'none' : 'default'}
+                              classes={{
+                                root: classes.tableCell
+                              }}
+                            >
+                              {cellData}
+                            </TableCell>
+                          )
+                        ) : null;
+                      })
+                    )}
+                  </TableRow>
+                  
+                  {
+                    (isExpanded && expandColumn && expanded) ? (
+                      <TableRow>
+                        <TableCell colSpan={columns.length}> 
+                          {expanded}
+                        </TableCell>
+                      </TableRow>
+                    ) : null
+                  }
+                </React.Fragment>
               );
             })}
-            {/* {emptyRows > 0 && (
-              <TableRow style={{ height: 49 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )} */}
             </TableBody>
           </Table>
         </div>
 
-        {(pagination && rows.length > 0 && rowsCount > rows.length) ? (
+        {(pagination && rows.length > 0) ? (
           <TablePagination
             component="div"
             count={rowsCount}
@@ -544,7 +603,8 @@ class EnhancedTable extends React.Component {
 
 EnhancedTable.defaultProps = {
   pagination: true,
-  rows: []
+  rows: [],
+  uKey: 'id'
 };
 
 EnhancedTable.propTypes = {

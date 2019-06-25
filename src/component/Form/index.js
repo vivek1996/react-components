@@ -1,8 +1,9 @@
-import Range from "./Range.jsx";
-import Select from "./Select.jsx";
-import Toggle from "./Toggle.jsx";
-import DateRange from "./DateRange.jsx";
-import AutoComplete from "./AutoComplete.jsx";
+import Range from "./Range";
+import Select from "./Select";
+import Toggle from "./Toggle";
+import DateRange from "./DateRange";
+import AutoComplete from "./AutoComplete";
 import AutoSuggest from "./AutoSuggest";
+import RichText from "./RichText";
 
-export { AutoComplete, AutoSuggest, Range, Select, Toggle, DateRange };
+export { AutoComplete, AutoSuggest, Range, Select, Toggle, DateRange, RichText };

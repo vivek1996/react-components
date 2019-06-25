@@ -37,6 +37,9 @@ const styles = theme => ({
       padding: '0px 8px',
     },
 	},
+	headingWrapper: {
+		flexBasis: '80%',
+	},
   heading: {
 		fontSize: theme.typography.pxToRem(15),
 		[theme.breakpoints.only('xs')]: {
@@ -84,15 +87,17 @@ const styles = theme => ({
 });
 
 class EnhancedExpansionPanel extends React.Component {
+	state = {
+		expanded: null,
+		loading: false,
+		data: [],
+		content: null
+	};
+
 	constructor(props) {
     super(props);
 
-    this.state = Object.assign({
-			expanded: null,
-			loading: false,
-			data: [],
-			content: null
-		}, props);
+    this.state = Object.assign(this.state, props);
   }
 
 	componentWillReceiveProps = (nextProps) => {
@@ -187,7 +192,9 @@ class EnhancedExpansionPanel extends React.Component {
 
 									{
 										(elem.title && elem.subheading) ? (
-											<div>
+											<div
+												className={classes.headingWrapper}
+											>
 												<Typography 
 													{...titleLink}
 													className={classes.heading}
@@ -218,7 +225,9 @@ class EnhancedExpansionPanel extends React.Component {
 										{
 											(expanded === panel && topActions) 
 											? (topActions.map(action => {
-												return (action.icon) ? (
+												let showAction  = (action.beforeShow) ? action.beforeShow(elem) : true;
+												
+												let actionButton = (action.icon) ? (
 													<Fab aria-label={action.title} className={classes.fab} color={action.color} onClick={() => action.action(this, elem)} size="small" key={"fab"}>
 														<action.icon />
 													</Fab>
@@ -227,6 +236,8 @@ class EnhancedExpansionPanel extends React.Component {
 														{action.label}
 													</Button>
 												);
+
+												return showAction ? actionButton : null;
 											})) 
 											: (
 												<Typography className={classes.secondaryHeading}>

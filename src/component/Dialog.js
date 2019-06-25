@@ -142,11 +142,11 @@ class EnhancedDialog extends React.Component {
 	}
 
   render = () => {
-    const { classes, title, onClose, ...other } = this.props;
+    const { classes, title, onClose, fullScreen, ...other } = this.props;
     
     return (
       <Dialog
-        fullScreen={isMobile}
+        fullScreen={fullScreen && isMobile}
         maxWidth={false}
         onClose={onClose}
 				aria-labelledby="dialog-title"
@@ -172,5 +172,9 @@ class EnhancedDialog extends React.Component {
     );
   }
 }
+
+EnhancedDialog.defaultProps = {
+  fullScreen: true
+};
 
 export default withStyles(styles)(EnhancedDialog);

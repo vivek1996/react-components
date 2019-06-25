@@ -5,13 +5,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-// import AppBar from '@material-ui/core/AppBar';
-// import Toolbar from '@material-ui/core/Toolbar';
-// import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-// import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -78,7 +74,7 @@ class MiniDrawer extends React.Component {
       >
         <div className={classes.toolbar}>
           {(props.logo) 
-            ? (<IconButton aria-label="Delete">{props.logo}</IconButton>)
+            ? (<IconButton aria-label="Delete"><props.logo /></IconButton>)
             : null
           }
 
@@ -111,7 +107,7 @@ class MiniDrawer extends React.Component {
                 </ListItemIcon>
                 <ListItemText 
                   primary={
-                    prop.sidebarName
+                    prop.title
                   }
                 />
               </ListItem>
@@ -124,7 +120,7 @@ class MiniDrawer extends React.Component {
                 <ListItemIcon>
                   {(typeof prop.icon === 'function') ? <prop.icon /> : prop.icon}
                 </ListItemIcon>
-                <ListItemText primary={prop.sidebarName} />
+                <ListItemText primary={prop.title} />
               </ListItem>
             );
           })}

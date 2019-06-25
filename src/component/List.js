@@ -49,38 +49,34 @@ class EnhanceList extends React.Component {
       <div className={classes.root}>
         <List component="nav">
           {items.map(item => {
-            let itemBtn;
-            let showItem   = true;
-
-            if(item.beforeShow) {
-              showItem = item.beforeShow(data);
-            }
-
+            let showItem   = (item.beforeShow) ? item.beforeShow(data) : true;
+            
             if(item.getIcon) {
               item['icon'] = item.getIcon(data[item.field]);
             }
 
-            if(item.action) {
-              itemBtn = <ListItem button onClick={() => item.action(this, data)} key={`${Date.now()}-list-item-${item.label.replace(' ', '-')}`}>
-                <ListItemIcon>
-                  <item.icon />
-                </ListItemIcon>
-                <ListItemText primary={item.label} />
-              </ListItem>;
-            } else {
-              itemBtn = <ListItem button to={item.href} component={Link} key={`${Date.now()}-list-item-${item.label.replace(' ', '-')}`}>
-                <ListItemIcon>
-                  <item.icon />
-                </ListItemIcon>
-                <ListItemText primary={item.label} />
-              </ListItem>;
-            }
+            let listItemProps = {
+              button: true,
+              key: `${Date.now()}-list-item-${item.label.replace(' ', '-')}`
+            };
 
-            if(showItem) {
-              return itemBtn;
+            if(item.action) {
+              listItemProps.onClick = () => item.action(this, data);
             } else {
-              return "";
+              listItemProps.to = item.href;
+              listItemProps.component= Link;
             }
+            
+            return (showItem) ? (
+              <ListItem 
+                {...listItemProps}
+              >
+                <ListItemIcon>
+                  <item.icon />
+                </ListItemIcon>
+                <ListItemText primary={item.label} />
+              </ListItem>
+            ) : null;
           })}
         </List>
 
@@ -96,6 +92,10 @@ class EnhanceList extends React.Component {
     );
   }
 }
+
+EnhanceList.defaultProps = {
+  data: {}
+};
 
 EnhanceList.propTypes = {
   classes: PropTypes.object.isRequired,

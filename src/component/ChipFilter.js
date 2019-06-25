@@ -86,21 +86,42 @@ class ChipFilter extends React.Component {
     } else if(['daterange'].indexOf(option.type) > -1) {
       return `${option.label} : From ${filterData[option.name].start} To ${filterData[option.name].end}`;
     } else {
-      return `${option.label} ${filterData[option.name]}`;
+      let availableOptions = [];
+      if(option.enum) {
+        availableOptions = option.enum;
+      } else if(option.options) {
+        availableOptions = option.options;
+      } else if(typeof option.data === 'object') {
+        availableOptions = option.data;
+      } else if(typeof option.data === 'function') {
+        availableOptions = option.data();
+      }
+
+      if(availableOptions.length > 0) {
+        let selectedOptions = availableOptions.map(availableOption => 
+          (filterData[option.name].indexOf(availableOption.value.toString()) > -1) ? availableOption.label : ''
+        ).filter(selectedOption => selectedOption !== undefined && selectedOption !== "")
+  
+        return (selectedOptions.length > 1) ? `${selectedOptions[0]} + ${selectedOptions.length - 1}` : selectedOptions;
+      } else {
+        return `${option.label} ${filterData[option.name]}`;
+      }
     }
   }
 
 	render = () => {
 		const { classes, options } = this.props;
     const { open, filterData } = this.state;
+
+    let filterOptions = options || [];
 		return (
 			<div className={classes.root}>
-				{options.map(option => {
+				{filterOptions.map(option => {
           return (option.filter) ? (
             <Chip
               key={option.name}
               icon={(filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0) ? <ArrowDropDown /> : null}
-              color={(filterData[option.name] !== undefined && filterData[option.name] !== "" && filterData[option.name].length > 0) ? 'primary' : 'default'}
+              color={(filterData[option.name] !== undefined && filterData[option.name] !== "" && (filterData[option.name].length > 0 || Object.keys(filterData[option.name]).length > 0 )) ? 'primary' : 'default'}
               label={this.getSelectedValue(option)}
               onClick={(node) => {
                 let tempOption = Object.assign({}, option);
