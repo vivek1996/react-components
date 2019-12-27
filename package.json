@@ -1,10 +1,11 @@
 {
   "name": "react-component-stack",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React Components to build your react project easily.",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
+  "private": true,
   "engines": {
     "node": ">=8",
     "npm": ">=5"
@@ -19,42 +20,47 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.9.0",
-    "react-docgen": "^4.1.1",
-    "react-dom": "^16.9.0",
-    "prop-types": "^15.7.2"
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.1",
+    "@material-ui/lab": "^3.0.0-alpha.25",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-device-detect": "^1.6.2",
+    "react-dom": "16.4.0"
   },
   "dependencies": {
     "@date-io/moment": "^1.3.5",
-    "@material-ui/core": "^4.3.2",
-    "@material-ui/icons": "^4.2.1",
-    "@material-ui/lab": "^4.0.0-alpha.23",
-    "@material-ui/pickers": "^3.2.2",
-    "@material-ui/styles": "^4.3.0",
-    "@tinymce/tinymce-react": "^3.2.0",
+    "@tinymce/tinymce-react": "^3.3.2",
+    "@uppy/core": "^1.6.0",
+    "@uppy/dropbox": "^1.3.3",
+    "@uppy/react": "^1.4.0",
+    "@uppy/tus": "^1.5.0",
     "async": "^2.6.2",
     "autosuggest-highlight": "^3.1.1",
     "classnames": "2.2.5",
+    "draft-js": "^0.11.2",
     "lodash": "^4.17.11",
+    "material-ui-pickers": "^2.2.4",
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
     "react-autosuggest": "^9.4.2",
     "react-daterange-picker": "^2.0.1",
-    "react-device-detect": "^1.7.5",
     "react-router-dom": "4.2.2",
     "react-select": "^2.4.3",
-    "tinymce": "^5.0.8"
+    "tinymce": "^5.1.2"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@svgr/rollup": "^2.4.1",
     "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.5",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "cross-env": "^5.1.4",
-    "eslint": "^5.0.1",
+    "eslint": "^6.7.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-config-standard-react": "^6.0.0",
     "eslint-plugin-import": "^2.13.0",
@@ -64,19 +70,20 @@
     "eslint-plugin-standard": "^3.1.0",
     "fs": "0.0.1-security",
     "gh-pages": "^1.2.0",
+    "jest": "^24.9.0",
     "path": "^0.12.7",
-    "prop-types": "^15.7.2",
-    "react": "^16.9.0",
+    "react": "^16.4.1",
     "react-docgen": "^4.1.1",
-    "react-dom": "^16.9.0",
-    "react-scripts": "^1.1.5",
+    "react-dom": "^16.4.1",
+    "react-scripts": "^1.1.4",
     "rollup": "^0.64.1",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-commonjs": "^9.1.3",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^1.6.2",
-    "rollup-plugin-url": "^1.4.0"
+    "rollup-plugin-url": "^1.4.0",
+    "webpack": "4.41.0"
   },
   "files": [
     "dist"
@@ -90,7 +97,8 @@
     "react form",
     "react table",
     "react material ui",
-    "form components"
+    "react forms",
+    "react dynamic forms"
   ],
   "author": {
     "name": "Deepak Bansal",

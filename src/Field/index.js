@@ -1,13 +1,10 @@
-import Range from "./Range";
-import Select from "./Select";
-import Toggle from "./Toggle";
-import DateRange from "./DateRange";
-import AutoComplete from "./AutoComplete";
-import AutoSuggest from "./AutoSuggest";
-import RichText from "./RichText";
-import Number from "./Number";
-import Radio from "./Radio";
-
-export { 
-	AutoComplete, AutoSuggest, Range, Select, Toggle, DateRange, RichText, Number, Radio 
-};
+export { default as Range } from './Range';
+export { default as Select } from './Select';
+export { default as Toggle } from './Toggle';
+export { default as DateRange } from './DateRange';
+export { default as AutoComplete } from './AutoComplete';
+export { default as AutoSuggest } from './AutoSuggest';
+export { default as RichText } from './RichText';
+export { default as Number } from './Number';
+export { default as Radio } from './Radio';
+export { default as File } from './File';

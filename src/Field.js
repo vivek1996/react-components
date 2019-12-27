@@ -22,7 +22,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Chip from '@material-ui/core/Chip';
 
 import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import { DatePicker } from 'material-ui-pickers';
 
 import amber from '@material-ui/core/colors/amber';
 import Card from "./Card";
@@ -35,6 +36,7 @@ import DateRange from "./Field/DateRange";
 import RichText from "./Field/RichText";
 import Number from "./Field/Number";
 import Radio from "./Field/Radio";
+import File from "./Field/File";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -964,6 +966,15 @@ class Field extends React.Component {
               ) : null
             }
           </FormControl>
+        );
+        break;
+      case 'file':
+        this.props = Object.assign({}, this.props, {value: fieldValue});
+        field = (
+          <File
+            key={`file-${name}`}
+            {...this.props}
+          />
         );
         break;
       default:
