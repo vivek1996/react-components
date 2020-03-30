@@ -8,7 +8,7 @@
     "@material-ui/lab": "^3.0.0-alpha.25",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
-    "react-component-stack": "^1.0.2",
+    "react-component-stack": "^1.0.3",
     "react-device-detect": "^1.6.2",
     "react-dom": "^16.12.0",
     "react-scripts": "3.2.0"
