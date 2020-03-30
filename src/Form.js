@@ -9,9 +9,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 import CheckIcon from '@material-ui/icons/Check';
 
+import _ from 'lodash';
+
 import Snackbar from "./Snackbar";
 import Toolbar from "./Toolbar";
 import Field from "./Field";
+
+const flatten = require('flat');
+const { unflatten } = require('flat');
 
 const styles = theme => ({
   formWraper: {
@@ -63,11 +68,13 @@ const defaultDataReducer = (accumulator, currentValue) => {
 }
 
 class EnhancedForm extends React.Component {
-  state = {loading: false, success: false, snackBarOpen: false };
   constructor(props) {
     super(props);
 
-    this.state = props;
+    this.state = {
+      loading: false, success: false, snackBarOpen: false,
+      ...props
+    };
   }
 
   componentDidMount = () => {
@@ -137,14 +144,26 @@ class EnhancedForm extends React.Component {
     }
   }
 
-  getCurrentField = (name) => {
-    return this.state.fields.find(function(field) {
-      return field.name === name;
+  getField = (name) => {
+    let formFields = this.state.fields;
+    const nameParts = name ? name.split('.') : [];
+    let formField = {};
+    nameParts.map((namePart, index) => {
+      if(Number.isNaN(namePart)) {
+        formField = _.find(formFields, {name: namePart});
+      }
+
+      const last = index === nameParts.length - 1;
+      if(!last) {
+        formFields = formField.fields;
+      }
     });
+
+    return formField;
   }
 
   getDependentFields = (fieldName, fieldValue) => {
-    let currentField    = this.getCurrentField(fieldName);
+    let currentField    = this.getField(fieldName);
     let dependentFields = null;
     if(currentField.dependencies) {
       let fields        = (currentField.dependent) ? this.state.fields : this.props.fields;
@@ -189,6 +208,7 @@ class EnhancedForm extends React.Component {
       } : {
         [fieldName]: fieldValue
       };
+
       return updatedState;
     }, () => {
       if(submit && this.state.loadOnChange && !this.state.loading) {
@@ -199,11 +219,7 @@ class EnhancedForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-
-    this.submitAction(this.state.data);
-  }
-
-  submitAction = () => {
+    // this.submitAction(this.state.data);
     let formValidationFlag = true;
     this.setState((state, props) => {
       let formData = state.data;
@@ -215,7 +231,7 @@ class EnhancedForm extends React.Component {
             return field;
           } else {
             formValidationFlag = false;
-            if(field.hasOwnProperty('error') && typeof field.error === 'boolean') 
+            if(!field.hasOwnProperty('error') || (field.hasOwnProperty('error') && typeof field.error === 'boolean'))
               field.error = true;
 
             return field;
@@ -236,15 +252,23 @@ class EnhancedForm extends React.Component {
       return updatedState;
     }, () => {
       if(this.state.loading && formValidationFlag) {
-        this.state.submitAction(this.state.data, this);
+        const parsedFields = unflatten(this.state.data, {
+          delimiter: '.'
+        });
+        console.log('parsedFields', parsedFields);
+        this.state.onSubmit(parsedFields, this);
       }
     });
   }
-  
+
   render = () => {
     const { classes, title, container } = this.props;
     const { data, fields, buttons, loading, success } = this.state;
 
+    const initialValues = data ? flatten(data, {
+      delimiter: '.'
+    }) : {};
+    console.log('initialValues', initialValues);
     const buttonClassname = classNames({
       [classes.buttonSuccess]: success,
       [classes.button]: !success,
@@ -264,7 +288,7 @@ class EnhancedForm extends React.Component {
             {fields.map(formField => {
               return (
                 <Field 
-                  data={data} 
+                  data={initialValues} 
                   onChange={this.handleFieldChange}
                   {...formField} 
                 />

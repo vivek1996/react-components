@@ -7,4 +7,6 @@ export { default as AutoSuggest } from './AutoSuggest';
 export { default as RichText } from './RichText';
 export { default as Number } from './Number';
 export { default as Radio } from './Radio';
+export { default as Checkbox } from './Checkbox';
 export { default as File } from './File';
+export { default as Input } from './Input';

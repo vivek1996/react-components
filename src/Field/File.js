@@ -1,17 +1,8 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
-
-// import { Uppy } from '@uppy/core'
-// import { DashboardModal } from '@uppy/react'
-
-
-const Uppy = require('@uppy/core')
-const Tus = require('@uppy/tus')
-
-const { DashboardModal } = require('@uppy/react')
-
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
+const Uppy = require('@uppy/core')
+const { DashboardModal } = require('@uppy/react')
 
 class EnhancedFile extends React.Component {
   constructor(props) {
@@ -21,7 +12,7 @@ class EnhancedFile extends React.Component {
       modalOpen: false
     }
 
-    this.uppy = Uppy()
+    this.uppy = new Uppy()
 
       // .use(Tus, {})
   }

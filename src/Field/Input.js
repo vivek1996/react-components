@@ -20,12 +20,12 @@ const styles = theme => ({
   }
 });
 
-const numberOptions = {};
-class EnhancedNumber extends React.Component {
+const inputOptions = {};
+class EnhancedInput extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = Object.assign(numberOptions, props);
+    this.state = Object.assign(inputOptions, props);
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -38,69 +38,27 @@ class EnhancedNumber extends React.Component {
     }
   }
 
-  validateValue = (value) => {
-    const { type, pattern } = this.props;
-    if(value.length > 0) {
-      let re = '';
-      switch(type) {
-        case 'tel':
-          re = (pattern) ? pattern : /^[0-9\b]+$/;
-          break;
-        default:
-          re = (pattern) ? pattern : '';
-          break;
-      }
-      
-      return (re.length > 0 || typeof re === "object") ? re.test(value) : true;
-    } else {
-      return true;
-    }
-  }
-
-  handleNumberOnChange = (fieldName, fieldValue) => {
-    // let formatFlag = this.validateValue(fieldValue);
-
-    // if(formatFlag) {
-      this.setState({value: fieldValue});
-    // } else {
-    //   this.setState({error: true});
-    // }
-  }
-
-  handleNumberOnBlur = (fieldName, fieldValue) => {
-    if(fieldValue) {
-      this.props.onChange(fieldName, fieldValue);
-    }
-  }
-
   render = () => {
     const props = this.props;
-    const { classes, type } = this.props;
+    const { type, parent, name } = props;
     const { data, value } = this.state;
-
+    const fieldName   = `${ parent ? `${parent}.${name}` : name }`;
     return (
       <TextField
-        key={props.name}
-        id={props.name}
-        name={props.name}
+        key={fieldName}
+        id={fieldName}
+        name={fieldName}
         type={type}
         label={props.label}
         placeholder={props.placeholder}
-        className={classes.textField}
+        // className={classes.textField}
         value={value}
-        onChange={(event) => {
-          const { name, value } = event.target;
-          this.handleNumberOnChange(name, value);
-        }}
-        onBlur={(event) => {
-          const { name, value } = event.target;
-          this.handleNumberOnBlur(name, value);
-        }}
+        onChange={props.handleChange}
         margin="normal"
         required={(props.required) ? true : false}
         disabled={(props.disabled) ? true : false}
         // helperText={(typeof props.helptext === 'function') ? props.helptext(data) : props.helptext}
-        InputProps={{ 
+        InputProps={{
           disabled: (typeof props.disabled === 'function') ? props.disabled(data) : props.disabled,
           readOnly: (typeof props.readonly === 'function') ? props.readonly(data) : props.readonly,
           startAdornment: (props.prefix) ? (<InputAdornment position="start">{props.prefix}</InputAdornment>) : null,
@@ -123,9 +81,9 @@ class EnhancedNumber extends React.Component {
   }
 }
 
-EnhancedNumber.propTypes = {
+EnhancedInput.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(EnhancedNumber);
+export default withStyles(styles, { withTheme: true })(EnhancedInput);

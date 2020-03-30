@@ -45,7 +45,7 @@ class EnhancedRadio extends React.Component {
     const props = this.props;
     const { classes } = this.props;
     const { options, value } = this.state;
-
+    
     return (
       <RadioGroup
         aria-label={props.label}

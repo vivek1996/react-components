@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 import FormLabel from '@material-ui/core/FormLabel';
@@ -13,7 +11,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Switch from '@material-ui/core/Switch';
-import Checkbox from '@material-ui/core/Checkbox';
+// import Checkbox from '@material-ui/core/Checkbox';
 
 import green from '@material-ui/core/colors/green';
 
@@ -26,7 +24,6 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import { DatePicker } from 'material-ui-pickers';
 
 import amber from '@material-ui/core/colors/amber';
-import Card from "./Card";
 import AutoComplete from "./Field/AutoComplete";
 import AutoSuggest from "./Field/AutoSuggest";
 import Range from "./Field/Range";
@@ -34,9 +31,21 @@ import Select from "./Field/Select";
 import Toggle from "./Field/Toggle";
 import DateRange from "./Field/DateRange";
 import RichText from "./Field/RichText";
-import Number from "./Field/Number";
+import NumberField from "./Field/Number";
 import Radio from "./Field/Radio";
+import Checkbox from "./Field/Checkbox";
 import File from "./Field/File";
+import InputField from "./Field/Input";
+
+import _ from 'lodash';
+
+import Grid from '@material-ui/core/Grid';
+
+import AddCircle from '@material-ui/icons/AddCircle';
+import RemoveCircle from '@material-ui/icons/RemoveCircle';
+
+const flatten = require('flat');
+const { unflatten } = require('flat');
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -61,9 +70,6 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
   },
-  button: {
-    margin: theme.spacing.unit,
-  },
   group: {
     margin: `${theme.spacing.unit}px 0`,
   },
@@ -74,26 +80,6 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'visible',
-  },
-  buttonSuccess: {
-    margin: theme.spacing.unit,
-    backgroundColor: green[500],
-    '&:hover': {
-      backgroundColor: green[700],
-    },
-  },
-  buttonWrapper: {
-    margin: theme.spacing.unit,
-    position: 'relative',
-  },
-  buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-    zIndex: 10000
   },
   chips: {
     display: 'flex',
@@ -158,6 +144,136 @@ function Description(props) {
     />
   );
 }
+
+const GroupField = (props) => {
+  const { label, name, data, fields, onChange } = props;
+  return (
+    <FormGroup row>
+      {
+        (label) && (
+          <FormLabel>
+            {(typeof label === 'function') ? label(data) : label}
+          </FormLabel>
+        )
+      }
+      {fields && fields.map((nestedField) => {
+        const nestedFieldName = `${name}.${nestedField.name}`;
+        return (
+          <Field
+            onChange={onChange}
+            parent={name}
+            value={data && data[nestedFieldName]}
+            { ...nestedField }
+          />
+        );
+      })}
+    </FormGroup>
+  );
+};
+
+const ArrayField = (props) => {
+  const { value, label } = props;
+  const subFieldCount = Array.isArray(value) ? value.length : 1;
+  const [counter, setCounter] = useState(subFieldCount);
+  const [formData, setFormData] = useState();
+  let fieldProps = {...props};
+  delete fieldProps.multiple;
+  delete fieldProps.label;
+  const addField = () => {
+    setCounter(counter + 1);
+  };
+  const removeField = (fieldName, fieldIndex) => {
+    const parsedValues = unflatten(fieldProps.data, {
+      delimiter: '.'
+    });
+    
+    const fieldNameParts = fieldName.split('.');
+    let removeFieldPath = '';
+    fieldNameParts.map((fieldNamePart, index) => {
+      const last = index === fieldNameParts.length - 1;
+      if(last) {
+        parsedValues[removeFieldPath].splice(fieldIndex, 1);
+      } else {
+        if(isNaN(fieldNamePart)) {
+          removeFieldPath = (index === 0) ? fieldNamePart : `${removeFieldPath}.${fieldNamePart}`;
+        } else {
+          removeFieldPath = (index === 0) ? `[${fieldNamePart}]` : `${removeFieldPath}.[${fieldNamePart}]`;
+        }
+      }
+    });
+
+    const finalValues = parsedValues ? flatten(parsedValues, {
+      delimiter: '.'
+    }) : {};
+
+    fieldProps.data = finalValues;
+    setFormData(finalValues);
+    setCounter(counter - 1);
+  };
+
+  fieldProps.data = (formData && Object.keys(formData).length > 0) ? formData : fieldProps.data;
+  return (
+    <>
+      <Grid
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          cursor: 'pointer'
+        }}
+      >
+        {
+          (label) && (
+            <FormLabel>
+              {(typeof label === 'function') ? label(formData) : label}
+            </FormLabel>
+          )
+        }
+        <AddCircle onClick={() => addField()} />
+      </Grid>
+      {_.times(counter || 1, (index) => {
+        let fieldNameParts = fieldProps.name.split('.');
+        const lastPart = fieldNameParts[fieldNameParts.length - 1];
+        if(isNaN(lastPart)) {
+          fieldProps.name = `${fieldProps.name}.${index}`;
+        } else {
+          fieldNameParts[fieldNameParts.length - 1] = index;
+          const fieldName = fieldNameParts.join('.');
+          fieldProps.name = `${fieldName}`;
+        }
+
+        return (
+          <Grid container>
+            <Grid item style={{
+              width: '90%',
+              display: 'flex'
+            }}>
+              <Field {...fieldProps} />
+            </Grid>
+            {
+              (counter > 1) && (
+                <Grid 
+                  item 
+                  style={{
+                    width: '10%',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  <RemoveCircle
+                    onClick={(event) => {
+                      removeField(fieldProps.name, index)
+                    }}
+                  />
+                </Grid>
+              )
+            }
+          </Grid>
+        );
+      })}
+    </>
+  );
+};
 
 class Field extends React.Component {
   constructor(props) {
@@ -274,7 +390,7 @@ class Field extends React.Component {
     if(type === 'tel') {
       formatFlag = this.checkFormat(type, value, pattern);
     }
-    
+
     if(formatFlag) {
       this.handleChangeData(name, fieldValue);
     } else {
@@ -296,10 +412,10 @@ class Field extends React.Component {
     if(type === 'tel') {
       formatFlag = this.checkFormat(type, value);
     }
-    
+
     if(formatFlag) {
       this.setState({ error: false }, () => {
-        this.props.onChange(name, value, submit);
+        this.props.onChange && this.props.onChange(name, value, submit);
       });
     } else {
       this.setState({ error: true });
@@ -307,7 +423,6 @@ class Field extends React.Component {
   }
 
   handleAutoSuggestChange = name => (event, { newValue }) => {
-    console.log('name', name, newValue);
     this.handleChangeData(name, newValue, false);
     // const { data } = this.state;
     // const { fields } = this.props;
@@ -349,7 +464,7 @@ class Field extends React.Component {
       const { data } = this.state;
       this.setState({
         data: {
-          ...data, 
+          ...data,
           [name]: value
         }
       }, () => {
@@ -389,44 +504,46 @@ class Field extends React.Component {
   }
 
   render = () => {
-    const { classes } = this.props;
+    const props = this.props;
+    const { classes } = props;
     const { 
-      data, type, name, label, helptext, helplink, error, multiple,
+      data, type, name, label, helptext, error, multiple,
       prefix, placeholder, disabled, options, value, suffix, required, format,
-      disablePast, disableFuture, disableDate, preview, openTo, min, max, readonly, 
-      title, maxlength, minlength, step, description
+      disablePast, disableFuture, disableDate, openTo, min, max, readonly, 
+      title, maxlength, minlength, step, description, fields, parent
     } = this.state;
 
+    const fieldName   = `${ parent ? `${parent}.${name}` : name }`;
     const fieldLabel = (label !== undefined) ? (
       <FormLabel component="legend">{label}</FormLabel>
     ) : null;
   
-    const fieldHelpText = (this.props.helptext !== undefined) ? (
-      <FormHelperText id={`${name}-help-text`}>
-        {(typeof this.props.helptext === 'function') ? this.props.helptext(data) : this.props.helptext}
+    const fieldHelpText = (props.helptext !== undefined) ? (
+      <FormHelperText id={`${fieldName}-help-text`}>
+        {(typeof props.helptext === 'function') ? props.helptext(data) : props.helptext}
       </FormHelperText>
     ) : null;
 
-    const fieldHelpLink = (this.props.helplink !== undefined) ? (
+    const fieldHelpLink = (props.helplink !== undefined) ? (
       <FormHelperText 
-        id={`${name}-help-link`}
+        id={`${fieldName}-help-link`}
         classes={{
           root: classes.helperTextLink
         }}
       >
-        {(typeof this.props.helplink === 'function') ? this.props.helplink(this, data) : this.props.helplink}
+        {(typeof props.helplink === 'function') ? props.helplink(this, data) : props.helplink}
       </FormHelperText>
     ) : null;
 
-    const fieldErrorName  = `${name}-error-text`;
-    const fieldErrorData  = (typeof this.props.error === 'function') ? this.props.error(data) : (this.props.error || false);
+    const fieldErrorName  = `${fieldName}-error-text`;
+    const fieldErrorData  = (typeof props.error === 'function') ? props.error(data) : (props.error || false);
     const fieldError      = (fieldErrorData) ? (
       <FormHelperText id={fieldErrorName}>
-        {(typeof this.props.title === 'function') ? this.props.title(data) : this.props.title}
+        {(typeof props.title === 'function') ? props.title(data) : props.title}
       </FormHelperText>
     ) : null;
 
-    let fieldKey = `form-control-${name}`;
+    let fieldKey = `form-control-${fieldName}`;
     let arrayType = ["multiselect", "checkbox"];
     let field = '';
     let fieldOptions = [];
@@ -456,13 +573,23 @@ class Field extends React.Component {
         fieldOptions = optionsFn;
       }
     }
-    
-    if(fieldType === undefined && fieldOptions.length > 0) {
-      if(multiple !== undefined && multiple) {
-        fieldType = 'checkbox';
-      } else {
-        fieldType = 'radio';
+
+    if(fieldType === undefined) {
+      if(fieldOptions.length > 0) {
+        if(multiple) {
+          fieldType = 'checkbox';
+        } else {
+          fieldType = 'radio';
+        }
+      } else if (fields && fields.length > 0) {
+        fieldType = 'nested';
       }
+    }
+
+    if(fieldType !== 'checkbox' && multiple) {
+      return (
+        <ArrayField {...props} />
+      );
     }
 
     switch(fieldType) {
@@ -487,7 +614,7 @@ class Field extends React.Component {
               value={fieldValue}
               options={fieldOptions}
               onChange={this.handleChangeData}
-              {...this.props}
+              {...props}
             />
           </FormControl>
         )
@@ -567,22 +694,14 @@ class Field extends React.Component {
             <Toggle
               // onChange={this.handleToggleChange}
               onChange={this.handleChangeData}
-              
-
               key={name}
               name={name}
               value={fieldValue} 
               options={fieldOptions}
-              // onChange={this.props.onChange}
-
-
               {...this.props}
             />
-            
             { fieldHelpText }
-
             { fieldHelpLink }
-
             { fieldError }
           </FormControl>
         );
@@ -699,7 +818,7 @@ class Field extends React.Component {
               name={name}
               value={fieldValue}
               onChange={this.handleAutoSuggestChange}
-              // onChange={this.props.onChange}
+              // onChange={props.onChange}
               onSelect={this.onSuggestionSelected}
             />
             
@@ -721,7 +840,7 @@ class Field extends React.Component {
             name={name}
             value={fieldValue}
             onChange={this.handleAutoSuggestChange}
-            // onChange={this.props.onChange}
+            // onChange={props.onChange}
             onSelect={this.onSuggestionSelected}
             onKeyDown={this.handleAutoSuggestClick}
             disableUnderline={true}
@@ -732,36 +851,6 @@ class Field extends React.Component {
           />
         );
         break;
-      case 'image':
-        field = (
-          <div>
-            {(preview && (typeof value === 'function' || data[name])) ? (
-              <Card media={fieldValue.data} />
-            ) : null}
-            <TextField
-              key={name}
-              id={name}
-              name={name}
-              label={label}
-              type='file'
-              format={format}
-              placeholder={placeholder}
-              className={classes.textField}
-              onChange={this.handleChange}
-              // onChange={this.props.onChange}
-              margin="normal"
-              required={(required) ? true : false}
-              disabled={(disabled) ? true : false}
-              helperText={placeholder}
-              InputProps={{ 
-                inputProps: { 
-                  accept: "image/*"
-                } 
-              }}
-            />
-          </div>
-        );
-        break;
       case 'richtext':
         field = (
           <RichText
@@ -769,7 +858,7 @@ class Field extends React.Component {
             value={fieldValue}
             // onChange={this.richTextChange}
             onChange={this.handleChangeData}
-            {...this.props}
+            {...props}
           />
         );
         break;
@@ -799,59 +888,16 @@ class Field extends React.Component {
         );
         break;
       case 'checkbox':
-        field = (fieldOptions) ? (
-          <FormControl component="fieldset" required={required} className={classes.textField} key={fieldKey} error={fieldErrorData} aria-describedby={fieldErrorName} >
-            { fieldLabel }
-            <FormGroup
-              aria-label={label}
-              className={classes.group}
-            >
-              {fieldOptions.map(option => {
-                return (
-                  <FormControlLabel
-                    control={
-                      <Checkbox 
-                        onChange={this.handleCheckboxChange} 
-                        value={option.value} 
-                        name={name}
-                        disabled={(option.disabled) ? true : false}
-                        checked={(fieldValue.indexOf(option.value.toString()) > -1) ? true : false}
-                      />
-                    }
-                    label={option.label}
-                  />
-                );
-              })}
-            </FormGroup>
-
-            { fieldError }
-          </FormControl>
-        ) : (
-          <FormControl component="fieldset" required={required} className={classes.textField} key={fieldKey} error={fieldErrorData} aria-describedby={fieldErrorName} >
-            <FormGroup
-              aria-label={label}
-              className={classes.group}
-            >
-              <FormControlLabel
-                control={
-                  <Checkbox 
-                    onChange={this.handleCheckboxChange} 
-                    value={value} 
-                    name={name}
-                    disabled={(disabled) ? true : false}
-                    checked={fieldValue}
-                  />
-                }
-                label={
-                  <Typography variant="caption" >
-                    {label}
-                  </Typography>
-                }
-              />
-            </FormGroup>
-            
-            { fieldError }
-          </FormControl>
+        field = (
+          <Checkbox
+            data={data}
+            error={fieldErrorData} 
+            aria-describedby={fieldErrorName}
+            key={fieldKey}
+            value={fieldValue}
+            onChange={this.handleChangeData}
+            {...props}
+          />
         );
         break;
       case 'date':
@@ -918,53 +964,27 @@ class Field extends React.Component {
             fields={this.state.fields}
             // onChange={this.handleDateRangeChange}
             onChange={this.handleChangeData}
-            {...this.props}
+            {...props}
           />
         );
         break;
       case 'number':
       case 'tel':
         field = (
-          <FormControl  
+          <FormControl
             error={(typeof error === 'function') ? error(data) : error} 
-            aria-describedby={`${name}-error-text`}
-            key={`form-control-${name}`}
+            aria-describedby={fieldErrorName}
+            key={fieldKey}
           >
-            <Number
+            <NumberField
               data={data}
               value={fieldValue}
               onChange={this.handleChangeData}
-              {...this.props}
+              {...props}
             />
-
-            {
-              (helptext) ? (
-                <FormHelperText id={`${name}-help-text`}>
-                  {(typeof helptext === 'function') ? helptext(data) : helptext}
-                </FormHelperText>
-              ) : null
-            }
-
-            {
-              (helplink) ? (
-                <FormHelperText 
-                  id={`${name}-help-link`}
-                  classes={{
-                    root: classes.helperTextLink
-                  }}
-                >
-                  {(typeof helplink === 'function') ? helplink(this, data) : helplink}
-                </FormHelperText>
-              ) : null
-            }
-
-            {
-              (error) ? (
-                <FormHelperText id={`${name}-error-text`}>
-                  {(typeof title === 'function') ? title(data) : title}
-                </FormHelperText>
-              ) : null
-            }
+            { fieldHelpText }
+            { fieldHelpLink }
+            { fieldError }
           </FormControl>
         );
         break;
@@ -977,55 +997,31 @@ class Field extends React.Component {
           />
         );
         break;
+      case 'nested':
+        field = (
+          <GroupField
+            key={`group-${name}`}
+            {...props}
+          />
+        );
+        break;
       default:
         field = (
           <FormControl 
-            className={classes.formControl} 
+            // className={classes.formControl} 
             error={fieldErrorData} 
             aria-describedby={fieldErrorName}
             key={fieldKey}
           >
-            <TextField
-              key={name}
-              id={name}
-              name={name}
-              type={type}
-              label={label}
-              placeholder={placeholder}
-              className={classes.textField}
+            <InputField
+              data={data}
               value={fieldValue}
-              onChange={this.handleChange}
-              margin="normal"
-              required={(required) ? true : false}
-              disabled={(disabled) ? true : false}
-              // helperText={(typeof helptext === 'function') ? helptext(data) : helptext}
-              InputProps={{ 
-                disabled: (typeof disabled === 'function') ? disabled(data) : disabled,
-                readOnly: (typeof readonly === 'function') ? readonly(data) : readonly,
-                startAdornment: (prefix) ? (<InputAdornment position="start">{prefix}</InputAdornment>) : null,
-                endAdornment: (suffix) ? (<InputAdornment position="end">{suffix}</InputAdornment>) : null,
-                inputProps: {
-                  title: (typeof title === 'function') ? title(data) : title, 
-                  min: (typeof min === 'function') ? min(data) : min, 
-                  max: (typeof max === 'function') ? max(data) : max,
-                  maxLength: (typeof maxlength === 'function') ? maxlength(data) : maxlength,
-                  minLength: (typeof minlength === 'function') ? minlength(data) : minlength,
-                  step: (typeof step === 'function') ? step(data) : step
-                }
-              }}
+              handleChange={this.handleChange}
+              {...props}
             />
-            
-            { 
-              fieldHelpText 
-            }
-
-            { 
-              fieldHelpLink 
-            }
-
-            { 
-              fieldError 
-            }
+            { fieldHelpText }
+            { fieldHelpLink }
+            { fieldError }
           </FormControl>
         );
         break;
@@ -1035,14 +1031,11 @@ class Field extends React.Component {
   }
 }
 
-Field.defaultProps = {
-  buttons: []
-};
+Field.defaultProps = {};
 
 Field.propTypes = {
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  buttons: PropTypes.array.isRequired
+  theme: PropTypes.object.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(Field);

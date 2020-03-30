@@ -4,17 +4,25 @@ import external from 'rollup-plugin-peer-deps-external'
 import postcss from 'rollup-plugin-postcss'
 import resolve from 'rollup-plugin-node-resolve'
 import url from 'rollup-plugin-url'
+import cssbundle from 'rollup-plugin-css-bundle'
 import svgr from '@svgr/rollup'
+import autoprefixer from 'autoprefixer'
 
 import pkg from './package.json'
 
 export default {
+  external: ['tinymce', '@tinymce/tinymce-react'],
   input: 'src/index.js',
   output: [
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: true
+      sourcemap: true,
+      plugins: [
+        cssbundle({
+          transform: code => postcss([autoprefixer]).process(code, {})
+        })
+      ]
     },
     {
       file: pkg.module,
@@ -29,11 +37,12 @@ export default {
     }),
     url(),
     svgr(),
+    resolve(),
     babel({
       exclude: 'node_modules/**',
-      plugins: [ 'external-helpers' ]
+      plugins: [ '@babel/plugin-proposal-class-properties' ],
+      presets: ['@babel/preset-env', '@babel/preset-react']
     }),
-    resolve(),
     commonjs()
   ]
 }
