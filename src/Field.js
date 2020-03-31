@@ -20,17 +20,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Chip from '@material-ui/core/Chip';
 
 import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider } from 'material-ui-pickers';
-import { DatePicker } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { DatePicker } from '@material-ui/pickers';
 
 import amber from '@material-ui/core/colors/amber';
-import AutoComplete from "./Field/AutoComplete";
-import AutoSuggest from "./Field/AutoSuggest";
 import Range from "./Field/Range";
 import Select from "./Field/Select";
 import Toggle from "./Field/Toggle";
-import DateRange from "./Field/DateRange";
-import RichText from "./Field/RichText";
 import NumberField from "./Field/Number";
 import Radio from "./Field/Radio";
 import Checkbox from "./Field/Checkbox";
@@ -58,7 +54,7 @@ const MenuProps = {
   },
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -289,82 +285,6 @@ class Field extends React.Component {
     this.setState(Object.assign({}, nextProps, tempNextProps));
   }
 
-  handleCheckboxChange = event => {
-    const { name, value, checked } = event.target;
-
-    const { data } = this.state;
-    const { fields } = this.props;
-    let fieldValue = checked;
-    let prevValue = ((data[name] === undefined) ? [] : data[name]);
-
-    let currentField = this.state.fields.find(function(field) {
-      return field.name === name;
-    });
-
-    if(checked) {
-      if(currentField.dependencies && currentField.dependencies[value] !== undefined) {
-        this.setState({
-          fields: fields.concat(currentField.dependencies[value])
-        });
-      }
-
-      this.setState((state, props) => {
-        let prevFieldValue = ((state.data[name] === undefined) ? [] : state.data[name]);
-        if(Array.isArray(prevFieldValue)) {
-          let updatedArray = prevFieldValue.concat([value]);
-          let uniqueArray = updatedArray.filter(function(item, pos) {
-            return updatedArray.indexOf(item) === pos; 
-          });
-
-          return {
-            data: {
-              ...data,
-              [name]: uniqueArray
-            }
-          }
-        } else {
-          return {
-            data: {
-              ...data,
-              [name]: fieldValue
-            }
-          }
-        }
-      }, () => {
-        if (this.state.loadOnChange && !this.state.loading) {
-          this.submitAction(this.state.data);
-        }
-      });
-    } else {
-      this.setState((state, props) => {
-        let prevFieldValue = ((state.data[name] === undefined) ? [] : state.data[name]);
-        if(Array.isArray(prevFieldValue)) {
-          let filteredPrevValue = prevValue.filter(function(item, pos) {
-              return prevValue.indexOf(value) !== pos; 
-          });
-
-          return  {
-            data: {
-              ...data,
-              [name]: filteredPrevValue
-            }
-          }
-        } else {
-          return {
-            data: {
-              ...data,
-              [name]: fieldValue
-            }
-          }
-        }
-      }, () => {
-        if (this.state.loadOnChange && !this.state.loading) {
-          this.submitAction(this.state.data);
-        }
-      });
-    }
-  }
-
   checkFormat = (type, value, pattern) => {
     if(value.length > 0) {
       let re = '';
@@ -422,87 +342,6 @@ class Field extends React.Component {
     }
   }
 
-  handleAutoSuggestChange = name => (event, { newValue }) => {
-    this.handleChangeData(name, newValue, false);
-    // const { data } = this.state;
-    // const { fields } = this.props;
-
-    // let currentField = this.state.fields.find(function(field) {
-    //   return field.name === name;
-    // });
-
-    // if(currentField.dependencies && currentField.dependencies[newValue] !== undefined) {
-    //   this.setState({
-    //     fields: fields.concat(currentField.dependencies[newValue]),
-    //     data: { 
-    //       ...data, 
-    //       [name]: newValue
-    //     }
-    //   });
-    // } else if(currentField.dependencies && currentField.dependencies["*"] !== undefined) {
-    //   this.setState({
-    //     fields: fields.concat(currentField.dependencies["*"]),
-    //     data: { 
-    //       ...data, 
-    //       [name]: newValue
-    //     }
-    //   });
-    // } else {
-    //   this.setState({
-    //     data: { 
-    //       ...data, 
-    //       [name]: newValue
-    //     }
-    //   });
-    // }
-  };
-
-  handleAutoSuggestClick = event => {
-    const { name, value } = event.target;
-
-    if(event.which === 13) {
-      const { data } = this.state;
-      this.setState({
-        data: {
-          ...data,
-          [name]: value
-        }
-      }, () => {
-        if (this.state.loadOnChange) {
-          this.submitAction();
-        }
-      });
-    }
-  };
-
-  onSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
-    const { data, fields } = this.state;
-
-    let selectedData = {};
-    fields.map(field => {
-      let fieldName = field.name;
-      selectedData[fieldName] = (suggestion[fieldName] !== undefined) 
-          ? suggestion[fieldName] 
-          : ((typeof field.value === 'function') ? field.value(suggestion) : '') ;
-      return false;
-    });
-    
-    this.setState({
-      data: {
-        ...data, 
-        ...selectedData
-      }
-    }, () => {
-      if (this.state.loadOnChange) {
-        this.submitAction(this.state.data);
-      }
-    });
-  }
-
-  submitAction = () => {
-    console.log("submtAction");
-  }
-
   render = () => {
     const props = this.props;
     const { classes } = props;
@@ -539,7 +378,7 @@ class Field extends React.Component {
     const fieldErrorData  = (typeof props.error === 'function') ? props.error(data) : (props.error || false);
     const fieldError      = (fieldErrorData) ? (
       <FormHelperText id={fieldErrorName}>
-        {(typeof props.title === 'function') ? props.title(data) : props.title}
+        {(typeof props.title === 'function') ? props.title(data) : props.title || props.errorMessage}
       </FormHelperText>
     ) : null;
 
@@ -553,9 +392,9 @@ class Field extends React.Component {
     if(data !== undefined && data !== null && data[name] !== undefined && data[name] !== null) {
       fieldValue = data[name] ;
       fieldValue = (typeof fieldValue === 'function') ? fieldValue(data) : fieldValue;
-    } else if(value && typeof value === 'function') {
+    } else if(value !== undefined && typeof value === 'function') {
       fieldValue = value(data);
-    } else if(value) {
+    } else if(value !== undefined) {
       fieldValue = value;
     } else if(arrayType.indexOf(type) > -1 || multiple) {
       fieldValue = [];
@@ -592,6 +431,7 @@ class Field extends React.Component {
       );
     }
 
+    const updatedProps = Object.assign({}, this.props, {value: fieldValue});
     switch(fieldType) {
       case 'radio':
         field = (
@@ -602,13 +442,11 @@ class Field extends React.Component {
             key={fieldKey}
           >
             { fieldLabel }
-
             {
               (description) ? (
                 <Description html={description} />
               ) : null
             }
-            
             <Radio
               data={data}
               value={fieldValue}
@@ -625,7 +463,6 @@ class Field extends React.Component {
             key={fieldKey}
           >
             { fieldLabel }
-            
             <FormGroup>
               <FormControlLabel
                 control={
@@ -641,11 +478,8 @@ class Field extends React.Component {
                 label={(typeof placeholder === 'function') ? placeholder(data) : placeholder}
               />
             </FormGroup>
-            
             { fieldError }
-
             { fieldHelpText }
-
             { fieldHelpLink }
           </FormControl>
         )
@@ -683,7 +517,6 @@ class Field extends React.Component {
         </FormGroup>
         break;
       case 'toggle':
-        this.props = Object.assign({}, this.props, {value: fieldValue});
         field = (
           <FormControl 
             className={classes.formControl} 
@@ -696,9 +529,8 @@ class Field extends React.Component {
               onChange={this.handleChangeData}
               key={name}
               name={name}
-              value={fieldValue} 
               options={fieldOptions}
-              {...this.props}
+              {...updatedProps}
             />
             { fieldHelpText }
             { fieldHelpLink }
@@ -707,159 +539,79 @@ class Field extends React.Component {
         );
         break;
       case 'select':
-        this.props = Object.assign({}, this.props, {value: fieldValue});
         field = (
-          <Select
-            data={data}
-            value={fieldValue}
-            onChange={this.handleChange}
-            {...this.props}
-          />
+          <FormControl
+            // className={classes.formControl} 
+            error={fieldErrorData}
+            aria-describedby={fieldErrorName}
+            key={fieldKey}
+          >
+            <Select
+              data={data}
+              onChange={this.handleChange}
+              {...updatedProps}
+            />
+            { fieldHelpText }
+            { fieldHelpLink }
+            { fieldError }
+          </FormControl>
         );
         break;
       case 'multiselect':
         field = (
-          <Select
-            multiple
-            key={name}
-            id={name}
-            name={name}
-            label={label}
-            value={(fieldValue === '' || fieldValue === undefined) ? [] : fieldValue}
-            onChange={this.handleChange}
-            margin="dense"
-            required={(required) ? true : false}
-            disabled={(disabled) ? true : false}
-            input={<Input id="select-multiple-chip" />}
-            renderValue={selected => (
-              <div className={classes.chips}>
-                {
-                  selected.map(value => {
-                    let selectedOption = {};
-                    if(typeof value === 'object') {
-                      selectedOption = value;
-                    } else {
-                      selectedOption = fieldOptions.find(fieldOption => 
-                        fieldOption.value === value
-                      );
-                    }
-
-                    return <Chip key={selectedOption.value} label={selectedOption.label} className={classes.chip} />
-                  })
-                }
-              </div>
-            )}
-            MenuProps={MenuProps}
-          >
-            {fieldOptions.map(fieldOption => {
-              return (
-                <MenuItem
-                  key={`${name}-${fieldOption.value}`}
-                  value={fieldOption.value}
-                >
-                  {fieldOption.label}
-                </MenuItem>
-              )
-            })}
-          </Select>
-        );
-        break;
-      case 'autocomplete':
-        field = (
-          <AutoComplete
-            multiple
-            key={name}
-            id={name}
-            name={name}
-            label={label}
-            value={fieldValue}
-            onChange={this.handleChange}
-            margin="dense"
-            required={(required) ? true : false}
-            disabled={(disabled) ? true : false}
-            helperText={placeholder}
-            input={<Input id="select-multiple-chip" />}
-            renderValue={selected => (
-              <div className={classes.chips}>
-                {
-                  selected.map(value => {
-                    let selectedOption = {};
-                    if(typeof value === 'object') {
-                      selectedOption = value;
-                    } else {
-                      selectedOption = fieldOptions.find(fieldOption => 
-                        fieldOption.value === value
-                      );
-                    }
-
-                    return <Chip key={selectedOption.value} label={selectedOption.label} className={classes.chip} />
-                  })
-                }
-              </div>
-            )}
-            MenuProps={MenuProps}
-          />
-        );
-        break;
-      case 'autosuggest':
-        field = (
-          <FormControl 
-            className={classes.formControl} 
-            error={fieldErrorData} 
+          <FormControl
+            // className={classes.formControl} 
+            error={fieldErrorData}
             aria-describedby={fieldErrorName}
             key={fieldKey}
           >
-            <AutoSuggest
-              data={data}
+            <Select
+              multiple
               key={name}
-              placeholder={placeholder}
-              suggestions={fieldOptions}
-              fetchApi={options}
+              id={name}
               name={name}
-              value={fieldValue}
-              onChange={this.handleAutoSuggestChange}
-              // onChange={props.onChange}
-              onSelect={this.onSuggestionSelected}
-            />
-            
-            { fieldError }
+              label={label}
+              value={(fieldValue === '' || fieldValue === undefined) ? [] : fieldValue}
+              onChange={this.handleChange}
+              margin="dense"
+              required={(required) ? true : false}
+              disabled={(disabled) ? true : false}
+              input={<Input id="select-multiple-chip" />}
+              renderValue={selected => (
+                <div className={classes.chips}>
+                  {
+                    selected.map(value => {
+                      let selectedOption = {};
+                      if(typeof value === 'object') {
+                        selectedOption = value;
+                      } else {
+                        selectedOption = fieldOptions.find(fieldOption => 
+                          fieldOption.value === value
+                        );
+                      }
 
+                      return <Chip key={selectedOption.value} label={selectedOption.label} className={classes.chip} />
+                    })
+                  }
+                </div>
+              )}
+              MenuProps={MenuProps}
+            >
+              {fieldOptions.map(fieldOption => {
+                return (
+                  <MenuItem
+                    key={`${name}-${fieldOption.value}`}
+                    value={fieldOption.value}
+                  >
+                    {fieldOption.label}
+                  </MenuItem>
+                )
+              })}
+            </Select>
             { fieldHelpText }
-
             { fieldHelpLink }
+            { fieldError }
           </FormControl>
-        );
-        break;
-      case 'search':
-        field = (
-          <AutoSuggest
-            key={name}
-            placeholder={(placeholder) ? placeholder : 'Search…'}
-            suggestions={fieldOptions}
-            fetchApi={options}
-            name={name}
-            value={fieldValue}
-            onChange={this.handleAutoSuggestChange}
-            // onChange={props.onChange}
-            onSelect={this.onSuggestionSelected}
-            onKeyDown={this.handleAutoSuggestClick}
-            disableUnderline={true}
-            classes={{
-              root: classes.searchRoot,
-              input: classes.searchInput,
-            }}
-          />
-        );
-        break;
-      case 'richtext':
-        field = (
-          <RichText
-            data={data}
-            value={fieldValue}
-            // onChange={this.richTextChange}
-            onChange={this.handleChangeData}
-            {...props}
-          />
         );
         break;
       case 'hidden':
@@ -876,15 +628,22 @@ class Field extends React.Component {
         );
         break;
       case 'range':
-        this.props = Object.assign({}, this.props, {value: fieldValue});
         field = (
-          <Range
-            key={`range-${name}`}
-            data={data}
-            value={fieldValue}
-            onChange={this.handleChangeData}
-            {...this.props}
-          />
+          <FormControl
+            // className={classes.formControl} 
+            error={fieldErrorData}
+            aria-describedby={fieldErrorName}
+            key={fieldKey}
+          >
+            <Range
+              data={data}
+              handleChange={this.handleChange}
+              {...updatedProps}
+            />
+            { fieldHelpText }
+            { fieldHelpLink }
+            { fieldError }
+          </FormControl>
         );
         break;
       case 'checkbox':
@@ -956,18 +715,6 @@ class Field extends React.Component {
           </FormControl>
         );
         break;
-      case 'daterange':
-        field = (
-          <DateRange
-            data={data}
-            value={fieldValue}
-            fields={this.state.fields}
-            // onChange={this.handleDateRangeChange}
-            onChange={this.handleChangeData}
-            {...props}
-          />
-        );
-        break;
       case 'number':
       case 'tel':
         field = (
@@ -989,11 +736,10 @@ class Field extends React.Component {
         );
         break;
       case 'file':
-        this.props = Object.assign({}, this.props, {value: fieldValue});
         field = (
           <File
             key={`file-${name}`}
-            {...this.props}
+            {...updatedProps}
           />
         );
         break;
@@ -1015,9 +761,8 @@ class Field extends React.Component {
           >
             <InputField
               data={data}
-              value={fieldValue}
               handleChange={this.handleChange}
-              {...props}
+              {...updatedProps}
             />
             { fieldHelpText }
             { fieldHelpLink }

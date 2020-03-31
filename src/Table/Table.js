@@ -1,6 +1,4 @@
 import React from "react";
-import moment from "moment";
-import { Link as RouterLink } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -15,19 +13,16 @@ import Fab from '@material-ui/core/Fab';
 import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
-import LinkIcon from '@material-ui/icons/Link';
-import {Done, Clear } from '@material-ui/icons';
+import { Done, Clear } from '@material-ui/icons';
 import { KeyboardArrowUp, KeyboardArrowDown } from "@material-ui/icons";
 
 import TableHead from './TableHead';
 import Toolbar from "./../Toolbar";
 // import Filter from "./../Filter";
 import Dialog from "./../Dialog";
-import Card from "./../Card";
 import ChipFilter from "./../ChipFilter";
 
 import { createBrowserHistory } from 'history';
@@ -245,20 +240,6 @@ class EnhancedTable extends React.Component {
         case 'boolean':
           cellData = cellData ? <Done /> : <Clear />;
           break;
-        case 'datetime':
-        case 'daterange':
-          cellData = (cellData === null || cellData === "") ? '' : moment(cellData).format('MMMM Do YYYY, h:mm:ss a');
-          break;
-        case 'date':
-          cellData = (cellData === null || cellData === "") ? '' : moment(cellData).format('MMMM Do YYYY');
-          break;
-        case 'month':
-          if(cellData) {
-            cellData = moment(cellData).format('MMMM YYYY');
-          } else {
-            cellData = "";
-          }
-          break;
         case 'button':
           cellData = [];
           cell.buttons.map(button => {
@@ -283,12 +264,12 @@ class EnhancedTable extends React.Component {
                 cellData.push(<Chip
                   label={button.label}
                   to={buttonLink} 
-                  component={RouterLink}
+                  component={Link}
                   className={this.props.classes.chip}
                   key={rowData[uKey] + button.label.replace(' ', '-')}
                 />);
               } else {
-                cellData.push(<IconButton aria-label={button.label} to={buttonLink} component={RouterLink} key={rowData[uKey] + button.label.replace(' ', '-')} >
+                cellData.push(<IconButton aria-label={button.label} to={buttonLink} component={Link} key={rowData[uKey] + button.label.replace(' ', '-')} >
                   <button.icon />
                 </IconButton>);
               }
@@ -321,66 +302,6 @@ class EnhancedTable extends React.Component {
           break;
         case 'render':
           cellData = cell.render(rowData, this);
-          break;
-        case 'link':
-          if(cellData && cellData !== "") {
-            cellData = (
-              <Link 
-                component={RouterLink}
-                to={cellData}
-                target="_blank"
-                rel="noopener"
-              >
-                <LinkIcon />
-              </Link>
-            );
-          }
-          break;
-        case 'file':
-          if(cellData && cellData !== "") {
-            cellData = (
-              <Link 
-                component={RouterLink}
-                to={cellData}
-                target="_blank"
-                rel="noopener"
-              >
-                <LinkIcon />
-              </Link>
-            );
-          }
-          break;
-        case 'image':
-          let imageSource = cellData;
-          cellData = (
-            <IconButton aria-label={"button.label"} onClick={() => {
-              this.openDialog({
-                title: "Image",
-                content: <Card 
-                  image={imageSource}
-                  onClose={this.closeDialog}
-                />
-              });
-            }}>
-              <Avatar alt={""} src={cellData} />
-            </IconButton>
-          );
-          break;
-        case 'media':
-          let mediaSource = cellData;
-          cellData = (
-            <IconButton aria-label={cell.label} onClick={() => {
-              this.openDialog({
-                title: "Media",
-                content: <Card 
-                  media={mediaSource}
-                  onClose={this.closeDialog}
-                />
-              });
-            }}>
-              <LinkIcon />
-            </IconButton>
-          );
           break;
         case 'expand':
           const isExpanded = (rowData[uKey] === this.state.expandedRow[uKey]);

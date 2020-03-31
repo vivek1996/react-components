@@ -40,9 +40,10 @@ class EnhancedInput extends React.Component {
 
   render = () => {
     const props = this.props;
-    const { type, parent, name } = props;
+    const { type, parent, name, classes } = props;
     const { data, value } = this.state;
-    const fieldName   = `${ parent ? `${parent}.${name}` : name }`;
+    const fieldName = `${ parent ? `${parent}.${name}` : name }`;
+
     return (
       <TextField
         key={fieldName}
@@ -51,7 +52,7 @@ class EnhancedInput extends React.Component {
         type={type}
         label={props.label}
         placeholder={props.placeholder}
-        // className={classes.textField}
+        className={classes.textField}
         value={value}
         onChange={props.handleChange}
         margin="normal"
@@ -74,7 +75,7 @@ class EnhancedInput extends React.Component {
           }
         }}
         InputLabelProps={{
-          shrink: (value || props.prefix) ? true : false
+          shrink: (value !== undefined || props.prefix) ? true : false
         }}
       />
     );

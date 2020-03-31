@@ -15,10 +15,12 @@ import Snackbar from "./Snackbar";
 import Toolbar from "./Toolbar";
 import Field from "./Field";
 
+import { validate } from "./lib";
+
 const flatten = require('flat');
 const { unflatten } = require('flat');
 
-const styles = theme => ({
+const styles = (theme) => ({
   formWraper: {
     width: '100%'
   },
@@ -60,7 +62,7 @@ const reducer = (accumulator, currentValue) => {
 }
 
 const defaultDataReducer = (accumulator, currentValue) => {
-  if(currentValue && currentValue.hasOwnProperty('name') && accumulator && !accumulator[currentValue.name] && currentValue.value) {
+  if (currentValue && currentValue.hasOwnProperty('name') && accumulator && !accumulator[currentValue.name] && currentValue.value !== undefined) {
     accumulator[currentValue.name] = (typeof currentValue.value === 'function') ? currentValue.value(accumulator) : currentValue.value;
   }
   
@@ -79,7 +81,7 @@ class EnhancedForm extends React.Component {
 
   componentDidMount = () => {
     const { fields, data } = this.state;
-    let defaultFieldValue = fields.reduce(defaultDataReducer, data);
+    let defaultFieldValue = fields.reduce(defaultDataReducer, (data ? data : {}));
     this.setState({
       data: Object.assign({}, data, defaultFieldValue)
     });
@@ -96,38 +98,8 @@ class EnhancedForm extends React.Component {
     this.setState({ snackBarOpen: false, snackBarMessage: null });
   };
 
-  validateValue = (field, value, formData) => {
-    let validateFlag = true;
-    if(value !== undefined && value !== null && value !== "") {
-      if(validateFlag && field.minlength) {
-        validateFlag = (value.length >= field.minlength) ? true : false;
-      }
-
-      if(validateFlag && field.maxlength) {
-        validateFlag = (value.length <= field.maxlength) ? true : false;
-      }
-
-      let re = (field.pattern) ? field.pattern : '';
-      if(validateFlag && (re.length > 0 || typeof re === "object")) {
-        validateFlag = re.test(value);
-      }
-
-      if(validateFlag && field.validate) {
-        validateFlag = (typeof field.validate === "function") ? field.validate(formData) : field.validate;
-      }
-
-      if(validateFlag && field.error) {
-        validateFlag = !((typeof field.error === "function") ? field.error(formData) : field.error);
-      }
-
-      return validateFlag;
-    } else {
-      return !validateFlag;
-    }
-  }
-
   checkFormat = (field, value) => {
-    if(value.length > 0) {
+    if (value.length > 0) {
       let re = '';
       switch(field.type) {
         case 'tel':
@@ -149,12 +121,12 @@ class EnhancedForm extends React.Component {
     const nameParts = name ? name.split('.') : [];
     let formField = {};
     nameParts.map((namePart, index) => {
-      if(Number.isNaN(namePart)) {
+      if (Number.isNaN(namePart)) {
         formField = _.find(formFields, {name: namePart});
       }
 
       const last = index === nameParts.length - 1;
-      if(!last) {
+      if (!last) {
         formFields = formField.fields;
       }
     });
@@ -165,11 +137,11 @@ class EnhancedForm extends React.Component {
   getDependentFields = (fieldName, fieldValue) => {
     let currentField    = this.getField(fieldName);
     let dependentFields = null;
-    if(currentField.dependencies) {
+    if (currentField.dependencies) {
       let fields        = (currentField.dependent) ? this.state.fields : this.props.fields;
-      if(currentField.dependencies[fieldValue] !== undefined) {
+      if (currentField.dependencies[fieldValue] !== undefined) {
         dependentFields = currentField.dependencies[fieldValue];
-      } else if(currentField.dependencies["*"] !== undefined) {
+      } else if (currentField.dependencies["*"] !== undefined) {
         dependentFields = currentField.dependencies["*"];
       } else {
         dependentFields = [];
@@ -194,7 +166,7 @@ class EnhancedForm extends React.Component {
       let updatedState  = {};
       let data          = state.data;
       let dependentFields   = this.getDependentFields(fieldName, fieldValue);
-      if(dependentFields) {
+      if (dependentFields) {
         updatedState.fields   = dependentFields;
         let defaultFieldValue = dependentFields.reduce(defaultDataReducer, data);
         updatedState.data     = Object.assign({}, data, defaultFieldValue);
@@ -211,7 +183,7 @@ class EnhancedForm extends React.Component {
 
       return updatedState;
     }, () => {
-      if(submit && this.state.loadOnChange && !this.state.loading) {
+      if (submit && this.state.loadOnChange && !this.state.loading) {
         this.submitAction();
       }
     });
@@ -219,23 +191,23 @@ class EnhancedForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    // this.submitAction(this.state.data);
     let formValidationFlag = true;
     this.setState((state, props) => {
       let formData = state.data;
       let updatedState = {};
       let updatedFields = state.fields.map(field => {
-        if(field.required && (field.readonly === undefined || field.readonly)) {
-          if(this.validateValue(field, formData[field.name], formData)) {
-            field.error = false;
-            return field;
-          } else {
+        if (field.readonly === undefined || !field.readonly) {
+          const { error, errorMessage } = validate(field, formData[field.name], formData);
+          if (error) {
             formValidationFlag = false;
-            if(!field.hasOwnProperty('error') || (field.hasOwnProperty('error') && typeof field.error === 'boolean'))
+            if (!field.hasOwnProperty('error') || (field.hasOwnProperty('error') && typeof field.error === 'boolean'))
               field.error = true;
 
-            return field;
+            return {...field, errorMessage};
           }
+
+          field.error = false;
+          return {...field, errorMessage};
         } else {
           field.error = false;
           return field;
@@ -244,18 +216,17 @@ class EnhancedForm extends React.Component {
 
       updatedState.fields = updatedFields;
 
-      if(!state.loading && formValidationFlag) {
+      if (!state.loading && formValidationFlag) {
         updatedState.success = false;
         updatedState.loading = true;
       }
 
       return updatedState;
     }, () => {
-      if(this.state.loading && formValidationFlag) {
+      if (this.state.loading && formValidationFlag) {
         const parsedFields = unflatten(this.state.data, {
           delimiter: '.'
         });
-        console.log('parsedFields', parsedFields);
         this.state.onSubmit(parsedFields, this);
       }
     });
@@ -268,7 +239,6 @@ class EnhancedForm extends React.Component {
     const initialValues = data ? flatten(data, {
       delimiter: '.'
     }) : {};
-    console.log('initialValues', initialValues);
     const buttonClassname = classNames({
       [classes.buttonSuccess]: success,
       [classes.button]: !success,
@@ -280,17 +250,17 @@ class EnhancedForm extends React.Component {
       <div className={classes.formWraper}>
         {(title) ? <Toolbar title={title} /> : ""}
         <form 
-          onSubmit={this.handleSubmit} 
+          onSubmit={this.handleSubmit}
           autoComplete="off" 
           noValidate={(this.props.novalidate) ? this.props.novalidate : false}
         >
           <div className={containerClass} >
             {fields.map(formField => {
               return (
-                <Field 
-                  data={initialValues} 
+                <Field
+                  data={initialValues}
                   onChange={this.handleFieldChange}
-                  {...formField} 
+                  {...formField}
                 />
               );
             })}

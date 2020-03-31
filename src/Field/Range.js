@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { withStyles } from '@material-ui/core/styles';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import { withStyles } from '@material-ui/core';
 
-import Slider from '@material-ui/lab/Slider';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
-const styles = theme => ({
+const styles = (theme) => ({
   wrapper: {
-    display: 'flex'
+    display: 'flex',
+    margin: '16px 8px 8px 8px'
   },
   container: {
-    padding: '22px 0px',
+    padding: '22px 0px'
   },
   rangeMin: {
     display: 'flex',
@@ -25,6 +24,17 @@ const styles = theme => ({
     alignItems: 'center',
     paddingLeft: theme.spacing.unit
   },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    minWidth: '100px'
+  },
+  optionItem: {
+    height: 'auto',
+    overflowWrap: 'break-word',
+    wordWrap: 'break-word',
+    whiteSpace: 'normal !important'
+  }
 });
 
 const rangeOptions = {};
@@ -47,73 +57,52 @@ class EnhancedRange extends React.Component {
   }
 
   render = () => {
-    const { classes } = this.props;
+    const props = this.props;
+    const { classes, minText, min, name, maxText, max, step, parent } = this.props;
     const { data, value } = this.state;
+    const fieldName = `${ parent ? `${parent}.${name}` : name }`;
     return (
-      <FormControl error={this.props.error} aria-describedby={`${this.props.name}-error-text`}>
-        {
-          (this.props.label) 
-          ? <FormLabel >{this.props.label}</FormLabel>
-          : null
-        }
-
-        <div key={`wrapper-${this.props.name}`} className={classes.wrapper}>
-          <div className={classes.rangeMin}>
-            {
-              (
-                (typeof this.props.minText === 'function') ? this.props.minText(data) : this.props.minText
-              ) || (
-                (typeof this.props.min === 'function') ? this.props.min(data) : this.props.min
-              )
-            }
-          </div>
-          <Slider
-            key={`slider-${this.props.name}`}
-            id={this.props.name}
-            name={this.props.name}
-            classes={{ container: classes.container }}
-            value={
-              (typeof value === 'function') 
-              ? value(data) 
-              : ((value === undefined || value === "") ? 0 : parseFloat(value))
-            }
-            min={
-              (typeof this.props.min === 'function') ? this.props.min(data) : this.props.min.value || this.props.min
-            }
-            max={
-              (typeof this.props.max === 'function') ? this.props.max(data) : this.props.max.value ||this.props.max
-            }
-            step={(typeof this.props.step === 'function') ? this.props.step(data) : this.props.step}
-            onChange={(event, value) => {
-              this.props.onChange(this.props.name, value);
-            }}
-          />
-          <div className={classes.rangeMax}>
-            {
-              (
-                (typeof this.props.maxText === 'function') ? this.props.maxText(data) : this.props.maxText
-              ) || (
-                (typeof this.props.max === 'function') ? this.props.max(data) : this.props.max
-              )
-            }
-          </div>
-        </div>
-        {
-          (this.props.error) ? (
-            <FormHelperText id={`${this.props.name}-error-text`} component="span">
-            {this.props.title}
-            </FormHelperText>
-          ) : null
-        }
-
-        {
-          (this.props.helptext) ? (
-            <FormHelperText id={`${this.props.name}-help-text`} component="span">
-            {(typeof this.props.helptext === 'function') ? this.props.helptext(data) : this.props.helptext}
-            </FormHelperText>
-          ) : null
-        }
-      </FormControl>
+      <TextField
+        key={`range-${fieldName}`}
+        id={fieldName}
+        name={fieldName}
+        type="range"
+        label={props.label}
+        placeholder={props.placeholder}
+        className={classes.textField}
+        value={value}
+        onChange={props.handleChange}
+        margin="normal"
+        required={(props.required) ? true : false}
+        disabled={(props.disabled) ? true : false}
+        // helperText={(typeof props.helptext === 'function') ? props.helptext(data) : props.helptext}
+        InputProps={{
+          disabled: (typeof props.disabled === 'function') ? props.disabled(data) : props.disabled,
+          readOnly: (typeof props.readonly === 'function') ? props.readonly(data) : props.readonly,
+          startAdornment: ((minText !== undefined || min !== undefined) ? (
+            <InputAdornment position="start">
+              {(minText !== undefined && typeof minText === 'function') ? minText(data) : minText}
+              {(min !== undefined && typeof min === 'function') ? min(data) : min}
+            </InputAdornment>
+          ) : null),
+          endAdornment: ((maxText !== undefined || max !== undefined) ? (
+            <InputAdornment position="end">
+              {(maxText !== undefined && typeof maxText === 'function') ? maxText(data) : maxText}
+              {(max !== undefined && typeof max === 'function') ? max(data) : max}
+            </InputAdornment>
+          ) : null),
+          inputProps: {
+            title: (typeof props.title === 'function') ? props.title(data) : props.title, 
+            min: (typeof props.min === 'function') ? props.min(data) : props.min, 
+            max: (typeof props.max === 'function') ? props.max(data) : props.max,
+            step: (typeof props.step === 'function') ? props.step(data) : props.step,
+            pattern: (typeof props.pattern === 'function') ? props.pattern(data) : props.pattern
+          }
+        }}
+        InputLabelProps={{
+          shrink: (value !== undefined || props.prefix) ? true : false
+        }}
+      />
     );
   }
 }

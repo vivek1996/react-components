@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import Link from '@material-ui/core/Link';
 
 import classNames from 'classnames';
 import PropTypes from 'prop-types';

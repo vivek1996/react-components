@@ -74,7 +74,10 @@ class EnhancedSelect extends React.Component {
           placeholder={this.props.placeholder}
           className={classes.textField}
           value={value}
-          onChange={this.props.onChange}
+          onChange={(event) => {
+            const { name, value } = event.target;
+            this.props.onChange(name, value);
+          }}
           margin="normal"
           required={(this.props.required) ? true : false}
           disabled={(this.props.disabled) ? true : false}
