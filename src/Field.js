@@ -32,6 +32,7 @@ import Radio from "./Field/Radio";
 import Checkbox from "./Field/Checkbox";
 import File from "./Field/File";
 import InputField from "./Field/Input";
+import Autocomplete from "./Field/Autocomplete";
 
 import _ from 'lodash';
 
@@ -385,7 +386,7 @@ class Field extends React.Component {
     let fieldKey = `form-control-${fieldName}`;
     let arrayType = ["multiselect", "checkbox"];
     let field = '';
-    let fieldOptions = [];
+    let fieldOptions = options;
     let fieldValue = "";
     let fieldType = type;
 
@@ -431,7 +432,10 @@ class Field extends React.Component {
       );
     }
 
-    const updatedProps = Object.assign({}, this.props, {value: fieldValue});
+    const updatedProps = Object.assign({}, this.props, {
+      value: fieldValue
+    });
+
     switch(fieldType) {
       case 'radio':
         field = (
@@ -452,7 +456,7 @@ class Field extends React.Component {
               value={fieldValue}
               options={fieldOptions}
               onChange={this.handleChangeData}
-              {...props}
+              {...updatedProps}
             />
           </FormControl>
         )
@@ -547,6 +551,7 @@ class Field extends React.Component {
             key={fieldKey}
           >
             <Select
+              key={fieldKey}
               data={data}
               onChange={this.handleChange}
               {...updatedProps}
@@ -655,7 +660,7 @@ class Field extends React.Component {
             key={fieldKey}
             value={fieldValue}
             onChange={this.handleChangeData}
-            {...props}
+            {...updatedProps}
           />
         );
         break;
@@ -726,8 +731,27 @@ class Field extends React.Component {
             <NumberField
               data={data}
               value={fieldValue}
-              onChange={this.handleChangeData}
-              {...props}
+              handleChange={this.handleChange}
+              {...updatedProps}
+            />
+            { fieldHelpText }
+            { fieldHelpLink }
+            { fieldError }
+          </FormControl>
+        );
+        break;
+      case 'autocomplete':
+        field = (
+          <FormControl
+            error={(typeof error === 'function') ? error(data) : error} 
+            aria-describedby={fieldErrorName}
+            key={fieldKey}
+          >
+            <Autocomplete
+              key={fieldKey}
+              data={data}
+              handleChange={this.handleChangeData}
+              {...updatedProps}
             />
             { fieldHelpText }
             { fieldHelpLink }
@@ -747,7 +771,7 @@ class Field extends React.Component {
         field = (
           <GroupField
             key={`group-${name}`}
-            {...props}
+            {...updatedProps}
           />
         );
         break;
