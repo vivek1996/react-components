@@ -1,6 +1,6 @@
 {
   "name": "react-component-stack",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "React Components to build your react project easily.",
   "main": "dist/index.js",
   "module": "dist/index.es.js",

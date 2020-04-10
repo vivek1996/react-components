@@ -160,7 +160,7 @@ class EnhancedForm extends React.Component {
 
     return dependentFields;
   }
-  
+
   handleFieldChange = (fieldName, fieldValue, submit = true) => {
     this.setState((state, props) => {
       let updatedState  = {};

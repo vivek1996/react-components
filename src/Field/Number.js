@@ -17,6 +17,27 @@ const styles = theme => ({
 const EnhancedNumber = (props) => {
   const { classes, type, value } = props;
 
+  const handleOnChange = (event) => {
+    const { name, value, step } = event.target;
+
+    let fieldValue = value;
+    if (!Number.isNaN(fieldValue)) {
+      if (step && Number.isInteger(step)) {
+        fieldValue = parseInt(fieldValue);
+      } else if (step && !Number.isInteger(step)) {
+        fieldValue = parseFloat(fieldValue);
+      } else {
+        if (Number.isInteger(fieldValue)) {
+          fieldValue = parseInt(fieldValue);
+        } else {
+          fieldValue = parseFloat(fieldValue);
+        }
+      }
+
+      props.handleChange(name, fieldValue);
+    }
+  }
+
   return (
     <TextField
       key={props.name}
@@ -27,8 +48,8 @@ const EnhancedNumber = (props) => {
       placeholder={props.placeholder}
       className={classes.textField}
       value={value}
-      onChange={props.handleChange}
-      onBlur={props.handleChange}
+      onChange={handleOnChange}
+      onBlur={handleOnChange}
       margin="normal"
       required={(props.required) ? true : false}
       disabled={(props.disabled) ? true : false}

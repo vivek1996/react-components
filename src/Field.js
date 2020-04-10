@@ -322,19 +322,19 @@ class Field extends React.Component {
   handleChangeData = (name, value, submit = true) => {
     const { format, type, decimal } = this.props;
     let formatFlag = true;
-    if(type === 'date') {
+    if (type === 'date') {
       value = (format) ? value.format(format) :  value.format("YYYY-MM-DD");
     }
 
-    if(type === 'range') {
+    if (type === 'range') {
       value = (isNaN(value) || typeof value === 'string') ? value : value.toFixed((decimal) ? decimal : 2);
     }
 
-    if(type === 'tel') {
+    if (type === 'tel') {
       formatFlag = this.checkFormat(type, value);
     }
 
-    if(formatFlag) {
+    if (formatFlag) {
       this.setState({ error: false }, () => {
         this.props.onChange && this.props.onChange(name, value, submit);
       });
@@ -721,6 +721,8 @@ class Field extends React.Component {
         );
         break;
       case 'number':
+      case 'integer':
+      case 'decimal':
       case 'tel':
         field = (
           <FormControl
@@ -731,7 +733,7 @@ class Field extends React.Component {
             <NumberField
               data={data}
               value={fieldValue}
-              handleChange={this.handleChange}
+              handleChange={this.handleChangeData}
               {...updatedProps}
             />
             { fieldHelpText }
