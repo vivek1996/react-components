@@ -402,7 +402,7 @@ export default function Field (props) {
   const checkFormat = (type, value, pattern) => {
     if (value.length > 0) {
       let re = '';
-      switch(type) {
+      switch (type) {
         case 'tel':
           re = (pattern) ? pattern : /^[0-9\b]+$/;
           break;
@@ -467,7 +467,6 @@ export default function Field (props) {
     value: fieldValue
   });
 
-  console.log(`name-${name} error-${error} errorMessage-${errorMessage}`);
   switch (fieldType) {
     case 'radio':
       field = (
