@@ -2,26 +2,18 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const styles = theme => ({
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(),
+    marginRight: theme.spacing(),
     minWidth: '100px'
-  },
-  optionItem: {
-    height: 'auto',
-    overflowWrap: 'break-word',
-    wordWrap: 'break-word',
-    whiteSpace: 'normal !important'
   }
 });
 
@@ -95,78 +87,49 @@ class EnhancedCheckbox extends React.Component {
     const { options, value } = this.state;
 
     return (options) ? (
-      <FormControl 
-        component="fieldset" 
-        required={required} 
-        className={classes.textField} 
-        key={key} 
-        error={error} 
-        aria-describedby={props['aria-describedby']} 
+      <FormGroup
+        aria-label={label}
+        className={classes.group}
       >
-        { 
-          //fieldLabel 
-        }
-        <FormGroup
-          aria-label={label}
-          className={classes.group}
-        >
-          {options.map(option => {
-            return (
-              <FormControlLabel
-                control={
-                  <Checkbox 
-                    onChange={this.handleChange} 
-                    value={option.value} 
-                    name={name}
-                    disabled={(option.disabled) ? true : false}
-                    checked={(value.indexOf(option.value.toString()) > -1) ? true : false}
-                  />
-                }
-                label={option.label}
-              />
-            );
-          })}
-        </FormGroup>
-
-        { 
-          // fieldError 
-        }
-      </FormControl>
+        {options.map(option => {
+          return (
+            <FormControlLabel
+              control={
+                <Checkbox 
+                  onChange={this.handleChange} 
+                  value={option.value} 
+                  name={name}
+                  disabled={(option.disabled) ? true : false}
+                  checked={(value.indexOf(option.value.toString()) > -1) ? true : false}
+                />
+              }
+              label={option.label}
+            />
+          );
+        })}
+      </FormGroup>
     ) : (
-      <FormControl 
-        component="fieldset" 
-        required={required} 
-        className={classes.textField} 
-        key={key} 
-        error={error} 
-        aria-describedby={props['aria-describedby']} 
+      <FormGroup
+        aria-label={label}
+        className={classes.group}
       >
-        <FormGroup
-          aria-label={label}
-          className={classes.group}
-        >
-          <FormControlLabel
-            control={
-              <Checkbox 
-                onChange={this.handleChange} 
-                value={value} 
-                name={name}
-                disabled={(disabled) ? true : false}
-                checked={value}
-              />
-            }
-            label={
-              <Typography variant="caption" >
-                {label}
-              </Typography>
-            }
-          />
-        </FormGroup>
-        
-        { 
-          // fieldError 
-        }
-      </FormControl>
+        <FormControlLabel
+          control={
+            <Checkbox 
+              onChange={this.handleChange} 
+              value={value} 
+              name={name}
+              disabled={(disabled) ? true : false}
+              checked={value}
+            />
+          }
+          label={
+            <Typography variant='caption' >
+              {label}
+            </Typography>
+          }
+        />
+      </FormGroup>
     );
   }
 }
@@ -176,4 +139,4 @@ EnhancedCheckbox.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(EnhancedCheckbox);
+export default withStyles(styles, { withTheme: true })(EnhancedCheckbox);

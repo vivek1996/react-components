@@ -163,11 +163,11 @@ class EnhancedForm extends React.Component {
 
   handleFieldChange = (fieldName, fieldValue, submit = true) => {
     this.setState((state, props) => {
-      let updatedState  = {};
-      let data          = state.data;
-      let dependentFields   = this.getDependentFields(fieldName, fieldValue);
+      let updatedState = {};
+      let data = state.data;
+      let dependentFields = this.getDependentFields(fieldName, fieldValue);
       if (dependentFields) {
-        updatedState.fields   = dependentFields;
+        updatedState.fields = dependentFields;
         let defaultFieldValue = dependentFields.reduce(defaultDataReducer, data);
         updatedState.data     = Object.assign({}, data, defaultFieldValue);
       } else {
@@ -189,13 +189,13 @@ class EnhancedForm extends React.Component {
     });
   }
 
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
     let formValidationFlag = true;
     this.setState((state, props) => {
       let formData = state.data;
       let updatedState = {};
-      let updatedFields = state.fields.map(field => {
+      let updatedFields = state.fields.map((field) => {
         if (field.readonly === undefined || !field.readonly) {
           const { error, errorMessage } = validate(field, formData[field.name], formData);
           if (error) {
@@ -233,7 +233,7 @@ class EnhancedForm extends React.Component {
   }
 
   render = () => {
-    const { classes, title, container } = this.props;
+    const { classes, title, container, novalidate } = this.props;
     const { data, fields, buttons, loading, success } = this.state;
 
     const initialValues = data ? flatten(data, {
@@ -245,14 +245,14 @@ class EnhancedForm extends React.Component {
     });
 
     const containerClass = classNames(container && classes.container);
-    
+
     return (
       <div className={classes.formWraper}>
-        {(title) ? <Toolbar title={title} /> : ""}
-        <form 
+        {(title) ? <Toolbar title={title} /> : ''}
+        <form
           onSubmit={this.handleSubmit}
-          autoComplete="off" 
-          noValidate={(this.props.novalidate) ? this.props.novalidate : false}
+          autoComplete='off'
+          noValidate={novalidate}
         >
           <div className={containerClass} >
             {fields.map(formField => {
@@ -266,12 +266,12 @@ class EnhancedForm extends React.Component {
             })}
 
             {buttons.map(formButton => {
-              let field = '';
-              switch(formButton.type) {
+              let button = '';
+              switch (formButton.type) {
                 case 'button':
                   const btnKey = `button-${formButton.label.replace(' ', '-')}`;
                   let disable = (typeof formButton.disable === "function") ? formButton.disable(data, this) : formButton.disable;
-                  field = (
+                  button = (
                     <Button 
                       variant={(formButton.variant) ? formButton.variant : "contained"}
                       color={(formButton.color) ? formButton.color : "secondary"}
@@ -286,7 +286,7 @@ class EnhancedForm extends React.Component {
                   )
                   break;
                 default:
-                  field = (
+                  button = (
                     <Button 
                       variant="contained" 
                       color={(formButton.color) ? formButton.color : "primary"} 
@@ -302,12 +302,12 @@ class EnhancedForm extends React.Component {
                   break;
               }
 
-              return field;
+              return button;
             })}
           </div>
         </form>
 
-        <Snackbar 
+        <Snackbar
           variant={this.state.snackBarType}
           snackBarDuration={10000}
           snackBarOpen={this.state.snackBarOpen}

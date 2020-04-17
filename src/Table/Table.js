@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -16,25 +16,20 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
-import { Done, Clear } from '@material-ui/icons';
-import { KeyboardArrowUp, KeyboardArrowDown } from "@material-ui/icons";
+import { Done, Clear, KeyboardArrowUp, KeyboardArrowDown } from '@material-ui/icons';
 
 import TableHead from './TableHead';
-import Toolbar from "./../Toolbar";
+import Toolbar from '../Toolbar';
 // import Filter from "./../Filter";
-import Dialog from "./../Dialog";
-import ChipFilter from "./../ChipFilter";
-
-import { createBrowserHistory } from 'history';
-
-const history = createBrowserHistory();
+import Dialog from '../Dialog';
+import ChipFilter from '../ChipFilter';
 
 const styles = theme => ({
   tableWrapper: {
-    overflowX: 'auto',
+    overflowX: 'auto'
   },
   table: {
-    minWidth: 'auto',
+    minWidth: 'auto'
   },
   paper: {
     width: '100%',
@@ -44,7 +39,7 @@ const styles = theme => ({
     overflow: 'visible',
   },
   chip: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing()
   },
   progress: {
     position: 'absolute',
@@ -181,7 +176,8 @@ class EnhancedTable extends React.Component {
     
     if(event.target.tagName === "TD" && this.props.clickLink) {
       event.preventDefault();
-      history.push(this.props.clickLink + rowData[this.props.uKey]);
+      // history.push(this.props.clickLink + rowData[this.props.uKey]);
+      console.log("TD Click Link");
     }
     
     if(event.target.tagName === "TD" && this.props.clickFunction) {
@@ -555,4 +551,4 @@ EnhancedTable.propTypes = {
   rows: PropTypes.array.isRequired
 };
 
-export default withStyles(styles)(EnhancedTable);
+export default withStyles(styles, { withTheme: true })(EnhancedTable);

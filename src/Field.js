@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { withStyles } from '@material-ui/core';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import { makeStyles } from '@material-ui/core';
 
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -19,20 +18,17 @@ import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Chip from '@material-ui/core/Chip';
 
-import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { DatePicker } from '@material-ui/pickers';
-
 import amber from '@material-ui/core/colors/amber';
-import Range from "./Field/Range";
-import Select from "./Field/Select";
-import Toggle from "./Field/Toggle";
-import NumberField from "./Field/Number";
-import Radio from "./Field/Radio";
-import Checkbox from "./Field/Checkbox";
-import File from "./Field/File";
-import InputField from "./Field/Input";
-import Autocomplete from "./Field/Autocomplete";
+import Range from './Field/Range';
+import Select from './Field/Select';
+import Toggle from './Field/Toggle';
+import NumberField from './Field/Number';
+import Radio from './Field/Radio';
+import Checkbox from './Field/Checkbox';
+import File from './Field/File';
+import InputField from './Field/Input';
+import Autocomplete from './Field/Autocomplete';
+import DateField from './Field/Date';
 
 import _ from 'lodash';
 
@@ -40,6 +36,8 @@ import Grid from '@material-ui/core/Grid';
 
 import AddCircle from '@material-ui/icons/AddCircle';
 import RemoveCircle from '@material-ui/icons/RemoveCircle';
+
+// import { getInputProps } from './lib';
 
 const flatten = require('flat');
 const { unflatten } = require('flat');
@@ -55,59 +53,59 @@ const MenuProps = {
   },
 };
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'wrap',
-    paddingRight: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing(),
+    paddingLeft: theme.spacing()
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(),
+    marginRight: theme.spacing()
   },
   group: {
-    margin: `${theme.spacing.unit}px 0`,
+    margin: theme.spacing(1, 0)
   },
   paper: {
     width: '100%',
     minWidth: 'auto',
-    marginTop: theme.spacing.unit * 6,
+    marginTop: theme.spacing(6),
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'visible',
+    overflow: 'visible'
   },
   chips: {
     display: 'flex',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
   chip: {
-    margin: theme.spacing.unit / 4,
+    margin: theme.spacing(1 / 4)
   },
   searchRoot: {
     color: 'inherit',
-    width: '100%',
+    width: '100%'
   },
   searchInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 4,
+    paddingTop: theme.spacing(),
+    paddingRight: theme.spacing(),
+    paddingBottom: theme.spacing(),
+    paddingLeft: theme.spacing(4),
     transition: theme.transitions.create('width'),
-    width: '100%',
+    width: '100%'
   },
   success: {
-    backgroundColor: green[600],
+    backgroundColor: green[600]
   },
   error: {
-    backgroundColor: theme.palette.error.dark,
+    backgroundColor: theme.palette.error.dark
   },
   info: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.dark
   },
   warning: {
-    backgroundColor: amber[700],
+    backgroundColor: amber[700]
   },
   switchLabel: {
     alignItems: 'center',
@@ -120,21 +118,21 @@ const styles = (theme) => ({
     textAlign: 'right'
   },
   formControlToggle: {
-    marginTop: theme.spacing.unit * 2,
-    paddingLeft: theme.spacing.unit
+    marginTop: theme.spacing(2),
+    paddingLeft: theme.spacing()
   },
   formControl: {
     // maxWidth: '200px'
   },
   formGroup: {
     // maxWidth: '200px'
-  },
-});
+  }
+}));
 
 function Description(props) {
   return (
-    <div 
-      className="description" 
+    <div
+      className='description'
       dangerouslySetInnerHTML={{
         __html: props.html
       }}
@@ -183,15 +181,15 @@ const ArrayField = (props) => {
     const parsedValues = unflatten(fieldProps.data, {
       delimiter: '.'
     });
-    
+
     const fieldNameParts = fieldName.split('.');
     let removeFieldPath = '';
     fieldNameParts.map((fieldNamePart, index) => {
       const last = index === fieldNameParts.length - 1;
-      if(last) {
+      if (last) {
         parsedValues[removeFieldPath].splice(fieldIndex, 1);
       } else {
-        if(isNaN(fieldNamePart)) {
+        if (isNaN(fieldNamePart)) {
           removeFieldPath = (index === 0) ? fieldNamePart : `${removeFieldPath}.${fieldNamePart}`;
         } else {
           removeFieldPath = (index === 0) ? `[${fieldNamePart}]` : `${removeFieldPath}.[${fieldNamePart}]`;
@@ -231,7 +229,7 @@ const ArrayField = (props) => {
       {_.times(counter || 1, (index) => {
         let fieldNameParts = fieldProps.name.split('.');
         const lastPart = fieldNameParts[fieldNameParts.length - 1];
-        if(isNaN(lastPart)) {
+        if (isNaN(lastPart)) {
           fieldProps.name = `${fieldProps.name}.${index}`;
         } else {
           fieldNameParts[fieldNameParts.length - 1] = index;
@@ -249,8 +247,8 @@ const ArrayField = (props) => {
             </Grid>
             {
               (counter > 1) && (
-                <Grid 
-                  item 
+                <Grid
+                  item
                   style={{
                     width: '10%',
                     display: 'flex',
@@ -272,22 +270,137 @@ const ArrayField = (props) => {
   );
 };
 
-class Field extends React.Component {
-  constructor(props) {
-    super(props);
+const FieldLabel = (props) => {
+  const { label } = props;
 
-    this.state = props;
+  return (label !== undefined) ? (
+    <FormLabel component='legend'>{label}</FormLabel>
+  ) : null;
+};
+
+const FieldHelpText = (props) => {
+  const { helptext, fieldName, data } = props;
+
+  return (helptext !== undefined) ? (
+    <FormHelperText id={`${fieldName}-help-text`}>
+      {(typeof helptext === 'function') ? helptext(data) : helptext}
+    </FormHelperText>
+  ) : null;
+};
+
+const FieldHelpLink = (props) => {
+  const classes = useStyles();
+  const { helplink, fieldName, data } = props;
+
+  return (helplink !== undefined) ? (
+    <FormHelperText
+      id={`${fieldName}-help-link`}
+      classes={{
+        root: classes.helperTextLink
+      }}
+    >
+      {(typeof helplink === 'function') ? helplink(data) : helplink}
+    </FormHelperText>
+  ) : null;
+};
+
+const FieldError = (props) => {
+  const { data, title, error, errorName, errorMessage } = props;
+  return (error) ? (
+    <FormHelperText id={errorName}>
+      {(typeof title === 'function') ? title(data) : title || errorMessage}
+    </FormHelperText>
+  ) : null;
+};
+
+export default function Field (props) {
+  const classes = useStyles();
+
+  const {
+    data, type, name, label, helptext, multiple,
+    prefix, placeholder, disabled, options, value, suffix, required,
+    errorMessage, helplink, title, description, fields, parent, onChange, ...restProps
+  } = props;
+
+  // More properties handled in useEffect
+  // format, disablePast, disableFuture, disableDate, openTo, min, max, readonly, maxlength, minlength, step
+  const [error, setError] = React.useState(false);
+  // React.useEffect(() => {
+  //   console.log('Inside Use Effect', restProps);
+  //   (async () => {
+  //     if (fieldProps === undefined) {
+  //       const inputProps = await getInputProps(restProps, data);
+  //       console.log('inputProps', inputProps);
+  //       setFieldProps(inputProps);
+  //     }
+  //   })();
+  // }, [restProps]);
+
+  // console.log('fieldProps', fieldProps);
+
+  const fieldName = `${ parent ? `${parent}.${name}` : name }`;
+  const fieldErrorName = `${fieldName}-error-text`;
+
+  let fieldKey = `form-control-${fieldName}`;
+  let arrayType = ['multiselect', 'checkbox'];
+  let field = '';
+  let fieldOptions = options || [];
+  let fieldValue = value;
+  let fieldType = type;
+
+  if (data !== undefined && data !== null && data[name] !== undefined && data[name] !== null) {
+    fieldValue = data[name] ;
+    fieldValue = (typeof fieldValue === 'function') ? fieldValue(data) : fieldValue;
+  } else if (value !== undefined && typeof value === 'function') {
+    fieldValue = value(data);
+  } else if (value !== undefined) {
+    fieldValue = value;
+  } else if (arrayType.indexOf(type) > -1 || multiple) {
+    fieldValue = [];
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    let tempNextProps = {};
-    tempNextProps.data = (typeof nextProps.data === "function") ? nextProps.data() : nextProps.data;
-
-    this.setState(Object.assign({}, nextProps, tempNextProps));
+  if (Array.isArray(options)) {
+    fieldOptions = options;
+  } else if (typeof options === 'function') {
+    let optionsFn = options(data);
+    if (optionsFn instanceof Promise) {
+      optionsFn.then(options => {
+        fieldOptions = options;
+      });
+    } else {
+      fieldOptions = optionsFn;
+    }
   }
 
-  checkFormat = (type, value, pattern) => {
-    if(value.length > 0) {
+  if (fieldType === undefined) {
+    if (fieldOptions.length > 0) {
+      if (multiple) {
+        fieldType = 'checkbox';
+      } else {
+        fieldType = 'radio';
+      }
+    } else if (fields && fields.length > 0) {
+      fieldType = 'nested';
+    }
+  }
+
+  if (fieldType !== 'checkbox' && multiple) {
+    return (
+      <ArrayField {...props} />
+    );
+  }
+
+  React.useEffect(() => {
+    (async () => {
+      if (props.error !== undefined) {
+        const fieldErrorFlag = (typeof props.error === 'function') ? props.error(data) : (props.error || false);
+        setError(fieldErrorFlag);
+      }
+    })();
+  });
+
+  const checkFormat = (type, value, pattern) => {
+    if (value.length > 0) {
       let re = '';
       switch(type) {
         case 'tel':
@@ -297,516 +410,625 @@ class Field extends React.Component {
           re = (pattern) ? pattern : '';
           break;
       }
-      
-      return (re.length > 0 || typeof re === "object") ? re.test(value) : true;
+
+      return (re.length > 0 || typeof re === 'object') ? re.test(value) : true;
     } else {
       return true;
     }
   }
 
-  handleChange = (event) => {
+  const handleChange = (event) => {
     const { name, value, type, checked, pattern } = event.target;
     let fieldValue = (type === 'checkbox') ? checked : value;
     let formatFlag = true;
-    if(type === 'tel') {
-      formatFlag = this.checkFormat(type, value, pattern);
-    }
-
-    if(formatFlag) {
-      this.handleChangeData(name, fieldValue);
-    } else {
-      this.setState({ error: true });
-    }
-  }
-
-  handleChangeData = (name, value, submit = true) => {
-    const { format, type, decimal } = this.props;
-    let formatFlag = true;
-    if (type === 'date') {
-      value = (format) ? value.format(format) :  value.format("YYYY-MM-DD");
-    }
-
-    if (type === 'range') {
-      value = (isNaN(value) || typeof value === 'string') ? value : value.toFixed((decimal) ? decimal : 2);
-    }
-
     if (type === 'tel') {
-      formatFlag = this.checkFormat(type, value);
+      formatFlag = checkFormat(type, value, pattern);
     }
 
     if (formatFlag) {
-      this.setState({ error: false }, () => {
-        this.props.onChange && this.props.onChange(name, value, submit);
-      });
+      handleChangeData(name, fieldValue);
     } else {
-      this.setState({ error: true });
+      setError(true);
     }
   }
 
-  render = () => {
-    const props = this.props;
-    const { classes } = props;
-    const { 
-      data, type, name, label, helptext, error, multiple,
-      prefix, placeholder, disabled, options, value, suffix, required, format,
-      disablePast, disableFuture, disableDate, openTo, min, max, readonly, 
-      title, maxlength, minlength, step, description, fields, parent
-    } = this.state;
-
-    const fieldName   = `${ parent ? `${parent}.${name}` : name }`;
-    const fieldLabel = (label !== undefined) ? (
-      <FormLabel component="legend">{label}</FormLabel>
-    ) : null;
-  
-    const fieldHelpText = (props.helptext !== undefined) ? (
-      <FormHelperText id={`${fieldName}-help-text`}>
-        {(typeof props.helptext === 'function') ? props.helptext(data) : props.helptext}
-      </FormHelperText>
-    ) : null;
-
-    const fieldHelpLink = (props.helplink !== undefined) ? (
-      <FormHelperText 
-        id={`${fieldName}-help-link`}
-        classes={{
-          root: classes.helperTextLink
-        }}
-      >
-        {(typeof props.helplink === 'function') ? props.helplink(this, data) : props.helplink}
-      </FormHelperText>
-    ) : null;
-
-    const fieldErrorName  = `${fieldName}-error-text`;
-    const fieldErrorData  = (typeof props.error === 'function') ? props.error(data) : (props.error || false);
-    const fieldError      = (fieldErrorData) ? (
-      <FormHelperText id={fieldErrorName}>
-        {(typeof props.title === 'function') ? props.title(data) : props.title || props.errorMessage}
-      </FormHelperText>
-    ) : null;
-
-    let fieldKey = `form-control-${fieldName}`;
-    let arrayType = ["multiselect", "checkbox"];
-    let field = '';
-    let fieldOptions = options;
-    let fieldValue = "";
-    let fieldType = type;
-
-    if(data !== undefined && data !== null && data[name] !== undefined && data[name] !== null) {
-      fieldValue = data[name] ;
-      fieldValue = (typeof fieldValue === 'function') ? fieldValue(data) : fieldValue;
-    } else if(value !== undefined && typeof value === 'function') {
-      fieldValue = value(data);
-    } else if(value !== undefined) {
-      fieldValue = value;
-    } else if(arrayType.indexOf(type) > -1 || multiple) {
-      fieldValue = [];
-    }
-
-    if(Array.isArray(options)) {
-      fieldOptions = options;
-    } else if(typeof options === 'function') {
-      let optionsFn = options(data);
-      if(optionsFn instanceof Promise) {
-        optionsFn.then(options => {
-          fieldOptions = options;
-        });
-      } else {
-        fieldOptions = optionsFn;
+  const handleChangeData = (name, value, submit = true) => {
+    const { format, type, decimal } = props;
+    let formatFlag = true;
+    if (type === 'date') {
+      if (value !== undefined) {
+        value = (format) ? value.format(format) : value.format('YYYY-MM-DD');
       }
     }
 
-    if(fieldType === undefined) {
-      if(fieldOptions.length > 0) {
-        if(multiple) {
-          fieldType = 'checkbox';
-        } else {
-          fieldType = 'radio';
-        }
-      } else if (fields && fields.length > 0) {
-        fieldType = 'nested';
+    if (type === 'range') {
+      value = (isNaN(value) || typeof value === 'string') ? value : value.toFixed(decimal || 2);
+    }
+
+    if (type === 'tel') {
+      formatFlag = checkFormat(type, value);
+    }
+
+    if (formatFlag) {
+      if (error) {
+        setError(false);
       }
+      onChange && onChange(name, value, submit);
+      // this.setState({ error: false }, () => {
+      //   this.props.onChange && this.props.onChange(name, value, submit);
+      // });
+    } else {
+      // this.setState({ error: true });
+      setError(true);
     }
+  }
 
-    if(fieldType !== 'checkbox' && multiple) {
-      return (
-        <ArrayField {...props} />
-      );
-    }
+  const updatedProps = Object.assign({}, props, {
+    value: fieldValue
+  });
 
-    const updatedProps = Object.assign({}, this.props, {
-      value: fieldValue
-    });
-
-    switch(fieldType) {
-      case 'radio':
-        field = (
-          <FormControl 
-            component="fieldset" 
-            required 
-            className={classes.textField} 
-            key={fieldKey}
-          >
-            { fieldLabel }
-            {
-              (description) ? (
-                <Description html={description} />
-              ) : null
-            }
-            <Radio
-              data={data}
-              value={fieldValue}
-              options={fieldOptions}
-              onChange={this.handleChangeData}
-              {...updatedProps}
-            />
-          </FormControl>
-        )
-        break;
-      case 'boolean':
-        field = (
-          <FormControl 
-            key={fieldKey}
-          >
-            { fieldLabel }
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    id={name}
-                    name={name}
-                    value={fieldValue}
-                    onChange={this.handleChange}
-                    disabled={(disabled) ? true : false}
-                    checked={fieldValue}
-                  />
-                }
-                label={(typeof placeholder === 'function') ? placeholder(data) : placeholder}
-              />
-            </FormGroup>
-            { fieldError }
-            { fieldHelpText }
-            { fieldHelpLink }
-          </FormControl>
-        )
-        break;
-      case 'switch':
-        field = <FormGroup className={classes.formGroup} row>
-          {(prefix) ? (
-            <FormLabel
-              classes={{
-                root: classes.switchLabel
-              }}
-            >
-              {(typeof prefix === 'function') ? prefix(data) : prefix}
-            </FormLabel>
-          ) : null}
-          <Switch
-            id={name}
-            label={"helllo"}
-            name={name}
-            value={fieldValue}
-            onChange={this.handleChange}
-            disabled={(disabled) ? true : false}
-            checked={fieldValue}
+  console.log(`name-${name} error-${error} errorMessage-${errorMessage}`);
+  switch (fieldType) {
+    case 'radio':
+      field = (
+        <FormControl
+          component='fieldset'
+          required={required}
+          className={classes.textField}
+          error={error}
+          aria-describedby={fieldErrorName}
+          key={fieldKey}
+        >
+          { <FieldLabel label={label} /> }
+          {
+            (description) ? (
+              <Description html={description} />
+            ) : null
+          }
+          <Radio
+            data={data}
+            options={fieldOptions}
+            onChange={handleChangeData}
+            {...updatedProps}
           />
-          {(suffix) ? (
-            <FormLabel
-              classes={{
-                root: classes.switchLabel
-              }}
-            >
-              {(typeof suffix === 'function') ? suffix(data) : suffix}
-            </FormLabel>
-          ) : null}
-          { fieldHelpText }
-        </FormGroup>
-        break;
-      case 'toggle':
-        field = (
-          <FormControl 
-            className={classes.formControl} 
-            error={fieldErrorData} 
-            aria-describedby={fieldErrorName}
-            key={fieldKey}
-          >
-            <Toggle
-              // onChange={this.handleToggleChange}
-              onChange={this.handleChangeData}
-              key={name}
-              name={name}
-              options={fieldOptions}
-              {...updatedProps}
-            />
-            { fieldHelpText }
-            { fieldHelpLink }
-            { fieldError }
-          </FormControl>
-        );
-        break;
-      case 'select':
-        field = (
-          <FormControl
-            // className={classes.formControl} 
-            error={fieldErrorData}
-            aria-describedby={fieldErrorName}
-            key={fieldKey}
-          >
-            <Select
-              key={fieldKey}
+          {
+            <FieldError
               data={data}
-              onChange={this.handleChange}
-              {...updatedProps}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
             />
-            { fieldHelpText }
-            { fieldHelpLink }
-            { fieldError }
-          </FormControl>
-        );
-        break;
-      case 'multiselect':
-        field = (
-          <FormControl
-            // className={classes.formControl} 
-            error={fieldErrorData}
-            aria-describedby={fieldErrorName}
-            key={fieldKey}
+          }
+          {
+            <FieldHelpText
+              data={data}
+              helptext={helptext}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldHelpLink
+              data={data}
+              helplink={helplink}
+              fieldName={fieldName}
+            />
+          }
+        </FormControl>
+      )
+      break;
+    case 'boolean':
+      field = (
+        <FormControl
+          key={fieldKey}
+        >
+          { <FieldLabel label={label} /> }
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  id={name}
+                  name={name}
+                  value={fieldValue}
+                  onChange={handleChange}
+                  disabled={disabled}
+                  checked={fieldValue}
+                />
+              }
+              label={(typeof placeholder === 'function') ? placeholder(data) : placeholder}
+            />
+          </FormGroup>
+          {
+            <FieldError
+              data={data}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
+            />
+          }
+          {
+            <FieldHelpText
+              data={data}
+              helptext={helptext}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldHelpLink
+              data={data}
+              helplink={helplink}
+              fieldName={fieldName}
+            />
+          }
+        </FormControl>
+      )
+      break;
+    case 'switch':
+      field = <FormGroup className={classes.formGroup} row>
+        {(prefix) ? (
+          <FormLabel
+            classes={{
+              root: classes.switchLabel
+            }}
           >
-            <Select
-              multiple
-              key={name}
-              id={name}
-              name={name}
-              label={label}
-              value={(fieldValue === '' || fieldValue === undefined) ? [] : fieldValue}
-              onChange={this.handleChange}
-              margin="dense"
-              required={(required) ? true : false}
-              disabled={(disabled) ? true : false}
-              input={<Input id="select-multiple-chip" />}
-              renderValue={selected => (
-                <div className={classes.chips}>
-                  {
-                    selected.map(value => {
-                      let selectedOption = {};
-                      if(typeof value === 'object') {
-                        selectedOption = value;
-                      } else {
-                        selectedOption = fieldOptions.find(fieldOption => 
-                          fieldOption.value === value
-                        );
-                      }
-
-                      return <Chip key={selectedOption.value} label={selectedOption.label} className={classes.chip} />
-                    })
-                  }
-                </div>
-              )}
-              MenuProps={MenuProps}
-            >
-              {fieldOptions.map(fieldOption => {
-                return (
-                  <MenuItem
-                    key={`${name}-${fieldOption.value}`}
-                    value={fieldOption.value}
-                  >
-                    {fieldOption.label}
-                  </MenuItem>
-                )
-              })}
-            </Select>
-            { fieldHelpText }
-            { fieldHelpLink }
-            { fieldError }
-          </FormControl>
-        );
-        break;
-      case 'hidden':
-        field = (
-          <input
+            {(typeof prefix === 'function') ? prefix(data) : prefix}
+          </FormLabel>
+        ) : null}
+        <Switch
+          id={name}
+          label={label}
+          name={name}
+          value={fieldValue}
+          onChange={handleChange}
+          disabled={disabled}
+          checked={fieldValue}
+        />
+        {(suffix) ? (
+          <FormLabel
+            classes={{
+              root: classes.switchLabel
+            }}
+          >
+            {(typeof suffix === 'function') ? suffix(data) : suffix}
+          </FormLabel>
+        ) : null}
+        {
+          <FieldHelpText
+            data={data}
+            helptext={helptext}
+            fieldName={fieldName}
+          />
+        }
+      </FormGroup>
+      break;
+    case 'toggle':
+      field = (
+        <FormControl
+          className={classes.formControl}
+          error={error}
+          aria-describedby={fieldErrorName}
+          key={fieldKey}
+        >
+          <Toggle
+            onChange={handleChangeData}
+            key={name}
+            name={name}
+            options={fieldOptions}
+            {...updatedProps}
+          />
+          {
+            <FieldHelpText
+              data={data}
+              helptext={helptext}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldHelpLink
+              data={data}
+              helplink={helplink}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldError
+              data={data}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
+            />
+          }
+        </FormControl>
+      );
+      break;
+    case 'select':
+      field = (
+        <FormControl
+          // className={classes.formControl}
+          error={error}
+          aria-describedby={fieldErrorName}
+          key={fieldKey}
+        >
+          <Select
+            key={fieldKey}
+            data={data}
+            onChange={handleChange}
+            {...updatedProps}
+          />
+          {
+            <FieldHelpText
+              data={data}
+              helptext={helptext}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldHelpLink
+              data={data}
+              helplink={helplink}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldError
+              data={data}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
+            />
+          }
+        </FormControl>
+      );
+      break;
+    case 'multiselect':
+      field = (
+        <FormControl
+          // className={classes.formControl}
+          error={error}
+          aria-describedby={fieldErrorName}
+          key={fieldKey}
+        >
+          <Select
+            multiple
             key={name}
             id={name}
             name={name}
-            type={type}
-            value={fieldValue}
-            onChange={this.handleChange}
-            required={(required) ? true : false}
-          />
-        );
-        break;
-      case 'range':
-        field = (
-          <FormControl
-            // className={classes.formControl} 
-            error={fieldErrorData}
-            aria-describedby={fieldErrorName}
-            key={fieldKey}
+            label={label}
+            value={(fieldValue === '' || fieldValue === undefined) ? [] : fieldValue}
+            onChange={handleChange}
+            margin='dense'
+            required={required}
+            disabled={disabled}
+            input={<Input id='select-multiple-chip' />}
+            renderValue={selected => (
+              <div className={classes.chips}>
+                {
+                  selected.map(value => {
+                    let selectedOption = {};
+                    if (typeof value === 'object') {
+                      selectedOption = value;
+                    } else {
+                      selectedOption = fieldOptions.find(fieldOption =>
+                        fieldOption.value === value
+                      );
+                    }
+
+                    return <Chip key={selectedOption.value} label={selectedOption.label} className={classes.chip} />
+                  })
+                }
+              </div>
+            )}
+            MenuProps={MenuProps}
           >
-            <Range
+            {fieldOptions.map(fieldOption => {
+              return (
+                <MenuItem
+                  key={`${name}-${fieldOption.value}`}
+                  value={fieldOption.value}
+                >
+                  {fieldOption.label}
+                </MenuItem>
+              )
+            })}
+          </Select>
+          {
+            <FieldHelpText
               data={data}
-              handleChange={this.handleChange}
-              {...updatedProps}
+              helptext={helptext}
+              fieldName={fieldName}
             />
-            { fieldHelpText }
-            { fieldHelpLink }
-            { fieldError }
-          </FormControl>
-        );
-        break;
-      case 'checkbox':
-        field = (
+          }
+          {
+            <FieldHelpLink
+              data={data}
+              helplink={helplink}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldError
+              data={data}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
+            />
+          }
+        </FormControl>
+      );
+      break;
+    case 'hidden':
+      field = (
+        <input
+          key={name}
+          id={name}
+          name={name}
+          type={type}
+          value={fieldValue}
+          onChange={handleChange}
+          required={required}
+        />
+      );
+      break;
+    case 'range':
+      field = (
+        <FormControl
+          // className={classes.formControl}
+          error={error}
+          aria-describedby={fieldErrorName}
+          key={fieldKey}
+        >
+          <Range
+            data={data}
+            handleChange={handleChange}
+            {...updatedProps}
+          />
+          {
+            <FieldHelpText
+              data={data}
+              helptext={helptext}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldHelpLink
+              data={data}
+              helplink={helplink}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldError
+              data={data}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
+            />
+          }
+        </FormControl>
+      );
+      break;
+    case 'checkbox':
+      field = (
+        <FormControl
+          component='fieldset'
+          required={required}
+          className={classes.textField}
+          error={error}
+          aria-describedby={fieldErrorName}
+          key={fieldKey}
+        >
+          { <FieldLabel label={label} /> }
           <Checkbox
             data={data}
-            error={fieldErrorData} 
+            error={error}
             aria-describedby={fieldErrorName}
             key={fieldKey}
             value={fieldValue}
-            onChange={this.handleChangeData}
+            onChange={handleChangeData}
             {...updatedProps}
           />
-        );
-        break;
-      case 'date':
-        field = (
-          <FormControl 
-            className={classes.formControl} 
-            error={fieldErrorData} 
-            aria-describedby={fieldErrorName}
-            key={fieldKey}
-          >
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <DatePicker
-                key={name}
-                id={name}
-                name={name}
-                label={label}
-                placeholder={placeholder}
-                className={classes.textField}
-                value={(fieldValue) ? fieldValue : null}
-                openTo={(openTo) ? openTo : 'day'}
-                views={["year", "month", "day"]}
-                // onChange={date => this.handleDateChange(name, date)}
-                onChange={date => this.handleChangeData(name, date)}
-                margin="normal"
-                format={(format) ? format : 'DD/MM/YYYY'}
-                required={(required) ? true : false}
-                disabled={(disabled) ? true : false}
-                disablePast={(disablePast) ? disablePast : false}
-                shouldDisableDate={(typeof disableDate === 'function') 
-                  ? (day) => {
-                    return disableDate(day, data);
-                  } : null
-                }
-                disableFuture={(disableFuture) ? disableFuture : false}
-                helperText={(typeof helptext === 'function') ? helptext(data) : helptext}
-                minDate={(typeof min === 'function') ? min(data) : min}
-                maxDate={(typeof max === 'function') ? max(data) : max}
-                InputProps={{ 
-                  disabled: (typeof disabled === 'function') ? disabled(data) : disabled,
-                  readOnly: (typeof readonly === 'function') ? readonly(data) : readonly,
-                  startAdornment: (prefix) ? (<InputAdornment position="start">{prefix}</InputAdornment>) : null,
-                  endAdornment: (suffix) ? (<InputAdornment position="end">{suffix}</InputAdornment>) : null,
-                  inputProps: {
-                    title: (typeof title === 'function') ? title(data) : title, 
-                    min: (typeof min === 'function') ? min(data) : min, 
-                    max: (typeof max === 'function') ? max(data) : max,
-                    maxLength: (typeof maxlength === 'function') ? maxlength(data) : maxlength,
-                    minLength: (typeof minlength === 'function') ? minlength(data) : minlength,
-                    step: (typeof step === 'function') ? step(data) : step
-                  }
-                }}
-              />
-            </MuiPickersUtilsProvider>
-            
-            { fieldError }
-          </FormControl>
-        );
-        break;
-      case 'number':
-      case 'integer':
-      case 'decimal':
-      case 'tel':
-        field = (
-          <FormControl
-            error={(typeof error === 'function') ? error(data) : error} 
-            aria-describedby={fieldErrorName}
-            key={fieldKey}
-          >
-            <NumberField
+          {
+            <FieldHelpText
               data={data}
-              value={fieldValue}
-              handleChange={this.handleChangeData}
-              {...updatedProps}
+              helptext={helptext}
+              fieldName={fieldName}
             />
-            { fieldHelpText }
-            { fieldHelpLink }
-            { fieldError }
-          </FormControl>
-        );
-        break;
-      case 'autocomplete':
-        field = (
-          <FormControl
-            error={(typeof error === 'function') ? error(data) : error} 
-            aria-describedby={fieldErrorName}
-            key={fieldKey}
-          >
-            <Autocomplete
-              key={fieldKey}
+          }
+          {
+            <FieldHelpLink
               data={data}
-              handleChange={this.handleChangeData}
-              {...updatedProps}
+              helplink={helplink}
+              fieldName={fieldName}
             />
-            { fieldHelpText }
-            { fieldHelpLink }
-            { fieldError }
-          </FormControl>
-        );
-        break;
-      case 'file':
-        field = (
-          <File
-            key={`file-${name}`}
+          }
+          {
+            <FieldError
+              data={data}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
+            />
+          }
+        </FormControl>
+      );
+      break;
+    case 'date':
+      field = (
+        <FormControl
+          className={classes.formControl}
+          error={error}
+          aria-describedby={fieldErrorName}
+          key={fieldKey}
+        >
+          <DateField
+            data={data}
+            handleChange={handleChangeData}
             {...updatedProps}
           />
-        );
-        break;
-      case 'nested':
-        field = (
-          <GroupField
-            key={`group-${name}`}
+          {
+            <FieldError
+              data={data}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
+            />
+          }
+        </FormControl>
+      );
+      break;
+    case 'number':
+    case 'integer':
+    case 'decimal':
+    case 'tel':
+      field = (
+        <FormControl
+          error={(typeof error === 'function') ? error(data) : error}
+          aria-describedby={fieldErrorName}
+          key={fieldKey}
+        >
+          <NumberField
+            data={data}
+            value={fieldValue}
+            handleChange={handleChangeData}
             {...updatedProps}
           />
-        );
-        break;
-      default:
-        field = (
-          <FormControl 
-            // className={classes.formControl} 
-            error={fieldErrorData} 
-            aria-describedby={fieldErrorName}
-            key={fieldKey}
-          >
-            <InputField
+          {
+            <FieldHelpText
               data={data}
-              handleChange={this.handleChange}
-              {...updatedProps}
+              helptext={helptext}
+              fieldName={fieldName}
             />
-            { fieldHelpText }
-            { fieldHelpLink }
-            { fieldError }
-          </FormControl>
-        );
-        break;
-    }
-
-    return field;
+          }
+          {
+            <FieldHelpLink
+              data={data}
+              helplink={helplink}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldError
+              data={data}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
+            />
+          }
+        </FormControl>
+      );
+      break;
+    case 'autocomplete':
+      field = (
+        <FormControl
+          error={(typeof error === 'function') ? error(data) : error}
+          aria-describedby={fieldErrorName}
+          key={fieldKey}
+        >
+          <Autocomplete
+            key={fieldKey}
+            data={data}
+            handleChange={handleChangeData}
+            {...updatedProps}
+          />
+          {
+            <FieldHelpText
+              data={data}
+              helptext={helptext}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldHelpLink
+              data={data}
+              helplink={helplink}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldError
+              data={data}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
+            />
+          }
+        </FormControl>
+      );
+      break;
+    case 'file':
+      field = (
+        <File
+          key={`file-${name}`}
+          {...updatedProps}
+        />
+      );
+      break;
+    case 'nested':
+      field = (
+        <GroupField
+          key={`group-${name}`}
+          {...updatedProps}
+        />
+      );
+      break;
+    default:
+      field = (
+        <FormControl
+          // className={classes.formControl}
+          error={error}
+          aria-describedby={fieldErrorName}
+          key={fieldKey}
+        >
+          <InputField
+            data={data}
+            handleChange={handleChange}
+            {...updatedProps}
+          />
+          {
+            <FieldHelpText
+              data={data}
+              helptext={helptext}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldHelpLink
+              data={data}
+              helplink={helplink}
+              fieldName={fieldName}
+            />
+          }
+          {
+            <FieldError
+              data={data}
+              title={title}
+              error={error}
+              errorName={fieldErrorName}
+              errorMessage={errorMessage}
+            />
+          }
+        </FormControl>
+      );
+      break;
   }
-}
+
+  return field;
+};
 
 Field.defaultProps = {};
 
 Field.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(Field);
+// export default withStyles(styles, { withTheme: true })(Field);

@@ -22,14 +22,14 @@ const styles = theme => ({
     // }
   },
   chip: {
-    margin: theme.spacing.unit / 2,
+    margin: theme.spacing(1 / 2)
   },
   paper: {
-    marginRight: theme.spacing.unit * 2,
+    marginRight: theme.spacing(2)
   },
   chipLabel: {
-    paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit
+    paddingLeft: theme.spacing(),
+    paddingRight: theme.spacing()
   }
 });
 
@@ -185,4 +185,4 @@ ChipFilter.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ChipFilter);
+export default withStyles(styles, { withTheme: true })(ChipFilter);

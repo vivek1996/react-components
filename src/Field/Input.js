@@ -8,15 +8,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 
 const styles = theme => ({
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(),
+    marginRight: theme.spacing(),
     minWidth: '100px'
-  },
-  optionItem: {
-    height: 'auto',
-    overflowWrap: 'break-word',
-    wordWrap: 'break-word',
-    whiteSpace: 'normal !important'
   }
 });
 

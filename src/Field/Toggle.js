@@ -14,19 +14,18 @@ const styles = theme => ({
   },
   spacing: {
     marginTop: theme.spacing.unit * 2,
-    paddingLeft: theme.spacing.unit
+    paddingLeft: theme.spacing()
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginLeft: theme.spacing(),
+    marginRight: theme.spacing()
   },
   options: {
     ...theme.typography.button,
-    
     // padding: theme.spacing.unit,
     color: theme.palette.common.white,
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'center'
     // marginLeft: theme.spacing.unit,
     // marginRight: theme.spacing.unit,
 
@@ -35,7 +34,7 @@ const styles = theme => ({
   },
   toggleButton: {
     minWidth: '42%',
-    padding: "".concat(theme.spacing.unit - 4, "px ").concat(theme.spacing.unit * 1.5, "px"),
+    padding: ''.concat(theme.spacing(1 / 2), 'px ').concat(theme.spacing(1.5), 'px'),
     borderRadius: 2,
     justifyContent: 'center',
     display: 'flex',

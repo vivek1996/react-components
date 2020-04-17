@@ -9,8 +9,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const styles = theme => ({
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(),
+    marginRight: theme.spacing(),
     minWidth: '100px'
   },
   optionItem: {
@@ -57,11 +57,11 @@ class EnhancedRadio extends React.Component {
       >
         {options.map(option => {
           return (
-            <FormControlLabel 
-              value={option.value} 
-              control={<Radio />} 
-              label={option.label} 
-              disabled={(option.disabled) ? true : false} 
+            <FormControlLabel
+              value={option.value}
+              control={<Radio />}
+              label={option.label}
+              disabled={(option.disabled) ? true : false}
               key={`${(new Date()).getTime()}-radio-group-${option.label}`}
             />
           );

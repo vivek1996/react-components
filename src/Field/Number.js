@@ -2,26 +2,27 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(),
+    marginRight: theme.spacing(),
     minWidth: '100px'
   }
-});
+}));
 
 const EnhancedNumber = (props) => {
-  const { classes, type, value } = props;
+  const classes = useStyles();
+  const { type, value } = props;
 
   const handleOnChange = (event) => {
     const { name, value, step } = event.target;
 
     let fieldValue = value;
-    if (!Number.isNaN(fieldValue)) {
+    if (fieldValue !== '' && !Number.isNaN(fieldValue)) {
       if (step && Number.isInteger(step)) {
         fieldValue = parseInt(fieldValue);
       } else if (step && !Number.isInteger(step)) {
@@ -34,6 +35,8 @@ const EnhancedNumber = (props) => {
         }
       }
 
+      props.handleChange(name, fieldValue);
+    } else {
       props.handleChange(name, fieldValue);
     }
   }
@@ -50,15 +53,15 @@ const EnhancedNumber = (props) => {
       value={value}
       onChange={handleOnChange}
       onBlur={handleOnChange}
-      margin="normal"
+      margin='normal'
       required={(props.required) ? true : false}
       disabled={(props.disabled) ? true : false}
       // helperText={(typeof props.helptext === 'function') ? props.helptext(data) : props.helptext}
       InputProps={{ 
         disabled: (typeof props.disabled === 'function') ? props.disabled(data) : props.disabled,
         readOnly: (typeof props.readonly === 'function') ? props.readonly(data) : props.readonly,
-        startAdornment: (props.prefix) ? (<InputAdornment position="start">{props.prefix}</InputAdornment>) : null,
-        endAdornment: (props.suffix) ? (<InputAdornment position="end">{props.suffix}</InputAdornment>) : null,
+        startAdornment: (props.prefix) ? (<InputAdornment position='start'>{props.prefix}</InputAdornment>) : null,
+        endAdornment: (props.suffix) ? (<InputAdornment position='end'>{props.suffix}</InputAdornment>) : null,
         inputProps: {
           title: (typeof props.title === 'function') ? props.title(data) : props.title, 
           min: (typeof props.min === 'function') ? props.min(data) : props.min, 
@@ -81,4 +84,4 @@ EnhancedNumber.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(EnhancedNumber);
+export default EnhancedNumber;

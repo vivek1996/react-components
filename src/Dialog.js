@@ -36,28 +36,28 @@ const styles = theme => ({
     minWidth: '300px'
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginLeft: theme.spacing(),
+    marginRight: theme.spacing()
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing()
   },
   formControl: {
-    margin: theme.spacing.unit * 3,
+    margin: theme.spacing(3)
   },
   group: {
-    margin: `${theme.spacing.unit}px 0`,
+    margin: theme.spacing(1, 0)
   },
   closeButton: {
     position: 'absolute',
-    right: theme.spacing.unit,
-    color: 'rgba(255, 255, 255)',
+    right: theme.spacing(),
+    color: 'rgba(255, 255, 255)'
   },
   title: {
-    color: 'rgba(255, 255, 255)',
+    color: 'rgba(255, 255, 255)'
   },
   content: {
-    paddingTop: theme.spacing.unit * 3,
+    paddingTop: theme.spacing(3)
   }
 });
 
@@ -178,4 +178,4 @@ EnhancedDialog.defaultProps = {
   actions: []
 };
 
-export default withStyles(styles)(EnhancedDialog);
+export default withStyles(styles, { withTheme: true })(EnhancedDialog);
