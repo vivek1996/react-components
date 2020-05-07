@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -9,102 +9,88 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
 
-const tableHeadStyles = theme => ({
+const tableHeadStyles = () => ({
   head: {
-    background: '#f5f5f5',
+    background: '#f5f5f5'
   },
   tableCell: {
-    padding: '4px 8px 4px 8px'
+    padding: '8px'
   }
 });
 
-const tableHeadOptions = {
-  order: "asc",
-  orderBy: "id",
-  rowCount: 0,
-  numSelected: 0,
-  columns: []
-}
+const EnhancedTableHead = (props) => {
+  const { columns, classes, numSelected, rowCount, onSelectAllClick, selectable, orderBy, order } = props;
 
-class EnhancedTableHead extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = Object.assign(tableHeadOptions, props);
-  }
-
-  createSortHandler = property => event => {
-    this.props.onRequestSort(event, property);
+  const createSortHandler = property => event => {
+    props.onRequestSort(event, property);
   };
 
-  render = () => {
-      const {columns, classes, numSelected, rowCount, onSelectAllClick, selectable} = this.props;
-      
-      let headerRequired = columns.find(column => {
-        return column.label;
-      });
-      
-      return (headerRequired) ? (
-        <TableHead className={classes.head}>
-          <TableRow>
-            {columns.map(column => {
-              return (
-                (selectable && column.type === "select") ?
-                (
-                  <TableCell 
-                    padding="checkbox"
-                    classes={{
-                      root: classes.tableCell
-                    }}
-                  >
-                    <Checkbox 
-                      indeterminate={numSelected > 0 && numSelected < rowCount} 
-                      checked={numSelected === rowCount} 
-                      onChange={onSelectAllClick}
-                    />
-                  </TableCell>
-                ) : (
-                  (column.show === undefined || column.show) ? (
-                    <TableCell
-                      key={`${(new Date()).getTime()}-table-head-${column.name}`}
-                      padding={column.disablePadding ? 'none' : 'default'}
-                      sortDirection={this.props.orderBy === column.name ? this.props.order : false}
-                      classes={{
-                        root: classes.tableCell
-                      }}
-                    >
-                      {
-                        (column.sort) ? (
-                          <Tooltip
-                            title="Sort"
-                            placement={column.numeric ? 'bottom-end' : 'bottom-start'}
-                            enterDelay={300}
-                          >
-                            <TableSortLabel
-                                active={this.props.orderBy === column.name}
-                                direction={this.props.order}
-                                onClick={this.createSortHandler(column.name)}
-                            >
-                                {column.label}
-                            </TableSortLabel>
-                          </Tooltip>
-                        ) : column.label
-                      }
-                    </TableCell>
-                  ) : null
-                )
-              );
-            }, this)}
-          </TableRow>
-        </TableHead>
-      ) : null;
-  }
+  const headerRequired = columns.find(column => {
+    return column.label;
+  });
+
+  return (headerRequired) ? (
+    <TableHead className={classes.head}>
+      <TableRow>
+        {columns.map(column => {
+          return (
+            (selectable && column.type === 'select') ? (
+              <TableCell
+                padding='checkbox'
+                classes={{
+                  root: classes.tableCell
+                }}
+              >
+                <Checkbox
+                  indeterminate={numSelected > 0 && numSelected < rowCount}
+                  checked={numSelected === rowCount}
+                  onChange={onSelectAllClick}
+                />
+              </TableCell>
+            ) : (
+              (column.show === undefined || column.show) ? (
+                <TableCell
+                  key={`${(new Date()).getTime()}-table-head-${column.name}`}
+                  padding={column.disablePadding ? 'none' : 'default'}
+                  sortDirection={orderBy === column.name ? order : false}
+                  classes={{
+                    root: classes.tableCell
+                  }}
+                >
+                  {
+                    (column.sort) ? (
+                      <Tooltip
+                        title='Sort'
+                        placement={column.numeric ? 'bottom-end' : 'bottom-start'}
+                        enterDelay={300}
+                      >
+                        <TableSortLabel
+                          active={orderBy === column.name}
+                          direction={order}
+                          onClick={createSortHandler(column.name)}
+                        >
+                          {column.label}
+                        </TableSortLabel>
+                      </Tooltip>
+                    ) : column.label
+                  }
+                </TableCell>
+              ) : null
+            )
+          );
+        })}
+      </TableRow>
+    </TableHead>
+  ) : null;
 }
 
 EnhancedTableHead.defaultProps = {
   order: 'desc',
   rowCount: 0,
-  selectable: false
+  selectable: false,
+  orderBy: 'id',
+  numSelected: 0,
+  columns: []
 };
 
 EnhancedTableHead.propTypes = {
@@ -114,7 +100,7 @@ EnhancedTableHead.propTypes = {
   order: PropTypes.string.isRequired,
   // orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(tableHeadStyles)(EnhancedTableHead);

@@ -25,7 +25,6 @@ import Toggle from './Field/Toggle';
 import NumberField from './Field/Number';
 import Radio from './Field/Radio';
 import Checkbox from './Field/Checkbox';
-import File from './Field/File';
 import InputField from './Field/Input';
 import Autocomplete from './Field/Autocomplete';
 import DateField from './Field/Date';
@@ -961,14 +960,6 @@ export default function Field (props) {
             />
           }
         </FormControl>
-      );
-      break;
-    case 'file':
-      field = (
-        <File
-          key={`file-${name}`}
-          {...updatedProps}
-        />
       );
       break;
     case 'nested':

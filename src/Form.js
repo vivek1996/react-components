@@ -183,8 +183,11 @@ class EnhancedForm extends React.Component {
 
       return updatedState;
     }, () => {
-      if (submit && this.state.loadOnChange && !this.state.loading) {
-        this.submitAction();
+      if (submit && this.props.autoSubmit && !this.state.loading) {
+        const parsedFields = unflatten(this.state.data, {
+          delimiter: '.'
+        });
+        this.props.onSubmit(parsedFields, this);
       }
     });
   }

@@ -101,8 +101,7 @@ const styles = theme => ({
     padding: '0 8px 0 16px'
   },
   content: {
-    maxHeight: '400px',
-    paddingTop: theme.spacing.unit * 3,
+    maxHeight: '400px'
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -140,9 +139,9 @@ class EnhancedPopper extends React.Component {
 
   handleClose = () => {
     this.props.onClose();
-	};
-	
-	handleCancel = () => {
+  };
+  
+  handleCancel = () => {
     if(this.props.value) {
       this.props.onClose(this.props.value);
     } else {
@@ -156,35 +155,35 @@ class EnhancedPopper extends React.Component {
     } else {
       this.props.onClose("ok");
     }
-	};
+  };
 
-	renderActions = () => {
-		switch(this.state.type) {
-			case 'confirm': {
-				return(
-					<DialogActions>
-						<Button onClick={this.handleCancel} color="primary">
-							Cancel
-						</Button>
-						<Button onClick={this.handleOk} color="primary">
-							Ok
-						</Button>
-					</DialogActions>
-				);
-			}
-			case 'alert': {
-				return(
-					<DialogActions>
-						<Button onClick={this.handleClose} color="primary" autoFocus>
-							Ok
-						</Button>
-					</DialogActions>
-				);
+  renderActions = () => {
+    switch(this.state.type) {
+      case 'confirm': {
+        return(
+          <DialogActions>
+            <Button onClick={this.handleCancel} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handleOk} color="primary">
+              Ok
+            </Button>
+          </DialogActions>
+        );
+      }
+      case 'alert': {
+        return(
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary" autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        );
       }
       default: {
         return;
       }
-		}
+    }
   }
   
   render() {
@@ -218,11 +217,11 @@ class EnhancedPopper extends React.Component {
               ) : null}
             </DialogTitle> : ""
           }
-					<DialogContent className={classes.content}>
-						{(this.state.text) ? <DialogContentText>{this.state.text}</DialogContentText> : ""}
-						{(this.state.content) ? this.state.content : ""}
-					</DialogContent>
-					{(this.state.type) ? this.renderActions() : ""}
+          <DialogContent className={classes.content}>
+            {(this.state.text) ? <DialogContentText>{this.state.text}</DialogContentText> : ""}
+            {(this.state.content) ? this.state.content : ""}
+          </DialogContent>
+          {(this.state.type) ? this.renderActions() : ""}
         </Paper>
       </Popper>
     );

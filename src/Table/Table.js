@@ -19,10 +19,11 @@ import Link from '@material-ui/core/Link';
 import { Done, Clear, KeyboardArrowUp, KeyboardArrowDown } from '@material-ui/icons';
 
 import TableHead from './TableHead';
-import Toolbar from '../Toolbar';
+import Titlebar from './Titlebar';
 // import Filter from "./../Filter";
-import Dialog from '../Dialog';
 import ChipFilter from '../ChipFilter';
+
+import { isDefined, isFunction } from '../lib/utils';
 
 const styles = theme => ({
   tableWrapper: {
@@ -54,259 +55,206 @@ const styles = theme => ({
   }
 });
 
-const tableOptions = {
-  order: 'desc',
-  orderBy: 'id',
-  uKey: 'id',
-  selected: [],
-  rows: [],
-  page: 0,
-  rowsPerPage: 10,
-  selectable: false,
-  actions: [],
-  dialogOpen: false,
-  dialog: {},
-  loading: false,
-  filter: {},
-  expanded: null,
-  expandedRow: {}
-}
+const EnhancedTable = (props) => {
+  const { title, pagination, classes, uniqueKey, selectable, columns, onLoad, filter, ...other } = props;
 
-class EnhancedTable extends React.Component {
-  selectedRows = [];
-  constructor(props) {
-    super(props);
+  const [loading, setLoading] = React.useState(false);
+  const [rows, setRows] = React.useState(props.rows);
+  const [rowsCount, setRowsCount] = React.useState(props.rowsCount || props.rows.length);
+  const [rowsPerPage, setRowsPerPage] = React.useState(props.rowsPerPage);
+  const [filterOptions, setFilterOptions] = React.useState(filter);
+  const [sort, setSort] = React.useState(props.order || props.sort);
+  const [sortBy, setSortBy] = React.useState(props.orderBy || props.sortBy);
+  const [selected, setSelected] = React.useState(props.selected);
+  const [page, setPage] = React.useState(props.page);
+  const [expanded, setExpanded] = React.useState(props.expanded);
+  const [expandedRow, setExpandedRow] = React.useState(props.expandedRow);
 
-    this.state = Object.assign({}, tableOptions, props);
-  }
-
-  componentDidMount = () => {
-    this.loadData();
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    this.loadData();
-    this.setState({ 
-      rows: nextProps.rows, 
-      columns: nextProps.columns, 
-      title: nextProps.title, 
-      orderBy: nextProps.orderBy || this.state.orderBy, 
-      order: nextProps.order || this.state.order, 
-      rowsCount: nextProps.rowsCount,
-      selected: nextProps.selected
-    });
-  }
-
-  componentWillUnmount = () => {}
-
-  loadData = (filterOptions) => {
-    filterOptions = (filterOptions === undefined) ? this.state.filter : filterOptions;
-    let updatedTableProps = {
-      orderBy:this.state.orderBy, 
-      order:this.state.order,
-      page: this.state.page,
-      rowsPerPage: this.state.rowsPerPage
-    };
-
-    filterOptions = Object.assign({}, filterOptions, updatedTableProps);
-    if(this.props.loadData) {
-      this.setState({filter: filterOptions, loading: true});
-      this.props.loadData(filterOptions).then(
-        records => {
-          this.setState({
-            loading: false, rows: records.rows, rowsCount: records.count
-          });
-        },
-        error => {
-          this.setState({rows: [], rowsCount: 0, loading: false});
-        }
-      );
-    } else {
-      this.setState({rows: this.state.rows, rowsCount: this.state.rows.length, loading: false, filter: filterOptions});
-    }
-  }
-
-  refreshData = () => {
-    this.loadData();
-  }
-
-  handleRequestSort = (event, property) => {
-    const orderBy = property;
-    let order = 'desc';
-
-    if (this.state.orderBy === property && this.state.order === 'desc') {
-        order = 'asc';
+  const fetchData = async (tableLoadOptions) => {
+    setLoading(true);
+    if (onLoad) {
+      const { rows, rowsCount } = await onLoad(tableLoadOptions);
+      setRows(rows);
+      setRowsCount(rowsCount);
     }
 
-    this.setState({ order, orderBy }, () => {
-      console.log("Inside handleRequestSort");
-      this.loadData();
+    setLoading(false);
+  }
+
+  React.useEffect(() => {
+    fetchData({
+      filter: filterOptions,
+      sortBy,
+      sort,
+      page,
+      rowsPerPage
     });
+  }, []);
+
+  React.useEffect(() => {
+    fetchData({
+      filter: filterOptions,
+      sortBy,
+      sort,
+      page,
+      rowsPerPage
+    });
+  }, [page, rowsPerPage, sort, sortBy, filterOptions]);
+
+  const handleRequestSort = (event, property) => {
+    let sortBy = property;
+    let sort = 'desc';
+
+    if (sortBy === property && sort === 'desc') {
+      sort = 'asc';
+    }
+
+    setSort(sort);
+    setSortBy(sortBy);
   };
 
-  handleSelectAllClick = (event, checked) => {
-    this.setState({ 
-      selected: (checked) ? this.state.rows.map(n => n[this.props.uKey]) : []
-    });
+  const handleSelectAllClick = (event, checked) => {
+    setSelected((checked) ? rows.map(n => n[props.uniqueKey]) : []);
   };
 
-  handleClick = (event, rowData) => {
+  const handleClick = (event, rowData) => {
     const { type, checked } = event.target;
-    if(type === "checkbox") {
-      if(this.props.onClick && typeof this.props.onClick === 'function') {
+    if (type === 'checkbox') {
+      if (props.onClick && isFunction(props.onClick)) {
         event.preventDefault();
-        this.props.onClick(this, rowData, event);
+        props.onClick(rowData, event);
       } else {
-        this.setState((state, props) => {
-          let selected = state.selected;
-          let rowKey = rowData[props.uKey];
-          
-          if(checked) {
-            if(selected.indexOf(rowKey) === -1) {
-              selected.push(rowKey);
-            }
-          } else {
-            selected = selected.splice(selected.indexOf(rowKey), 1);
-          }
-  
-          return { selected: selected };
-        });
+        // this.setState((state, props) => {
+        //   let selected = state.selected;
+        //   let rowKey = rowData[props.uniqueKey];
+
+        //   if (checked) {
+        //     if (selected.indexOf(rowKey) === -1) {
+        //       selected.push(rowKey);
+        //     }
+        //   } else {
+        //     selected = selected.splice(selected.indexOf(rowKey), 1);
+        //   }
+
+        //   return { selected: selected };
+        // });
       }
     }
-    
-    if(event.target.tagName === "TD" && this.props.clickLink) {
+
+    if (event.target.tagName === 'TD' && props.clickLink) {
       event.preventDefault();
-      // history.push(this.props.clickLink + rowData[this.props.uKey]);
-      console.log("TD Click Link");
+      // history.push(props.clickLink + rowData[props.uniqueKey]);
     }
-    
-    if(event.target.tagName === "TD" && this.props.clickFunction) {
+
+    if (event.target.tagName === 'TD' && props.clickFunction) {
       event.preventDefault();
-      this.props.clickFunction(this, rowData);
+      props.clickFunction(rowData);
     }
   };
 
-  isSelected = id => (this.state.selected.indexOf(id) !== -1);
-  
-  handleChangePage = (event, page) => {
-    this.setState({ page: page }, () => {
-      this.loadData();
-    });
+  const isSelected = id => (selected.indexOf(id) !== -1);
+
+  const handleChangePage = (event, page) => setPage(page);
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(event.target.value);
+    setPage(0);
   };
 
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value, page: 0 }, () => {
-      console.log("Inside handleChangeRowsPerPage");
-      this.loadData();
-    });
-  };
-
-  openDialog = (dialogInfo) => {
-    this.setState({ dialogOpen: true, dialog: dialogInfo });
-  };
-
-  closeDialog = value => {
-    this.setState({ dialogOpen: false });
-
-    if(value === "ok" && this.state.dialog.action) {
-      this.state.dialog.action();
-    }
-  };
-
-  formatCellData = (cell, rowData, uKey) => {
+  const formatCellData = (cell, rowData, uniqueKey) => {
     let cellData = rowData;
     let nestedData = cell.name.split('.');
     nestedData.map(nestedColumn => {
-      if(cellData[nestedColumn]) {
+      if (cellData[nestedColumn]) {
         cellData = cellData[nestedColumn];
       } else {
-        cellData = "";
+        cellData = '';
       }
-      
-      return "";
+
+      return '';
     });
 
     let showCellData = true;
-    if(cell.beforeShow) {
+    if (cell.beforeShow) {
       showCellData = cell.beforeShow(rowData);
     }
 
-    if(showCellData) {
-      switch(cell.type) {
+    if (showCellData) {
+      switch (cell.type) {
         case 'boolean':
           cellData = cellData ? <Done /> : <Clear />;
           break;
         case 'button':
           cellData = [];
           cell.buttons.map(button => {
-            let buttonLink  = "";
-            let showField   = true;
+            let buttonLink = '';
+            let showField = true;
 
-            if(button.beforeShow) {
+            if (button.beforeShow) {
               showField = button.beforeShow(rowData);
             }
 
-            if(button.getIcon) {
+            if (button.getIcon) {
               button['icon'] = button.getIcon(rowData[button.field]);
             }
 
-            if(showField && button.link) {
+            if (showField && button.link) {
               buttonLink = button.link;
-              if(button.param) {
+              if (button.param) {
                 buttonLink = buttonLink + rowData[button.param];
               }
 
-              if(button.icon === undefined) {
-                cellData.push(<Chip
-                  label={button.label}
-                  to={buttonLink} 
-                  component={Link}
-                  className={this.props.classes.chip}
-                  key={rowData[uKey] + button.label.replace(' ', '-')}
-                />);
-              } else {
-                cellData.push(<IconButton aria-label={button.label} to={buttonLink} component={Link} key={rowData[uKey] + button.label.replace(' ', '-')} >
+              if (isDefined(button.icon)) {
+                cellData.push(<IconButton aria-label={button.label} to={buttonLink} component={Link} key={rowData[uniqueKey] + button.label.replace(' ', '-')} >
                   <button.icon />
                 </IconButton>);
+              } else {
+                cellData.push(<Chip
+                  label={button.label}
+                  to={buttonLink}
+                  component={Link}
+                  className={props.classes.chip}
+                  key={rowData[uniqueKey] + button.label.replace(' ', '-')}
+                />);
               }
             }
 
-            if(showField && button.action) {
-              if(button.icon === undefined) {
+            if (showField && button.action) {
+              if (!isDefined(button.icon)) {
                 cellData.push(<Chip
                   label={button.label}
-                  onClick={() => button.action(this, rowData)}
-                  className={this.props.classes.chip}
-                  key={rowData[uKey] + button.label.replace(' ', '-')}
+                  onClick={() => button.action(rowData)}
+                  className={props.classes.chip}
+                  key={rowData[uniqueKey] + button.label.replace(' ', '-')}
                   color={button.color}
                   size={button.size}
                   variant={button.variant}
                 />);
-              } else if(button.type === 'fab') {
-                cellData.push(<Fab aria-label={button.label} onClick={() => button.action(this, rowData)} color={button.color} key={rowData[uKey] + button.label.replace(' ', '-')} size={button.size} classes={button.classes}>
+              } else if (button.type === 'fab') {
+                cellData.push(<Fab aria-label={button.label} onClick={() => button.action(rowData)} color={button.color} key={rowData[uniqueKey] + button.label.replace(' ', '-')} size={button.size} classes={button.classes}>
                   <button.icon />
                 </Fab>);
               } else {
-                cellData.push(<IconButton aria-label={button.label} onClick={() => button.action(this, rowData)} color={button.color} key={rowData[uKey] + button.label.replace(' ', '-')}>
+                cellData.push(<IconButton aria-label={button.label} onClick={() => button.action(rowData)} color={button.color} key={rowData[uniqueKey] + button.label.replace(' ', '-')}>
                   <button.icon />
                 </IconButton>);
               }
             }
 
-            return "";
+            return '';
           });
           break;
         case 'render':
-          cellData = cell.render(rowData, this);
+          cellData = cell.render(rowData);
           break;
         case 'expand':
-          const isExpanded = (rowData[uKey] === this.state.expandedRow[uKey]);
+          const isExpanded = (rowData[uniqueKey] === expandedRow[uniqueKey]);
           cellData = (
             <IconButton aria-label={cell.label} onClick={() => {
-              this.toggleExpand(cell, rowData);
+              toggleExpand(cell, rowData);
             }}>
               {
-                (isExpanded && this.state.expanded) ? <KeyboardArrowUp /> : <KeyboardArrowDown />
+                (isExpanded && expanded) ? <KeyboardArrowUp /> : <KeyboardArrowDown />
               }
             </IconButton>
           );
@@ -315,88 +263,66 @@ class EnhancedTable extends React.Component {
           break;
       }
     } else {
-      cellData = "";
+      cellData = '';
     }
 
     return cellData;
   }
 
-  toggleExpand = async (cell, rowData) => {
-    let expandedRow   = this.state.expandedRow;
+  const toggleExpand = async (cell, rowData) => {
     let expandContent = null;
-    if(Object.keys(expandedRow).length > 0 
-      && expandedRow[this.props.uKey] === rowData[this.props.uKey]) {
-      expandedRow = {};
+    let tempExpandedRow = expandedRow;
+    if (Object.keys(expandedRow).length > 0
+      && expandedRow[props.uniqueKey] === rowData[props.uniqueKey]) {
+      tempExpandedRow = {};
     } else {
-      expandedRow   = rowData;
-      expandContent = await this.getExpandContent(cell, rowData);
+      tempExpandedRow = rowData;
+      expandContent = await getExpandContent(cell, rowData);
     }
 
-    this.setState({expanded: expandContent, expandedRow: expandedRow});
+    setExpanded(expandContent);
+    setExpandedRow(tempExpandedRow);
   }
 
-  getExpandContent = async (cell, rowData) => {
-    let expandContent = await cell.render(rowData, this);
+  const getExpandContent = async (cell, rowData) => {
+    let expandContent = await cell.render(rowData);
     return expandContent;
   }
 
-  render = () => {
-    const { title, pagination, classes, uKey, selectable, ...other } = this.props;
-    
-    const { columns, rowsCount, expanded, expandedRow } = this.state;
-    const { order, orderBy, selected, rowsPerPage, page } = this.state;
-    const { handleSelectAllClick, handleRequestSort } = this.state;
+  return (
+    <Paper className={classes.paper}>
+      {(title) ? (
+        <Titlebar
+          title={title}
+          selectable={selectable}
+          numSelected={selected.length}
+          {...other}
+        />
+      ) : null}
 
-    let rows = [];
-    if(this.state.loadData) {
-      rows = (this.state.rows) ? this.state.rows : [];
-    } else {
-      rows = (this.state.rows) ? this.state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : [];
-    }
+      <ChipFilter
+        options={columns}
+        onFilter={setFilterOptions}
+      />
 
-    if(handleSelectAllClick !== undefined) {
-      this.handleSelectAllClick = handleSelectAllClick;
-    }
-
-    if(handleRequestSort !== undefined) {
-      this.onRequestSort = handleRequestSort;
-    }
-    
-    return (
-      <Paper className={classes.paper}>
-        {(title) ? (
-          <Toolbar 
-            title={title}
+      <div className={classes.tableWrapper}>
+        {loading && <CircularProgress className={classes.progress} />}
+        <Table className={classes.table} aria-labelledby='tableTitle' key={Date.now()}>
+          <TableHead
             selectable={selectable}
+            columns={columns}
             numSelected={selected.length}
-            openDialog={this.openDialog} 
-            closeDialog={this.closeDialog}
-            refreshData={this.refreshData}
-            {...other} 
+            sort={sort}
+            sortBy={sortBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={rows.length}
           />
-        ) : null}
-
-        <ChipFilter options={columns} loadData={this.loadData} />
-
-        <div className={classes.tableWrapper}>
-          {this.state.loading && <CircularProgress className={classes.progress} />}
-          <Table className={classes.table} aria-labelledby="tableTitle" key={Date.now()}>
-            <TableHead
-              selectable={selectable}
-              columns={columns}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-            
-            {(!this.state.loading && rows.length === 0) ? (
+          <TableBody>
+            {(!loading && rows.length === 0) ? (
               <TableRow>
-                <TableCell 
-                  colSpan={columns.length} 
+                <TableCell
+                  colSpan={columns.length}
                   classes={{
                     root: classes.tableCell
                   }}
@@ -405,13 +331,13 @@ class EnhancedTable extends React.Component {
                 </TableCell>
               </TableRow>
             ) : null}
-            
+
             {rows.map(n => {
-              const isSelected = this.isSelected(n[uKey]);
-              const isExpanded = (n[uKey] === expandedRow[uKey]);
+              const isSelectedVal = isSelected(n[uniqueKey]);
+              const isExpanded = (n[uniqueKey] === expandedRow[uniqueKey]);
               let expandColumn = isExpanded && columns.find(function(column) {
                 let showColumn = true;
-                if(column.beforeShow) {
+                if (column.beforeShow) {
                   showColumn = column.beforeShow(n);
                 }
 
@@ -422,31 +348,31 @@ class EnhancedTable extends React.Component {
                 <React.Fragment>
                   <TableRow
                     hover
-                    onClick={event => this.handleClick(event, n)}
-                    role="checkbox"
-                    aria-checked={isSelected}
+                    onClick={event => handleClick(event, n)}
+                    role='checkbox'
+                    aria-checked={isSelectedVal}
                     tabIndex={-1}
-                    key={`${(new Date()).getTime()}-${n[uKey]}`}
-                    selected={isSelected}
+                    key={`${(new Date()).getTime()}-${n[uniqueKey]}`}
+                    selected={isSelectedVal}
                   >
                     {(columns.some(column => column.span === true)) ? (
                       columns.map(column => {
-                        let cellData = this.formatCellData(column, n, uKey);
+                        let cellData = formatCellData(column, n, uniqueKey);
 
                         return ((column.show === undefined || column.show) && column.span) ? (
-                          (column.type === "select") ? (
-                            <TableCell 
-                              padding="checkbox" 
+                          (column.type === 'select') ? (
+                            <TableCell
+                              padding='checkbox'
                               key={column.name}
                               classes={{
                                 root: classes.tableCell
                               }}
                             >
-                              <Checkbox checked={isSelected} />
+                              <Checkbox checked={isSelectedVal} />
                             </TableCell>
                           ) : (
-                            <TableCell 
-                              key={column.name} 
+                            <TableCell
+                              key={column.name}
                               colSpan={columns.length}
                               classes={{
                                 root: classes.tableCell
@@ -459,24 +385,24 @@ class EnhancedTable extends React.Component {
                       })
                     ) : (
                       columns.map(column => {
-                        let cellData = this.formatCellData(column, n, uKey);
+                        let cellData = formatCellData(column, n, uniqueKey);
 
                         return (column.show === undefined || column.show) ? (
-                          (column.type === "select") ? (
-                            <TableCell 
-                              padding="checkbox" 
+                          (column.type === 'select') ? (
+                            <TableCell
+                              padding='checkbox'
                               key={column.name}
                               classes={{
                                 root: classes.tableCell
                               }}
                             >
-                              <Checkbox 
-                                checked={isSelected} 
+                              <Checkbox
+                                checked={isSelectedVal}
                               />
                             </TableCell>
                           ) : (
-                            <TableCell 
-                              key={column.name} 
+                            <TableCell
+                              key={column.name}
                               padding={column.disablePadding ? 'none' : 'default'}
                               classes={{
                                 root: classes.tableCell
@@ -489,11 +415,11 @@ class EnhancedTable extends React.Component {
                       })
                     )}
                   </TableRow>
-                  
+
                   {
                     (isExpanded && expandColumn && expanded) ? (
                       <TableRow>
-                        <TableCell colSpan={columns.length}> 
+                        <TableCell colSpan={columns.length}>
                           {expanded}
                         </TableCell>
                       </TableRow>
@@ -502,39 +428,29 @@ class EnhancedTable extends React.Component {
                 </React.Fragment>
               );
             })}
-            </TableBody>
-          </Table>
-        </div>
+          </TableBody>
+        </Table>
+      </div>
 
-        {(pagination && rows.length > 0) ? (
-          <TablePagination
-            component="div"
-            count={rowsCount}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            rowsPerPageOptions={[5, 10, 25, 50, 100]}
-            backIconButtonProps={{
-              'aria-label': 'Previous Page',
-            }}
-            nextIconButtonProps={{
-              'aria-label': 'Next Page',
-            }}
-            onChangePage={this.handleChangePage}
-            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-          />
-        ) : null}
-
-        <Dialog 
-          title={this.state.dialog.title}
-          open={this.state.dialogOpen}
-          onClose={this.closeDialog}
-          type={this.state.dialog.type} 
-          content={this.state.dialog.content}
-          text={this.state.dialog.text}
+      {(pagination && rows.length > 0) ? (
+        <TablePagination
+          component='div'
+          count={rowsCount}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          backIconButtonProps={{
+            'aria-label': 'Previous Page'
+          }}
+          nextIconButtonProps={{
+            'aria-label': 'Next Page'
+          }}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
         />
-      </Paper>
-    );
-  }
+      ) : null}
+    </Paper>
+  );
 }
 
 EnhancedTable.defaultProps = {
@@ -542,7 +458,17 @@ EnhancedTable.defaultProps = {
   selectable: false,
   rows: [],
   selected: [],
-  uKey: 'id'
+  columns: [],
+  uniqueKey: 'id',
+  sort: 'desc',
+  sortBy: 'id',
+  page: 0,
+  rowsPerPage: 10,
+  actions: [],
+  loading: false,
+  filter: {},
+  expanded: null,
+  expandedRow: {}
 };
 
 EnhancedTable.propTypes = {

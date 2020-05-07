@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const EnhancedToolbar = (props) => {
+const EnhancedTableTitlebar = (props) => {
   const classes = useStyles();
   const { title, data, content, numSelected, actions, selectable, ...other } = props;
 
@@ -128,15 +128,15 @@ const EnhancedToolbar = (props) => {
   );
 };
 
-EnhancedToolbar.defaultProps = {
+EnhancedTableTitlebar.defaultProps = {
   selectable: false,
   title: null,
   content: null,
   actions: []
 };
 
-EnhancedToolbar.propTypes = {
+EnhancedTableTitlebar.propTypes = {
   selectable: PropTypes.bool.isRequired
 };
 
-export default EnhancedToolbar;
+export default EnhancedTableTitlebar;

@@ -5,7 +5,31 @@ import fetch from 'cross-fetch';
 
 import logo from './logo.svg';
 import './App.css';
-import { Form as FormComponent } from 'react-component-stack';
+import { Form as FormComponent, Table as TableComponent } from 'react-component-stack';
+
+const tableData = {
+  columns: [
+    { name: 'name', label: 'Name', type: 'text', sort: true, filter: true },
+    { name: 'status', label: 'Status', type: 'text', sort: true, filter: true }
+  ],
+  rows: [
+    {
+      "id":"1",
+      "name":"Draft Record",
+      "status":"Draft",
+    },
+    {
+      "id":"2",
+      "name":"Ready Record",
+      "status":"Ready"
+    },
+    {
+      "id":"3",
+      "name":"Published Record",
+      "status":"Published"
+    }
+  ]
+}
 
 function sleep(delay = 0) {
   return new Promise((resolve) => {
@@ -13,45 +37,7 @@ function sleep(delay = 0) {
   });
 }
 
-// const fields = [
-//   {
-//     name: 'country1', type: 'autocomplete', label: 'Auto complete with static list', required: true, options: [
-//       {
-//         key: 'ind',
-//         value: 'India'
-//       },
-//       {
-//         key: 'aus',
-//         value: 'Australia'
-//       },
-//       {
-//         key: 'uk',
-//         value: 'United Kingdom'
-//       }
-//     ]
-//   },
-//   {name: 'multitext', type: 'text', label: 'Text', placeholder: 'Text', required: true, multiple: true},
-//   {name: 'object', type: 'nested', label: 'Object', placeholder: 'Text', required: true, fields: [
-//     {name: 'nested-1', type: 'text', label: 'Nested 1', placeholder: 'Nested 1', required: true},
-//     {name: 'nested-2', type: 'text', label: 'Nested 2', placeholder: 'Nested 2', required: true}
-//   ]},
-//   {name: 'multiobject', type: 'nested', label: 'Array Object', placeholder: 'Text', required: true, multiple: true, fields: [
-//     {name: 'nested-1', type: 'text', label: 'Nested 1', placeholder: 'Nested 1', required: true},
-//     {name: 'nested-2', type: 'text', label: 'Nested 2', placeholder: 'Nested 2', required: true}
-//   ]},
-//   {name: 'percentage', type: 'number', label: 'Percentage', placeholder: 'Percentage', required: true, min: -200, max: 100, step: 0.1, suffix: '%'},
-//   {name: 'tel', type: 'tel', label: 'Tel', placeholder: 'Tel', required: true},
-//   {name: 'hidden', type: 'hidden', label: 'hidden', placeholder: 'hidden', required: true},
-//   {name: 'toggle', type: 'toggle', label: 'toggle', placeholder: 'toggle', required: true},
-//   {name: 'switch', type: 'switch', label: 'switch', placeholder: 'switch', required: true},
-//   {name: 'boolean', type: 'boolean', label: 'boolean', placeholder: 'boolean', required: true},
-//   {name: 'multiselect', type: 'multiselect', label: 'multiselect', required: true},
-
-//   {name: 'richtext', type: 'richtext', label: 'richtext', placeholder: 'richtext', required: true}
-// ];
-
 const fields = [
-  // {name: 'text', type: 'text', label: 'Text', placeholder: 'Text', required: true, minlength: 10, maxlength: 10},
   {
     name: 'country2', type: 'autocomplete', label: 'Autocomplete with dynamic list', required: true, options: (async (brandData) => {
       if (brandData) {
@@ -70,7 +56,7 @@ const fields = [
       return [];
     }), optionKey: 'country', optionValue: 'name'
   },
-  // {name: 'date', type: 'date', label: 'Date', placeholder: 'Date', required: true},
+  {name: 'date', type: 'date', label: 'Date', placeholder: 'Date', required: true},
   {name: 'number', type: 'number', label: 'Number', placeholder: 'Number', required: true},
   {name: 'range', type: 'range', label: 'range', placeholder: 'range', required: true, min: 0, max: 10},
   {name: 'select', type: 'select', label: 'select', placeholder: 'select', required: true, options: ['India', 'Australia']},
@@ -94,6 +80,8 @@ function App() {
           console.log('Form onSubmit', formData);
         }}
       />
+
+      <TableComponent {...tableData} />
     </div>
   );
 }

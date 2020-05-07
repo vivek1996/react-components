@@ -4,10 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 
-import Form from "./Form";
-import Popper from "./Popper";
+import Form from './Form';
+import Popper from './Popper';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     display: 'flex',
     // justifyContent: 'flex-end',
@@ -15,11 +15,8 @@ const styles = theme => ({
     overflowX: 'hidden',
     overflowY: 'hidden',
     '&:hover': {
-      overflowX: 'auto',
-    },
-    // [theme.breakpoints.between('sm', 'xl')]: {
-    //   flexWrap: 'wrap',
-    // }
+      overflowX: 'auto'
+    }
   },
   chip: {
     margin: theme.spacing(1 / 2)
@@ -33,76 +30,68 @@ const styles = theme => ({
   }
 });
 
-class ChipFilter extends React.Component {
-	state = {
-		open: false,
-		dialogOpen: false,
-    dialog: {},
-    filterData: {}
-	};
+const ChipFilter = (props) => {
+  const { classes, options, onFilter } = props;
 
-	clearFilter = (option) => {
-    this.setState((state) => {
-      let newState = state;
-      delete newState.filterData[option.name];
-      return newState;
-    }, () => {
-      this.props.loadData(this.state.filterData);
-    });
-	}
+  const [open, setOpen] = React.useState(false);
+  const [dialog, setDialog] = React.useState();
+  const [filterData, setFilterData] = React.useState({});
 
-	openFilter = (dialogInfo) => {
-		this.setState({ dialogOpen: true, dialog: dialogInfo });
-	};
-	
-	closeFilter = value => {
-		this.setState({ dialogOpen: false });
-	
-		if(value === "ok" && this.state.dialog.action) {
-		  this.state.dialog.action();
-		}
+  const clearFilter = (option) => {
+    const updatedFilterData = {...filterData};
+    delete updatedFilterData[option.name];
+    setFilterData(updatedFilterData);
+  }
+
+  const openFilter = (dialogInfo) => {
+    setOpen(true);
+    setDialog(dialogInfo);
   };
-  
-  getSelectedValue = (option) => {
-    let filterData = this.state.filterData;
-    if(filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0) {
+
+  const closeFilter = value => {
+    setOpen(false);
+    setDialog(null);
+  };
+
+  const getSelectedValue = (option) => {
+    if (filterData[option.name] === undefined || filterData[option.name] === '' || filterData[option.name].length === 0) {
       return option.label;
-    } else if(['multiselect', 'select', 'radio', 'checkbox'].indexOf(option.type) > -1) {
+    } else if (['multiselect', 'select', 'radio', 'checkbox'].indexOf(option.type) > -1) {
       let availableOptions = [];
-      if(option.enum) {
+      if (option.enum) {
         availableOptions = option.enum;
-      } else if(option.options) {
+      } else if (option.options) {
         availableOptions = option.options;
-      } else if(typeof option.data === 'object') {
+      } else if (typeof option.data === 'object') {
         availableOptions = option.data;
-      } else if(typeof option.data === 'function') {
+      } else if (typeof option.data === 'function') {
         availableOptions = option.data();
       }
 
-      let selectedOptions = availableOptions.map(availableOption => 
+      let selectedOptions = availableOptions.map(availableOption =>
         (filterData[option.name].indexOf(availableOption.value.toString()) > -1) ? availableOption.label : ''
-      ).filter(selectedOption => selectedOption !== undefined && selectedOption !== "")
+      ).filter(selectedOption => selectedOption !== undefined && selectedOption !== '')
 
       return (selectedOptions.length > 1) ? `${selectedOptions[0]} + ${selectedOptions.length - 1}` : selectedOptions;
-    } else if(['daterange'].indexOf(option.type) > -1) {
+    } else if (['daterange'].indexOf(option.type) > -1) {
       return `${option.label} : From ${filterData[option.name].start} To ${filterData[option.name].end}`;
     } else {
       let availableOptions = [];
-      if(option.enum) {
+      if (option.enum) {
         availableOptions = option.enum;
-      } else if(option.options) {
+      } else if (option.options) {
         availableOptions = option.options;
-      } else if(typeof option.data === 'object') {
+      } else if (typeof option.data === 'object') {
         availableOptions = option.data;
-      } else if(typeof option.data === 'function') {
+      } else if (typeof option.data === 'function') {
         availableOptions = option.data();
       }
 
-      if(availableOptions.length > 0) {
-        let selectedOptions = availableOptions.map(availableOption => 
+      if (availableOptions.length > 0) {
+        let selectedOptions = availableOptions.map(availableOption =>
           (filterData[option.name].indexOf(availableOption.value.toString()) > -1) ? availableOption.label : ''
-        ).filter(selectedOption => selectedOption !== undefined && selectedOption !== "")
-  
+        ).filter(selectedOption => selectedOption !== undefined && selectedOption !== '')
+
         return (selectedOptions.length > 1) ? `${selectedOptions[0]} + ${selectedOptions.length - 1}` : selectedOptions;
       } else {
         return `${option.label} ${filterData[option.name]}`;
@@ -110,79 +99,77 @@ class ChipFilter extends React.Component {
     }
   }
 
-	render = () => {
-		const { classes, options } = this.props;
-    const { open, filterData } = this.state;
+  React.useEffect(() => {
+    onFilter(filterData);
+  }, [filterData]);
 
-    let filterOptions = options || [];
-		return (
-			<div className={classes.root}>
-				{filterOptions.map(option => {
-          return (option.filter) ? (
-            <Chip
-              key={option.name}
-              icon={(filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0) ? <ArrowDropDown /> : null}
-              color={(filterData[option.name] !== undefined && filterData[option.name] !== "" && (filterData[option.name].length > 0 || Object.keys(filterData[option.name]).length > 0 )) ? 'primary' : 'default'}
-              label={this.getSelectedValue(option)}
-              onClick={(node) => {
-                let tempOption = Object.assign({}, option);
-                delete tempOption.label;
-                this.openFilter({
-                  title: option.label,
-                  anchorEl: node.target,
-                  content: <Form 
-                    fields={[tempOption]}
-                    buttons={[]}
-                    data={filterData}
-                    loadOnChange={true}
-                    submitAction={(filterData, formInstance) => {
-                      if(Object.keys(filterData).length > 0) {
-                        this.props.loadData(filterData);
-                      }
+  return (
+    <div className={classes.root}>
+      {options.map(option => {
+        return (option.filter) ? (
+          <Chip
+            key={option.name}
+            icon={(filterData[option.name] === undefined || filterData[option.name] === '' || filterData[option.name].length === 0) ? <ArrowDropDown /> : null}
+            color={(filterData[option.name] !== undefined && filterData[option.name] !== '' && (filterData[option.name].length > 0 || Object.keys(filterData[option.name]).length > 0 )) ? 'primary' : 'default'}
+            label={getSelectedValue(option)}
+            onClick={(node) => {
+              let tempOption = Object.assign({}, option);
+              delete tempOption.label;
+              openFilter({
+                title: option.label,
+                anchorEl: node.target,
+                content: <Form
+                  fields={[tempOption]}
+                  buttons={[]}
+                  data={filterData}
+                  autoSubmit={true}
+                  onSubmit={(filterData, formInstance) => {
+                    formInstance.setState({loading: false});
+                    setFilterData(filterData)
+                  }}
+                  onClose={closeFilter}
+                />
+              });
+            }}
+            onDelete={(filterData[option.name] === undefined || filterData[option.name] === '' || filterData[option.name].length === 0) ? null : () => {
+              clearFilter(option);
+            }}
+            className={classes.chip}
+            aria-owns={open ? 'menu-list-grow' : undefined}
+            aria-haspopup='true'
+            classes={{
+              label: classes.chipLabel
+            }}
+          />
+        ) : null;
+      })}
 
-                      formInstance.setState({loading: false});
-                      this.setState({filterData: filterData});
-                    }}
-                    onClose={this.closeFilter}
-                  />
-                });
-              }}
-              onDelete={(filterData[option.name] === undefined || filterData[option.name] === "" || filterData[option.name].length === 0) ? null : () => {
-                this.clearFilter(option);
-              }}
-              className={classes.chip}
-              aria-owns={open ? 'menu-list-grow' : undefined}
-              aria-haspopup="true"
-              classes={{
-                label: classes.chipLabel
-              }}
-            />
-          ) : null;
-				})}
-
-        <Popper 
-          key={this.state.dialog.key}
-          title={this.state.dialog.title}
-          open={this.state.dialogOpen}
-          onClose={this.closeFilter}
-          type={this.state.dialog.type} 
-          content={this.state.dialog.content}
-          text={this.state.dialog.text}
-          arrow={false}
-          arrowRef={null}
-          disablePortal={false}
-          flip={true}
-          placement={"bottom-start"}
-          preventOverflow={'scrollParent'}
-          anchorEl={this.state.dialog.anchorEl}
-				/>
-			</div>
-		);
-	}
+      <Popper
+        flip={true}
+        arrow={false}
+        arrowRef={null}
+        disablePortal={false}
+        open={open}
+        onClose={closeFilter}
+        title={dialog && dialog.title}
+        content={dialog && dialog.content}
+        anchorEl={dialog && dialog.anchorEl}
+        placement={'bottom-start'}
+        preventOverflow={'scrollParent'}
+      />
+    </div>
+  );
 }
+
+ChipFilter.defaultProps = {
+  options: [],
+  onFilter: () => {}
+};
 
 ChipFilter.propTypes = {
   classes: PropTypes.object.isRequired,
+  options: PropTypes.array.isRequired,
+  onFilter: PropTypes.func.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(ChipFilter);
