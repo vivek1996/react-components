@@ -23,11 +23,12 @@ const useStyles = makeStyles((theme) => ({
 const EnhancedSelect = (props) => {
   const classes = useStyles();
   const {
-    key, name, value, label, placeholder, required, disabled, readonly,
-    optionKey, optionValue, onChange, title, suffix, prefix, data
+    key, name, label, placeholder, required, disabled, readonly, value,
+    optionKey, optionValue, handleChange, title, suffix, prefix, data, multiple
   } = props;
 
   const [options, setOptions] = React.useState([]);
+  const [localValue, setLocalValue] = React.useState(value);
   const loading = options.length === 0;
 
   React.useEffect(() => {
@@ -42,7 +43,7 @@ const EnhancedSelect = (props) => {
       if (typeof props.options === 'object') {
         resultOptions = props.options;
       } else if (typeof props.options === 'function') {
-        resultOptions = await props.options(value);
+        resultOptions = await props.options(localValue);
       }
 
       if (active) {
@@ -58,20 +59,25 @@ const EnhancedSelect = (props) => {
   return (
     <TextField
       select
+      multiple={multiple}
       key={key}
       id={key}
       name={name}
       label={label}
       placeholder={placeholder}
       className={classes.textField}
-      value={value}
+      defaultValue={value || ''}
       onChange={(event) => {
-        const { name, value } = event.target;
-        onChange(name, value);
+        const { value } = event.target;
+        setLocalValue(value);
+      }}
+      onBlur={(event) => {
+        const { value } = event.target;
+        handleChange(name, value);
       }}
       margin='normal'
-      required={(required) ? true : false}
-      InputProps={{ 
+      required={required}
+      InputProps={{
         disabled: (typeof disabled === 'function') ? disabled(data) : disabled,
         readOnly: (typeof readonly === 'function') ? readonly(data) : readonly,
         startAdornment: (
@@ -92,12 +98,32 @@ const EnhancedSelect = (props) => {
         }
       }}
       InputLabelProps={{
-        shrink: value !== undefined
+        shrink: (localValue !== undefined && localValue !== null && localValue !== '' && props.prefix)
+      }}
+      SelectProps={{
+        displayEmpty: false,
+        multiple: multiple,
+        renderValue: (selected) => {
+          if (multiple) {
+            if (selected.length === 0 && placeholder) {
+              return <em>{placeholder}</em>;
+            }
+
+            return selected.join(', ');
+          }
+
+          return selected;
+        }
       }}
     >
+      {(placeholder) && (
+        <MenuItem disabled value=''>
+          <em>{placeholder}</em>
+        </MenuItem>
+      )}
       {options.map(option => (
         <MenuItem
-          key={`select-${name}-${option[optionKey] || option[name] || option.id || option.key || option.value}`}
+          key={`select-option-${name}-${option[optionKey] || option[name] || option.id || option.key || option.value || option}`}
           value={option[optionKey] || option[name] || option.id || option.key || option.value || option}
           className={classes.optionItem}
         >
@@ -107,6 +133,10 @@ const EnhancedSelect = (props) => {
     </TextField>
   );
 }
+
+EnhancedSelect.defaultProps = {
+  multiple: false
+};
 
 EnhancedSelect.propTypes = {
 };

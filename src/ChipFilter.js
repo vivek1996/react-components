@@ -123,8 +123,7 @@ const ChipFilter = (props) => {
                   buttons={[]}
                   data={filterData}
                   autoSubmit={true}
-                  onSubmit={(filterData, formInstance) => {
-                    formInstance.setState({loading: false});
+                  onSubmit={(filterData) => {
                     setFilterData(filterData)
                   }}
                   onClose={closeFilter}

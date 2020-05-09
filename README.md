@@ -1,9 +1,9 @@
 # react-component-stack
-This is React.js based Components which are build with Material UI library.
+This is React.js based components which are build with Material UI library.
 
 ## Example
 
-Form example:
+Form example form inputs:
 
 ```js
 import React from 'react';
@@ -23,7 +23,7 @@ function sleep(delay = 0) {
 
 const fields = [
   {
-    name: 'country2', type: 'autocomplete', label: 'Autocomplete with dynamic list', required: true, options: (async (brandData) => {
+    name: 'autocomplete', type: 'autocomplete', label: 'Autocomplete with dynamic list', required: true, options: (async (brandData) => {
       if (brandData) {
         const response = await fetch('https://country.register.gov.uk/records.json?page-size=5000');
         await sleep(1e3); // For demo purposes.
@@ -40,11 +40,115 @@ const fields = [
       return [];
     }), optionKey: 'country', optionValue: 'name'
   },
+  {name: 'text', type: 'text', label: 'Text', placeholder: 'Text', required: true},
+  {name: 'textarea', type: 'textarea', label: 'Textarea', placeholder: 'Textarea', required: true},
   {name: 'number', type: 'number', label: 'Number', placeholder: 'Number', required: true},
   {name: 'range', type: 'range', label: 'range', placeholder: 'range', required: true, min: 0, max: 10},
   {name: 'select', type: 'select', label: 'select', placeholder: 'select', required: true, options: ['India', 'Australia']},
   {name: 'checkbox', type: 'checkbox', label: 'checkbox', placeholder: 'checkbox', required: true, options: [{value: 'chk1', label: 'Checkbox 1'}, {value: 'chk2', label: 'Checkbox 2'}]},
   {name: 'radio', type: 'radio', label: 'radio', placeholder: 'radio', required: true, options: [{value: 'opt1', label: 'Option 1'}, {value: 'opt2', label: 'Option 2'}]}
+];
+
+const buttons = [{ type: 'submit', label: 'Create', color: 'secondary' }];
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+      </header>
+      <FormComponent
+        novalidate={true}
+        fields={fields}
+        buttons={buttons}
+        onSubmit={(formData) => {
+          console.log('Form onSubmit', formData);
+        }}
+      />
+    </div>
+  );
+}
+
+export default App;
+```
+
+Form Nested Fields:
+
+```js
+import React from 'react';
+
+import logo from './logo.svg';
+import './App.css';
+import { Form as FormComponent } from 'react-component-stack';
+
+const fields = [
+  {
+    name: 'address',
+    type: 'nested',
+    label: 'Address',
+    required: true,
+    fields: [
+      {
+        name: 'line_1',
+        type: 'text',
+        label: 'Address Line 1',
+        placeholder: 'Address Line 1',
+        required: true
+      },
+      {
+        name: 'line_2',
+        type: 'text',
+        label: 'Address Line 2',
+        placeholder: 'Address Line 2',
+        required: true
+      },
+      {
+        name: 'city',
+        type: 'text',
+        label: 'City',
+        placeholder: 'City',
+        required: true
+      },
+      {
+        name: 'state',
+        type: 'text',
+        label: 'State',
+        placeholder: 'State',
+        required: true
+      },
+      {
+        name: 'country',
+        type: 'select',
+        label: 'Country',
+        placeholder: 'Country',
+        required: true,
+        options: ['India', 'Australia']
+      },
+    ]
+  },
+  {
+    name: 'list',
+    type: 'nested',
+    label: 'List',
+    required: true,
+    multiple: true,
+    fields: [
+      {
+        name: 'name',
+        type: 'text',
+        label: 'List Name',
+        placeholder: 'List Name',
+        required: true
+      },
+      {
+        name: 'content',
+        type: 'text',
+        label: 'Content',
+        placeholder: 'Content',
+        required: true
+      },
+    ]
+  }
 ];
 
 const buttons = [{ type: 'submit', label: 'Create', color: 'secondary' }];

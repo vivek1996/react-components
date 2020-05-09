@@ -56,7 +56,6 @@ const getInputProps = async (props) => {
 
   for (const property in rest) {
     const propValue = await getPropValue(props[property], data);
-    console.log(`${property} - ${propValue}`);
     if (propValue !== undefined) {
       if (Object.keys(propMapper).indexOf(property) > -1) {
         defaultProps[propMapper[property]] = propValue;

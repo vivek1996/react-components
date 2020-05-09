@@ -85,8 +85,8 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'wrap',
-    paddingRight: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing(),
+    paddingLeft: theme.spacing()
   },
   header: {
     alignItems: 'center',
@@ -104,21 +104,21 @@ const styles = theme => ({
     maxHeight: '400px'
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginLeft: theme.spacing(),
+    marginRight: theme.spacing()
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing()
   },
   formControl: {
-    margin: theme.spacing.unit * 3,
+    margin: theme.spacing(3)
   },
   group: {
-    margin: `${theme.spacing.unit}px 0`,
+    margin: `${theme.spacing()} 0`,
   },
   closeButton: {
     position: 'absolute',
-    right: theme.spacing.unit,
+    right: theme.spacing(),
     color: 'rgba(255, 255, 255)',
   },
   title: {

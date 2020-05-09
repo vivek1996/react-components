@@ -14,10 +14,6 @@ import Switch from '@material-ui/core/Switch';
 
 import green from '@material-ui/core/colors/green';
 
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import Chip from '@material-ui/core/Chip';
-
 import amber from '@material-ui/core/colors/amber';
 import Range from './Field/Range';
 import Select from './Field/Select';
@@ -29,28 +25,16 @@ import InputField from './Field/Input';
 import Autocomplete from './Field/Autocomplete';
 import DateField from './Field/Date';
 
-import _ from 'lodash';
-
 import Grid from '@material-ui/core/Grid';
 
 import AddCircle from '@material-ui/icons/AddCircle';
 import RemoveCircle from '@material-ui/icons/RemoveCircle';
 
-// import { getInputProps } from './lib';
+import _ from 'lodash';
+import { isDefined, getInputProps } from './lib';
 
 const flatten = require('flat');
 const { unflatten } = require('flat');
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -140,44 +124,53 @@ function Description(props) {
 }
 
 const GroupField = (props) => {
-  const { label, name, data, fields, onChange } = props;
+  const { label, name, formData, fields, onChange } = props;
   return (
-    <FormGroup row>
+    <>
       {
         (label) && (
           <FormLabel>
-            {(typeof label === 'function') ? label(data) : label}
+            {(typeof label === 'function') ? label(formData) : label}
           </FormLabel>
         )
       }
-      {fields && fields.map((nestedField) => {
-        const nestedFieldName = `${name}.${nestedField.name}`;
-        return (
-          <Field
-            onChange={onChange}
-            parent={name}
-            value={data && data[nestedFieldName]}
-            { ...nestedField }
-          />
-        );
-      })}
-    </FormGroup>
+      <FormGroup row>
+        {fields && fields.map((nestedField) => {
+          const nestedFieldName = `${name}.${nestedField.name}`;
+          return (
+            <Field
+              onChange={onChange}
+              parent={name}
+              value={formData && formData[nestedFieldName]}
+              { ...nestedField }
+            />
+          );
+        })}
+      </FormGroup>
+    </>
   );
 };
 
 const ArrayField = (props) => {
-  const { value, label } = props;
+  const { value, label, formData } = props;
   const subFieldCount = Array.isArray(value) ? value.length : 1;
   const [counter, setCounter] = useState(subFieldCount);
-  const [formData, setFormData] = useState();
+  const [fieldValue, setFieldValue] = useState();
   let fieldProps = {...props};
   delete fieldProps.multiple;
   delete fieldProps.label;
+
+  React.useEffect(() => {
+    const flatValues = flatten(formData || {}, { delimiter: '.' });
+    setFieldValue(flatValues);
+  }, [formData]);
+
   const addField = () => {
     setCounter(counter + 1);
   };
+
   const removeField = (fieldName, fieldIndex) => {
-    const parsedValues = unflatten(fieldProps.data, {
+    const parsedValues = unflatten(fieldValue, {
       delimiter: '.'
     });
 
@@ -186,7 +179,9 @@ const ArrayField = (props) => {
     fieldNameParts.map((fieldNamePart, index) => {
       const last = index === fieldNameParts.length - 1;
       if (last) {
-        parsedValues[removeFieldPath].splice(fieldIndex, 1);
+        if (isDefined(parsedValues[removeFieldPath])) {
+          parsedValues[removeFieldPath].splice(fieldIndex, 1);
+        }
       } else {
         if (isNaN(fieldNamePart)) {
           removeFieldPath = (index === 0) ? fieldNamePart : `${removeFieldPath}.${fieldNamePart}`;
@@ -200,12 +195,10 @@ const ArrayField = (props) => {
       delimiter: '.'
     }) : {};
 
-    fieldProps.data = finalValues;
-    setFormData(finalValues);
+    setFieldValue(finalValues);
     setCounter(counter - 1);
   };
 
-  fieldProps.data = (formData && Object.keys(formData).length > 0) ? formData : fieldProps.data;
   return (
     <>
       <Grid
@@ -235,6 +228,8 @@ const ArrayField = (props) => {
           const fieldName = fieldNameParts.join('.');
           fieldProps.name = `${fieldName}`;
         }
+
+        fieldProps.value = isDefined(fieldValue) ? fieldValue[fieldProps.name] || '' : '';
 
         return (
           <Grid container>
@@ -278,18 +273,18 @@ const FieldLabel = (props) => {
 };
 
 const FieldHelpText = (props) => {
-  const { helptext, fieldName, data } = props;
+  const { helptext, fieldName, formData } = props;
 
   return (helptext !== undefined) ? (
     <FormHelperText id={`${fieldName}-help-text`}>
-      {(typeof helptext === 'function') ? helptext(data) : helptext}
+      {(typeof helptext === 'function') ? helptext(formData) : helptext}
     </FormHelperText>
   ) : null;
 };
 
 const FieldHelpLink = (props) => {
   const classes = useStyles();
-  const { helplink, fieldName, data } = props;
+  const { helplink, fieldName, formData } = props;
 
   return (helplink !== undefined) ? (
     <FormHelperText
@@ -298,39 +293,40 @@ const FieldHelpLink = (props) => {
         root: classes.helperTextLink
       }}
     >
-      {(typeof helplink === 'function') ? helplink(data) : helplink}
+      {(typeof helplink === 'function') ? helplink(formData) : helplink}
     </FormHelperText>
   ) : null;
 };
 
 const FieldError = (props) => {
-  const { data, title, error, errorName, errorMessage } = props;
+  const { formData, title, error, errorName, errorMessage } = props;
   return (error) ? (
     <FormHelperText id={errorName}>
-      {(typeof title === 'function') ? title(data) : title || errorMessage}
+      {(typeof title === 'function') ? title(formData) : title || errorMessage}
     </FormHelperText>
   ) : null;
 };
 
-export default function Field (props) {
+const Field = (props) => {
   const classes = useStyles();
 
   const {
-    data, type, name, label, helptext, multiple,
-    prefix, placeholder, disabled, options, value, suffix, required,
+    formData, type, name, label, helptext, multiple,
+    prefix, placeholder, disabled, options, value, suffix, required, error,
     errorMessage, helplink, title, description, fields, parent, onChange, ...restProps
   } = props;
 
   // More properties handled in useEffect
   // format, disablePast, disableFuture, disableDate, openTo, min, max, readonly, maxlength, minlength, step
-  const [error, setError] = React.useState(false);
-  // React.useEffect(() => {
+  const [fieldError, setFieldError] = React.useState(false);
+  // const [fieldProps, setFieldProps] = React.useState();
+  // React.useEffect(() => { 
   //   console.log('Inside Use Effect', restProps);
   //   (async () => {
   //     if (fieldProps === undefined) {
-  //       const inputProps = await getInputProps(restProps, data);
+  //       const inputProps = await getInputProps(restProps, formData);
   //       console.log('inputProps', inputProps);
-  //       setFieldProps(inputProps);
+  //       // setFieldProps(inputProps);
   //     }
   //   })();
   // }, [restProps]);
@@ -339,29 +335,29 @@ export default function Field (props) {
 
   const fieldName = `${ parent ? `${parent}.${name}` : name }`;
   const fieldErrorName = `${fieldName}-error-text`;
+  const fieldKey = `form-control-${fieldName}`;
+  const arrayType = ['select', 'checkbox'];
 
-  let fieldKey = `form-control-${fieldName}`;
-  let arrayType = ['multiselect', 'checkbox'];
   let field = '';
   let fieldOptions = options || [];
   let fieldValue = value;
   let fieldType = type;
 
-  if (data !== undefined && data !== null && data[name] !== undefined && data[name] !== null) {
-    fieldValue = data[name] ;
-    fieldValue = (typeof fieldValue === 'function') ? fieldValue(data) : fieldValue;
+  if (formData !== undefined && formData !== null && formData[name] !== undefined && formData[name] !== null) {
+    fieldValue = formData[name] ;
+    fieldValue = (typeof fieldValue === 'function') ? fieldValue(formData) : fieldValue;
   } else if (value !== undefined && typeof value === 'function') {
-    fieldValue = value(data);
+    fieldValue = value(formData);
   } else if (value !== undefined) {
     fieldValue = value;
-  } else if (arrayType.indexOf(type) > -1 || multiple) {
+  } else if (fieldType === 'checkbox' || (fieldType === 'select' && multiple) || multiple) {
     fieldValue = [];
   }
 
   if (Array.isArray(options)) {
     fieldOptions = options;
   } else if (typeof options === 'function') {
-    let optionsFn = options(data);
+    let optionsFn = options(formData);
     if (optionsFn instanceof Promise) {
       optionsFn.then(options => {
         fieldOptions = options;
@@ -383,20 +379,27 @@ export default function Field (props) {
     }
   }
 
-  if (fieldType !== 'checkbox' && multiple) {
+  const updatedProps = Object.assign({}, props, {
+    name: fieldName,
+    value: fieldValue,
+    type: fieldType,
+    key: fieldKey
+  });
+
+  if (arrayType.indexOf(fieldType) === -1 && multiple) {
     return (
-      <ArrayField {...props} />
+      <ArrayField {...updatedProps} />
     );
   }
 
   React.useEffect(() => {
     (async () => {
-      if (props.error !== undefined) {
-        const fieldErrorFlag = (typeof props.error === 'function') ? props.error(data) : (props.error || false);
-        setError(fieldErrorFlag);
+      if (error !== undefined) {
+        const fieldErrorFlag = (typeof error === 'function') ? error(formData) : (error || false);
+        setFieldError(fieldErrorFlag);
       }
     })();
-  });
+  }, [error]);
 
   const checkFormat = (type, value, pattern) => {
     if (value.length > 0) {
@@ -427,7 +430,7 @@ export default function Field (props) {
     if (formatFlag) {
       handleChangeData(name, fieldValue);
     } else {
-      setError(true);
+      setFieldError(true);
     }
   }
 
@@ -449,22 +452,14 @@ export default function Field (props) {
     }
 
     if (formatFlag) {
-      if (error) {
-        setError(false);
+      if (fieldError) {
+        setFieldError(false);
       }
       onChange && onChange(name, value, submit);
-      // this.setState({ error: false }, () => {
-      //   this.props.onChange && this.props.onChange(name, value, submit);
-      // });
     } else {
-      // this.setState({ error: true });
-      setError(true);
+      setFieldError(true);
     }
   }
-
-  const updatedProps = Object.assign({}, props, {
-    value: fieldValue
-  });
 
   switch (fieldType) {
     case 'radio':
@@ -473,7 +468,7 @@ export default function Field (props) {
           component='fieldset'
           required={required}
           className={classes.textField}
-          error={error}
+          error={fieldError}
           aria-describedby={fieldErrorName}
           key={fieldKey}
         >
@@ -484,30 +479,30 @@ export default function Field (props) {
             ) : null
           }
           <Radio
-            data={data}
+            formData={formData}
             options={fieldOptions}
-            onChange={handleChangeData}
+            handleChange={handleChangeData}
             {...updatedProps}
           />
           {
             <FieldError
-              data={data}
+              formData={formData}
               title={title}
-              error={error}
+              error={fieldError}
               errorName={fieldErrorName}
               errorMessage={errorMessage}
             />
           }
           {
             <FieldHelpText
-              data={data}
+              formData={formData}
               helptext={helptext}
               fieldName={fieldName}
             />
           }
           {
             <FieldHelpLink
-              data={data}
+              formData={formData}
               helplink={helplink}
               fieldName={fieldName}
             />
@@ -533,28 +528,28 @@ export default function Field (props) {
                   checked={fieldValue}
                 />
               }
-              label={(typeof placeholder === 'function') ? placeholder(data) : placeholder}
+              label={(typeof placeholder === 'function') ? placeholder(formData) : placeholder}
             />
           </FormGroup>
           {
             <FieldError
-              data={data}
+              formData={formData}
               title={title}
-              error={error}
+              error={fieldError}
               errorName={fieldErrorName}
               errorMessage={errorMessage}
             />
           }
           {
             <FieldHelpText
-              data={data}
+              formData={formData}
               helptext={helptext}
               fieldName={fieldName}
             />
           }
           {
             <FieldHelpLink
-              data={data}
+              formData={formData}
               helplink={helplink}
               fieldName={fieldName}
             />
@@ -570,7 +565,7 @@ export default function Field (props) {
               root: classes.switchLabel
             }}
           >
-            {(typeof prefix === 'function') ? prefix(data) : prefix}
+            {(typeof prefix === 'function') ? prefix(formData) : prefix}
           </FormLabel>
         ) : null}
         <Switch
@@ -588,12 +583,12 @@ export default function Field (props) {
               root: classes.switchLabel
             }}
           >
-            {(typeof suffix === 'function') ? suffix(data) : suffix}
+            {(typeof suffix === 'function') ? suffix(formData) : suffix}
           </FormLabel>
         ) : null}
         {
           <FieldHelpText
-            data={data}
+            formData={formData}
             helptext={helptext}
             fieldName={fieldName}
           />
@@ -604,7 +599,7 @@ export default function Field (props) {
       field = (
         <FormControl
           className={classes.formControl}
-          error={error}
+          error={fieldError}
           aria-describedby={fieldErrorName}
           key={fieldKey}
         >
@@ -617,23 +612,23 @@ export default function Field (props) {
           />
           {
             <FieldHelpText
-              data={data}
+              formData={formData}
               helptext={helptext}
               fieldName={fieldName}
             />
           }
           {
             <FieldHelpLink
-              data={data}
+              formData={formData}
               helplink={helplink}
               fieldName={fieldName}
             />
           }
           {
             <FieldError
-              data={data}
+              formData={formData}
               title={title}
-              error={error}
+              error={fieldError}
               errorName={fieldErrorName}
               errorMessage={errorMessage}
             />
@@ -645,112 +640,36 @@ export default function Field (props) {
       field = (
         <FormControl
           // className={classes.formControl}
-          error={error}
+          error={fieldError}
           aria-describedby={fieldErrorName}
           key={fieldKey}
         >
           <Select
             key={fieldKey}
-            data={data}
-            onChange={handleChange}
+            multiple={multiple}
+            formData={formData}
+            handleChange={handleChangeData}
             {...updatedProps}
           />
           {
             <FieldHelpText
-              data={data}
+              formData={formData}
               helptext={helptext}
               fieldName={fieldName}
             />
           }
           {
             <FieldHelpLink
-              data={data}
+              formData={formData}
               helplink={helplink}
               fieldName={fieldName}
             />
           }
           {
             <FieldError
-              data={data}
+              formData={formData}
               title={title}
-              error={error}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-        </FormControl>
-      );
-      break;
-    case 'multiselect':
-      field = (
-        <FormControl
-          // className={classes.formControl}
-          error={error}
-          aria-describedby={fieldErrorName}
-          key={fieldKey}
-        >
-          <Select
-            multiple
-            key={name}
-            id={name}
-            name={name}
-            label={label}
-            value={(fieldValue === '' || fieldValue === undefined) ? [] : fieldValue}
-            onChange={handleChange}
-            margin='dense'
-            required={required}
-            disabled={disabled}
-            input={<Input id='select-multiple-chip' />}
-            renderValue={selected => (
-              <div className={classes.chips}>
-                {
-                  selected.map(value => {
-                    let selectedOption = {};
-                    if (typeof value === 'object') {
-                      selectedOption = value;
-                    } else {
-                      selectedOption = fieldOptions.find(fieldOption =>
-                        fieldOption.value === value
-                      );
-                    }
-
-                    return <Chip key={selectedOption.value} label={selectedOption.label} className={classes.chip} />
-                  })
-                }
-              </div>
-            )}
-            MenuProps={MenuProps}
-          >
-            {fieldOptions.map(fieldOption => {
-              return (
-                <MenuItem
-                  key={`${name}-${fieldOption.value}`}
-                  value={fieldOption.value}
-                >
-                  {fieldOption.label}
-                </MenuItem>
-              )
-            })}
-          </Select>
-          {
-            <FieldHelpText
-              data={data}
-              helptext={helptext}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldHelpLink
-              data={data}
-              helplink={helplink}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldError
-              data={data}
-              title={title}
-              error={error}
+              error={fieldError}
               errorName={fieldErrorName}
               errorMessage={errorMessage}
             />
@@ -775,34 +694,34 @@ export default function Field (props) {
       field = (
         <FormControl
           // className={classes.formControl}
-          error={error}
+          error={fieldError}
           aria-describedby={fieldErrorName}
           key={fieldKey}
         >
           <Range
-            data={data}
-            handleChange={handleChange}
+            formData={formData}
+            handleChange={handleChangeData}
             {...updatedProps}
           />
           {
             <FieldHelpText
-              data={data}
+              formData={formData}
               helptext={helptext}
               fieldName={fieldName}
             />
           }
           {
             <FieldHelpLink
-              data={data}
+              formData={formData}
               helplink={helplink}
               fieldName={fieldName}
             />
           }
           {
             <FieldError
-              data={data}
+              formData={formData}
               title={title}
-              error={error}
+              error={fieldError}
               errorName={fieldErrorName}
               errorMessage={errorMessage}
             />
@@ -816,39 +735,39 @@ export default function Field (props) {
           component='fieldset'
           required={required}
           className={classes.textField}
-          error={error}
+          error={fieldError}
           aria-describedby={fieldErrorName}
           key={fieldKey}
         >
           { <FieldLabel label={label} /> }
           <Checkbox
-            data={data}
-            error={error}
+            formData={formData}
+            error={fieldError}
             aria-describedby={fieldErrorName}
             key={fieldKey}
             value={fieldValue}
-            onChange={handleChangeData}
+            handleChange={handleChangeData}
             {...updatedProps}
           />
           {
             <FieldHelpText
-              data={data}
+              formData={formData}
               helptext={helptext}
               fieldName={fieldName}
             />
           }
           {
             <FieldHelpLink
-              data={data}
+              formData={formData}
               helplink={helplink}
               fieldName={fieldName}
             />
           }
           {
             <FieldError
-              data={data}
+              formData={formData}
               title={title}
-              error={error}
+              error={fieldError}
               errorName={fieldErrorName}
               errorMessage={errorMessage}
             />
@@ -860,20 +779,20 @@ export default function Field (props) {
       field = (
         <FormControl
           className={classes.formControl}
-          error={error}
+          error={fieldError}
           aria-describedby={fieldErrorName}
           key={fieldKey}
         >
           <DateField
-            data={data}
+            formData={formData}
             handleChange={handleChangeData}
             {...updatedProps}
           />
           {
             <FieldError
-              data={data}
+              formData={formData}
               title={title}
-              error={error}
+              error={fieldError}
               errorName={fieldErrorName}
               errorMessage={errorMessage}
             />
@@ -887,35 +806,35 @@ export default function Field (props) {
     case 'tel':
       field = (
         <FormControl
-          error={(typeof error === 'function') ? error(data) : error}
+          error={fieldError}
           aria-describedby={fieldErrorName}
           key={fieldKey}
         >
           <NumberField
-            data={data}
+            formData={formData}
             value={fieldValue}
             handleChange={handleChangeData}
             {...updatedProps}
           />
           {
             <FieldHelpText
-              data={data}
+              formData={formData}
               helptext={helptext}
               fieldName={fieldName}
             />
           }
           {
             <FieldHelpLink
-              data={data}
+              formData={formData}
               helplink={helplink}
               fieldName={fieldName}
             />
           }
           {
             <FieldError
-              data={data}
+              formData={formData}
               title={title}
-              error={error}
+              error={fieldError}
               errorName={fieldErrorName}
               errorMessage={errorMessage}
             />
@@ -926,35 +845,35 @@ export default function Field (props) {
     case 'autocomplete':
       field = (
         <FormControl
-          error={(typeof error === 'function') ? error(data) : error}
+          error={fieldError}
           aria-describedby={fieldErrorName}
           key={fieldKey}
         >
           <Autocomplete
             key={fieldKey}
-            data={data}
+            formData={formData}
             handleChange={handleChangeData}
             {...updatedProps}
           />
           {
             <FieldHelpText
-              data={data}
+              formData={formData}
               helptext={helptext}
               fieldName={fieldName}
             />
           }
           {
             <FieldHelpLink
-              data={data}
+              formData={formData}
               helplink={helplink}
               fieldName={fieldName}
             />
           }
           {
             <FieldError
-              data={data}
+              formData={formData}
               title={title}
-              error={error}
+              error={fieldError}
               errorName={fieldErrorName}
               errorMessage={errorMessage}
             />
@@ -974,34 +893,34 @@ export default function Field (props) {
       field = (
         <FormControl
           // className={classes.formControl}
-          error={error}
+          error={fieldError}
           aria-describedby={fieldErrorName}
           key={fieldKey}
         >
           <InputField
-            data={data}
-            handleChange={handleChange}
+            formData={formData}
+            handleChange={handleChangeData}
             {...updatedProps}
           />
           {
             <FieldHelpText
-              data={data}
+              formData={formData}
               helptext={helptext}
               fieldName={fieldName}
             />
           }
           {
             <FieldHelpLink
-              data={data}
+              formData={formData}
               helplink={helplink}
               fieldName={fieldName}
             />
           }
           {
             <FieldError
-              data={data}
+              formData={formData}
               title={title}
-              error={error}
+              error={fieldError}
               errorName={fieldErrorName}
               errorMessage={errorMessage}
             />
@@ -1022,3 +941,4 @@ Field.propTypes = {
 };
 
 // export default withStyles(styles, { withTheme: true })(Field);
+export default Field;

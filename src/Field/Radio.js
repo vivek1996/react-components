@@ -21,59 +21,42 @@ const styles = theme => ({
   }
 });
 
-const radioOptions = {
+const EnhancedRadio = (props) => {
+  const { classes, options, value, name, key, label, handleChange, optionKey, optionValue } = props;
+
+  return (
+    <RadioGroup
+      aria-label={label}
+      className={classes.group}
+      defaultValue={value}
+      key={key}
+      name={name}
+      onChange={(event) => {
+        const { value } = event.target;
+        handleChange(name, value);
+      }}
+    >
+      {options.map(option => {
+        return (
+          <FormControlLabel
+            value={option[optionKey] || option[name] || option.id || option.key || option.value || option}
+            control={<Radio />}
+            label={ option[optionValue] || option.name || option.label || option.value || option }
+            disabled={option.disabled}
+            key={`${(new Date()).getTime()}-radio-group-${option[optionKey] || option[name] || option.id || option.key || option.value || option}`}
+          />
+        );
+      })}
+    </RadioGroup>
+  );
+}
+
+EnhancedRadio.defaultProps = {
   options: []
-}
-
-class EnhancedRadio extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = Object.assign(radioOptions, props);
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    this.setState({ value: nextProps.value, data: nextProps.data });
-  }
-
-  handleChange = event => {
-    const { name, value } = event.target;
-    this.props.onChange(name, value);
-  }
-
-  render = () => {
-    const props = this.props;
-    const { classes } = this.props;
-    const { options, value } = this.state;
-    
-    return (
-      <RadioGroup
-        aria-label={props.label}
-        className={classes.group}
-        value={value}
-        id={props.name}
-        name={props.name}
-        onChange={this.handleChange}
-      >
-        {options.map(option => {
-          return (
-            <FormControlLabel
-              value={option.value}
-              control={<Radio />}
-              label={option.label}
-              disabled={(option.disabled) ? true : false}
-              key={`${(new Date()).getTime()}-radio-group-${option.label}`}
-            />
-          );
-        })}
-      </RadioGroup>
-    );
-  }
-}
+};
 
 EnhancedRadio.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(EnhancedRadio);

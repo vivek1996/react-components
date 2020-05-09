@@ -11,10 +11,9 @@ import {Delete} from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // paddingRight: theme.spacing.unit,
-    marginBottom: theme.spacing.unit * 2,
+    marginBottom: theme.spacing(2),
     [theme.breakpoints.only('xs')]: {
-      marginBottom: theme.spacing.unit
+      marginBottom: theme.spacing()
     }
   },
   highlight:
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
   fab: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   },
   container: {
     justifyContent: 'space-between'

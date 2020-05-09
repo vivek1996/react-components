@@ -18,6 +18,8 @@ const EnhancedNumber = (props) => {
   const classes = useStyles();
   const { type, value } = props;
 
+  const [localValue, setLocalValue] = React.useState(value);
+
   const handleOnChange = (event) => {
     const { name, value, step } = event.target;
 
@@ -50,8 +52,11 @@ const EnhancedNumber = (props) => {
       label={props.label}
       placeholder={props.placeholder}
       className={classes.textField}
-      value={value}
-      onChange={handleOnChange}
+      defaultValue={value || ''}
+      onChange={(event) => {
+        const { value } = event.target;
+        setLocalValue(value);
+      }}
       onBlur={handleOnChange}
       margin='normal'
       required={(props.required) ? true : false}
@@ -73,7 +78,7 @@ const EnhancedNumber = (props) => {
         }
       }}
       InputLabelProps={{
-        shrink: (value !== undefined || props.prefix) ? true : false
+        shrink: (localValue !== undefined && localValue !== null && localValue !== '' && props.prefix)
       }}
     />
   );

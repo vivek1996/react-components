@@ -27,7 +27,7 @@ const styles = theme => ({
   },
   snackBarIconVariant: {
     opacity: 0.9,
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing()
   },
   success: {
     backgroundColor: green[600],

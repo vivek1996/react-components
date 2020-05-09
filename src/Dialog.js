@@ -19,8 +19,8 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'wrap',
-    paddingRight: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing(),
+    paddingLeft: theme.spacing()
   },
   header: {
     alignItems: 'center',

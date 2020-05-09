@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EnhancedAutocomplete (props) {
   const classes = useStyles();
-  const { minlength } = props;
+  const { minlength, key, name, optionKey, optionValue, handleChange } = props;
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const [value, setValue] = React.useState();
@@ -58,7 +58,6 @@ export default function EnhancedAutocomplete (props) {
     };
   }, [loading, value]);
 
-  const { key, name, optionKey, optionValue } = props;
   return (
     <Autocomplete
       key={key}
@@ -73,7 +72,7 @@ export default function EnhancedAutocomplete (props) {
       }}
       onChange={(event, value) => {
         const selectedValue = value[optionKey] || value[name] || value.id || value.key || value.value || value.name || value;
-        props.handleChange(name, selectedValue);
+        handleChange(name, selectedValue);
       }}
       getOptionSelected={(option, selected) => (option[optionKey] || option[name] || option.id || option.key || option.value || option.name || option) === (selected[optionKey] || selected[name] || selected.id || selected.key || selected.value || selected.name || selected)}
       getOptionLabel={(option) => option[optionValue] || option.name || option.label || option.value || option}

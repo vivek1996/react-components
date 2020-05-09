@@ -6,7 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
-import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const styles = theme => ({
@@ -17,126 +16,86 @@ const styles = theme => ({
   }
 });
 
-const radioOptions = {
-  options: []
-}
+const EnhancedCheckbox = (props) => {
+  const { classes, label, name, required, key, error, disabled, value, options, handleChange, formData, optionKey, optionValue } = props;
 
-class EnhancedCheckbox extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = Object.assign(radioOptions, props);
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    this.setState({ value: nextProps.value, data: nextProps.data });
-  }
-
-  handleChange = event => {
+  const onChange = event => {
     const { name, value, checked } = event.target;
-    const { data } = this.props;
-
-    let prevFieldValue = ((data[name] === undefined) ? [] : data[name]);
-
-    if(Array.isArray(prevFieldValue)) {
-      if(checked) {
+    const prevFieldValue = ((formData[name] === undefined) ? [] : formData[name]);
+    if (Array.isArray(prevFieldValue)) {
+      if (checked) {
         let updatedArray = prevFieldValue.concat([value]);
         let uniqueArray = updatedArray.filter(function(item, pos) {
-          return updatedArray.indexOf(item) === pos; 
+          return updatedArray.indexOf(item) === pos;
         });
-
-        this.props.onChange(name, uniqueArray);
+        handleChange(name, uniqueArray);
       } else {
         let filteredPrevValue = prevFieldValue.filter(function(item, pos) {
-            return prevFieldValue.indexOf(value) !== pos;
+          return prevFieldValue.indexOf(value) !== pos;
         });
 
-        this.props.onChange(name, filteredPrevValue);
+        handleChange(name, filteredPrevValue);
       }
     } else {
-      this.props.onChange(name, value);
+      handleChange(name, value);
     }
   }
 
-  render = () => {
-    // return (
-    //   <RadioGroup
-    //     aria-label={props.label}
-    //     className={classes.group}
-    //     value={value}
-    //     id={props.name}
-    //     name={props.name}
-    //     onChange={this.handleChange}
-    //   >
-    //     {options.map(option => {
-    //       return (
-    //         <FormControlLabel 
-    //           value={option.value} 
-    //           control={<Radio />} 
-    //           label={option.label} 
-    //           disabled={(option.disabled) ? true : false} 
-    //           key={`${(new Date()).getTime()}-radio-group-${option.label}`}
-    //         />
-    //       );
-    //     })}
-    //   </RadioGroup>
-  // );
-
-    const props = this.props;
-    const { classes, label, name, required, key, error, disabled } = this.props;
-    const { options, value } = this.state;
-
-    return (options) ? (
-      <FormGroup
-        aria-label={label}
-        className={classes.group}
-      >
-        {options.map(option => {
-          return (
-            <FormControlLabel
-              control={
-                <Checkbox 
-                  onChange={this.handleChange} 
-                  value={option.value} 
-                  name={name}
-                  disabled={(option.disabled) ? true : false}
-                  checked={(value.indexOf(option.value.toString()) > -1) ? true : false}
-                />
-              }
-              label={option.label}
-            />
-          );
-        })}
-      </FormGroup>
-    ) : (
-      <FormGroup
-        aria-label={label}
-        className={classes.group}
-      >
-        <FormControlLabel
-          control={
-            <Checkbox 
-              onChange={this.handleChange} 
-              value={value} 
-              name={name}
-              disabled={(disabled) ? true : false}
-              checked={value}
-            />
-          }
-          label={
-            <Typography variant='caption' >
-              {label}
-            </Typography>
-          }
-        />
-      </FormGroup>
-    );
-  }
+  return (options) ? (
+    <FormGroup
+      aria-label={label}
+      className={classes.group}
+    >
+      {options.map(option => {
+        const optionVal = option[optionKey] || option[name] || option.id || option.key || option.value || option;
+        const optionLabel = option[optionValue] || option.name || option.label || option.value || option;
+        return (
+          <FormControlLabel
+            control={
+              <Checkbox
+                onChange={onChange}
+                value={optionVal}
+                name={name}
+                disabled={option.disabled}
+                checked={(value.indexOf(optionVal.toString()) > -1)}
+              />
+            }
+            label={optionLabel}
+          />
+        );
+      })}
+    </FormGroup>
+  ) : (
+    <FormGroup
+      aria-label={label}
+      className={classes.group}
+    >
+      <FormControlLabel
+        control={
+          <Checkbox
+            onChange={handleChange}
+            value={value}
+            name={name}
+            disabled={disabled}
+            checked={value}
+          />
+        }
+        label={
+          <Typography variant='caption'>
+            {label}
+          </Typography>
+        }
+      />
+    </FormGroup>
+  );
 }
 
+EnhancedCheckbox.defaultProps = {
+  options: []
+};
+
 EnhancedCheckbox.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(EnhancedCheckbox);

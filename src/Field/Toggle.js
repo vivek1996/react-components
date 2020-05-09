@@ -9,11 +9,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
-  root: {
-    
-  },
+  root: {},
   spacing: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
     paddingLeft: theme.spacing()
   },
   textField: {
@@ -22,15 +20,9 @@ const styles = theme => ({
   },
   options: {
     ...theme.typography.button,
-    // padding: theme.spacing.unit,
     color: theme.palette.common.white,
     display: 'flex',
     alignItems: 'center'
-    // marginLeft: theme.spacing.unit,
-    // marginRight: theme.spacing.unit,
-
-    // justifyContent: 'center',
-    // padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
   toggleButton: {
     minWidth: '42%',
@@ -40,17 +32,6 @@ const styles = theme => ({
     display: 'flex',
     backgroundColor: '#f5f5f5',
     color: 'rgba(0, 0, 0, .3)',
-    // '&:hover': {
-    //   textDecoration: 'none',
-    //   // Reset on mouse devices
-    //   backgroundColor: theme.palette.primary.main,
-    //   '@media (hover: none)': {
-    //     backgroundColor: 'transparent'
-    //   },
-    //   '&$disabled': {
-    //     backgroundColor: 'transparent'
-    //   }
-    // },
     '&:not(:first-child)': {
       borderTopLeftRadius: 0,
       borderBottomLeftRadius: 0
@@ -77,12 +58,12 @@ class EnhancedToggle extends React.Component {
   state = {
     data: {}
   };
-  
+
   componentWillReceiveProps = (nextProps) => {
     let data = nextProps.data || this.state.data || {};
-    if(typeof nextProps.options === 'function') {
+    if (typeof nextProps.options === 'function') {
       let optionsFn = nextProps.options(data);
-      if(optionsFn instanceof Promise) {
+      if (optionsFn instanceof Promise) {
         optionsFn.then(options => {
           this.setState({ 
             value: nextProps.value, 
@@ -97,7 +78,7 @@ class EnhancedToggle extends React.Component {
           options: optionsFn
         });
       }
-    } else if(typeof nextProps.options === 'object') {
+    } else if (typeof nextProps.options === 'object') {
       this.setState({ 
         value: nextProps.value, 
         data: nextProps.data, 
@@ -107,18 +88,18 @@ class EnhancedToggle extends React.Component {
   }
 
   componentDidMount = () => {
-    if(this.props.enum) {
+    if (this.props.enum) {
       this.setState({options: this.props.enum});
-    } else if(typeof this.props.options === 'function') {
+    } else if (typeof this.props.options === 'function') {
       let optionsFn = this.props.options(this.props.data);
-      if(optionsFn instanceof Promise) {
+      if (optionsFn instanceof Promise) {
         optionsFn.then(options => {
           this.setState({options: options});
         });
       } else {
         this.setState({options: optionsFn});
       }
-    } else if(typeof this.props.options === 'object') {
+    } else if (typeof this.props.options === 'object') {
       this.setState({options: this.props.options});
     }
   }
@@ -127,7 +108,7 @@ class EnhancedToggle extends React.Component {
     const name = (event.target.name) ? event.target.name : event.target.getAttribute('name');
     const value = (event.target.value) ? event.target.value : event.target.getAttribute('value');
     
-    if(this.props.value !== value) {
+    if (this.props.value !== value) {
       this.props.onChange(name, value);
     }
   }
@@ -136,9 +117,9 @@ class EnhancedToggle extends React.Component {
     const { classes, spacing, name, label, error, value, data, options } = this.props;
     const spacingClass = classNames(classes.root, spacing && classes.spacing);
     let fieldOptions = options;
-    if(typeof options === 'function') {
+    if (typeof options === 'function') {
       let optionsFn = options(data);
-      if(optionsFn instanceof Promise) {
+      if (optionsFn instanceof Promise) {
         optionsFn.then(options => {
           fieldOptions = options;
         });

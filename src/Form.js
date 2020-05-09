@@ -11,13 +11,11 @@ import CheckIcon from '@material-ui/icons/Check';
 
 import _ from 'lodash';
 
-import Snackbar from "./Snackbar";
-import Toolbar from "./Toolbar";
-import Field from "./Field";
+import Toolbar from './Toolbar';
+import Field from './Field';
 
-import { validate } from "./lib";
+import { validate, isDefined, isFunction } from './lib';
 
-const flatten = require('flat');
 const { unflatten } = require('flat');
 
 const styles = (theme) => ({
@@ -28,22 +26,22 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'wrap',
-    paddingRight: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing(),
+    paddingLeft: theme.spacing()
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing()
   },
   buttonSuccess: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(),
     backgroundColor: green[500],
     '&:hover': {
-      backgroundColor: green[700],
-    },
+      backgroundColor: green[700]
+    }
   },
   buttonWrapper: {
-    margin: theme.spacing.unit,
-    position: 'relative',
+    margin: theme.spacing(),
+    position: 'relative'
   },
   buttonProgress: {
     color: green[500],
@@ -57,7 +55,7 @@ const styles = (theme) => ({
 });
 
 const reducer = (accumulator, currentValue) => {
-  accumulator[currentValue.name] = "";
+  accumulator[currentValue.name] = '';
   return accumulator;
 }
 
@@ -65,269 +63,205 @@ const defaultDataReducer = (accumulator, currentValue) => {
   if (currentValue && currentValue.hasOwnProperty('name') && accumulator && !accumulator[currentValue.name] && currentValue.value !== undefined) {
     accumulator[currentValue.name] = (typeof currentValue.value === 'function') ? currentValue.value(accumulator) : currentValue.value;
   }
-  
+
   return accumulator;
 }
 
-class EnhancedForm extends React.Component {
-  constructor(props) {
-    super(props);
+const EnhancedForm = (props) => {
+  const { classes, title, container, novalidate, data, initialValues,
+    fields, buttons, autoSubmit, onSubmit } = props;
+  const containerClass = classNames(container && classes.container);
 
-    this.state = {
-      loading: false, success: false, snackBarOpen: false,
-      ...props
-    };
-  }
+  const initialFormData = data || initialValues;
+  const [loading, setLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const [formData, setFormData] = React.useState(initialFormData);
+  const [formFields, setFormFields] = React.useState(fields);
 
-  componentDidMount = () => {
-    const { fields, data } = this.state;
-    let defaultFieldValue = fields.reduce(defaultDataReducer, (data ? data : {}));
-    this.setState({
-      data: Object.assign({}, data, defaultFieldValue)
-    });
-  }
+  const buttonClassname = classNames({
+    [classes.buttonSuccess]: success,
+    [classes.button]: !success
+  });
 
-  componentWillReceiveProps = (nextProps) => {
-    let tempNextProps = {};
-    tempNextProps.data = (typeof nextProps.data === "function") ? nextProps.data() : nextProps.data;
-
-    this.setState(Object.assign({}, nextProps, tempNextProps));
-  }
-
-  handleSnackBarClose = (event, reason) => {
-    this.setState({ snackBarOpen: false, snackBarMessage: null });
-  };
-
-  checkFormat = (field, value) => {
-    if (value.length > 0) {
-      let re = '';
-      switch(field.type) {
-        case 'tel':
-          re = (field.pattern) ? field.pattern : /^[0-9\b]+$/;
-          break;
-        default:
-          re = (field.pattern) ? field.pattern : '';
-          break;
-      }
-      
-      return (re.length > 0 || typeof re === "object") ? re.test(value) : true;
-    } else {
-      return true;
+  React.useEffect(() => {
+    if (isFunction(initialFormData)) {
+      (async () => {
+        const tempInitialValues = await initialFormData();
+        setFormData(tempInitialValues);
+      })();
     }
-  }
 
-  getField = (name) => {
-    let formFields = this.state.fields;
+    const defaultFieldValue = fields.reduce(defaultDataReducer, initialFormData);
+    setFormData(Object.assign({}, initialFormData, defaultFieldValue));
+  }, []);
+
+  React.useEffect(() => {
+    const defaultFieldValue = formFields.reduce(defaultDataReducer, formData);
+    setFormData(Object.assign({}, formData, defaultFieldValue));
+  }, [formFields]);
+
+  const getField = (name) => {
+    let tempFormFields = formFields;
     const nameParts = name ? name.split('.') : [];
     let formField = {};
     nameParts.map((namePart, index) => {
       if (Number.isNaN(namePart)) {
-        formField = _.find(formFields, {name: namePart});
+        formField = _.find(tempFormFields, {name: namePart});
       }
 
       const last = index === nameParts.length - 1;
       if (!last) {
-        formFields = formField.fields;
+        tempFormFields = formField.fields;
       }
     });
 
     return formField;
   }
 
-  getDependentFields = (fieldName, fieldValue) => {
-    let currentField    = this.getField(fieldName);
-    let dependentFields = null;
+  const getDependentFields = (fieldName, fieldValue) => {
+    let currentField = getField(fieldName);
+    let dependentFields = [];
     if (currentField.dependencies) {
-      let fields        = (currentField.dependent) ? this.state.fields : this.props.fields;
+      let tempFields = (currentField.dependent) ? formFields : fields;
       if (currentField.dependencies[fieldValue] !== undefined) {
         dependentFields = currentField.dependencies[fieldValue];
-      } else if (currentField.dependencies["*"] !== undefined) {
-        dependentFields = currentField.dependencies["*"];
-      } else {
-        dependentFields = [];
+      } else if (currentField.dependencies['*'] !== undefined) {
+        dependentFields = currentField.dependencies['*'];
       }
 
-      let fieldNameArr  = Object.keys(fields.reduce(reducer, {}));
-      dependentFields   = dependentFields.filter(field => fieldNameArr.indexOf(field.name) === -1);
+      let fieldNameArr = Object.keys(tempFields.reduce(reducer, {}));
+      dependentFields = dependentFields.filter(field => fieldNameArr.indexOf(field.name) === -1);
 
-      dependentFields   = dependentFields.map(dependentField => {
+      dependentFields = dependentFields.map(dependentField => {
         dependentField.dependent = true;
         return dependentField;
       });
 
-      dependentFields   = fields.concat(dependentFields);
+      dependentFields = tempFields.concat(dependentFields);
     }
 
     return dependentFields;
   }
 
-  handleFieldChange = (fieldName, fieldValue, submit = true) => {
-    this.setState((state, props) => {
-      let updatedState = {};
-      let data = state.data;
-      let dependentFields = this.getDependentFields(fieldName, fieldValue);
-      if (dependentFields) {
-        updatedState.fields = dependentFields;
-        let defaultFieldValue = dependentFields.reduce(defaultDataReducer, data);
-        updatedState.data     = Object.assign({}, data, defaultFieldValue);
-      } else {
-        updatedState.data     = data;
-      }
+  const handleFieldChange = (fieldName, fieldValue, submit = true) => {
+    setFormData({...formData, [fieldName]: fieldValue});
+    const dependentFields = getDependentFields(fieldName, fieldValue);
+    if (dependentFields) {
+      setFormFields(dependentFields);
+    }
 
-      updatedState.data = (updatedState.data) ? {
-        ...updatedState.data,
-        [fieldName]: fieldValue
-      } : {
-        [fieldName]: fieldValue
-      };
-
-      return updatedState;
-    }, () => {
-      if (submit && this.props.autoSubmit && !this.state.loading) {
-        const parsedFields = unflatten(this.state.data, {
-          delimiter: '.'
-        });
-        this.props.onSubmit(parsedFields, this);
-      }
-    });
+    if (submit && autoSubmit && !loading) {
+      submitForm();
+    }
   }
 
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
+    submitForm();
+  }
+
+  const submitForm = () => {
     let formValidationFlag = true;
-    this.setState((state, props) => {
-      let formData = state.data;
-      let updatedState = {};
-      let updatedFields = state.fields.map((field) => {
-        if (field.readonly === undefined || !field.readonly) {
-          const { error, errorMessage } = validate(field, formData[field.name], formData);
-          if (error) {
-            formValidationFlag = false;
-            if (!field.hasOwnProperty('error') || (field.hasOwnProperty('error') && typeof field.error === 'boolean'))
-              field.error = true;
+    const updatedFields = formFields.map((field) => {
+      if (field.readonly === undefined || !field.readonly) {
+        const { error, errorMessage } = validate(field, formData[field.name], formData);
+        if (error) {
+          formValidationFlag = false;
+          if (!field.hasOwnProperty('error') || (field.hasOwnProperty('error') && typeof field.error === 'boolean'))
+            field.error = true;
 
-            return {...field, errorMessage};
-          }
-
-          field.error = false;
           return {...field, errorMessage};
-        } else {
-          field.error = false;
-          return field;
         }
+
+        field.error = false;
+        return {...field, errorMessage};
+      } else {
+        field.error = false;
+        return field;
+      }
+    });
+
+    setFormFields(updatedFields);
+
+    if (!loading && formValidationFlag) {
+      setLoading(true);
+      setSuccess(false);
+      const parsedFields = unflatten(formData, {
+        delimiter: '.'
       });
-
-      updatedState.fields = updatedFields;
-
-      if (!state.loading && formValidationFlag) {
-        updatedState.success = false;
-        updatedState.loading = true;
-      }
-
-      return updatedState;
-    }, () => {
-      if (this.state.loading && formValidationFlag) {
-        const parsedFields = unflatten(this.state.data, {
-          delimiter: '.'
-        });
-        this.state.onSubmit(parsedFields, this);
-      }
-    });
+      onSubmit(parsedFields);
+    }
   }
 
-  render = () => {
-    const { classes, title, container, novalidate } = this.props;
-    const { data, fields, buttons, loading, success } = this.state;
+  return (
+    <div className={classes.formWraper}>
+      {(title) ? <Toolbar title={title} /> : ''}
+      <form
+        onSubmit={handleSubmit}
+        autoComplete='off'
+        noValidate={novalidate}
+      >
+        <div className={containerClass} >
+          {fields.map(formField => {
+            return (
+              <Field
+                formData={formData}
+                onChange={handleFieldChange}
+                {...formField}
+              />
+            );
+          })}
 
-    const initialValues = data ? flatten(data, {
-      delimiter: '.'
-    }) : {};
-    const buttonClassname = classNames({
-      [classes.buttonSuccess]: success,
-      [classes.button]: !success,
-    });
+          {buttons.map(formButton => {
+            let button = '';
+            switch (formButton.type) {
+              case 'button':
+                const btnKey = `button-${formButton.label.replace(' ', '-')}`;
+                let disable = (typeof formButton.disable === 'function') ? formButton.disable(data) : formButton.disable;
+                button = (
+                  <Button
+                    variant={(formButton.variant) ? formButton.variant : 'contained'}
+                    color={(formButton.color) ? formButton.color : 'secondary'}
+                    className={buttonClassname}
+                    onClick={(e) => formButton.action(formData, e, btnKey)}
+                    key={btnKey}
+                    disabled={disable || success || loading || formButton.disabled}
+                  >
+                    {success ? <CheckIcon /> : ''} {formButton.label}
+                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                  </Button>
+                )
+                break;
+              default:
+                button = (
+                  <Button
+                    variant='contained'
+                    color={(formButton.color) ? formButton.color : 'primary'}
+                    type='submit'
+                    disabled={loading}
+                    className={buttonClassname}
+                    key={`${(new Date()).getTime()}-button-${formButton.label}`}
+                  >
+                    {success ? <CheckIcon /> : ''} {formButton.label}
+                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                  </Button>
+                )
+                break;
+            }
 
-    const containerClass = classNames(container && classes.container);
-
-    return (
-      <div className={classes.formWraper}>
-        {(title) ? <Toolbar title={title} /> : ''}
-        <form
-          onSubmit={this.handleSubmit}
-          autoComplete='off'
-          noValidate={novalidate}
-        >
-          <div className={containerClass} >
-            {fields.map(formField => {
-              return (
-                <Field
-                  data={initialValues}
-                  onChange={this.handleFieldChange}
-                  {...formField}
-                />
-              );
-            })}
-
-            {buttons.map(formButton => {
-              let button = '';
-              switch (formButton.type) {
-                case 'button':
-                  const btnKey = `button-${formButton.label.replace(' ', '-')}`;
-                  let disable = (typeof formButton.disable === "function") ? formButton.disable(data, this) : formButton.disable;
-                  button = (
-                    <Button 
-                      variant={(formButton.variant) ? formButton.variant : "contained"}
-                      color={(formButton.color) ? formButton.color : "secondary"}
-                      className={buttonClassname} 
-                      onClick={(e) => formButton.action(this, data, e, btnKey)} 
-                      key={btnKey}
-                      disabled={disable || (this.state[btnKey] && (this.state[btnKey].disabled || this.state[btnKey].loading)) || success || loading || formButton.disabled}
-                    >
-                      {(this.state[btnKey] && this.state[btnKey].success) ? <CheckIcon /> : ''} {formButton.label}
-                      {(this.state[btnKey] && this.state[btnKey].loading) && <CircularProgress size={24} className={classes.buttonProgress} />}
-                    </Button>
-                  )
-                  break;
-                default:
-                  button = (
-                    <Button 
-                      variant="contained" 
-                      color={(formButton.color) ? formButton.color : "primary"} 
-                      type="submit" 
-                      disabled={loading} 
-                      className={buttonClassname} 
-                      key={`${(new Date()).getTime()}-button-${formButton.label}`}
-                    >
-                      {success ? <CheckIcon /> : ''} {formButton.label}
-                      {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                    </Button>
-                  )
-                  break;
-              }
-
-              return button;
-            })}
-          </div>
-        </form>
-
-        <Snackbar
-          variant={this.state.snackBarType}
-          snackBarDuration={10000}
-          snackBarOpen={this.state.snackBarOpen}
-          snackBarMessage={this.state.snackBarMessage}
-          onClose={this.handleSnackBarClose}
-        />
-      </div>
-    );
-  }
+            return button;
+          })}
+        </div>
+      </form>
+    </div>
+  );
 }
 
 EnhancedForm.defaultProps = {
   buttons: [],
   container: true,
-  loading: false, 
-  success: false, 
-  snackBarOpen: false
+  loading: false,
+  success: false
 };
 
 EnhancedForm.propTypes = {
