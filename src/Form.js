@@ -26,8 +26,7 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'wrap',
-    paddingRight: theme.spacing(),
-    paddingLeft: theme.spacing()
+    padding: theme.spacing()
   },
   button: {
     margin: theme.spacing()
@@ -92,12 +91,12 @@ const EnhancedForm = (props) => {
     }
 
     const defaultFieldValue = fields.reduce(defaultDataReducer, initialFormData);
-    setFormData(Object.assign({}, initialFormData, defaultFieldValue));
+    setFormData(Object.assign({}, defaultFieldValue, initialFormData));
   }, []);
 
   React.useEffect(() => {
     const defaultFieldValue = formFields.reduce(defaultDataReducer, formData);
-    setFormData(Object.assign({}, formData, defaultFieldValue));
+    setFormData(Object.assign({}, defaultFieldValue, formData));
   }, [formFields]);
 
   const getField = (name) => {
@@ -143,10 +142,10 @@ const EnhancedForm = (props) => {
     return dependentFields;
   }
 
-  const handleFieldChange = (fieldName, fieldValue, submit = true) => {
+  const handleFieldChange = async (fieldName, fieldValue, submit = true) => {
     setFormData({...formData, [fieldName]: fieldValue});
-    const dependentFields = getDependentFields(fieldName, fieldValue);
-    if (dependentFields) {
+    const dependentFields = await getDependentFields(fieldName, fieldValue);
+    if (dependentFields.length > 0) {
       setFormFields(dependentFields);
     }
 
@@ -202,7 +201,7 @@ const EnhancedForm = (props) => {
         noValidate={novalidate}
       >
         <div className={containerClass} >
-          {fields.map(formField => {
+          {formFields.map(formField => {
             return (
               <Field
                 formData={formData}

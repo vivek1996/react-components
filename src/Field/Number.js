@@ -8,8 +8,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
-    marginLeft: theme.spacing(),
-    marginRight: theme.spacing(),
     minWidth: '100px'
   }
 }));

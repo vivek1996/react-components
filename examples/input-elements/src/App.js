@@ -98,7 +98,11 @@ const fields = [
     options: ['India', 'Australia'],
     multiple: true
   },
-  {name: 'checkbox', type: 'checkbox', label: 'checkbox', placeholder: 'checkbox', required: true, options: [{value: 'chk1', label: 'Checkbox 1'}, {value: 'chk2', label: 'Checkbox 2'}]},
+  {name: 'switch', type: 'switch', label: 'switch', placeholder: 'switch', required: true},
+  {name: 'boolean', type: 'boolean', label: 'boolean', placeholder: 'boolean', required: true},
+  {name: 'checkbox1', type: 'checkbox', label: 'checkbox 1', placeholder: 'checkbox 1', required: true},
+  {name: 'checkbox2', type: 'checkbox', label: 'checkbox 2', placeholder: 'checkbox 2', required: true, options: [{value: 'chk1', label: 'Checkbox 1'}, {value: 'chk2', label: 'Checkbox 2'}]},
+  {name: 'toggle', type: 'toggle', label: 'toggle', placeholder: 'toggle', required: true, options: [{value: 'toggle1', label: 'toggle 1'}, {value: 'toggle2', label: 'toggle 2'}, {value: 'toggle3', label: 'toggle 3'}]},
   {name: 'radio', type: 'radio', label: 'radio', placeholder: 'radio', required: true, options: [{value: 'opt1', label: 'Option 1'}, {value: 'opt2', label: 'Option 2'}]},
   {name: 'text-multiple', type: 'text', label: 'Text', placeholder: 'Text', required: true, multiple: true},
   {

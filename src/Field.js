@@ -7,14 +7,8 @@ import { makeStyles } from '@material-ui/core';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Switch from '@material-ui/core/Switch';
-// import Checkbox from '@material-ui/core/Checkbox';
 
-import green from '@material-ui/core/colors/green';
-
-import amber from '@material-ui/core/colors/amber';
 import Range from './Field/Range';
 import Select from './Field/Select';
 import Toggle from './Field/Toggle';
@@ -24,6 +18,7 @@ import Checkbox from './Field/Checkbox';
 import InputField from './Field/Input';
 import Autocomplete from './Field/Autocomplete';
 import DateField from './Field/Date';
+import Switch from './Field/Switch';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -31,7 +26,7 @@ import AddCircle from '@material-ui/icons/AddCircle';
 import RemoveCircle from '@material-ui/icons/RemoveCircle';
 
 import _ from 'lodash';
-import { isDefined, getInputProps } from './lib';
+import { isDefined, getInputProps, validate } from './lib';
 
 const flatten = require('flat');
 const { unflatten } = require('flat');
@@ -41,54 +36,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'wrap',
-    paddingRight: theme.spacing(),
-    paddingLeft: theme.spacing()
-  },
-  textField: {
-    marginLeft: theme.spacing(),
-    marginRight: theme.spacing()
-  },
-  group: {
-    margin: theme.spacing(1, 0)
-  },
-  paper: {
-    width: '100%',
-    minWidth: 'auto',
-    marginTop: theme.spacing(6),
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'visible'
-  },
-  chips: {
-    display: 'flex',
-    flexWrap: 'wrap'
-  },
-  chip: {
-    margin: theme.spacing(1 / 4)
-  },
-  searchRoot: {
-    color: 'inherit',
-    width: '100%'
-  },
-  searchInput: {
-    paddingTop: theme.spacing(),
-    paddingRight: theme.spacing(),
-    paddingBottom: theme.spacing(),
-    paddingLeft: theme.spacing(4),
-    transition: theme.transitions.create('width'),
-    width: '100%'
-  },
-  success: {
-    backgroundColor: green[600]
-  },
-  error: {
-    backgroundColor: theme.palette.error.dark
-  },
-  info: {
-    backgroundColor: theme.palette.primary.dark
-  },
-  warning: {
-    backgroundColor: amber[700]
+    padding: theme.spacing(),
+    paddingLeft: 0
   },
   switchLabel: {
     alignItems: 'center',
@@ -99,13 +48,6 @@ const useStyles = makeStyles((theme) => ({
   },
   helperTextLink: {
     textAlign: 'right'
-  },
-  formControlToggle: {
-    marginTop: theme.spacing(2),
-    paddingLeft: theme.spacing()
-  },
-  formControl: {
-    // maxWidth: '200px'
   },
   formGroup: {
     // maxWidth: '200px'
@@ -203,10 +145,11 @@ const ArrayField = (props) => {
     <>
       <Grid
         style={{
-          width: '100%',
           display: 'flex',
           justifyContent: 'space-between',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          padding: '8px',
+          paddingLeft: 0
         }}
       >
         {
@@ -234,7 +177,7 @@ const ArrayField = (props) => {
         return (
           <Grid container>
             <Grid item style={{
-              width: '90%',
+              width: '95%',
               display: 'flex'
             }}>
               <Field {...fieldProps} />
@@ -244,9 +187,11 @@ const ArrayField = (props) => {
                 <Grid
                   item
                   style={{
-                    width: '10%',
+                    width: '5%',
                     display: 'flex',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    padding: '8px'
                   }}
                 >
                   <RemoveCircle
@@ -319,23 +264,22 @@ const Field = (props) => {
   // More properties handled in useEffect
   // format, disablePast, disableFuture, disableDate, openTo, min, max, readonly, maxlength, minlength, step
   const [fieldError, setFieldError] = React.useState(false);
+  const [fieldErrorMessage, setFieldErrorMessage] = React.useState();
   // const [fieldProps, setFieldProps] = React.useState();
-  // React.useEffect(() => { 
-  //   console.log('Inside Use Effect', restProps);
+
+  // React.useEffect(() => {
+  //   console.log('Inside Use Effect - restProps', restProps);
   //   (async () => {
   //     if (fieldProps === undefined) {
   //       const inputProps = await getInputProps(restProps, formData);
   //       console.log('inputProps', inputProps);
-  //       // setFieldProps(inputProps);
+  //       setFieldProps(inputProps);
   //     }
   //   })();
-  // }, [restProps]);
+  // }, []);
 
   // console.log('fieldProps', fieldProps);
 
-  const fieldName = `${ parent ? `${parent}.${name}` : name }`;
-  const fieldErrorName = `${fieldName}-error-text`;
-  const fieldKey = `form-control-${fieldName}`;
   const arrayType = ['select', 'checkbox'];
 
   let field = '';
@@ -350,7 +294,7 @@ const Field = (props) => {
     fieldValue = value(formData);
   } else if (value !== undefined) {
     fieldValue = value;
-  } else if (fieldType === 'checkbox' || (fieldType === 'select' && multiple) || multiple) {
+  } else if ((fieldType === 'checkbox' && options !== undefined) || (fieldType === 'select' && multiple) || multiple) {
     fieldValue = [];
   }
 
@@ -379,6 +323,9 @@ const Field = (props) => {
     }
   }
 
+  const fieldName = `${ parent ? `${parent}.${name}` : name }`;
+  const fieldErrorName = `${fieldName}-error-text`;
+  const fieldKey = `field-${fieldType}-${fieldName}`;
   const updatedProps = Object.assign({}, props, {
     name: fieldName,
     value: fieldValue,
@@ -400,6 +347,15 @@ const Field = (props) => {
       }
     })();
   }, [error]);
+
+  React.useEffect(() => {
+    (async () => {
+      if (errorMessage !== undefined) {
+        const fieldErrorMessageText = (typeof errorMessage === 'function') ? errorMessage(formData) : errorMessage;
+        setFieldErrorMessage(fieldErrorMessageText);
+      }
+    })();
+  }, [errorMessage]);
 
   const checkFormat = (type, value, pattern) => {
     if (value.length > 0) {
@@ -423,6 +379,7 @@ const Field = (props) => {
     const { name, value, type, checked, pattern } = event.target;
     let fieldValue = (type === 'checkbox') ? checked : value;
     let formatFlag = true;
+
     if (type === 'tel') {
       formatFlag = checkFormat(type, value, pattern);
     }
@@ -436,6 +393,7 @@ const Field = (props) => {
 
   const handleChangeData = (name, value, submit = true) => {
     const { format, type, decimal } = props;
+
     let formatFlag = true;
     if (type === 'date') {
       if (value !== undefined) {
@@ -451,239 +409,65 @@ const Field = (props) => {
       formatFlag = checkFormat(type, value);
     }
 
-    if (formatFlag) {
-      if (fieldError) {
-        setFieldError(false);
-      }
-      onChange && onChange(name, value, submit);
-    } else {
+    const { error, errorMessage } = validate(props, value, formData);
+    if (error || !formatFlag) {
       setFieldError(true);
+      setFieldErrorMessage(errorMessage);
+    } else {
+      setFieldError(false);
+      setFieldErrorMessage(null);
+      onChange && onChange(name, value, submit);
     }
+
+    console.log(`Field - 
+      handleChangeData : 
+        error - ${error}, errorMessage - ${errorMessage}
+    `);
   }
 
   switch (fieldType) {
     case 'radio':
       field = (
-        <FormControl
-          component='fieldset'
-          required={required}
-          className={classes.textField}
-          error={fieldError}
-          aria-describedby={fieldErrorName}
-          key={fieldKey}
-        >
-          { <FieldLabel label={label} /> }
-          {
-            (description) ? (
-              <Description html={description} />
-            ) : null
-          }
-          <Radio
-            formData={formData}
-            options={fieldOptions}
-            handleChange={handleChangeData}
-            {...updatedProps}
-          />
-          {
-            <FieldError
-              formData={formData}
-              title={title}
-              error={fieldError}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-          {
-            <FieldHelpText
-              formData={formData}
-              helptext={helptext}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldHelpLink
-              formData={formData}
-              helplink={helplink}
-              fieldName={fieldName}
-            />
-          }
-        </FormControl>
+        <Radio
+          options={fieldOptions}
+          handleChange={handleChangeData}
+          {...updatedProps}
+        />
       )
       break;
     case 'boolean':
-      field = (
-        <FormControl
-          key={fieldKey}
-        >
-          { <FieldLabel label={label} /> }
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Switch
-                  id={name}
-                  name={name}
-                  value={fieldValue}
-                  onChange={handleChange}
-                  disabled={disabled}
-                  checked={fieldValue}
-                />
-              }
-              label={(typeof placeholder === 'function') ? placeholder(formData) : placeholder}
-            />
-          </FormGroup>
-          {
-            <FieldError
-              formData={formData}
-              title={title}
-              error={fieldError}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-          {
-            <FieldHelpText
-              formData={formData}
-              helptext={helptext}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldHelpLink
-              formData={formData}
-              helplink={helplink}
-              fieldName={fieldName}
-            />
-          }
-        </FormControl>
-      )
-      break;
     case 'switch':
-      field = <FormGroup className={classes.formGroup} row>
-        {(prefix) ? (
-          <FormLabel
-            classes={{
-              root: classes.switchLabel
-            }}
-          >
-            {(typeof prefix === 'function') ? prefix(formData) : prefix}
-          </FormLabel>
-        ) : null}
+      field = (
         <Switch
-          id={name}
-          label={label}
-          name={name}
-          value={fieldValue}
-          onChange={handleChange}
-          disabled={disabled}
-          checked={fieldValue}
+          handleChange={handleChangeData}
+          {...updatedProps}
         />
-        {(suffix) ? (
-          <FormLabel
-            classes={{
-              root: classes.switchLabel
-            }}
-          >
-            {(typeof suffix === 'function') ? suffix(formData) : suffix}
-          </FormLabel>
-        ) : null}
-        {
-          <FieldHelpText
-            formData={formData}
-            helptext={helptext}
-            fieldName={fieldName}
-          />
-        }
-      </FormGroup>
+      )
       break;
     case 'toggle':
       field = (
-        <FormControl
-          className={classes.formControl}
-          error={fieldError}
-          aria-describedby={fieldErrorName}
-          key={fieldKey}
-        >
-          <Toggle
-            onChange={handleChangeData}
-            key={name}
-            name={name}
-            options={fieldOptions}
-            {...updatedProps}
-          />
-          {
-            <FieldHelpText
-              formData={formData}
-              helptext={helptext}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldHelpLink
-              formData={formData}
-              helplink={helplink}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldError
-              formData={formData}
-              title={title}
-              error={fieldError}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-        </FormControl>
+        <Toggle
+          handleChange={handleChangeData}
+          options={fieldOptions}
+          {...updatedProps}
+        />
       );
       break;
     case 'select':
       field = (
-        <FormControl
-          // className={classes.formControl}
-          error={fieldError}
-          aria-describedby={fieldErrorName}
-          key={fieldKey}
-        >
-          <Select
-            key={fieldKey}
-            multiple={multiple}
-            formData={formData}
-            handleChange={handleChangeData}
-            {...updatedProps}
-          />
-          {
-            <FieldHelpText
-              formData={formData}
-              helptext={helptext}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldHelpLink
-              formData={formData}
-              helplink={helplink}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldError
-              formData={formData}
-              title={title}
-              error={fieldError}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-        </FormControl>
+        <Select
+          multiple={multiple}
+          handleChange={handleChangeData}
+          {...updatedProps}
+        />
       );
       break;
     case 'hidden':
       field = (
         <input
-          key={name}
-          id={name}
-          name={name}
-          type={type}
+          key={fieldKey}
+          name={fieldName}
+          type={fieldType}
           value={fieldValue}
           onChange={handleChange}
           required={required}
@@ -692,112 +476,26 @@ const Field = (props) => {
       break;
     case 'range':
       field = (
-        <FormControl
-          // className={classes.formControl}
-          error={fieldError}
-          aria-describedby={fieldErrorName}
-          key={fieldKey}
-        >
-          <Range
-            formData={formData}
-            handleChange={handleChangeData}
-            {...updatedProps}
-          />
-          {
-            <FieldHelpText
-              formData={formData}
-              helptext={helptext}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldHelpLink
-              formData={formData}
-              helplink={helplink}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldError
-              formData={formData}
-              title={title}
-              error={fieldError}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-        </FormControl>
+        <Range
+          handleChange={handleChangeData}
+          {...updatedProps}
+        />
       );
       break;
     case 'checkbox':
       field = (
-        <FormControl
-          component='fieldset'
-          required={required}
-          className={classes.textField}
-          error={fieldError}
-          aria-describedby={fieldErrorName}
-          key={fieldKey}
-        >
-          { <FieldLabel label={label} /> }
-          <Checkbox
-            formData={formData}
-            error={fieldError}
-            aria-describedby={fieldErrorName}
-            key={fieldKey}
-            value={fieldValue}
-            handleChange={handleChangeData}
-            {...updatedProps}
-          />
-          {
-            <FieldHelpText
-              formData={formData}
-              helptext={helptext}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldHelpLink
-              formData={formData}
-              helplink={helplink}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldError
-              formData={formData}
-              title={title}
-              error={fieldError}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-        </FormControl>
+        <Checkbox
+          handleChange={handleChangeData}
+          {...updatedProps}
+        />
       );
       break;
     case 'date':
       field = (
-        <FormControl
-          className={classes.formControl}
-          error={fieldError}
-          aria-describedby={fieldErrorName}
-          key={fieldKey}
-        >
-          <DateField
-            formData={formData}
-            handleChange={handleChangeData}
-            {...updatedProps}
-          />
-          {
-            <FieldError
-              formData={formData}
-              title={title}
-              error={fieldError}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-        </FormControl>
+        <DateField
+          handleChange={handleChangeData}
+          {...updatedProps}
+        />
       );
       break;
     case 'number':
@@ -805,132 +503,75 @@ const Field = (props) => {
     case 'decimal':
     case 'tel':
       field = (
-        <FormControl
-          error={fieldError}
-          aria-describedby={fieldErrorName}
-          key={fieldKey}
-        >
-          <NumberField
-            formData={formData}
-            value={fieldValue}
-            handleChange={handleChangeData}
-            {...updatedProps}
-          />
-          {
-            <FieldHelpText
-              formData={formData}
-              helptext={helptext}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldHelpLink
-              formData={formData}
-              helplink={helplink}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldError
-              formData={formData}
-              title={title}
-              error={fieldError}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-        </FormControl>
+        <NumberField
+          handleChange={handleChangeData}
+          {...updatedProps}
+        />
       );
       break;
     case 'autocomplete':
       field = (
-        <FormControl
-          error={fieldError}
-          aria-describedby={fieldErrorName}
-          key={fieldKey}
-        >
-          <Autocomplete
-            key={fieldKey}
-            formData={formData}
-            handleChange={handleChangeData}
-            {...updatedProps}
-          />
-          {
-            <FieldHelpText
-              formData={formData}
-              helptext={helptext}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldHelpLink
-              formData={formData}
-              helplink={helplink}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldError
-              formData={formData}
-              title={title}
-              error={fieldError}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-        </FormControl>
+        <Autocomplete
+          handleChange={handleChangeData}
+          {...updatedProps}
+        />
       );
       break;
     case 'nested':
       field = (
         <GroupField
-          key={`group-${name}`}
           {...updatedProps}
         />
       );
       break;
     default:
       field = (
-        <FormControl
-          // className={classes.formControl}
-          error={fieldError}
-          aria-describedby={fieldErrorName}
-          key={fieldKey}
-        >
-          <InputField
-            formData={formData}
-            handleChange={handleChangeData}
-            {...updatedProps}
-          />
-          {
-            <FieldHelpText
-              formData={formData}
-              helptext={helptext}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldHelpLink
-              formData={formData}
-              helplink={helplink}
-              fieldName={fieldName}
-            />
-          }
-          {
-            <FieldError
-              formData={formData}
-              title={title}
-              error={fieldError}
-              errorName={fieldErrorName}
-              errorMessage={errorMessage}
-            />
-          }
-        </FormControl>
+        <InputField
+          handleChange={handleChangeData}
+          {...updatedProps}
+        />
       );
       break;
   }
 
-  return field;
+  return (
+    <FormControl
+      error={fieldError}
+      aria-describedby={fieldErrorName}
+      key={fieldKey}
+      className={classes.container}
+    >
+      {field}
+      {
+        (description) ? (
+          <Description html={description} />
+        ) : null
+      }
+      {
+        <FieldHelpText
+          formData={formData}
+          helptext={helptext}
+          fieldName={fieldName}
+        />
+      }
+      {
+        <FieldHelpLink
+          formData={formData}
+          helplink={helplink}
+          fieldName={fieldName}
+        />
+      }
+      {
+        <FieldError
+          formData={formData}
+          title={title}
+          error={fieldError}
+          errorName={fieldErrorName}
+          errorMessage={fieldErrorMessage}
+        />
+      }
+    </FormControl>
+  );
 };
 
 Field.defaultProps = {};

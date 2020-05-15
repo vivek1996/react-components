@@ -1,11 +1,17 @@
 const validate = (field, value, formData) => {
-  const { required, min, max, minlength, maxlength, pattern, type, error, validate, fields } = field;
+  const {
+    required, min, max, minlength, maxlength, pattern, type, error, validate, fields,
+    multiple
+  } = field;
   let errorFlag = false;
   let errorMessage = '';
+  console.log('value', value);
+  console.log('field', field);
+  const optionType = ['select', 'radio', 'checkbox'];
   if (required && (value === undefined || value === null || value === '' ||
     (Array.isArray(value) && value.length === 0))) {
     errorFlag = true;
-    errorMessage = (['select', 'radio', 'checkbox'].indexOf(type) > -1) ? `Please select an option!` : `Please enter a value!`;
+    errorMessage = (optionType.indexOf(type) > -1) ? `Please select an option!` : `Please enter a value!`;
   } else if (value !== undefined && value !== null && value !== '') {
     if (!errorFlag && min && max && (value < min || value > max)) {
       errorMessage = `Value must be between ${min} and ${max}`;
@@ -54,6 +60,10 @@ const validate = (field, value, formData) => {
     }
   }
 
+  console.log('type', type);
+  console.log('multiple', multiple);
+  console.log('errorFlag', errorFlag);
+  console.log('errorMessage', errorMessage);
   return {
     error: errorFlag,
     errorMessage: errorMessage

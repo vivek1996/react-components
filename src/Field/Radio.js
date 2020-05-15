@@ -6,48 +6,44 @@ import { withStyles } from '@material-ui/core/styles';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 
-const styles = theme => ({
-  textField: {
-    marginLeft: theme.spacing(),
-    marginRight: theme.spacing(),
-    minWidth: '100px'
-  },
-  optionItem: {
-    height: 'auto',
-    overflowWrap: 'break-word',
-    wordWrap: 'break-word',
-    whiteSpace: 'normal !important'
-  }
-});
+const styles = (theme) => ({});
 
 const EnhancedRadio = (props) => {
   const { classes, options, value, name, key, label, handleChange, optionKey, optionValue } = props;
 
   return (
-    <RadioGroup
-      aria-label={label}
-      className={classes.group}
-      defaultValue={value}
-      key={key}
-      name={name}
-      onChange={(event) => {
-        const { value } = event.target;
-        handleChange(name, value);
-      }}
-    >
-      {options.map(option => {
-        return (
-          <FormControlLabel
-            value={option[optionKey] || option[name] || option.id || option.key || option.value || option}
-            control={<Radio />}
-            label={ option[optionValue] || option.name || option.label || option.value || option }
-            disabled={option.disabled}
-            key={`${(new Date()).getTime()}-radio-group-${option[optionKey] || option[name] || option.id || option.key || option.value || option}`}
-          />
-        );
-      })}
-    </RadioGroup>
+    <>
+      {
+        (label !== undefined) ? (
+          <FormLabel component='legend'>{label}</FormLabel>
+        ) : null
+      }
+      <RadioGroup
+        aria-label={label}
+        className={classes.group}
+        defaultValue={value}
+        key={key}
+        name={name}
+        onChange={(event) => {
+          const { value } = event.target;
+          handleChange(name, value);
+        }}
+      >
+        {options.map(option => {
+          return (
+            <FormControlLabel
+              value={option[optionKey] || option[name] || option.id || option.key || option.value || option}
+              control={<Radio />}
+              label={ option[optionValue] || option.name || option.label || option.value || option }
+              disabled={option.disabled}
+              key={`${(new Date()).getTime()}-radio-group-${option[optionKey] || option[name] || option.id || option.key || option.value || option}`}
+            />
+          );
+        })}
+      </RadioGroup>
+    </>
   );
 }
 

@@ -8,8 +8,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 
 const styles = theme => ({
   textField: {
-    marginLeft: theme.spacing(),
-    marginRight: theme.spacing(),
     minWidth: '100px'
   }
 });
@@ -17,7 +15,10 @@ const styles = theme => ({
 const EnhancedInput = (props) => {
   const { type, name, key, data, handleChange, classes, value } = props;
 
-  const [localValue, setLocalValue] = React.useState(value);
+  const [localValue, setLocalValue] = React.useState();
+  React.useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
 
   return (
     <TextField
@@ -27,15 +28,13 @@ const EnhancedInput = (props) => {
       label={props.label}
       placeholder={props.placeholder}
       className={classes.textField}
-      defaultValue={value || ''}
+      defaultValue={localValue}
+      value={localValue}
       onChange={(event) => {
         const { value } = event.target;
         setLocalValue(value);
       }}
-      onBlur={(event) => {
-        const { value } = event.target;
-        handleChange(name, value);
-      }}
+      onBlur={() => handleChange(name, localValue)}
       margin='normal'
       required={props.required}
       disabled={props.disabled}

@@ -3,8 +3,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
 import Typography from '@material-ui/core/Typography';
 
@@ -14,18 +13,14 @@ const styles = theme => ({
     marginTop: theme.spacing(2),
     paddingLeft: theme.spacing()
   },
-  textField: {
-    marginLeft: theme.spacing(),
-    marginRight: theme.spacing()
-  },
-  options: {
+  optionsContainer: {
     ...theme.typography.button,
     color: theme.palette.common.white,
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: theme.spacing(2)
   },
   toggleButton: {
-    minWidth: '42%',
     padding: ''.concat(theme.spacing(1 / 2), 'px ').concat(theme.spacing(1.5), 'px'),
     borderRadius: 2,
     justifyContent: 'center',
@@ -54,154 +49,66 @@ const styles = theme => ({
   }
 });
 
-class EnhancedToggle extends React.Component {
-  state = {
-    data: {}
-  };
+const EnhancedToggle = (props) => {
+  const { classes, name, label, value, formData, options, handleChange, optionKey, optionValue } = props;
 
-  componentWillReceiveProps = (nextProps) => {
-    let data = nextProps.data || this.state.data || {};
-    if (typeof nextProps.options === 'function') {
-      let optionsFn = nextProps.options(data);
-      if (optionsFn instanceof Promise) {
-        optionsFn.then(options => {
-          this.setState({ 
-            value: nextProps.value, 
-            data: nextProps.data, 
-            options: options
-          });
-        });
-      } else {
-        this.setState({ 
-          value: nextProps.value, 
-          data: nextProps.data, 
-          options: optionsFn
-        });
+  const [toggleOptions, setToggleOptions] = React.useState([]);
+  React.useEffect(() => {
+    let fieldOptions = options;
+    (async () => {
+      if (typeof options === 'function') {
+        fieldOptions = await options(formData);
       }
-    } else if (typeof nextProps.options === 'object') {
-      this.setState({ 
-        value: nextProps.value, 
-        data: nextProps.data, 
-        options: nextProps.options
-      });
-    }
-  }
+      setToggleOptions(fieldOptions);
+    })();
+  }, [options]);
 
-  componentDidMount = () => {
-    if (this.props.enum) {
-      this.setState({options: this.props.enum});
-    } else if (typeof this.props.options === 'function') {
-      let optionsFn = this.props.options(this.props.data);
-      if (optionsFn instanceof Promise) {
-        optionsFn.then(options => {
-          this.setState({options: options});
-        });
-      } else {
-        this.setState({options: optionsFn});
-      }
-    } else if (typeof this.props.options === 'object') {
-      this.setState({options: this.props.options});
-    }
-  }
-
-  handleClick = (event) => {
+  const handleClick = (event) => {
     const name = (event.target.name) ? event.target.name : event.target.getAttribute('name');
     const value = (event.target.value) ? event.target.value : event.target.getAttribute('value');
-    
-    if (this.props.value !== value) {
-      this.props.onChange(name, value);
-    }
+
+    handleChange(name, value);
   }
 
-  render = () => {
-    const { classes, spacing, name, label, error, value, data, options } = this.props;
-    const spacingClass = classNames(classes.root, spacing && classes.spacing);
-    let fieldOptions = options;
-    if (typeof options === 'function') {
-      let optionsFn = options(data);
-      if (optionsFn instanceof Promise) {
-        optionsFn.then(options => {
-          fieldOptions = options;
-        });
-      } else {
-        fieldOptions = optionsFn;
+  return (
+    <>
+      {
+        (label !== undefined) ? (
+          <FormLabel component='legend'>{label}</FormLabel>
+        ) : null
       }
-    }
-    
-    return (
-      <FormControl 
-        className={spacingClass}
-        error={(typeof error === 'function') ? error(data) : error} 
-        aria-describedby={`${name}-error-text`}
-        key={`form-control-${name}`}
-      >
-        {(label) ? (
-          <div>
-          <br/>
-          <FormLabel>{label}</FormLabel>
-          <br/>
-          </div>
-        ) : null}
-        
-        <div className={classes.options}>
-          {fieldOptions.map(option => {
-            let optionValue = (typeof option === 'object' && option.hasOwnProperty('value')) ? option.value : option;
-            let optionLabel = (typeof option === 'object' && option.hasOwnProperty('label')) ? option.label : option;
-            let selected = (value === optionValue) ? true : false;
-            
+      <FormGroup aria-label={label}>
+        <div className={classes.optionsContainer}>
+          {toggleOptions.map(option => {
+            const tableOptionValue = option[optionKey] || option[name] || option.id || option.key || option.value || option;
+            const selected = value === tableOptionValue;
             return (
-              <Typography 
-                value={optionValue}
-                key={`${(new Date()).getTime()}-toggle-button-${name}-${optionLabel}`}
+              <Typography
+                value={tableOptionValue}
+                key={`${(new Date()).getTime()}-toggle-option-${name}-${tableOptionValue}`}
                 name={name}
-                onClick={this.handleClick}
+                onClick={handleClick}
                 className={classNames(classes.toggleButton, selected && classes.toggleButtonSelected)}
                 classes={{
                   root: classes.toggleButton
                 }}
               >
-                {optionLabel}
+                { option[optionValue] || option.name || option.label || option.value || option }
               </Typography>
             );
           })}
         </div>
-        
-        {
-          (this.props.error) ? (
-            <FormHelperText id={`${this.props.name}-error-text`}>
-              {(typeof this.props.title === 'function') ? this.props.title(data) : this.props.title}
-            </FormHelperText>
-          ) : null
-        }
-
-        {
-          (this.props.helptext) ? (
-            <FormHelperText id={`${this.props.name}-help-text`}>
-            {(typeof this.props.helptext === 'function') ? this.props.helptext(data) : this.props.helptext}
-            </FormHelperText>
-          ) : null
-        }
-
-        {
-          (this.props.helplink) ? (
-            <FormHelperText id={`${this.props.name}-help-text`}>
-              {(typeof this.props.helplink === 'function') ? this.props.helplink(data) : this.props.helplink}
-            </FormHelperText>
-          ) : null
-        }
-      </FormControl>
-    );
-  }
+      </FormGroup>
+    </>
+  );
 }
 
 EnhancedToggle.defaultProps = {
-  spacing: true,
   options: []
 };
 
 EnhancedToggle.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(EnhancedToggle);

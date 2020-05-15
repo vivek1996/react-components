@@ -6,8 +6,6 @@ import Slider from '@material-ui/core/Slider';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
-    marginLeft: theme.spacing(),
-    marginRight: theme.spacing(),
     minWidth: '100px'
   }
 }));

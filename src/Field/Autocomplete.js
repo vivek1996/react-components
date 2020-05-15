@@ -8,8 +8,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
-    marginLeft: theme.spacing(),
-    marginRight: theme.spacing(),
     minWidth: '100px'
   }
 }));
