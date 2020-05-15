@@ -5,22 +5,98 @@
     "standard-react"
   ],
   "env": {
-    "es6": true
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "jest": true,
+    "phantomjs": true
   },
   "plugins": [
     "react"
   ],
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "generators": true
+    }
   },
   "rules": {
     // don't force es6 functions to include space before paren
     "space-before-function-paren": 0,
 
-    // allow specifying true explicitly for boolean props
-    "react/jsx-boolean-value": 0,
-
+    "react/jsx-boolean-value": [
+      1,
+      "always"
+    ],
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-    "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
+    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+    "indent": 1,
+    "import/prefer-default-export": 1,
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/*.story.jsx",
+          "**/*.spec.jsx",
+          "**/*.spec.js",
+          "**/tests/*.*",
+          "**/tests/**/*.*",
+          "**/tasks/**/*.js",
+          "**/config/**/*.js",
+          "gulpfile.js"
+        ]
+      }
+    ],
+    "class-methods-use-this": 1,
+    "no-restricted-syntax": 1,
+    "no-use-before-define": 0,
+    "no-param-reassign": 1,
+    "no-console": 2,
+    "no-useless-escape": 1,
+    "new-cap": 0,
+    "func-names": 0,
+    "function-paren-newline": [
+      "error",
+      "consistent"
+    ],
+    "prefer-spread": 1,
+    "comma-dangle": [
+      2,
+      "never"
+    ],
+    "strict": 0,
+    "max-len": [
+      1,
+      120
+    ],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "allowTemplateLiterals": true
+      }
+    ],
+    "object-curly-newline": [
+      "error",
+      {
+        "consistent": true
+      }
+    ],
+    "react/prop-types": 1,
+    "react/forbid-prop-types": 1,
+    "react/style-prop-object": 1,
+    "react/no-multi-comp": 1,
+    "react/jsx-no-bind": 1,
+    "react/jsx-space-before-closing": 0,
+    "react/prefer-stateless-function": 0,
+    "react/jsx-closing-bracket-location": 1,
+    "jsx-a11y/no-static-element-interactions": 1,
+    "jsx-a11y/href-no-hash": 0,
+    "react/destructuring-assignment": 0,
+    "react/jsx-wrap-multilines": 0
+  },
+  "globals": {
+    "chrome": "readonly"
   }
 }
