@@ -1,35 +1,6 @@
 import React, { createContext, useReducer, useContext } from 'react';
 
-function formFieldReducer(state, action) {
-  switch (action.type) {
-    case 'SET_INITIAL_FIELD':
-      return {
-        ...state,
-        initialFields: [...action.payload],
-        updatedFields: [...action.payload]
-      };
-    case 'FORM_FIELD_UPDATE':
-      return { ...state, updatedFields: [...action.payload] };
-    default:
-      return { ...state, ...action.payload };
-  }
-}
-
-function formDataReducer(state, action) {
-  switch (action.type) {
-    case 'SET_INITIAL_STATE':
-      return { ...state, ...action.payload };
-    case 'FIELD_VALUE_UPDATE':
-      return { ...state, ...action.payload };
-    case 'FORM_DATA_UPDATE':
-      return { ...state, ...action.payload };
-    default:
-      return { ...state, ...action.payload };
-  }
-}
-
 function formReducer(state, action) {
-  console.log('formReducer', action);
   switch (action.type) {
     case 'SET_INITIAL_FORM':
       return {
@@ -63,17 +34,12 @@ function formReducer(state, action) {
 const StoreContext = createContext();
 
 export function StoreProvider({ children }) {
-  const [formData, formDataDispatch] = useReducer(formDataReducer, {});
-  const [formField, formFieldDispatch] = useReducer(formFieldReducer, {
-    initialFields: [],
-    updatedFields: []
-  });
   const [form, formDispatch] = useReducer(formReducer, {
     fields: [],
     values: {},
     errors: {}
   });
-  const value = { formField, formFieldDispatch, formData, formDataDispatch, form, formDispatch };
+  const value = { form, formDispatch };
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }
