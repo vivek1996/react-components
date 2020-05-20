@@ -17,11 +17,17 @@ const EnhancedDate = (props) => {
   const classes = useStyles();
   const { data, value, name, label, placeholder, openTo, format, required, disabled, disablePast, disableDate, disableFuture, helptext, min, max, readonly, prefix, suffix, title, maxlength, minlength, step, handleChange } = props;
 
+  // const { format } = props;
+  // if (value !== undefined) {
+  //   value = (format) ? value.format(format) : value.format('YYYY-MM-DD');
+  // }
+  // More properties handled in useEffect
+  // format, disablePast, disableFuture, disableDate, openTo, min, max, readonly, maxlength, minlength, step
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <DatePicker
         key={name}
-        id={name}
         name={name}
         label={label}
         placeholder={placeholder}
@@ -29,7 +35,7 @@ const EnhancedDate = (props) => {
         value={(value !== undefined) ? value : null}
         openTo={(openTo !== undefined) ? openTo : 'date'}
         views={['year', 'month', 'date']}
-        onChange={date => handleChange(name, date)}
+        onChange={date => handleChange(date)}
         margin='normal'
         format={(format !== undefined) ? format : 'DD/MM/YYYY'}
         required={required}

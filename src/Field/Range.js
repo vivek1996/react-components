@@ -12,7 +12,12 @@ const useStyles = makeStyles((theme) => ({
 
 const EnhancedRange = (props) => {
   const classes = useStyles();
-  const { key, name, min, step, max, value, formData, handleChange } = props;
+  const { key, name, min, step, max, value, fieldValues, handleChange } = props;
+
+  // const { decimal } = props;
+  // if (type === 'range') {
+  //   value = (isNaN(value) || typeof value === 'string') ? value : value.toFixed(decimal || 2);
+  // }
 
   return (
     <div className={classes.textField}>
@@ -20,11 +25,11 @@ const EnhancedRange = (props) => {
         key={key}
         name={name}
         defaultValue={value || 0}
-        min={(typeof min === 'function') ? min(formData) : min}
-        max={(typeof max === 'function') ? max(formData) : max}
-        step={(typeof step === 'function') ? step(formData) : step}
+        min={(typeof min === 'function') ? min(fieldValues) : min}
+        max={(typeof max === 'function') ? max(fieldValues) : max}
+        step={(typeof step === 'function') ? step(fieldValues) : step}
         onChange={(event, value) => {
-          handleChange(name, value);
+          handleChange(value);
         }}
         valueLabelDisplay='auto'
         marks={[{value: min, label: min}, {value: max, label: max}]}

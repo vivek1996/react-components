@@ -1,12 +1,12 @@
 import React from 'react';
-
-import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   textField: {
     minWidth: '100px'
   },
@@ -16,12 +16,11 @@ const useStyles = makeStyles((theme) => ({
     wordWrap: 'break-word',
     whiteSpace: 'normal !important'
   }
-}));
+});
 
 const EnhancedSelect = (props) => {
-  const classes = useStyles();
   const {
-    key, name, label, placeholder, required, disabled, readonly, value,
+    key, name, label, placeholder, required, disabled, readonly, value, classes,
     optionKey, optionValue, handleChange, title, suffix, prefix, data, multiple
   } = props;
 
@@ -59,7 +58,6 @@ const EnhancedSelect = (props) => {
       select
       multiple={multiple}
       key={key}
-      id={key}
       name={name}
       label={label}
       placeholder={placeholder}
@@ -71,7 +69,7 @@ const EnhancedSelect = (props) => {
       }}
       onBlur={(event) => {
         const { value } = event.target;
-        handleChange(name, value);
+        handleChange(value);
       }}
       margin='normal'
       required={required}
@@ -137,6 +135,7 @@ EnhancedSelect.defaultProps = {
 };
 
 EnhancedSelect.propTypes = {
+  classes: PropTypes.object.isRequired
 };
 
-export default EnhancedSelect;
+export default withStyles(styles, { withTheme: true })(EnhancedSelect);

@@ -13,80 +13,16 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-const styles = theme => ({
+const styles = (theme) => ({
   paper: {
     maxWidth: 360,
-    // maxHeight: 360,
-    overflow: 'auto',
+    overflow: 'auto'
   },
   popper: {
     zIndex: 1400,
     minWidth: '240px',
     maxWidth: '360px',
-    maxHeight: '360px',
-    '&[x-placement*="bottom"] $arrow': {
-      top: 0,
-      left: 0,
-      marginTop: '-0.9em',
-      width: '3em',
-      height: '1em',
-      '&::before': {
-        borderWidth: '0 1em 1em 1em',
-        borderColor: `transparent transparent ${theme.palette.common.white} transparent`,
-      },
-    },
-    '&[x-placement*="top"] $arrow': {
-      bottom: 0,
-      left: 0,
-      marginBottom: '-0.9em',
-      width: '3em',
-      height: '1em',
-      '&::before': {
-        borderWidth: '1em 1em 0 1em',
-        borderColor: `${theme.palette.common.white} transparent transparent transparent`,
-      },
-    },
-    '&[x-placement*="right"] $arrow': {
-      left: 0,
-      marginLeft: '-0.9em',
-      height: '3em',
-      width: '1em',
-      '&::before': {
-        borderWidth: '1em 1em 1em 0',
-        borderColor: `transparent ${theme.palette.common.white} transparent transparent`,
-      },
-    },
-    '&[x-placement*="left"] $arrow': {
-      right: 0,
-      marginRight: '-0.9em',
-      height: '3em',
-      width: '1em',
-      '&::before': {
-        borderWidth: '1em 0 1em 1em',
-        borderColor: `transparent transparent transparent ${theme.palette.common.white}`,
-      },
-    },
-  },
-  arrow: {
-    position: 'absolute',
-    fontSize: 7,
-    width: '3em',
-    height: '3em',
-    '&::before': {
-      content: '""',
-      margin: 'auto',
-      display: 'block',
-      width: 0,
-      height: 0,
-      borderStyle: 'solid',
-    },
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    paddingRight: theme.spacing(),
-    paddingLeft: theme.spacing()
+    maxHeight: '360px'
   },
   header: {
     alignItems: 'center',
@@ -103,26 +39,13 @@ const styles = theme => ({
   content: {
     maxHeight: '400px'
   },
-  textField: {
-    marginLeft: theme.spacing(),
-    marginRight: theme.spacing()
-  },
-  button: {
-    margin: theme.spacing()
-  },
-  formControl: {
-    margin: theme.spacing(3)
-  },
-  group: {
-    margin: `${theme.spacing()} 0`,
-  },
   closeButton: {
     position: 'absolute',
     right: theme.spacing(),
-    color: 'rgba(255, 255, 255)',
+    color: 'rgba(255, 255, 255)'
   },
   title: {
-    color: 'rgba(255, 255, 255)',
+    color: 'rgba(255, 255, 255)'
   }
 });
 
@@ -134,7 +57,7 @@ class EnhancedPopper extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState(nextProps);  
+    this.setState(nextProps);
   }
 
   handleClose = () => {
@@ -142,39 +65,39 @@ class EnhancedPopper extends React.Component {
   };
   
   handleCancel = () => {
-    if(this.props.value) {
+    if (this.props.value) {
       this.props.onClose(this.props.value);
     } else {
-      this.props.onClose("cancel");
+      this.props.onClose('cancel');
     }
   };
 
   handleOk = () => {
-    if(this.state.value) {
+    if (this.state.value) {
       this.props.onClose(this.state.value);
     } else {
-      this.props.onClose("ok");
+      this.props.onClose('ok');
     }
   };
 
   renderActions = () => {
-    switch(this.state.type) {
+    switch (this.state.type) {
       case 'confirm': {
-        return(
+        return (
           <DialogActions>
-            <Button onClick={this.handleCancel} color="primary">
+            <Button onClick={this.handleCancel} color='primary'>
               Cancel
             </Button>
-            <Button onClick={this.handleOk} color="primary">
+            <Button onClick={this.handleOk} color='primary'>
               Ok
             </Button>
           </DialogActions>
         );
       }
       case 'alert': {
-        return(
+        return (
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary" autoFocus>
+            <Button onClick={this.handleClose} color='primary' autoFocus>
               Ok
             </Button>
           </DialogActions>
@@ -185,7 +108,7 @@ class EnhancedPopper extends React.Component {
       }
     }
   }
-  
+
   render() {
     const { open, classes, onClose, anchorEl } = this.props;
 
@@ -193,35 +116,35 @@ class EnhancedPopper extends React.Component {
       <Popper
         open={open}
         anchorEl={anchorEl}
-        placement={"bottom-end"}
+        placement='bottom-end'
         disablePortal={true}
         className={classes.popper}
         modifiers={{
           flip: {
-            enabled: true,
+            enabled: true
           },
           preventOverflow: {
             enabled: true,
-            boundariesElement: 'scrollParent',
-          },
+            boundariesElement: 'scrollParent'
+          }
         }}
       >
         <Paper className={classes.paper}>
-          {(this.state.title) ? 
-            <DialogTitle id="dialog-title" className={classes.header} disableTypography={true}>
-              <Typography variant="h6" className={classes.title}>{this.state.title}</Typography>
+          {(this.state.title) ?
+            <DialogTitle id='dialog-title' className={classes.header} disableTypography={true}>
+              <Typography variant='h6' className={classes.title}>{this.state.title}</Typography>
               {onClose ? (
-                <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+                <IconButton aria-label='Close' className={classes.closeButton} onClick={onClose}>
                   <CloseIcon />
                 </IconButton>
               ) : null}
-            </DialogTitle> : ""
+            </DialogTitle> : ''
           }
           <DialogContent className={classes.content}>
-            {(this.state.text) ? <DialogContentText>{this.state.text}</DialogContentText> : ""}
-            {(this.state.content) ? this.state.content : ""}
+            {(this.state.text) ? <DialogContentText>{this.state.text}</DialogContentText> : ''}
+            {(this.state.content) ? this.state.content : ''}
           </DialogContent>
-          {(this.state.type) ? this.renderActions() : ""}
+          {(this.state.type) ? this.renderActions() : ''}
         </Paper>
       </Popper>
     );

@@ -4,17 +4,15 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Toolbar from '@material-ui/core/Toolbar';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
-import CheckIcon from '@material-ui/icons/Check';
 
-import _ from 'lodash';
-
-import Toolbar from './Toolbar';
 import Field from './Field';
 
-import { validate, isDefined, isFunction } from './lib';
+import { validate, isDefined, isFunction, StoreProvider, useStore } from './lib';
 
 const { unflatten } = require('flat');
 
@@ -53,160 +51,92 @@ const styles = (theme) => ({
   }
 });
 
-const reducer = (accumulator, currentValue) => {
-  accumulator[currentValue.name] = '';
-  return accumulator;
-}
-
-const defaultDataReducer = (accumulator, currentValue) => {
+const defaultDataReducer = async (accumulator, currentValue) => {
   if (currentValue && currentValue.hasOwnProperty('name') && accumulator && !accumulator[currentValue.name] && currentValue.value !== undefined) {
-    accumulator[currentValue.name] = (typeof currentValue.value === 'function') ? currentValue.value(accumulator) : currentValue.value;
+    accumulator[currentValue.name] = (typeof currentValue.value === 'function') ? await currentValue.value(accumulator) : currentValue.value;
   }
 
   return accumulator;
 }
 
 const EnhancedForm = (props) => {
-  const { classes, title, container, novalidate, data, initialValues,
-    fields, buttons, autoSubmit, onSubmit } = props;
+  const { classes, title, container, novalidate, autoValidate, data, initialValues,
+    fields, buttons, onSubmit, onError } = props;
   const containerClass = classNames(container && classes.container);
 
   const initialFormData = data || initialValues;
-  const [loading, setLoading] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
-  const [formData, setFormData] = React.useState(initialFormData);
-  const [formFields, setFormFields] = React.useState(fields);
-
-  const buttonClassname = classNames({
-    [classes.buttonSuccess]: success,
-    [classes.button]: !success
-  });
-
+  const [submiting, setSubmiting] = React.useState(false);
+  const { form, formDispatch } = useStore();
+  const fieldValues = form.values;
   React.useEffect(() => {
-    if (isFunction(initialFormData)) {
-      (async () => {
-        const tempInitialValues = await initialFormData();
-        setFormData(tempInitialValues);
-      })();
-    }
-
-    const defaultFieldValue = fields.reduce(defaultDataReducer, initialFormData);
-    setFormData(Object.assign({}, defaultFieldValue, initialFormData));
+    (async () => {
+      const defaultFieldValue = fields.reduce(defaultDataReducer, initialFormData);
+      var formInitialValues = {...defaultFieldValue, ...initialFormData};
+      if (isFunction(initialFormData)) {
+        formInitialValues = await initialFormData();
+      }
+      formDispatch({ 
+        type: 'SET_INITIAL_FORM', 
+        payload: {
+          fields,
+          fieldValues: formInitialValues,
+          fieldErrors: {}
+        }
+      });
+    })();
   }, []);
 
-  React.useEffect(() => {
-    const defaultFieldValue = formFields.reduce(defaultDataReducer, formData);
-    setFormData(Object.assign({}, defaultFieldValue, formData));
-  }, [formFields]);
-
-  const getField = (name) => {
-    let tempFormFields = formFields;
-    const nameParts = name ? name.split('.') : [];
-    let formField = {};
-    nameParts.map((namePart, index) => {
-      if (Number.isNaN(namePart)) {
-        formField = _.find(tempFormFields, {name: namePart});
-      }
-
-      const last = index === nameParts.length - 1;
-      if (!last) {
-        tempFormFields = formField.fields;
-      }
-    });
-
-    return formField;
-  }
-
-  const getDependentFields = (fieldName, fieldValue) => {
-    let currentField = getField(fieldName);
-    let dependentFields = [];
-    if (currentField.dependencies) {
-      let tempFields = (currentField.dependent) ? formFields : fields;
-      if (currentField.dependencies[fieldValue] !== undefined) {
-        dependentFields = currentField.dependencies[fieldValue];
-      } else if (currentField.dependencies['*'] !== undefined) {
-        dependentFields = currentField.dependencies['*'];
-      }
-
-      let fieldNameArr = Object.keys(tempFields.reduce(reducer, {}));
-      dependentFields = dependentFields.filter(field => fieldNameArr.indexOf(field.name) === -1);
-
-      dependentFields = dependentFields.map(dependentField => {
-        dependentField.dependent = true;
-        return dependentField;
-      });
-
-      dependentFields = tempFields.concat(dependentFields);
-    }
-
-    return dependentFields;
-  }
-
-  const handleFieldChange = async (fieldName, fieldValue, submit = true) => {
-    setFormData({...formData, [fieldName]: fieldValue});
-    const dependentFields = await getDependentFields(fieldName, fieldValue);
-    if (dependentFields.length > 0) {
-      setFormFields(dependentFields);
-    }
-
-    if (submit && autoSubmit && !loading) {
-      submitForm();
-    }
-  }
-
   const handleSubmit = (event) => {
+    console.log('handleSubmit click');
     event.preventDefault();
-    submitForm();
-  }
+    let formHasError = false;
+    const parsedFields = unflatten(fieldValues, {
+      delimiter: '.'
+    });
 
-  const submitForm = () => {
-    let formValidationFlag = true;
-    const updatedFields = formFields.map((field) => {
-      if (field.readonly === undefined || !field.readonly) {
-        const { error, errorMessage } = validate(field, formData[field.name], formData);
-        if (error) {
-          formValidationFlag = false;
-          if (!field.hasOwnProperty('error') || (field.hasOwnProperty('error') && typeof field.error === 'boolean'))
-            field.error = true;
-
-          return {...field, errorMessage};
+    const fieldErrors = {};
+    form.fields.map((field) => {
+      if (!isDefined(field.readonly) || !field.readonly) {
+        const { error, errorMessage } = validate(field, parsedFields[field.name], parsedFields);
+        if (error) formHasError = true;
+        fieldErrors[field.name] = {
+          error, errorMessage
         }
-
-        field.error = false;
-        return {...field, errorMessage};
-      } else {
-        field.error = false;
-        return field;
       }
     });
 
-    setFormFields(updatedFields);
+    formDispatch({ type: 'FORM_ERROR_UPDATE', payload: {
+      errors: fieldErrors
+    } });
 
-    if (!loading && formValidationFlag) {
-      setLoading(true);
-      setSuccess(false);
-      const parsedFields = unflatten(formData, {
-        delimiter: '.'
-      });
+    if (formHasError) {
+      onError(fieldErrors);
+    } else if(!submiting) {
+      setSubmiting(true);
       onSubmit(parsedFields);
     }
   }
 
   return (
     <div className={classes.formWraper}>
-      {(title) ? <Toolbar title={title} /> : ''}
+      {(title) && (
+        <Toolbar>
+          <Typography variant='h6'>
+            {title}
+          </Typography>
+        </Toolbar>
+      )}
       <form
         onSubmit={handleSubmit}
         autoComplete='off'
-        noValidate={novalidate}
+        noValidate={novalidate || autoValidate}
       >
         <div className={containerClass} >
-          {formFields.map(formField => {
+          {form.fields.map(formFieldItem => {
             return (
               <Field
-                formData={formData}
-                onChange={handleFieldChange}
-                {...formField}
+                key={`${(new Date()).getTime()}-field-${formFieldItem.type}-${formFieldItem.name}`}
+                {...formFieldItem}
               />
             );
           })}
@@ -221,13 +151,13 @@ const EnhancedForm = (props) => {
                   <Button
                     variant={(formButton.variant) ? formButton.variant : 'contained'}
                     color={(formButton.color) ? formButton.color : 'secondary'}
-                    className={buttonClassname}
-                    onClick={(e) => formButton.action(formData, e, btnKey)}
+                    className={classes.button}
+                    onClick={(e) => formButton.action(fieldValues, e, btnKey)}
                     key={btnKey}
-                    disabled={disable || success || loading || formButton.disabled}
+                    disabled={disable || submiting || formButton.disabled}
                   >
-                    {success ? <CheckIcon /> : ''} {formButton.label}
-                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    {formButton.label}
+                    {submiting && <CircularProgress size={24} className={classes.buttonProgress} />}
                   </Button>
                 )
                 break;
@@ -237,12 +167,12 @@ const EnhancedForm = (props) => {
                     variant='contained'
                     color={(formButton.color) ? formButton.color : 'primary'}
                     type='submit'
-                    disabled={loading}
-                    className={buttonClassname}
+                    disabled={submiting}
+                    className={classes.button}
                     key={`${(new Date()).getTime()}-button-${formButton.label}`}
                   >
-                    {success ? <CheckIcon /> : ''} {formButton.label}
-                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    {formButton.label}
+                    {submiting && <CircularProgress size={24} className={classes.buttonProgress} />}
                   </Button>
                 )
                 break;
@@ -256,17 +186,24 @@ const EnhancedForm = (props) => {
   );
 }
 
-EnhancedForm.defaultProps = {
-  buttons: [],
-  container: true,
-  loading: false,
-  success: false
-};
-
 EnhancedForm.propTypes = {
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
   buttons: PropTypes.array.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(EnhancedForm);
+EnhancedForm.defaultProps = {
+  buttons: [{ type: 'submit', label: 'Submit', color: 'secondary' }],
+  container: true,
+  submiting: false,
+  autoValidate: false,
+  onSubmit: () => {},
+  onError: () => {}
+};
+
+// export default withStyles(styles, { withTheme: true })(EnhancedForm);
+
+export default withStyles(styles, { withTheme: true })((props) => (
+  <StoreProvider>
+    <EnhancedForm {...props} />
+  </StoreProvider>
+));

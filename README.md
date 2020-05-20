@@ -1,5 +1,5 @@
 # react-component-stack
-This is React.js based components which are build with Material UI library.
+React.js based Table & Form components.
 
 ## Example
 

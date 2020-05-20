@@ -50,24 +50,24 @@ const styles = theme => ({
 });
 
 const EnhancedToggle = (props) => {
-  const { classes, name, label, value, formData, options, handleChange, optionKey, optionValue } = props;
+  const { classes, name, label, value, fieldValues, options, handleChange, optionKey, optionValue } = props;
 
   const [toggleOptions, setToggleOptions] = React.useState([]);
   React.useEffect(() => {
     let fieldOptions = options;
     (async () => {
       if (typeof options === 'function') {
-        fieldOptions = await options(formData);
+        fieldOptions = await options(fieldValues);
       }
       setToggleOptions(fieldOptions);
     })();
   }, [options]);
 
   const handleClick = (event) => {
-    const name = (event.target.name) ? event.target.name : event.target.getAttribute('name');
+    // const name = (event.target.name) ? event.target.name : event.target.getAttribute('name');
     const value = (event.target.value) ? event.target.value : event.target.getAttribute('value');
 
-    handleChange(name, value);
+    handleChange(value);
   }
 
   return (

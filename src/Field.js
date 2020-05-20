@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
@@ -26,7 +27,7 @@ import AddCircle from '@material-ui/icons/AddCircle';
 import RemoveCircle from '@material-ui/icons/RemoveCircle';
 
 import _ from 'lodash';
-import { isDefined, getInputProps, validate } from './lib';
+import { isDefined, getInputProps, validate, useStore, isArray, isObject, isEmpty, getUniqueArray } from './lib';
 
 const flatten = require('flat');
 const { unflatten } = require('flat');
@@ -38,19 +39,6 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     padding: theme.spacing(),
     paddingLeft: 0
-  },
-  switchLabel: {
-    alignItems: 'center',
-    display: 'flex'
-  },
-  helperText: {
-    maxWidth: '200px'
-  },
-  helperTextLink: {
-    textAlign: 'right'
-  },
-  formGroup: {
-    // maxWidth: '200px'
   }
 }));
 
@@ -66,24 +54,25 @@ function Description(props) {
 }
 
 const GroupField = (props) => {
-  const { label, name, formData, fields, onChange } = props;
+  const { label, name, value, fields } = props;
   return (
     <>
       {
         (label) && (
           <FormLabel>
-            {(typeof label === 'function') ? label(formData) : label}
+            {(typeof label === 'function') ? label(value) : label}
           </FormLabel>
         )
       }
       <FormGroup row>
         {fields && fields.map((nestedField) => {
-          const nestedFieldName = `${name}.${nestedField.name}`;
+          nestedField.name = `${name}.${nestedField.name}`;
           return (
             <Field
-              onChange={onChange}
-              parent={name}
-              value={formData && formData[nestedFieldName]}
+              key={
+                `${(new Date()).getTime()}-field-${nestedField.type}-${nestedField.name}`
+              }
+              value={value && value[nestedField.name]}
               { ...nestedField }
             />
           );
@@ -94,13 +83,18 @@ const GroupField = (props) => {
 };
 
 const ArrayField = (props) => {
-  const { value, label, formData } = props;
-  const subFieldCount = Array.isArray(value) ? value.length : 1;
-  const [counter, setCounter] = useState(subFieldCount);
+  const { value, label, type, name } = props;
+  const { formData, formDataDispatch } = useStore();
+  const subFieldCount = Array.isArray(value) && value.length > 0 ? value.length : 1;
+  const [counter, setCounter] = useState(1);
   const [fieldValue, setFieldValue] = useState();
   let fieldProps = {...props};
   delete fieldProps.multiple;
   delete fieldProps.label;
+
+  React.useEffect(() => {
+    setCounter(subFieldCount);
+  }, []);
 
   React.useEffect(() => {
     const flatValues = flatten(formData || {}, { delimiter: '.' });
@@ -109,10 +103,23 @@ const ArrayField = (props) => {
 
   const addField = () => {
     setCounter(counter + 1);
+    const parsedFieldValues = unflatten(fieldValue, {
+      delimiter: '.'
+    });
+
+    if (parsedFieldValues[name]) {
+      parsedFieldValues[name].push(type === 'nested' ? {} : '');
+    } else {
+      parsedFieldValues[name] = [(type === 'nested' ? {} : '')];
+    }
+
+    const flatFieldValues = flatten(parsedFieldValues || {}, { delimiter: '.' });
+    setFieldValue(flatFieldValues);
+    formDataDispatch({ type: 'FIELD_VALUE_UPDATE', payload: parsedFieldValues });
   };
 
   const removeField = (fieldName, fieldIndex) => {
-    const parsedValues = unflatten(fieldValue, {
+    const parsedFieldValues = unflatten(fieldValue, {
       delimiter: '.'
     });
 
@@ -121,8 +128,8 @@ const ArrayField = (props) => {
     fieldNameParts.map((fieldNamePart, index) => {
       const last = index === fieldNameParts.length - 1;
       if (last) {
-        if (isDefined(parsedValues[removeFieldPath])) {
-          parsedValues[removeFieldPath].splice(fieldIndex, 1);
+        if (isDefined(parsedFieldValues[removeFieldPath])) {
+          parsedFieldValues[removeFieldPath].splice(fieldIndex, 1);
         }
       } else {
         if (isNaN(fieldNamePart)) {
@@ -133,12 +140,13 @@ const ArrayField = (props) => {
       }
     });
 
-    const finalValues = parsedValues ? flatten(parsedValues, {
+    const finalValues = parsedFieldValues ? flatten(parsedFieldValues, {
       delimiter: '.'
     }) : {};
 
     setFieldValue(finalValues);
     setCounter(counter - 1);
+    formDataDispatch({ type: 'FIELD_VALUE_UPDATE', payload: parsedFieldValues });
   };
 
   return (
@@ -155,7 +163,7 @@ const ArrayField = (props) => {
         {
           (label) && (
             <FormLabel>
-              {(typeof label === 'function') ? label(formData) : label}
+              {(typeof label === 'function') ? label(fieldValue) : label}
             </FormLabel>
           )
         }
@@ -175,7 +183,10 @@ const ArrayField = (props) => {
         fieldProps.value = isDefined(fieldValue) ? fieldValue[fieldProps.name] || '' : '';
 
         return (
-          <Grid container>
+          <Grid
+            container
+            key={`${(new Date()).getTime()}-array-field-${fieldProps.name}`}
+          >
             <Grid item style={{
               width: '95%',
               display: 'flex'
@@ -218,36 +229,33 @@ const FieldLabel = (props) => {
 };
 
 const FieldHelpText = (props) => {
-  const { helptext, fieldName, formData } = props;
+  const { helptext, name, fieldValues } = props;
 
   return (helptext !== undefined) ? (
-    <FormHelperText id={`${fieldName}-help-text`}>
-      {(typeof helptext === 'function') ? helptext(formData) : helptext}
+    <FormHelperText id={`${name}-help-text`}>
+      {(typeof helptext === 'function') ? helptext(fieldValues) : helptext}
     </FormHelperText>
   ) : null;
 };
 
 const FieldHelpLink = (props) => {
-  const classes = useStyles();
-  const { helplink, fieldName, formData } = props;
+  const { helplink, name, fieldValues } = props;
 
   return (helplink !== undefined) ? (
     <FormHelperText
-      id={`${fieldName}-help-link`}
-      classes={{
-        root: classes.helperTextLink
-      }}
+      id={`${name}-help-link`}
+      style={{textAlign: 'right'}}
     >
-      {(typeof helplink === 'function') ? helplink(formData) : helplink}
+      {(typeof helplink === 'function') ? helplink(fieldValues) : helplink}
     </FormHelperText>
   ) : null;
 };
 
 const FieldError = (props) => {
-  const { formData, title, error, errorName, errorMessage } = props;
+  const { fieldValues, title, error, errorName, errorMessage } = props;
   return (error) ? (
     <FormHelperText id={errorName}>
-      {(typeof title === 'function') ? title(formData) : title || errorMessage}
+      {(typeof title === 'function') ? title(fieldValues) : title || errorMessage}
     </FormHelperText>
   ) : null;
 };
@@ -256,17 +264,21 @@ const Field = (props) => {
   const classes = useStyles();
 
   const {
-    formData, type, name, label, helptext, multiple,
+    type, name, label, helptext, multiple,
     prefix, placeholder, disabled, options, value, suffix, required, error,
-    errorMessage, helplink, title, description, fields, parent, onChange, ...restProps
+    errorMessage, helplink, title, description, fields, dependencies,
+    dependent, onChange, onError, ...restProps
   } = props;
 
-  // More properties handled in useEffect
-  // format, disablePast, disableFuture, disableDate, openTo, min, max, readonly, maxlength, minlength, step
-  const [fieldError, setFieldError] = React.useState(false);
-  const [fieldErrorMessage, setFieldErrorMessage] = React.useState();
-  // const [fieldProps, setFieldProps] = React.useState();
+  // use store
+  const { form, formDispatch } = useStore();
+  const fieldValues = form.values;
+  const formErrors = form.errors;
+  const fieldErrorObj = formErrors[name] || {};
+  const fieldError = fieldErrorObj.error || false;
+  const fieldErrorMessage = fieldErrorObj.errorMessage || null;
 
+  // const [fieldProps, setFieldProps] = React.useState();
   // React.useEffect(() => {
   //   console.log('Inside Use Effect - restProps', restProps);
   //   (async () => {
@@ -277,7 +289,6 @@ const Field = (props) => {
   //     }
   //   })();
   // }, []);
-
   // console.log('fieldProps', fieldProps);
 
   const arrayType = ['select', 'checkbox'];
@@ -287,21 +298,21 @@ const Field = (props) => {
   let fieldValue = value;
   let fieldType = type;
 
-  if (formData !== undefined && formData !== null && formData[name] !== undefined && formData[name] !== null) {
-    fieldValue = formData[name] ;
-    fieldValue = (typeof fieldValue === 'function') ? fieldValue(formData) : fieldValue;
+  if (fieldValues !== undefined && fieldValues !== null && fieldValues[name] !== undefined && fieldValues[name] !== null) {
+    fieldValue = fieldValues[name] ;
+    fieldValue = (typeof fieldValue === 'function') ? fieldValue(fieldValues) : fieldValue;
   } else if (value !== undefined && typeof value === 'function') {
-    fieldValue = value(formData);
+    fieldValue = value(fieldValues);
   } else if (value !== undefined) {
     fieldValue = value;
   } else if ((fieldType === 'checkbox' && options !== undefined) || (fieldType === 'select' && multiple) || multiple) {
     fieldValue = [];
   }
 
-  if (Array.isArray(options)) {
+  if (isArray(options)) {
     fieldOptions = options;
   } else if (typeof options === 'function') {
-    let optionsFn = options(formData);
+    let optionsFn = options(fieldValues);
     if (optionsFn instanceof Promise) {
       optionsFn.then(options => {
         fieldOptions = options;
@@ -312,25 +323,80 @@ const Field = (props) => {
   }
 
   if (fieldType === undefined) {
-    if (fieldOptions.length > 0) {
+    if (isArray(fieldOptions) && fieldOptions.length > 0) {
       if (multiple) {
         fieldType = 'checkbox';
       } else {
         fieldType = 'radio';
       }
-    } else if (fields && fields.length > 0) {
+    } else if (fields && isArray(fields) && fields.length > 0) {
       fieldType = 'nested';
     }
   }
 
-  const fieldName = `${ parent ? `${parent}.${name}` : name }`;
-  const fieldErrorName = `${fieldName}-error-text`;
-  const fieldKey = `field-${fieldType}-${fieldName}`;
+  const fieldErrorName = `${name}-error-text`;
+  const fieldKey = `field-${fieldType}-${name}`;
+
+  // This function return updated fields based on the dependencies
+  const getUpdatedFields = (fieldValue) => {
+    let matchVal = fieldValue;
+    if (dependencies) {
+      let tempUpdatedFields = [];
+      const dependenciesFieldKeys = Object.keys(dependencies);
+      if (isArray(fieldValue)) {
+        matchVal = fieldValue.find(v => dependenciesFieldKeys.indexOf(v) !== -1);
+      }
+
+      const updatedFields = form.fields;
+      // Remove old dependent fields
+      let dependenciesArr = [];
+      for (let [key, value] of Object.entries(dependencies)) {
+        dependenciesArr = [...dependenciesArr, ...value]
+      }
+
+      const dependenciesFieldNameArr = [];
+      dependenciesArr.map(dependenciesArrItem => {
+        dependenciesFieldNameArr.push(dependenciesArrItem.name);
+      });
+
+      tempUpdatedFields = updatedFields.filter(dependenciesItem => dependenciesFieldNameArr.indexOf(dependenciesItem.name) === -1);
+
+      if (!isEmpty(matchVal) && isDefined(dependencies[matchVal])) {
+        tempUpdatedFields = [...tempUpdatedFields, ...dependencies[matchVal]];
+      } else if (!isEmpty(matchVal) && isDefined(dependencies['*'])) {
+        tempUpdatedFields = [...tempUpdatedFields, ...dependencies['*']];
+      }
+
+      // Get unique fields array
+      const uniqueFields = getUniqueArray(tempUpdatedFields, 'name');
+      return uniqueFields;
+    }
+  }
+
+  const handleChange = async (value) => {
+    const { error, errorMessage } = validate(props, value, fieldValues);
+    const updatedFields = await getUpdatedFields(value);
+
+    // update store with value, error, updated fields
+    formDispatch({ type: 'FORM_UPDATE', payload: { 
+      fieldValues: { [name]: value },
+      fieldErrors: { [name]: { error, errorMessage } },
+      fields: updatedFields
+    }});
+
+    if (error) {
+      onError({ error, errorMessage });
+    } else {
+      onChange(value);
+    }
+  }
+
   const updatedProps = Object.assign({}, props, {
-    name: fieldName,
     value: fieldValue,
     type: fieldType,
-    key: fieldKey
+    key: fieldKey,
+    fieldValues: fieldValues,
+    handleChange
   });
 
   if (arrayType.indexOf(fieldType) === -1 && multiple) {
@@ -339,90 +405,16 @@ const Field = (props) => {
     );
   }
 
-  React.useEffect(() => {
-    (async () => {
-      if (error !== undefined) {
-        const fieldErrorFlag = (typeof error === 'function') ? error(formData) : (error || false);
-        setFieldError(fieldErrorFlag);
-      }
-    })();
-  }, [error]);
-
-  React.useEffect(() => {
-    (async () => {
-      if (errorMessage !== undefined) {
-        const fieldErrorMessageText = (typeof errorMessage === 'function') ? errorMessage(formData) : errorMessage;
-        setFieldErrorMessage(fieldErrorMessageText);
-      }
-    })();
-  }, [errorMessage]);
-
-  const checkFormat = (type, value, pattern) => {
-    if (value.length > 0) {
-      let re = '';
-      switch (type) {
-        case 'tel':
-          re = (pattern) ? pattern : /^[0-9\b]+$/;
-          break;
-        default:
-          re = (pattern) ? pattern : '';
-          break;
-      }
-
-      return (re.length > 0 || typeof re === 'object') ? re.test(value) : true;
-    } else {
-      return true;
-    }
+  if (fieldType === 'nested') {
+    return (
+      <GroupField {...updatedProps} />
+    );
   }
 
-  const handleChange = (event) => {
-    const { name, value, type, checked, pattern } = event.target;
-    let fieldValue = (type === 'checkbox') ? checked : value;
-    let formatFlag = true;
-
-    if (type === 'tel') {
-      formatFlag = checkFormat(type, value, pattern);
-    }
-
-    if (formatFlag) {
-      handleChangeData(name, fieldValue);
-    } else {
-      setFieldError(true);
-    }
-  }
-
-  const handleChangeData = (name, value, submit = true) => {
-    const { format, type, decimal } = props;
-
-    let formatFlag = true;
-    if (type === 'date') {
-      if (value !== undefined) {
-        value = (format) ? value.format(format) : value.format('YYYY-MM-DD');
-      }
-    }
-
-    if (type === 'range') {
-      value = (isNaN(value) || typeof value === 'string') ? value : value.toFixed(decimal || 2);
-    }
-
-    if (type === 'tel') {
-      formatFlag = checkFormat(type, value);
-    }
-
-    const { error, errorMessage } = validate(props, value, formData);
-    if (error || !formatFlag) {
-      setFieldError(true);
-      setFieldErrorMessage(errorMessage);
-    } else {
-      setFieldError(false);
-      setFieldErrorMessage(null);
-      onChange && onChange(name, value, submit);
-    }
-
-    console.log(`Field - 
-      handleChangeData : 
-        error - ${error}, errorMessage - ${errorMessage}
-    `);
+  if (fieldType === 'hidden') {
+    return (
+      <input {...updatedProps} />
+    );
   }
 
   switch (fieldType) {
@@ -430,24 +422,17 @@ const Field = (props) => {
       field = (
         <Radio
           options={fieldOptions}
-          handleChange={handleChangeData}
           {...updatedProps}
         />
       )
       break;
     case 'boolean':
     case 'switch':
-      field = (
-        <Switch
-          handleChange={handleChangeData}
-          {...updatedProps}
-        />
-      )
+      field = (<Switch {...updatedProps} />)
       break;
     case 'toggle':
       field = (
         <Toggle
-          handleChange={handleChangeData}
           options={fieldOptions}
           {...updatedProps}
         />
@@ -456,81 +441,35 @@ const Field = (props) => {
     case 'select':
       field = (
         <Select
-          multiple={multiple}
-          handleChange={handleChangeData}
           {...updatedProps}
-        />
-      );
-      break;
-    case 'hidden':
-      field = (
-        <input
-          key={fieldKey}
-          name={fieldName}
-          type={fieldType}
-          value={fieldValue}
-          onChange={handleChange}
-          required={required}
+          multiple={multiple}
         />
       );
       break;
     case 'range':
-      field = (
-        <Range
-          handleChange={handleChangeData}
-          {...updatedProps}
-        />
+      field = (<Range {...updatedProps} />
       );
       break;
     case 'checkbox':
-      field = (
-        <Checkbox
-          handleChange={handleChangeData}
-          {...updatedProps}
-        />
-      );
+      field = (<Checkbox {...updatedProps} />);
       break;
     case 'date':
-      field = (
-        <DateField
-          handleChange={handleChangeData}
-          {...updatedProps}
-        />
-      );
+      field = (<DateField {...updatedProps} />);
       break;
-    case 'number':
+    case 'currency':
     case 'integer':
     case 'decimal':
+    case 'number':
+    case 'mobile':
+    case 'float':
     case 'tel':
-      field = (
-        <NumberField
-          handleChange={handleChangeData}
-          {...updatedProps}
-        />
-      );
+      field = (<NumberField {...updatedProps} />);
       break;
     case 'autocomplete':
-      field = (
-        <Autocomplete
-          handleChange={handleChangeData}
-          {...updatedProps}
-        />
-      );
-      break;
-    case 'nested':
-      field = (
-        <GroupField
-          {...updatedProps}
-        />
-      );
+      field = (<Autocomplete {...updatedProps} />);
       break;
     default:
-      field = (
-        <InputField
-          handleChange={handleChangeData}
-          {...updatedProps}
-        />
-      );
+      field = (<InputField {...updatedProps} />);
       break;
   }
 
@@ -549,23 +488,23 @@ const Field = (props) => {
       }
       {
         <FieldHelpText
-          formData={formData}
+          name={name}
           helptext={helptext}
-          fieldName={fieldName}
+          fieldValues={fieldValues}
         />
       }
       {
         <FieldHelpLink
-          formData={formData}
+          name={name}
           helplink={helplink}
-          fieldName={fieldName}
+          fieldValues={fieldValues}
         />
       }
       {
         <FieldError
-          formData={formData}
           title={title}
           error={fieldError}
+          fieldValues={fieldValues}
           errorName={fieldErrorName}
           errorMessage={fieldErrorMessage}
         />
@@ -574,12 +513,11 @@ const Field = (props) => {
   );
 };
 
-Field.defaultProps = {};
+Field.propTypes = {};
 
-Field.propTypes = {
-  // classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+Field.defaultProps = {
+  onError: () => {},
+  onChange: () => {}
 };
 
-// export default withStyles(styles, { withTheme: true })(Field);
 export default Field;

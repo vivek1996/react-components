@@ -9,10 +9,12 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 
+import { isEmpty, isArray } from '../lib';
+
 const styles = (theme) => ({});
 
 const EnhancedCheckbox = (props) => {
-  const { classes, label, name, required, key, error, disabled, value, options, handleChange, formData, optionKey, optionValue } = props;
+  const { classes, label, name, required, key, error, disabled, value, options, handleChange, optionKey, optionValue } = props;
 
   const [localValue, setLocalValue] = React.useState();
   React.useEffect(() => {
@@ -20,17 +22,18 @@ const EnhancedCheckbox = (props) => {
   }, []);
 
   const onChange = event => {
-    const { name, value, checked } = event.target;
-    const prevFieldValue = ((formData[name] === undefined) ?
-      (options === undefined ? '' : []) : formData[name]);
-    if (Array.isArray(prevFieldValue)) {
+    const { value, checked } = event.target;
+    const prevFieldValue = ((localValue === undefined) ?
+      (options === undefined ? '' : []) : (isEmpty(localValue) && !isArray(localValue)) ? []: localValue);
+
+    if (isArray(prevFieldValue)) {
       if (checked) {
         const updatedArray = prevFieldValue.concat([value]);
         const uniqueArray = updatedArray.filter(function(item, pos) {
           return updatedArray.indexOf(item) === pos;
         });
         setLocalValue(uniqueArray);
-        handleChange(name, uniqueArray);
+        handleChange(uniqueArray);
       } else {
         const filteredPrevValue = prevFieldValue.filter(function(item, pos) {
           return prevFieldValue.indexOf(value) !== pos;
@@ -38,11 +41,11 @@ const EnhancedCheckbox = (props) => {
 
         const filteredValue = filteredPrevValue.length > 0 ? filteredPrevValue : '';
         setLocalValue(filteredValue);
-        handleChange(name, filteredValue);
+        handleChange(filteredValue);
       }
     } else {
       setLocalValue(checked);
-      handleChange(name, checked);
+      handleChange(checked);
     }
   }
 
@@ -58,16 +61,18 @@ const EnhancedCheckbox = (props) => {
           {options.map(option => {
             const optionVal = option[optionKey] || option[name] || option.id || option.key || option.value || option;
             const optionLabel = option[optionValue] || option.name || option.label || option.value || option;
-
+            const checkedOption = (!isEmpty(localValue) && isArray(localValue) &&
+            localValue.indexOf(optionVal.toString()) > -1);
             return (
               <FormControlLabel
+                key={`${(new Date()).getTime()}-${name}-checkbox-option-${optionVal}`}
                 control={
                   <Checkbox
                     onChange={onChange}
                     value={optionVal}
                     name={name}
                     disabled={option.disabled}
-                    checked={(localValue && localValue.indexOf(optionVal.toString()) > -1)}
+                    checked={checkedOption}
                   />
                 }
                 label={optionLabel}

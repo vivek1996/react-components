@@ -17,7 +17,8 @@
     "start": "rollup -c -w",
     "prepare": "npm run build",
     "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/build"
+    "deploy": "gh-pages -d example/build",
+    "eslint": "cross-env eslint 'src/**/*.js' 'src/**/*.jsx'"
   },
   "peerDependencies": {
     "@material-ui/core": "^4.9.8",

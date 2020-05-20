@@ -11,7 +11,7 @@ import Switch from '@material-ui/core/Switch';
 const styles = theme => ({});
 
 const EnhancedSwitch = (props) => {
-  const { classes, label, name, key, disabled, value, handleChange, formData, placeholder } = props;
+  const { classes, label, name, key, disabled, value, handleChange, fieldValues, placeholder } = props;
 
   return (
     <>
@@ -28,13 +28,13 @@ const EnhancedSwitch = (props) => {
               name={name}
               onChange={(event) => {
                 const { name, checked } = event.target;
-                handleChange(name, checked);
+                handleChange(checked);
               }}
               disabled={disabled}
               checked={value}
             />
           }
-          label={(typeof placeholder === 'function') ? placeholder(formData) : placeholder}
+          label={(typeof placeholder === 'function') ? placeholder(fieldValues) : placeholder}
         />
       </FormGroup>
     </>

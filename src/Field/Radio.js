@@ -28,7 +28,7 @@ const EnhancedRadio = (props) => {
         name={name}
         onChange={(event) => {
           const { value } = event.target;
-          handleChange(name, value);
+          handleChange(value);
         }}
       >
         {options.map(option => {

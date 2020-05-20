@@ -18,8 +18,30 @@ const EnhancedNumber = (props) => {
 
   const [localValue, setLocalValue] = React.useState(value);
 
+  const checkFormat = (type, value, pattern) => {
+    if (value.length > 0) {
+      let re = '';
+      switch (type) {
+        case 'tel':
+          re = (pattern) ? pattern : /^[0-9\b]+$/;
+          break;
+        default:
+          re = (pattern) ? pattern : '';
+          break;
+      }
+
+      return (re.length > 0 || typeof re === 'object') ? re.test(value) : true;
+    } else {
+      return true;
+    }
+  }
+
   const handleOnChange = (event) => {
     const { name, value, step } = event.target;
+
+    // if (type === 'tel') {
+    //   formatFlag = checkFormat(type, value);
+    // }
 
     let fieldValue = value;
     if (fieldValue !== '' && !Number.isNaN(fieldValue)) {
@@ -35,9 +57,9 @@ const EnhancedNumber = (props) => {
         }
       }
 
-      props.handleChange(name, fieldValue);
+      props.handleChange(fieldValue);
     } else {
-      props.handleChange(name, fieldValue);
+      props.handleChange(fieldValue);
     }
   }
 

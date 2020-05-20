@@ -59,7 +59,6 @@ export default function EnhancedAutocomplete (props) {
   return (
     <Autocomplete
       key={key}
-      id={name}
       name={name}
       open={open}
       onOpen={() => {
@@ -70,7 +69,7 @@ export default function EnhancedAutocomplete (props) {
       }}
       onChange={(event, value) => {
         const selectedValue = value[optionKey] || value[name] || value.id || value.key || value.value || value.name || value;
-        handleChange(name, selectedValue);
+        handleChange(selectedValue);
       }}
       getOptionSelected={(option, selected) => (option[optionKey] || option[name] || option.id || option.key || option.value || option.name || option) === (selected[optionKey] || selected[name] || selected.id || selected.key || selected.value || selected.name || selected)}
       getOptionLabel={(option) => option[optionValue] || option.name || option.label || option.value || option}

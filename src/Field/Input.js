@@ -15,10 +15,7 @@ const styles = theme => ({
 const EnhancedInput = (props) => {
   const { type, name, key, data, handleChange, classes, value } = props;
 
-  const [localValue, setLocalValue] = React.useState();
-  React.useEffect(() => {
-    setLocalValue(value);
-  }, [value]);
+  const [localValue, setLocalValue] = React.useState(value);
 
   return (
     <TextField
@@ -28,13 +25,12 @@ const EnhancedInput = (props) => {
       label={props.label}
       placeholder={props.placeholder}
       className={classes.textField}
-      defaultValue={localValue}
-      value={localValue}
+      defaultValue={value || ''}
       onChange={(event) => {
         const { value } = event.target;
         setLocalValue(value);
       }}
-      onBlur={() => handleChange(name, localValue)}
+      onBlur={() => handleChange(localValue)}
       margin='normal'
       required={props.required}
       disabled={props.disabled}

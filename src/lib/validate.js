@@ -1,14 +1,32 @@
-const validate = (field, value, formData) => {
+const validateField = (fieldProps, value, formData) => {
   const {
     required, min, max, minlength, maxlength, pattern, type, error, validate, fields,
     multiple
-  } = field;
+  } = fieldProps;
   let errorFlag = false;
-  let errorMessage = '';
-  console.log('value', value);
-  console.log('field', field);
+  let errorMessage = null;
+
   const optionType = ['select', 'radio', 'checkbox'];
-  if (required && (value === undefined || value === null || value === '' ||
+  if (multiple && optionType.indexOf(type) === -1) {
+    const { multiple, ...restFieldProps } = fieldProps;
+    if (Array.isArray(value) && value.length > 0) {
+      errorFlag = !(value.every((valueObj) => {
+        const multipleFieldValidation = validateField(restFieldProps, valueObj, formData);
+        return !multipleFieldValidation.error;
+      }));
+      errorMessage = errorFlag ? (type === 'nested') ? `Please fill section details!` : ((optionType.indexOf(type) > -1) ? `Please select an option!` : `Please enter a value!`) : null;
+    } else if (required) {
+      errorFlag = true;
+      errorMessage = `Please fill section details!`;
+    }
+  } else if (type === 'nested' && fields.length > 0) {
+    errorFlag = !(fields.every((nestedField) => {
+      const nestedFieldValue = value && value[nestedField.name];
+      const nestedFieldValidation = validateField(nestedField, nestedFieldValue, value);
+      return !nestedFieldValidation.error;
+    }));
+    errorMessage = errorFlag ? `Please fill section details!` : null;
+  } else if (required && (value === undefined || value === null || value === '' ||
     (Array.isArray(value) && value.length === 0))) {
     errorFlag = true;
     errorMessage = (optionType.indexOf(type) > -1) ? `Please select an option!` : `Please enter a value!`;
@@ -60,14 +78,10 @@ const validate = (field, value, formData) => {
     }
   }
 
-  console.log('type', type);
-  console.log('multiple', multiple);
-  console.log('errorFlag', errorFlag);
-  console.log('errorMessage', errorMessage);
   return {
     error: errorFlag,
     errorMessage: errorMessage
   };
 }
 
-export default validate;
+export default validateField;
