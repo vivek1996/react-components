@@ -1,64 +1,63 @@
-import React from 'react';
+import React from "react";
 
-import { withStyles } from '@material-ui/core/styles';
-import { isMobile } from 'react-device-detect';
+import { withStyles } from "@material-ui/core/styles";
 
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Typography from "@material-ui/core/Typography";
 
-const styles = theme => ({
+const styles = (theme) => ({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexDirection: "column",
+    flexWrap: "wrap",
     paddingRight: theme.spacing(),
-    paddingLeft: theme.spacing()
+    paddingLeft: theme.spacing(),
   },
   header: {
-    alignItems: 'center',
-    display: 'flex',
+    alignItems: "center",
+    display: "flex",
     backgroundColor: theme.palette.primary.main,
-    color: '#fff',
-    height: '56px',
-    borderRadius: '3px 3px 0 0',
-    boxSizing: 'border-box',
+    color: "#fff",
+    height: "56px",
+    borderRadius: "3px 3px 0 0",
+    boxSizing: "border-box",
     fontWeight: 500,
-    justifyContent: 'space-between',
-    padding: '0 8px 0 16px',
-    minWidth: '300px'
+    justifyContent: "space-between",
+    padding: "0 8px 0 16px",
+    minWidth: "300px",
   },
   textField: {
     marginLeft: theme.spacing(),
-    marginRight: theme.spacing()
+    marginRight: theme.spacing(),
   },
   button: {
-    margin: theme.spacing()
+    margin: theme.spacing(),
   },
   formControl: {
-    margin: theme.spacing(3)
+    margin: theme.spacing(3),
   },
   group: {
-    margin: theme.spacing(1, 0)
+    margin: theme.spacing(1, 0),
   },
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     right: theme.spacing(),
-    color: 'rgba(255, 255, 255)'
+    color: "rgba(255, 255, 255)",
   },
   title: {
-    color: 'rgba(255, 255, 255)'
+    color: "rgba(255, 255, 255)",
   },
   content: {
-    paddingTop: theme.spacing(3)
-  }
+    paddingTop: theme.spacing(3),
+  },
 });
 
 class EnhancedDialog extends React.Component {
@@ -80,7 +79,7 @@ class EnhancedDialog extends React.Component {
     if (this.props.value) {
       this.props.onClose(this.props.value);
     } else {
-      this.props.onClose('cancel');
+      this.props.onClose("cancel");
     }
   };
 
@@ -88,22 +87,24 @@ class EnhancedDialog extends React.Component {
     if (this.state.value) {
       this.props.onClose(this.state.value);
     } else {
-      this.props.onClose('ok');
+      this.props.onClose("ok");
     }
   };
 
   renderActions = () => {
     switch (this.state.type) {
-      case 'custom': {
-        return (this.state.actions) ? (
+      case "custom": {
+        return this.state.actions ? (
           <DialogActions>
-            {this.state.actions.map(actionButton => {
-              const btnKey = `button-${actionButton.label.replace(' ', '-')}`;
+            {this.state.actions.map((actionButton) => {
+              const btnKey = `button-${actionButton.label.replace(" ", "-")}`;
 
               return (
-                <Button 
-                  variant={(actionButton.variant) ? actionButton.variant : 'contained'}
-                  color={(actionButton.color) ? actionButton.color : 'primary'}
+                <Button
+                  variant={
+                    actionButton.variant ? actionButton.variant : "contained"
+                  }
+                  color={actionButton.color ? actionButton.color : "primary"}
                   onClick={(e) => actionButton.action(this)}
                   key={btnKey}
                 >
@@ -114,22 +115,22 @@ class EnhancedDialog extends React.Component {
           </DialogActions>
         ) : null;
       }
-      case 'confirm': {
+      case "confirm": {
         return (
           <DialogActions>
-            <Button onClick={this.handleCancel} color='primary'>
+            <Button onClick={this.handleCancel} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleOk} color='primary'>
+            <Button onClick={this.handleOk} color="primary">
               Ok
             </Button>
           </DialogActions>
         );
       }
-      case 'alert': {
+      case "alert": {
         return (
           <DialogActions>
-            <Button onClick={this.handleClose} color='primary' autoFocus>
+            <Button onClick={this.handleClose} color="primary" autoFocus>
               Ok
             </Button>
           </DialogActions>
@@ -139,43 +140,58 @@ class EnhancedDialog extends React.Component {
         return null;
       }
     }
-  }
+  };
 
   render = () => {
     const { classes, title, onClose, fullScreen, ...other } = this.props;
 
+    //@TODO fullScreen={fullScreen && isMobile}
     return (
       <Dialog
-        fullScreen={fullScreen && isMobile}
+        fullScreen={fullScreen}
         maxWidth={false}
         onClose={onClose}
-        aria-labelledby='dialog-title'
+        aria-labelledby="dialog-title"
         className={classes.dialog}
         {...other}
       >
-        {(this.state.title) ?
-          <DialogTitle id='dialog-title' className={classes.header} disableTypography={true}>
-            <Typography variant='h6' className={classes.title}>{this.state.title}</Typography>
+        {this.state.title ? (
+          <DialogTitle
+            id="dialog-title"
+            className={classes.header}
+            disableTypography={true}
+          >
+            <Typography variant="h6" className={classes.title}>
+              {this.state.title}
+            </Typography>
             {onClose ? (
-              <IconButton aria-label='Close' className={classes.closeButton} onClick={onClose}>
+              <IconButton
+                aria-label="Close"
+                className={classes.closeButton}
+                onClick={onClose}
+              >
                 <CloseIcon />
               </IconButton>
             ) : null}
-          </DialogTitle> : null
-        }
+          </DialogTitle>
+        ) : null}
         <DialogContent className={classes.content}>
-          {(this.state.text) ? <DialogContentText>{this.state.text}</DialogContentText> : ''}
-          {(this.state.content) ? this.state.content : null}
+          {this.state.text ? (
+            <DialogContentText>{this.state.text}</DialogContentText>
+          ) : (
+            ""
+          )}
+          {this.state.content ? this.state.content : null}
         </DialogContent>
-        {(this.state.type) ? this.renderActions() : null}
+        {this.state.type ? this.renderActions() : null}
       </Dialog>
     );
-  }
+  };
 }
 
 EnhancedDialog.defaultProps = {
   fullScreen: true,
-  actions: []
+  actions: [],
 };
 
 export default withStyles(styles, { withTheme: true })(EnhancedDialog);
