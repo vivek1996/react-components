@@ -33,7 +33,7 @@ const fields = [
   //     return [];
   //   }), optionKey: 'country', optionValue: 'name'
   // },
-  // {name: 'date', type: 'date', label: 'Date', placeholder: 'Date', required: true},
+  {name: 'date', type: 'date', label: 'Date', placeholder: 'Date', required: true},
   // {name: 'text', type: 'text', label: 'Text', placeholder: 'Text', required: true},
   // {name: 'textarea', type: 'textarea', label: 'Textarea', placeholder: 'Textarea', required: true},
   // {name: 'number', type: 'number', label: 'Number', placeholder: 'Number', required: true},
@@ -124,7 +124,7 @@ const fields = [
   },
   // {
   //   name: 'address',
-  //   type: 'nested',
+  //   type: 'section',
   //   label: 'Address',
   //   required: true,
   //   fields: [
@@ -169,7 +169,7 @@ const fields = [
   // {name: 'text-multiple', type: 'text', label: 'Text', placeholder: 'Text', required: true, multiple: true},
   // {
   //   name: 'list',
-  //   type: 'nested',
+  //   type: 'section',
   //   label: 'List',
   //   required: true,
   //   multiple: true,

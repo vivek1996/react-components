@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Autocomplete Render Autocomplete with default options 1`] = `
+<WithStyles(ForwardRef(Autocomplete))
+  filterOptions={[Function]}
+  getOptionLabel={[Function]}
+  getOptionSelected={[Function]}
+  loading={false}
+  name="autocomplete"
+  onChange={[Function]}
+  onClose={[Function]}
+  onOpen={[Function]}
+  open={false}
+  options={Array []}
+  renderInput={[Function]}
+/>
+`;

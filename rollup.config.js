@@ -41,11 +41,7 @@ export default {
     url(),
     svgr(),
     resolve(),
-    babel({
-      exclude: 'node_modules/**',
-      plugins: [ '@babel/plugin-proposal-class-properties' ],
-      presets: ['@babel/preset-env', '@babel/preset-react']
-    }),
+    babel({ runtimeHelpers: true }),
     commonjs({
       include: 'node_modules/**',
       namedExports: {

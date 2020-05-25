@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Date Render Date with default options 1`] = `
+<MuiPickersUtilsProvider
+  utils={[Function]}
+>
+  <PickerWithState
+    InputProps={
+      Object {
+        "disabled": undefined,
+        "endAdornment": null,
+        "inputProps": Object {
+          "max": undefined,
+          "maxLength": undefined,
+          "min": undefined,
+          "minLength": undefined,
+          "step": undefined,
+          "title": undefined,
+        },
+        "readOnly": undefined,
+        "startAdornment": null,
+      }
+    }
+    allowKeyboardControl={true}
+    className="makeStyles-textField-1"
+    disableFuture={false}
+    disablePast={false}
+    format="DD/MM/YYYY"
+    invalidDateMessage="Invalid Date Format"
+    key="date"
+    margin="normal"
+    maxDate={2100-01-01T00:00:00.000Z}
+    maxDateMessage="Date should not be after maximal date"
+    minDate={1900-01-01T00:00:00.000Z}
+    minDateMessage="Date should not be before minimal date"
+    name="date"
+    onChange={[Function]}
+    openTo="date"
+    shouldDisableDate={null}
+    value={null}
+    views={
+      Array [
+        "year",
+        "month",
+        "date",
+      ]
+    }
+  />
+</MuiPickersUtilsProvider>
+`;

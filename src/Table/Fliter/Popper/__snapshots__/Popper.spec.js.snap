@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Popper Render Popper with default options 1`] = `
+<EnhancedPopper
+  classes={
+    Object {
+      "closeButton": "EnhancedPopper-closeButton-5",
+      "content": "EnhancedPopper-content-4",
+      "header": "EnhancedPopper-header-3",
+      "paper": "EnhancedPopper-paper-1",
+      "popper": "EnhancedPopper-popper-2",
+      "title": "EnhancedPopper-title-6",
+    }
+  }
+/>
+`;
