@@ -1,7 +1,5 @@
 import React from "react";
-
 import PropTypes from "prop-types";
-
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -14,9 +12,9 @@ const useStyles = makeStyles((theme) => ({
 
 const EnhancedNumber = (props) => {
   const classes = useStyles();
-  const { type, value } = props;
+  const { type, defaultValue } = props;
 
-  const [localValue, setLocalValue] = React.useState(value);
+  const [localValue, setLocalValue] = React.useState(defaultValue);
 
   const checkFormat = (type, value, pattern) => {
     if (value.length > 0) {
@@ -72,7 +70,7 @@ const EnhancedNumber = (props) => {
       label={props.label}
       placeholder={props.placeholder}
       className={classes.textField}
-      defaultValue={value || ""}
+      defaultValue={defaultValue}
       onChange={(event) => {
         const { value } = event.target;
         setLocalValue(value);
@@ -130,8 +128,11 @@ const EnhancedNumber = (props) => {
 };
 
 EnhancedNumber.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
+  defaultValue: PropTypes.number,
+};
+
+EnhancedNumber.defaultProps = {
+  defaultValue: null,
 };
 
 export default EnhancedNumber;

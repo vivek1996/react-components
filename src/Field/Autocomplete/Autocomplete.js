@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EnhancedAutocomplete(props) {
+const EnhancedAutocomplete = (props) => {
   const classes = useStyles();
   const { minlength, key, name, optionKey, optionValue, handleChange } = props;
   const [open, setOpen] = React.useState(false);
@@ -41,7 +41,7 @@ export default function EnhancedAutocomplete(props) {
           resultOptions = props.options;
         }
       } else if (typeof props.options === "function") {
-        if (value && value.length >= (minlength || 3)) {
+        if (value && value.length >= minlength) {
           resultOptions = await props.options(value);
         }
       }
@@ -132,12 +132,28 @@ export default function EnhancedAutocomplete(props) {
       }}
     />
   );
-}
+};
 
 EnhancedAutocomplete.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.shape({})),
+  options: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.arrayOf(PropTypes.shape({})),
+  ]),
+  minlength: PropTypes.number,
+  key: PropTypes.string,
+  name: PropTypes.string,
+  optionKey: PropTypes.string,
+  optionValue: PropTypes.string,
+  handleChange: PropTypes.func,
 };
 
 EnhancedAutocomplete.defaultProps = {
-  options: null,
+  options: [],
+  minlength: 3,
+  optionKey: "key",
+  optionValue: "value",
+  handleChange: () => {},
 };
+
+export default EnhancedAutocomplete;

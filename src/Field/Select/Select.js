@@ -27,7 +27,7 @@ const EnhancedSelect = (props) => {
     required,
     disabled,
     readonly,
-    value,
+    defaultValue,
     classes,
     optionKey,
     optionValue,
@@ -40,7 +40,7 @@ const EnhancedSelect = (props) => {
   } = props;
 
   const [options, setOptions] = React.useState([]);
-  const [localValue, setLocalValue] = React.useState(value);
+  const [localValue, setLocalValue] = React.useState(defaultValue);
   const loading = options.length === 0;
 
   React.useEffect(() => {
@@ -77,7 +77,7 @@ const EnhancedSelect = (props) => {
       label={label}
       placeholder={placeholder}
       className={classes.textField}
-      defaultValue={value || ""}
+      defaultValue={defaultValue}
       onChange={(event) => {
         const { value } = event.target;
         setLocalValue(value);
@@ -167,10 +167,12 @@ const EnhancedSelect = (props) => {
 
 EnhancedSelect.defaultProps = {
   multiple: false,
+  defaultValue: "",
 };
 
 EnhancedSelect.propTypes = {
   classes: PropTypes.object.isRequired,
+  defaultValue: PropTypes.string,
 };
 
 export default withStyles(styles, { withTheme: true })(EnhancedSelect);

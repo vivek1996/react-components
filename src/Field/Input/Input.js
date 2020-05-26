@@ -13,9 +13,17 @@ const styles = (theme) => ({
 });
 
 const EnhancedInput = (props) => {
-  const { type, name, key, data, handleChange, classes, value } = props;
+  const {
+    type,
+    name,
+    key,
+    fieldValues,
+    handleChange,
+    classes,
+    defaultValue,
+  } = props;
 
-  const [localValue, setLocalValue] = React.useState(value);
+  const [localValue, setLocalValue] = React.useState(defaultValue);
 
   return (
     <TextField
@@ -25,7 +33,7 @@ const EnhancedInput = (props) => {
       label={props.label}
       placeholder={props.placeholder}
       className={classes.textField}
-      defaultValue={value || ""}
+      defaultValue={defaultValue}
       onChange={(event) => {
         const { value } = event.target;
         setLocalValue(value);
@@ -35,15 +43,14 @@ const EnhancedInput = (props) => {
       required={props.required}
       disabled={props.disabled}
       multiline={type === "textarea"}
-      // helperText={(typeof props.helptext === 'function') ? props.helptext(data) : props.helptext}
       InputProps={{
         disabled:
           typeof props.disabled === "function"
-            ? props.disabled(data)
+            ? props.disabled(fieldValues)
             : props.disabled,
         readOnly:
           typeof props.readonly === "function"
-            ? props.readonly(data)
+            ? props.readonly(fieldValues)
             : props.readonly,
         startAdornment: props.prefix ? (
           <InputAdornment position="start">{props.prefix}</InputAdornment>
@@ -53,22 +60,32 @@ const EnhancedInput = (props) => {
         ) : null,
         inputProps: {
           title:
-            typeof props.title === "function" ? props.title(data) : props.title,
-          min: typeof props.min === "function" ? props.min(data) : props.min,
-          max: typeof props.max === "function" ? props.max(data) : props.max,
+            typeof props.title === "function"
+              ? props.title(fieldValues)
+              : props.title,
+          min:
+            typeof props.min === "function"
+              ? props.min(fieldValues)
+              : props.min,
+          max:
+            typeof props.max === "function"
+              ? props.max(fieldValues)
+              : props.max,
           maxLength:
             typeof props.maxlength === "function"
-              ? props.maxlength(data)
+              ? props.maxlength(fieldValues)
               : props.maxlength,
           minLength:
             typeof props.minlength === "function"
-              ? props.minlength(data)
+              ? props.minlength(fieldValues)
               : props.minlength,
           step:
-            typeof props.step === "function" ? props.step(data) : props.step,
+            typeof props.step === "function"
+              ? props.step(fieldValues)
+              : props.step,
           pattern:
             typeof props.pattern === "function"
-              ? props.pattern(data)
+              ? props.pattern(fieldValues)
               : props.pattern,
         },
       }}
@@ -85,6 +102,14 @@ const EnhancedInput = (props) => {
 
 EnhancedInput.propTypes = {
   classes: PropTypes.object.isRequired,
+  /**
+   * Default value for the field
+   */
+  defaultValue: PropTypes.string,
+};
+
+EnhancedInput.defaultProps = {
+  defaultValue: "",
 };
 
 export default withStyles(styles, { withTheme: true })(EnhancedInput);

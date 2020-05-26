@@ -58,7 +58,7 @@ const EnhancedToggle = (props) => {
     classes,
     name,
     label,
-    value,
+    defaultValue,
     fieldValues,
     options,
     handleChange,
@@ -94,18 +94,18 @@ const EnhancedToggle = (props) => {
       <FormGroup aria-label={label}>
         <div className={classes.optionsContainer}>
           {toggleOptions.map((option) => {
-            const tableOptionValue =
+            const toggleOptionValue =
               option[optionKey] ||
               option[name] ||
               option.id ||
               option.key ||
               option.value ||
               option;
-            const selected = value === tableOptionValue;
+            const selected = defaultValue === toggleOptionValue;
             return (
               <Typography
-                value={tableOptionValue}
-                key={`${new Date().getTime()}-toggle-option-${name}-${tableOptionValue}`}
+                value={toggleOptionValue}
+                key={`${new Date().getTime()}-toggle-option-${name}-${toggleOptionValue}`}
                 name={name}
                 onClick={handleClick}
                 className={classNames(

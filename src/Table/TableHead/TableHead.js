@@ -89,15 +89,6 @@ const EnhancedTableHead = (props) => {
   ) : null;
 };
 
-EnhancedTableHead.defaultProps = {
-  order: "desc",
-  rowCount: 0,
-  selectable: false,
-  orderBy: "id",
-  numSelected: 0,
-  columns: [],
-};
-
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
@@ -106,6 +97,17 @@ EnhancedTableHead.propTypes = {
   // orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
   classes: PropTypes.object.isRequired,
+};
+
+EnhancedTableHead.defaultProps = {
+  order: "desc",
+  rowCount: 0,
+  selectable: false,
+  orderBy: "id",
+  numSelected: 0,
+  columns: [],
+  onRequestSort: () => {},
+  onSelectAllClick: () => {},
 };
 
 export default withStyles(tableHeadStyles)(EnhancedTableHead);

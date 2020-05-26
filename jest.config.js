@@ -18,9 +18,8 @@ module.exports = {
       "statements": 90
     }
   },
-  "coverageReporters": [
-    "text"
-  ],
+  "collectCoverage": true,
+  "coverageReporters": ["json", "html", "text"],
   "setupFilesAfterEnv": [],
   "testMatch": [
     "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",

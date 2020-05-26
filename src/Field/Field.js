@@ -244,7 +244,7 @@ const Field = (props) => {
     placeholder,
     disabled,
     options,
-    value,
+    defaultValue,
     suffix,
     required,
     helplink,
@@ -282,7 +282,7 @@ const Field = (props) => {
 
   let field = "";
   let fieldOptions = options || [];
-  let fieldValue = value;
+  let fieldValue = defaultValue;
   let fieldType = type;
 
   if (
@@ -294,10 +294,10 @@ const Field = (props) => {
     fieldValue = fieldValues[name];
     fieldValue =
       typeof fieldValue === "function" ? fieldValue(fieldValues) : fieldValue;
-  } else if (value !== undefined && typeof value === "function") {
-    fieldValue = value(fieldValues);
-  } else if (value !== undefined) {
-    fieldValue = value;
+  } else if (defaultValue !== undefined && typeof defaultValue === "function") {
+    fieldValue = defaultValue(fieldValues);
+  } else if (defaultValue !== undefined) {
+    fieldValue = defaultValue;
   } else if (
     (fieldType === "checkbox" && options !== undefined) ||
     (fieldType === "select" && multiple) ||
@@ -397,7 +397,7 @@ const Field = (props) => {
   };
 
   const updatedProps = Object.assign({}, props, {
-    value: fieldValue,
+    defaultValue: fieldValue,
     type: fieldType,
     key: fieldKey,
     fieldValues: fieldValues,
@@ -528,7 +528,7 @@ Field.propTypes = {
   /**
    * Default value for the field
    */
-  defaultValue: PropTypes.string,
+  defaultValue: PropTypes.any,
   /**
    * Prefix for field
    */
@@ -574,8 +574,8 @@ Field.propTypes = {
    */
   options: PropTypes.oneOfType([
     PropTypes.func,
-    PropTypes.string,
-    PropTypes.object,
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.arrayOf(PropTypes.shape({})),
   ]),
   /**
    * Callback fired when the error is there.

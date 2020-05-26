@@ -22,7 +22,7 @@ const EnhancedCheckbox = (props) => {
     key,
     error,
     disabled,
-    value,
+    defaultValue,
     options,
     handleChange,
     optionKey,
@@ -31,7 +31,7 @@ const EnhancedCheckbox = (props) => {
 
   const [localValue, setLocalValue] = React.useState();
   React.useEffect(() => {
-    setLocalValue(value);
+    setLocalValue(defaultValue);
   }, []);
 
   const onChange = (event) => {
@@ -117,10 +117,10 @@ const EnhancedCheckbox = (props) => {
         control={
           <Checkbox
             onChange={onChange}
-            value={value}
+            value={defaultValue}
             name={name}
             disabled={disabled}
-            checked={value}
+            checked={defaultValue}
           />
         }
         label={<Typography variant="caption">{label}</Typography>}

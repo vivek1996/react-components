@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Slider from "@material-ui/core/Slider";
@@ -12,7 +12,16 @@ const useStyles = makeStyles((theme) => ({
 
 const EnhancedRange = (props) => {
   const classes = useStyles();
-  const { key, name, min, step, max, value, fieldValues, handleChange } = props;
+  const {
+    key,
+    name,
+    min,
+    step,
+    max,
+    defaultValue,
+    fieldValues,
+    handleChange,
+  } = props;
 
   // const { decimal } = props;
   // if (type === 'range') {
@@ -24,7 +33,7 @@ const EnhancedRange = (props) => {
       <Slider
         key={key}
         name={name}
-        defaultValue={value || 0}
+        defaultValue={defaultValue}
         min={typeof min === "function" ? min(fieldValues) : min}
         max={typeof max === "function" ? max(fieldValues) : max}
         step={typeof step === "function" ? step(fieldValues) : step}
@@ -39,6 +48,17 @@ const EnhancedRange = (props) => {
       />
     </div>
   );
+};
+
+EnhancedRange.propTypes = {
+  /**
+   * Default value for the field
+   */
+  defaultValue: PropTypes.number,
+};
+
+EnhancedRange.defaultProps = {
+  defaultValue: 0,
 };
 
 export default EnhancedRange;

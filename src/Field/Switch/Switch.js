@@ -17,7 +17,7 @@ const EnhancedSwitch = (props) => {
     name,
     key,
     disabled,
-    value,
+    defaultValue,
     handleChange,
     fieldValues,
     placeholder,
@@ -33,11 +33,11 @@ const EnhancedSwitch = (props) => {
               key={key}
               name={name}
               onChange={(event) => {
-                const { name, checked } = event.target;
+                const { checked } = event.target;
                 handleChange(checked);
               }}
               disabled={disabled}
-              checked={value}
+              checked={defaultValue}
             />
           }
           label={
@@ -53,6 +53,11 @@ const EnhancedSwitch = (props) => {
 
 EnhancedSwitch.propTypes = {
   classes: PropTypes.object.isRequired,
+  defaultValue: PropTypes.bool,
+};
+
+EnhancedSwitch.defaultProps = {
+  defaultValue: false,
 };
 
 export default withStyles(styles, { withTheme: true })(EnhancedSwitch);

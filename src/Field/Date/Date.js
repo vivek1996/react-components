@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
@@ -16,7 +16,7 @@ const EnhancedDate = (props) => {
   const classes = useStyles();
   const {
     data,
-    value,
+    defaultValue,
     name,
     label,
     placeholder,
@@ -55,7 +55,7 @@ const EnhancedDate = (props) => {
         label={label}
         placeholder={placeholder}
         className={classes.textField}
-        value={value !== undefined ? value : null}
+        defaultValue={defaultValue}
         openTo={openTo !== undefined ? openTo : "date"}
         views={["year", "month", "date"]}
         onChange={(date) => handleChange(date)}
@@ -98,6 +98,17 @@ const EnhancedDate = (props) => {
       />
     </MuiPickersUtilsProvider>
   );
+};
+
+EnhancedDate.propTypes = {
+  /**
+   * Default value for the field
+   */
+  defaultValue: PropTypes.string,
+};
+
+EnhancedDate.defaultProps = {
+  defaultValue: null,
 };
 
 export default EnhancedDate;

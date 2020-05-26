@@ -14,7 +14,7 @@ const EnhancedRadio = (props) => {
   const {
     classes,
     options,
-    value,
+    defaultValue,
     name,
     key,
     label,
@@ -31,7 +31,7 @@ const EnhancedRadio = (props) => {
       <RadioGroup
         aria-label={label}
         className={classes.group}
-        defaultValue={value}
+        defaultValue={defaultValue}
         key={key}
         name={name}
         onChange={(event) => {
