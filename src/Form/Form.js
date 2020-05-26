@@ -117,7 +117,6 @@ const EnhancedForm = (props) => {
   }, []);
 
   const handleSubmit = (event) => {
-    console.log("handleSubmit click");
     event.preventDefault();
     let formHasError = false;
     const parsedFields = unflatten(fieldValues, {
@@ -256,8 +255,6 @@ EnhancedForm.defaultProps = {
   onSubmit: () => {},
   onError: () => {},
 };
-
-// export default withStyles(styles, { withTheme: true })(EnhancedForm);
 
 export default withStyles(styles, { withTheme: true })((props) => (
   <StoreProvider>

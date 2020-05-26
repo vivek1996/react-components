@@ -82,10 +82,13 @@ const SectionField = (props) => {
 };
 
 const ArrayField = (props) => {
-  const { value, label, type, name } = props;
-  const { formData, formDataDispatch } = useStore();
+  const { defaultValue, label, type, name } = props;
+  const { form, formDispatch } = useStore();
+  const fieldValues = form.values;
   const subFieldCount =
-    Array.isArray(value) && value.length > 0 ? value.length : 1;
+    Array.isArray(defaultValue) && defaultValue.length > 0
+      ? defaultValue.length
+      : 1;
   const [counter, setCounter] = useState(1);
   const [fieldValue, setFieldValue] = useState();
   let fieldProps = { ...props };
@@ -97,9 +100,9 @@ const ArrayField = (props) => {
   }, []);
 
   React.useEffect(() => {
-    const flatValues = flatten(formData || {}, { delimiter: "." });
+    const flatValues = flatten(fieldValues || {}, { delimiter: "." });
     setFieldValue(flatValues);
-  }, [formData]);
+  }, [fieldValues]);
 
   const addField = () => {
     setCounter(counter + 1);
@@ -117,8 +120,8 @@ const ArrayField = (props) => {
       delimiter: ".",
     });
     setFieldValue(flatFieldValues);
-    formDataDispatch({
-      type: "FIELD_VALUE_UPDATE",
+    formDispatch({
+      type: "FORM_FIELD_UPDATE",
       payload: parsedFieldValues,
     });
   };
@@ -157,8 +160,8 @@ const ArrayField = (props) => {
 
     setFieldValue(finalValues);
     setCounter(counter - 1);
-    formDataDispatch({
-      type: "FIELD_VALUE_UPDATE",
+    formDispatch({
+      type: "FORM_FIELD_UPDATE",
       payload: parsedFieldValues,
     });
   };
@@ -189,6 +192,9 @@ const ArrayField = (props) => {
         }
 
         fieldProps.value = isDefined(fieldValue)
+          ? fieldValue[fieldProps.name] || ""
+          : "";
+        fieldProps.defaultValue = isDefined(fieldValue)
           ? fieldValue[fieldProps.name] || ""
           : "";
 
@@ -498,9 +504,9 @@ Field.propTypes = {
    */
   name: PropTypes.string.isRequired,
   /**
-   * Type of the field eg. (text, number, textarea, tel, email etc.).
+   * Type of the field eg. (text, number, textarea, tel, email etc.). Default type is text.
    */
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   /**
    * Label for the field
    */
@@ -597,6 +603,7 @@ Field.defaultProps = {
   multiple: false,
   disabled: false,
   required: false,
+  type: "text",
   onError: () => {},
   onChange: () => {},
 };

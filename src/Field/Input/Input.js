@@ -109,7 +109,7 @@ EnhancedInput.propTypes = {
 };
 
 EnhancedInput.defaultProps = {
-  defaultValue: "",
+  defaultValue: null,
 };
 
 export default withStyles(styles, { withTheme: true })(EnhancedInput);

@@ -129,10 +129,20 @@ const EnhancedNumber = (props) => {
 
 EnhancedNumber.propTypes = {
   defaultValue: PropTypes.number,
+  type: PropTypes.oneOf([
+    "currency",
+    "integer",
+    "decimal",
+    "number",
+    "mobile",
+    "float",
+    "tel",
+  ]),
 };
 
 EnhancedNumber.defaultProps = {
   defaultValue: null,
+  type: "number",
 };
 
 export default EnhancedNumber;
