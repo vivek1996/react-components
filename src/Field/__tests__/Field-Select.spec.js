@@ -54,4 +54,17 @@ describe("Field/Select", () => {
     );
     expect(wrapper.find("input").length).toBe(1);
   });
+
+  it("select field with options as function", function () {
+    const wrapper = mount(
+      <StoreProvider>
+        <Field
+          name="select"
+          type="select"
+          options={() => ["Select 1", "Select 2"]}
+        />
+      </StoreProvider>
+    );
+    expect(wrapper.find("input").length).toBe(1);
+  });
 });

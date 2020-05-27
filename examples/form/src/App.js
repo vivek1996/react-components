@@ -33,19 +33,31 @@ const fields = [
   //     return [];
   //   }), optionKey: 'country', optionValue: 'name'
   // },
-  {name: 'date', type: 'date', label: 'Date', placeholder: 'Date', required: true},
-  // {name: 'text', type: 'text', label: 'Text', placeholder: 'Text', required: true},
+  // {name: 'date', type: 'date', label: 'Date', placeholder: 'Date', required: true},
+  // {name: 'text', type: 'text', label: 'Text', placeholder: 'Text', required: true, description: 'This is text field'},
+  // {name: 'default1'},
+  // {name: 'default2', defaultValue:['Text 1', 'Text 2'], multiple: true},
+  // {name: 'default3', options: ["Option 1", "Option 2"]},
+  // {name: 'default4', options: ["Option 1", "Option 2"], multiple: true},
   // {name: 'textarea', type: 'textarea', label: 'Textarea', placeholder: 'Textarea', required: true},
   // {name: 'number', type: 'number', label: 'Number', placeholder: 'Number', required: true},
   // {name: 'range', type: 'range', label: 'range', placeholder: 'range', required: true, min: 0, max: 10},
-  // {
-  //   name: 'select',
-  //   type: 'select',
-  //   label: 'Country',
-  //   placeholder: 'Country',
-  //   required: true,
-  //   options: ['India', 'Australia']
-  // },
+  {
+    name: 'select1',
+    type: 'select',
+    label: 'Select 1',
+    placeholder: 'Select 1',
+    required: true,
+    options: ['India', 'Australia']
+  },
+  {
+    name: 'select2',
+    type: 'select',
+    label: 'Select 2',
+    placeholder: 'Select 2',
+    required: true,
+    options: () => ['India', 'Australia']
+  },
   // {
   //   name: 'multiselect',
   //   type: 'select',
@@ -58,70 +70,70 @@ const fields = [
   // {name: 'switch', type: 'switch', label: 'switch', placeholder: 'switch', required: true},
   // {name: 'boolean', type: 'boolean', label: 'boolean', placeholder: 'boolean', required: true},
   // {name: 'checkbox1', type: 'checkbox', label: 'checkbox 1', placeholder: 'checkbox 1', required: true},
-  {
-    name: 'checkbox2',
-    type: 'checkbox',
-    label: 'checkbox 2',
-    placeholder: 'checkbox 2',
-    required: true,
-    options: [{value: 'chk1', label: 'Checkbox 1'}, {value: 'chk2', label: 'Checkbox 2'}],
-    dependencies: {
-      'chk1': [
-        {
-          name: 'chk1-text',
-          type: 'text',
-          label: 'chk1-text',
-          required: true
-        }
-      ],
-      'chk2': [
-        {
-          name: 'chk2-text',
-          type: 'text',
-          label: 'chk2-text',
-          required: true
-        }
-      ],
-      '*': [
-        {
-          name: 'checkbox-all-text',
-          type: 'text',
-          label: 'checkbox-all-text',
-          required: true
-        }
-      ]
-    }
-  },
+  // {
+  //   name: 'checkbox2',
+  //   type: 'checkbox',
+  //   label: 'checkbox 2',
+  //   placeholder: 'checkbox 2',
+  //   required: true,
+  //   options: [{value: 'chk1', label: 'Checkbox 1'}, {value: 'chk2', label: 'Checkbox 2'}],
+  //   dependencies: {
+  //     'chk1': [
+  //       {
+  //         name: 'chk1-text',
+  //         type: 'text',
+  //         label: 'chk1-text',
+  //         required: true
+  //       }
+  //     ],
+  //     'chk2': [
+  //       {
+  //         name: 'chk2-text',
+  //         type: 'text',
+  //         label: 'chk2-text',
+  //         required: true
+  //       }
+  //     ],
+  //     '*': [
+  //       {
+  //         name: 'checkbox-all-text',
+  //         type: 'text',
+  //         label: 'checkbox-all-text',
+  //         required: true
+  //       }
+  //     ]
+  //   }
+  // },
   // {name: 'toggle', type: 'toggle', label: 'toggle', placeholder: 'toggle', required: true, options: [{value: 'toggle1', label: 'toggle 1'}, {value: 'toggle2', label: 'toggle 2'}, {value: 'toggle3', label: 'toggle 3'}]},
-  {
-    name: 'radio', type: 'radio', label: 'radio', placeholder: 'radio', required: true, options: [{value: 'opt1', label: 'Option 1'}, {value: 'opt2', label: 'Option 2'}],
-    dependencies: {
-      'opt1': [
-        {
-          name: 'opt1-text',
-          type: 'text',
-          label: 'opt1-text',
-          required: true
-        }
-      ],
-      'opt2': [
-        {
-          name: 'opt2-text',
-          type: 'text',
-          label: 'opt2-text',
-          required: true
-        }
-      ],
-      '*': [
-        {
-          name: 'radio-all-text',
-          type: 'text',
-          label: 'radio-all-text',
-          required: true
-        }
-      ]
-    }
-  },
+  // {
+  //   name: 'radio', type: 'radio', label: 'radio', placeholder: 'radio', required: true, options: [{value: 'opt1', label: 'Option 1'}, {value: 'opt2', label: 'Option 2'}],
+  //   dependencies: {
+  //     'opt1': [
+  //       {
+  //         name: 'opt1-text',
+  //         type: 'text',
+  //         label: 'opt1-text',
+  //         required: true
+  //       }
+  //     ],
+  //     'opt2': [
+  //       {
+  //         name: 'opt2-text',
+  //         type: 'text',
+  //         label: 'opt2-text',
+  //         required: true
+  //       }
+  //     ],
+  //     '*': [
+  //       {
+  //         name: 'radio-all-text',
+  //         type: 'text',
+  //         label: 'radio-all-text',
+  //         required: true
+  //       }
+  //     ]
+  //   }
+  // },
   // {
   //   name: 'address',
   //   type: 'section',
@@ -167,6 +179,7 @@ const fields = [
   //   ]
   // },
   // {name: 'text-multiple', type: 'text', label: 'Text', placeholder: 'Text', required: true, multiple: true},
+  // {name: 'text-multiple2', type: 'text', label: 'Text', placeholder: 'Text', required: true, multiple: true},
   // {
   //   name: 'list',
   //   type: 'section',

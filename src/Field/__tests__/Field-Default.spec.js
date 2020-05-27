@@ -31,9 +31,90 @@ describe("Field/Default", () => {
   it("default field should render without throwing an error", function () {
     const wrapper = mount(
       <StoreProvider>
-        <Field name="default" />
+        <Field name="default" description="This is default field" />
       </StoreProvider>
     );
     expect(wrapper.find("input").length).toBe(1);
+  });
+
+  it("default field with defaultValue as function", function () {
+    const wrapper = mount(
+      <StoreProvider>
+        <Field
+          name="default"
+          description="This is default field"
+          defaultValue={(fieldValues) => {
+            return "Hello Default Value Function";
+          }}
+        />
+      </StoreProvider>
+    );
+    expect(wrapper.find("input").length).toBe(1);
+    expect(wrapper.find("input").prop("defaultValue")).toEqual(
+      "Hello Default Value Function"
+    );
+  });
+
+  it("default field with options & without type", function () {
+    const wrapper = mount(
+      <StoreProvider>
+        <Field
+          name="default"
+          description="This is default field"
+          options={["Option 1", "Option 2"]}
+        />
+      </StoreProvider>
+    );
+    expect(wrapper.find("input").length).toBe(2);
+  });
+
+  it("default field with options & without type & multiple set to true", function () {
+    const wrapper = mount(
+      <StoreProvider>
+        <Field
+          name="default"
+          description="This is default field"
+          options={["Option 1", "Option 2"]}
+          multiple={true}
+        />
+      </StoreProvider>
+    );
+    expect(wrapper.find("input").length).toBe(2);
+  });
+
+  it("default field with fields to check section type field", function () {
+    const wrapper = mount(
+      <StoreProvider>
+        <Field
+          name="default"
+          description="This is default field"
+          fields={[
+            {
+              name: "text",
+            },
+          ]}
+        />
+      </StoreProvider>
+    );
+    expect(wrapper.find("input").length).toBe(1);
+  });
+
+  it("default field with multiple true", function () {
+    const wrapper = mount(
+      <StoreProvider>
+        <Field
+          name="default"
+          description="This is default field"
+          defaultValue={["Text 1", "Text 2"]}
+          multiple={true}
+        />
+      </StoreProvider>
+    );
+
+    expect(wrapper.find("input").length).toBe(2);
+    expect(wrapper.find("input").at(0).prop("defaultValue")).toEqual("Text 1");
+    expect(wrapper.find("input").at(0).prop("type")).toEqual("text");
+    expect(wrapper.find("input").at(1).prop("defaultValue")).toEqual("Text 2");
+    expect(wrapper.find("input").at(1).prop("type")).toEqual("text");
   });
 });

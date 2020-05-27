@@ -11,9 +11,6 @@ import Grid from "@material-ui/core/Grid";
 import AddCircle from "@material-ui/icons/AddCircle";
 import RemoveCircle from "@material-ui/icons/RemoveCircle";
 
-import flatten from "flat";
-import unflatten from "flat";
-
 // Field Input Types
 import Autocomplete from "./Autocomplete";
 import Checkbox from "./Checkbox";
@@ -43,7 +40,12 @@ import {
   isEmpty,
   getUniqueArray,
   times,
+  getValueFromJson,
+  isFunction,
 } from "../lib";
+
+import flatten from "flat";
+const { unflatten } = require("flat");
 
 const styles = (theme) => ({});
 
@@ -58,21 +60,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SectionField = (props) => {
-  const { label, name, value, fields } = props;
+  const { label, name, defaultValue, fields } = props;
   return (
     <>
-      <FieldLabel label={label} value={value} />
+      <FieldLabel label={label} value={defaultValue} />
       <FormGroup row>
         {fields &&
           fields.map((sectionField) => {
-            sectionField.name = `${name}.${sectionField.name}`;
             return (
               <Field
+                {...sectionField}
                 key={`${new Date().getTime()}-field-${sectionField.type}-${
                   sectionField.name
                 }`}
-                value={value && value[sectionField.name]}
-                {...sectionField}
+                name={`${name}.${sectionField.name}`}
+                defaultValue={defaultValue && defaultValue[sectionField.name]}
               />
             );
           })}
@@ -121,8 +123,11 @@ const ArrayField = (props) => {
     });
     setFieldValue(flatFieldValues);
     formDispatch({
-      type: "FORM_FIELD_UPDATE",
-      payload: parsedFieldValues,
+      type: "FORM_DATA_UPDATE",
+      payload: {
+        fieldValues: parsedFieldValues,
+        fieldErrors: {},
+      },
     });
   };
 
@@ -161,8 +166,11 @@ const ArrayField = (props) => {
     setFieldValue(finalValues);
     setCounter(counter - 1);
     formDispatch({
-      type: "FORM_FIELD_UPDATE",
-      payload: parsedFieldValues,
+      type: "FORM_DATA_UPDATE",
+      payload: {
+        fieldValues: parsedFieldValues,
+        fieldErrors: {},
+      },
     });
   };
 
@@ -180,7 +188,7 @@ const ArrayField = (props) => {
         <FieldLabel label={label} value={fieldValue} />
         <AddCircle onClick={() => addField()} />
       </Grid>
-      {times(counter || 1, (index) => {
+      {times(counter, (index) => {
         let fieldNameParts = fieldProps.name.split(".");
         const lastPart = fieldNameParts[fieldNameParts.length - 1];
         if (isNaN(lastPart)) {
@@ -243,16 +251,10 @@ const Field = (props) => {
   const {
     type,
     name,
-    label,
     helptext,
     multiple,
-    prefix,
-    placeholder,
-    disabled,
     options,
     defaultValue,
-    suffix,
-    required,
     helplink,
     title,
     description,
@@ -260,7 +262,6 @@ const Field = (props) => {
     dependencies,
     onChange,
     onError,
-    ...restProps
   } = props;
 
   // use store
@@ -271,19 +272,6 @@ const Field = (props) => {
   const fieldError = fieldErrorObj.error || false;
   const fieldErrorMessage = fieldErrorObj.errorMessage || null;
 
-  // const [fieldProps, setFieldProps] = React.useState();
-  // React.useEffect(() => {
-  //   console.log('Inside Use Effect - restProps', restProps);
-  //   (async () => {
-  //     if (fieldProps === undefined) {
-  //       const inputProps = await getInputProps(restProps, formData);
-  //       console.log('inputProps', inputProps);
-  //       setFieldProps(inputProps);
-  //     }
-  //   })();
-  // }, []);
-  // console.log('fieldProps', fieldProps);
-
   const arrayType = ["select", "checkbox"];
 
   let field = "";
@@ -291,41 +279,13 @@ const Field = (props) => {
   let fieldValue = defaultValue;
   let fieldType = type;
 
-  if (
-    fieldValues !== undefined &&
-    fieldValues !== null &&
-    fieldValues[name] !== undefined &&
-    fieldValues[name] !== null
-  ) {
-    fieldValue = fieldValues[name];
-    fieldValue =
-      typeof fieldValue === "function" ? fieldValue(fieldValues) : fieldValue;
-  } else if (defaultValue !== undefined && typeof defaultValue === "function") {
-    fieldValue = defaultValue(fieldValues);
-  } else if (defaultValue !== undefined) {
-    fieldValue = defaultValue;
-  } else if (
-    (fieldType === "checkbox" && options !== undefined) ||
-    (fieldType === "select" && multiple) ||
-    multiple
-  ) {
-    fieldValue = [];
+  if (isFunction(options)) {
+    (async () => {
+      fieldOptions = await options(fieldValues);
+    })();
   }
 
-  if (isArray(options)) {
-    fieldOptions = options;
-  } else if (typeof options === "function") {
-    let optionsFn = options(fieldValues);
-    if (optionsFn instanceof Promise) {
-      optionsFn.then((options) => {
-        fieldOptions = options;
-      });
-    } else {
-      fieldOptions = optionsFn;
-    }
-  }
-
-  if (fieldType === undefined) {
+  if (!isDefined(type)) {
     if (isArray(fieldOptions) && fieldOptions.length > 0) {
       if (multiple) {
         fieldType = "checkbox";
@@ -334,11 +294,42 @@ const Field = (props) => {
       }
     } else if (fields && isArray(fields) && fields.length > 0) {
       fieldType = "section";
+    } else {
+      fieldType = "text";
     }
   }
 
   const fieldErrorName = `${name}-error-text`;
   const fieldKey = `field-${fieldType}-${name}`;
+  var defaultValueMissing = false;
+  const valueFromJson = getValueFromJson(fieldValues, name);
+  if (isDefined(valueFromJson)) {
+    fieldValue = isFunction(valueFromJson)
+      ? valueFromJson(fieldValues)
+      : valueFromJson;
+  } else if (isDefined(defaultValue)) {
+    fieldValue = isFunction(defaultValue)
+      ? defaultValue(fieldValues)
+      : defaultValue;
+    defaultValueMissing = true;
+  } else if (
+    (fieldType === "checkbox" && isDefined(options)) ||
+    (fieldType === "select" && multiple) ||
+    multiple
+  ) {
+    fieldValue = [];
+    defaultValueMissing = true;
+  }
+
+  if (defaultValueMissing && !isEmpty(fieldValue)) {
+    formDispatch({
+      type: "FORM_FIELD_VALUE_UPDATE",
+      payload: {
+        fieldValues: { [name]: fieldValue },
+        fieldErrors: { [name]: { fieldError, fieldErrorMessage } },
+      },
+    });
+  }
 
   // This function return updated fields based on the dependencies
   const getUpdatedFields = (fieldValue) => {
@@ -387,7 +378,7 @@ const Field = (props) => {
 
     // update store with value, error, updated fields
     formDispatch({
-      type: "FORM_UPDATE",
+      type: "FORM_FIELD_VALUE_UPDATE",
       payload: {
         fieldValues: { [name]: value },
         fieldErrors: { [name]: { error, errorMessage } },
@@ -603,7 +594,6 @@ Field.defaultProps = {
   multiple: false,
   disabled: false,
   required: false,
-  type: "text",
   onError: () => {},
   onChange: () => {},
 };

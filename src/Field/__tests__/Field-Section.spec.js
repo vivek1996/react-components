@@ -107,6 +107,9 @@ describe("Field/Section", () => {
               type: "text",
             },
           ]}
+          defaultValue={{
+            text: "Text 1",
+          }}
         />
       </StoreProvider>,
       wrapper
@@ -126,9 +129,16 @@ describe("Field/Section", () => {
               type: "text",
             },
           ]}
+          defaultValue={{
+            text: "Text 1",
+          }}
         />
       </StoreProvider>
     );
+
     expect(wrapper.find("input").length).toBe(1);
+    expect(wrapper.find("input").at(0).prop("defaultValue")).toEqual("Text 1");
+    expect(wrapper.find("input").at(0).prop("type")).toEqual("text");
+    expect(wrapper.find("input").at(0).prop("name")).toEqual("section.text");
   });
 });

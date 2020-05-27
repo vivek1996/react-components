@@ -53,7 +53,26 @@ describe("Form", () => {
     ReactDOM.unmountComponentAtNode(wrapper);
   });
 
-  it("should set defaultValue prop", () => {
+  it("should set form", () => {
+    const wrapper = mount(
+      <Form
+        fields={[
+          {
+            name: "text-multiple",
+            type: "text",
+            label: "Text",
+            placeholder: "Text",
+            required: true,
+            multiple: true,
+          },
+        ]}
+      />
+    );
+
+    expect(wrapper.find("input").length).toBe(1);
+  });
+
+  it("should set initialValues prop", () => {
     const wrapper = mount(
       <Form
         fields={[

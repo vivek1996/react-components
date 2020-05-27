@@ -1,7 +1,10 @@
 export const isDefined = (value) => value !== undefined;
 
 export const isEmpty = (value) =>
-  value === undefined || value === null || value === "";
+  (isArray(value) && value.length === 0) ||
+  value === undefined ||
+  value === null ||
+  value === "";
 
 export const isArray = (value) => Array.isArray(value);
 
@@ -42,4 +45,36 @@ export const times = (count, func) => {
     i += 1;
   }
   return results;
+};
+
+/**
+ * Converts a string path to a value that is existing in a json object.
+ *
+ * @param {Object} json Json data to use for searching the value.
+ * @param {Object} path the path to use to find the value.
+ * @returns {valueOfThePath|undefined}
+ */
+export const getValueFromJson = (json, path) => {
+  if (!(json instanceof Object) || typeof path === "undefined") {
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Not valid argument:json:" + json + ", path:" + path);
+    }
+    return;
+  }
+  path = path.replace(/\[(\w+)\]/g, ".$1"); // convert indexes to properties
+  path = path.replace(/^\./, ""); // strip a leading dot
+  var pathArray = path.split(".");
+  for (var i = 0, n = pathArray.length; i < n; ++i) {
+    var key = pathArray[i];
+    if (key in json) {
+      if (json[key] !== undefined) {
+        json = json[key];
+      } else {
+        return;
+      }
+    } else {
+      return;
+    }
+  }
+  return json;
 };

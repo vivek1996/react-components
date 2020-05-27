@@ -58,18 +58,19 @@ const styles = (theme) => ({
   },
 });
 
-const defaultDataReducer = async (accumulator, currentValue) => {
+const defaultDataReducer = (accumulator, currentValue) => {
   if (
     currentValue &&
     currentValue.hasOwnProperty("name") &&
     accumulator &&
     !accumulator[currentValue.name] &&
-    currentValue.value !== undefined
+    currentValue.defaultValue !== undefined
   ) {
-    accumulator[currentValue.name] =
-      typeof currentValue.value === "function"
-        ? await currentValue.value(accumulator)
-        : currentValue.value;
+    (async () => {
+      accumulator[currentValue.name] = isFunction(currentValue.defaultValue)
+        ? await currentValue.defaultValue(accumulator)
+        : currentValue.defaultValue;
+    })();
   }
 
   return accumulator;
@@ -95,6 +96,7 @@ const EnhancedForm = (props) => {
   const [submiting, setSubmiting] = React.useState(false);
   const { form, formDispatch } = useStore();
   const fieldValues = form.values;
+  const formFields = form.fields;
   React.useEffect(() => {
     (async () => {
       const defaultFieldValue = fields.reduce(
@@ -124,7 +126,7 @@ const EnhancedForm = (props) => {
     });
 
     const fieldErrors = {};
-    form.fields.map((field) => {
+    formFields.map((field) => {
       if (!isDefined(field.readonly) || !field.readonly) {
         const { error, errorMessage } = validate(
           field,
@@ -167,7 +169,7 @@ const EnhancedForm = (props) => {
         noValidate={novalidate || autoValidate}
       >
         <div className={containerClass}>
-          {form.fields.map((formFieldItem) => {
+          {formFields.map((formFieldItem) => {
             return (
               <Field
                 key={`${new Date().getTime()}-field-${formFieldItem.type}-${
