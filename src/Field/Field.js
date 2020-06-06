@@ -271,7 +271,7 @@ const Field = (props) => {
   const fieldErrorObj = formErrors[name] || {};
   const fieldError = fieldErrorObj.error || false;
   const fieldErrorMessage = fieldErrorObj.errorMessage || null;
-
+  const valueFromJson = getValueFromJson(fieldValues, name);
   const arrayType = ["select", "checkbox"];
 
   let field = "";
@@ -281,7 +281,7 @@ const Field = (props) => {
 
   if (isFunction(options)) {
     (async () => {
-      fieldOptions = await options(fieldValues);
+      fieldOptions = await options(fieldValue, fieldValues);
     })();
   }
 
@@ -302,7 +302,6 @@ const Field = (props) => {
   const fieldErrorName = `${name}-error-text`;
   const fieldKey = `field-${fieldType}-${name}`;
   var defaultValueMissing = false;
-  const valueFromJson = getValueFromJson(fieldValues, name);
   if (isDefined(valueFromJson)) {
     fieldValue = isFunction(valueFromJson)
       ? valueFromJson(fieldValues)
@@ -321,7 +320,11 @@ const Field = (props) => {
     defaultValueMissing = true;
   }
 
-  if (defaultValueMissing && !isEmpty(fieldValue)) {
+  // @TODO Revist this peice of code and try to eliminate this
+  if (
+    defaultValueMissing &&
+    ((isArray(fieldValue) && fieldValue.length > 0) || !isEmpty(fieldValue))
+  ) {
     formDispatch({
       type: "FORM_FIELD_VALUE_UPDATE",
       payload: {
@@ -331,7 +334,9 @@ const Field = (props) => {
     });
   }
 
-  // This function return updated fields based on the dependencies
+  /**
+   * This function return updated fields based on the dependencies
+   */
   const getUpdatedFields = (fieldValue) => {
     let matchVal = fieldValue;
     if (dependencies) {
@@ -372,6 +377,9 @@ const Field = (props) => {
     }
   };
 
+  /**
+   * This function return updated fields based on the dependencies
+   */
   const handleChange = async (value) => {
     const { error, errorMessage } = validate(props, value, fieldValues);
     const updatedFields = await getUpdatedFields(value);
@@ -393,22 +401,42 @@ const Field = (props) => {
     }
   };
 
-  const updatedProps = Object.assign({}, props, {
-    defaultValue: fieldValue,
-    type: fieldType,
-    key: fieldKey,
-    fieldValues: fieldValues,
-    handleChange,
-  });
+  /**
+   * Update properties to handle undefined type, key, fieldValues, and add handleChange function
+   */
+  const updatedProps = {
+    ...props,
+    ...{
+      type: fieldType,
+      key: fieldKey,
+      fieldValues,
+      defaultOptions: fieldOptions,
+      handleChange,
+    },
+    ...(!isEmpty(fieldValue)
+      ? {
+          defaultValue: fieldValue,
+        }
+      : {}),
+  };
 
+  /**
+   * Call ArrayField if {multiple: true}
+   */
   if (arrayType.indexOf(fieldType) === -1 && multiple) {
     return <ArrayField {...updatedProps} />;
   }
 
+  /**
+   * Call SectionField if {type: "section"}
+   */
   if (fieldType === "section") {
     return <SectionField {...updatedProps} />;
   }
 
+  /**
+   * Call if {type: "hidden"}
+   */
   if (fieldType === "hidden") {
     return <input {...updatedProps} />;
   }

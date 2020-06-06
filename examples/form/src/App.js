@@ -34,13 +34,13 @@ const fields = [
   //   }), optionKey: 'country', optionValue: 'name'
   // },
   // {name: 'date', type: 'date', label: 'Date', placeholder: 'Date', required: true},
-  // {name: 'text', type: 'text', label: 'Text', placeholder: 'Text', required: true, description: 'This is text field'},
+  {name: 'text', type: 'text', label: 'Text', placeholder: 'Text', required: true, description: 'This is text field'},
   // {name: 'default1'},
-  // {name: 'default2', defaultValue:['Text 1', 'Text 2'], multiple: true},
+  {name: 'default2', defaultValue:['Text 1', 'Text 2'], multiple: true},
   // {name: 'default3', options: ["Option 1", "Option 2"]},
   // {name: 'default4', options: ["Option 1", "Option 2"], multiple: true},
   // {name: 'textarea', type: 'textarea', label: 'Textarea', placeholder: 'Textarea', required: true},
-  // {name: 'number', type: 'number', label: 'Number', placeholder: 'Number', required: true},
+  {name: 'number', type: 'number', label: 'Number', placeholder: 'Number', required: true},
   // {name: 'range', type: 'range', label: 'range', placeholder: 'range', required: true, min: 0, max: 10},
   {
     name: 'select1',
@@ -178,8 +178,8 @@ const fields = [
   //     },
   //   ]
   // },
-  // {name: 'text-multiple', type: 'text', label: 'Text', placeholder: 'Text', required: true, multiple: true},
-  // {name: 'text-multiple2', type: 'text', label: 'Text', placeholder: 'Text', required: true, multiple: true},
+  {name: 'text-multiple', type: 'text', label: 'Text', placeholder: 'Text', required: true, multiple: true},
+  {name: 'text-multiple2', type: 'text', label: 'text-multiple2', placeholder: 'text-multiple2', required: true, multiple: true},
   // {
   //   name: 'list',
   //   type: 'section',

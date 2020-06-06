@@ -14,14 +14,12 @@ function formReducer(state, action) {
     case "FORM_ERROR_UPDATE":
       return { ...state, errors: action.payload.errors };
     case "FORM_DATA_UPDATE":
-      console.log("action.payload 1", action.payload);
       return {
         ...state,
         values: { ...state.values, ...action.payload.fieldValues },
         errors: { ...state.errors, ...action.payload.fieldErrors },
       };
     case "FORM_FIELD_VALUE_UPDATE":
-      console.log("action.payload 2", action.payload);
       return {
         ...state,
         values: { ...state.values, ...action.payload.fieldValues },

@@ -1,10 +1,7 @@
 export const isDefined = (value) => value !== undefined;
 
 export const isEmpty = (value) =>
-  (isArray(value) && value.length === 0) ||
-  value === undefined ||
-  value === null ||
-  value === "";
+  value === undefined || value === null || value === "";
 
 export const isArray = (value) => Array.isArray(value);
 

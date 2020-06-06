@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EnhancedNumber = (props) => {
   const classes = useStyles();
-  const { type, defaultValue } = props;
+  const { type, defaultValue, step, handleChange } = props;
 
   const [localValue, setLocalValue] = React.useState(defaultValue);
 
@@ -34,8 +34,8 @@ const EnhancedNumber = (props) => {
     }
   };
 
-  const handleOnChange = (event) => {
-    const { name, value, step } = event.target;
+  const handleOnChange = (value) => {
+    // const { name, value, step } = event.target;
 
     // if (type === 'tel') {
     //   formatFlag = checkFormat(type, value);
@@ -55,9 +55,9 @@ const EnhancedNumber = (props) => {
         }
       }
 
-      props.handleChange(fieldValue);
+      handleChange(fieldValue);
     } else {
-      props.handleChange(fieldValue);
+      handleChange(fieldValue);
     }
   };
 
@@ -75,7 +75,7 @@ const EnhancedNumber = (props) => {
         const { value } = event.target;
         setLocalValue(value);
       }}
-      onBlur={handleOnChange}
+      onBlur={() => handleOnChange(localValue)}
       margin="normal"
       required={props.required ? true : false}
       disabled={props.disabled ? true : false}

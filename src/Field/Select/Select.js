@@ -37,9 +37,10 @@ const EnhancedSelect = (props) => {
     prefix,
     data,
     multiple,
+    defaultOptions,
   } = props;
 
-  const [options, setOptions] = React.useState([]);
+  const [options, setOptions] = React.useState(defaultOptions);
   const [localValue, setLocalValue] = React.useState(defaultValue);
   const loading = options.length === 0;
 
@@ -66,7 +67,7 @@ const EnhancedSelect = (props) => {
     return () => {
       active = false;
     };
-  }, [loading]);
+  }, []);
 
   return (
     <TextField
@@ -79,10 +80,6 @@ const EnhancedSelect = (props) => {
       className={classes.textField}
       defaultValue={defaultValue}
       onChange={(event) => {
-        const { value } = event.target;
-        setLocalValue(value);
-      }}
-      onBlur={(event) => {
         const { value } = event.target;
         handleChange(value);
       }}
