@@ -3,8 +3,12 @@
 *node_modules/*
 *dist/*
 *build/*
+*examples/*
+*__tests__/*
+*__snapshots__/*
+*__stories__/*
 .vscode/*
-/coverage
+*coverage/*
 **.snap
 **.stories.js
 **.spec.js
@@ -12,7 +16,3 @@
 /storybook-static
 .storybook/*
 .github/*
-.examples/*
-*__tests__/**/*.{js,jsx,ts,tsx}
-**.{spec,test}.{js,jsx,ts,tsx}
-**.stories.{js,jsx,ts,tsx}
