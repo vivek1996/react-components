@@ -117,8 +117,13 @@
   },
   "files": [
     "src/**/*.js",
+    "!src/**/*.stories.js",
+    "!src/**/*.spec.js",
     "dist",
     "README.md"
+  ],
+  "pre-commit": [
+    "tests"
   ],
   "repository": {
     "type": "git",
