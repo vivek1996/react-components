@@ -112,10 +112,11 @@ const ArrayField = (props) => {
       delimiter: ".",
     });
 
+    const newValue = type === "section" ? {} : "";
     if (parsedFieldValues[name]) {
-      parsedFieldValues[name].push(type === "section" ? {} : "");
+      parsedFieldValues[name].push(newValue);
     } else {
-      parsedFieldValues[name] = [type === "section" ? {} : ""];
+      parsedFieldValues[name] = [newValue, newValue];
     }
 
     const flatFieldValues = flatten(parsedFieldValues || {}, {
@@ -301,7 +302,6 @@ const Field = (props) => {
 
   const fieldErrorName = `${name}-error-text`;
   const fieldKey = `field-${fieldType}-${name}`;
-  var defaultValueMissing = false;
   if (isDefined(valueFromJson)) {
     fieldValue = isFunction(valueFromJson)
       ? valueFromJson(fieldValues)
@@ -310,28 +310,12 @@ const Field = (props) => {
     fieldValue = isFunction(defaultValue)
       ? defaultValue(fieldValues)
       : defaultValue;
-    defaultValueMissing = true;
   } else if (
     (fieldType === "checkbox" && isDefined(options)) ||
     (fieldType === "select" && multiple) ||
     multiple
   ) {
     fieldValue = [];
-    defaultValueMissing = true;
-  }
-
-  // @TODO Revist this peice of code and try to eliminate this
-  if (
-    defaultValueMissing &&
-    ((isArray(fieldValue) && fieldValue.length > 0) || !isEmpty(fieldValue))
-  ) {
-    formDispatch({
-      type: "FORM_FIELD_VALUE_UPDATE",
-      payload: {
-        fieldValues: { [name]: fieldValue },
-        fieldErrors: { [name]: { fieldError, fieldErrorMessage } },
-      },
-    });
   }
 
   /**
