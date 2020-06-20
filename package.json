@@ -133,8 +133,9 @@
     "react components",
     "react form",
     "react table",
-    "react material ui",
-    "react forms",
+    "material-ui form",
+    "material-ui table",
+    "react json form",
     "react dynamic forms"
   ],
   "author": {

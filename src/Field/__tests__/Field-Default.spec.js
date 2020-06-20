@@ -112,9 +112,11 @@ describe("Field/Default", () => {
     );
 
     expect(wrapper.find("input").length).toBe(2);
-    expect(wrapper.find("input").at(0).prop("defaultValue")).toEqual("Text 1");
+    expect(wrapper.find("input").at(0).prop("name")).toEqual("default.0");
+    // expect(wrapper.find("input").at(0).prop("defaultValue")).toEqual("Text 1");
     expect(wrapper.find("input").at(0).prop("type")).toEqual("text");
-    expect(wrapper.find("input").at(1).prop("defaultValue")).toEqual("Text 2");
+    expect(wrapper.find("input").at(1).prop("name")).toEqual("default.1");
+    // expect(wrapper.find("input").at(1).prop("defaultValue")).toEqual("Text 2");
     expect(wrapper.find("input").at(1).prop("type")).toEqual("text");
   });
 });
