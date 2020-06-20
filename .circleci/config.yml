@@ -3,7 +3,7 @@ version: 2.1
 defaults: &defaults
   working_directory: /src
   docker:
-    - image: circleci/node:8.15
+    - image: circleci/node:12.x
 # CircleCI has disabled the cache across forks for security reasons.
 # Following their official statement, it was a quick solution, they
 # are working on providing this feature back with appropriate security measures.
@@ -63,16 +63,14 @@ jobs:
               exit 1
             fi
       - run:
-          name: material-ui-icons
+          name: react-components
           command: |
             # latest commit
             LATEST_COMMIT=$(git rev-parse HEAD)
-            # latest commit where packages/material-ui-icons was changed
-            FOLDER_COMMIT=$(git log -1 --format=format:%H --full-diff packages/material-ui-icons)
+            # latest commit where code was changed
+            FOLDER_COMMIT=$(git log -1 --format=format:%H --full-diff)
             if [ $FOLDER_COMMIT = $LATEST_COMMIT ]; then
               echo "changes, let's run the tests"
-              yarn workspace @material-ui/icons build:typings
-              yarn workspace @material-ui/icons test:built-typings
             else
               echo "no changes"
             fi
@@ -92,61 +90,16 @@ jobs:
           command: git diff --exit-code
       - run:
           name: Can we generate the documentation?
-          command: yarn docs:api
+          command: yarn build-storybook:docs
       - run:
-          name: '`yarn docs:api` changes committed?'
+          name: '`yarn build-storybook:docs` changes committed?'
           command: git diff --exit-code
       - run:
           name: Check if yarn prettier was run
           command: yarn prettier check-changed
       - run:
           name: Lint
-          command: yarn lint:ci
-      - run:
-          name: Lint JSON
-          command: yarn jsonlint
-  test_types:
-    <<: *defaults
-    steps:
-      - checkout
-      - install_js
-      - run:
-          name: Transpile TypeScript demos
-          command: yarn workspace docs typescript:transpile --disable-cache
-      - run:
-          name: Are the compiled TypeScript demos equivalent to the JavaScript demos?
-          command: git add -A && git diff --exit-code --staged
-      - run:
-          name: Tests TypeScript definitions
-          command: yarn typescript
-  test_browser:
-    <<: *defaults
-    steps:
-      - checkout
-      - install_js
-      - prepare_chrome_headless
-      - run:
-          name: Tests real browsers
-          command: yarn test:karma
-      - run:
-          name: Can we generate the @material-ui/core umd build?
-          command: yarn workspace @material-ui/core build:umd
-      - run:
-          name: Test umd release
-          command: yarn test:umd
-  test_regressions:
-    <<: *defaults
-    docker:
-      - image: circleci/node:8.15
-      - image: selenium/standalone-chrome:3.11.0
-    steps:
-      - checkout
-      - install_js
-      - run:
-          name: Visual regression tests
-          command: |
-            DOCKER_TEST_URL=http://$(ip addr show lo | grep "inet\b" | awk '{print $2}' | cut -d/ -f1):3090 yarn test:regressions
-            yarn argos
+          command: yarn eslint
 workflows:
   version: 2
   pipeline:
@@ -163,15 +116,3 @@ workflows:
       - test_static:
           requires:
             - checkout
-      - test_types:
-          requires:
-            - checkout
-      - test_browser:
-          requires:
-            - checkout
-      - test_regressions:
-          requires:
-            - test_unit
-            - test_static
-            - test_types
-            - test_browser
