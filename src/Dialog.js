@@ -1,18 +1,18 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react'
 
-import { withStyles } from '@material-ui/core/styles';
-import { isMobile } from 'react-device-detect';
+import { withStyles } from '@material-ui/core/styles'
+import { isMobile } from 'react-device-detect'
 
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
 
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
+import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   container: {
@@ -20,7 +20,7 @@ const styles = theme => ({
     flexDirection: 'column',
     flexWrap: 'wrap',
     paddingRight: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit
   },
   header: {
     alignItems: 'center',
@@ -59,123 +59,117 @@ const styles = theme => ({
   content: {
     paddingTop: theme.spacing(3)
   }
-});
+})
 
-class EnhancedDialog extends React.Component {
-  constructor(props) {
-    super(props);
+const EnhancedDialog = (props) => {
+  const [state, setstate] = useState(props)
 
-    this.state = props;
+  useEffect(() => {
+    setstate(props)
+  }, [props])
+
+  const handleClose = () => {
+    props.onClose()
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState(nextProps);
+  const handleCancel = () => {
+    if (props.value) {
+      props.onClose(props.value)
+    } else {
+      props.onClose('cancel')
+    }
   }
 
-  handleClose = () => {
-    this.props.onClose();
-  };
-
-  handleCancel = () => {
-    if (this.props.value) {
-      this.props.onClose(this.props.value);
+  const handleOk = () => {
+    if (state.value) {
+      props.onClose(state.value)
     } else {
-      this.props.onClose('cancel');
+      props.onClose('ok')
     }
-  };
+  }
 
-  handleOk = () => {
-    if (this.state.value) {
-      this.props.onClose(this.state.value);
-    } else {
-      this.props.onClose('ok');
-    }
-  };
-
-  renderActions = () => {
-    switch (this.state.type) {
+  const renderActions = () => {
+    switch (state.type) {
       case 'custom': {
-        return (this.state.actions) ? (
+        return (state.actions) ? (
           <DialogActions>
-            {this.state.actions.map(actionButton => {
-              const btnKey = `button-${actionButton.label.replace(' ', '-')}`;
+            {state.actions.map(actionButton => {
+              const btnKey = `button-${actionButton.label.replace(' ', '-')}`
 
               return (
-                <Button 
+                <Button
                   variant={(actionButton.variant) ? actionButton.variant : 'contained'}
                   color={(actionButton.color) ? actionButton.color : 'primary'}
-                  onClick={(e) => actionButton.action(this)}
+                  onClick={(e) => actionButton.action()}
                   key={btnKey}
                 >
                   {actionButton.label}
                 </Button>
-              );
+              )
             })}
           </DialogActions>
-        ) : null;
+        ) : null
       }
       case 'confirm': {
         return (
           <DialogActions>
-            <Button onClick={this.handleCancel} color='primary'>
+            <Button onClick={handleCancel} color='primary'>
               Cancel
             </Button>
-            <Button onClick={this.handleOk} color='primary'>
+            <Button onClick={handleOk} color='primary'>
               Ok
             </Button>
           </DialogActions>
-        );
+        )
       }
       case 'alert': {
         return (
           <DialogActions>
-            <Button onClick={this.handleClose} color='primary' autoFocus>
+            <Button onClick={handleClose} color='primary' autoFocus>
               Ok
             </Button>
           </DialogActions>
-        );
+        )
       }
       default: {
-        return null;
+        return null
       }
     }
   }
 
-  render = () => {
-    const { classes, title, onClose, fullScreen, ...other } = this.props;
+  const { classes, title, onClose, fullScreen, ...other } = props
 
-    return (
-      <Dialog
-        fullScreen={fullScreen && isMobile}
-        maxWidth={false}
-        onClose={onClose}
-        aria-labelledby='dialog-title'
-        className={classes.dialog}
-        {...other}
-      >
-        {(this.state.title) ?
-          <DialogTitle id='dialog-title' className={classes.header} disableTypography={true}>
-            <Typography variant='h6' className={classes.title}>{this.state.title}</Typography>
-            {onClose ? (
-              <IconButton aria-label='Close' className={classes.closeButton} onClick={onClose}>
-                <CloseIcon />
-              </IconButton>
-            ) : null}
-          </DialogTitle> : null
-        }
-        <DialogContent className={classes.content}>
-          {(this.state.text) ? <DialogContentText>{this.state.text}</DialogContentText> : ''}
-          {(this.state.content) ? this.state.content : null}
-        </DialogContent>
-        {(this.state.type) ? this.renderActions() : null}
-      </Dialog>
-    );
-  }
+  return (
+    <Dialog
+      fullScreen={fullScreen && isMobile}
+      maxWidth={false}
+      onClose={onClose}
+      aria-labelledby='dialog-title'
+      className={classes.dialog}
+      {...other}
+    >
+      {(state.title)
+        ? <DialogTitle id='dialog-title' className={classes.header} disableTypography={true}>
+          <Typography variant='h6' className={classes.title}>{state.title}</Typography>
+          {onClose ? (
+            <IconButton aria-label='Close' className={classes.closeButton} onClick={onClose}>
+              <CloseIcon />
+            </IconButton>
+          ) : null}
+        </DialogTitle> : null
+      }
+      <DialogContent className={classes.content}>
+        {(state.text) ? <DialogContentText>{state.text}</DialogContentText> : ''}
+        {(state.content) ? state.content : null}
+      </DialogContent>
+      {(state.type) ? renderActions() : null}
+    </Dialog>
+  )
 }
 
 EnhancedDialog.defaultProps = {
   fullScreen: true,
   actions: []
-};
+}
 
-export default withStyles(styles, { withTheme: true })(EnhancedDialog);
+export default withStyles(styles, { withTheme: true })(EnhancedDialog)
